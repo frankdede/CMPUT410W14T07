@@ -1,9 +1,5 @@
 
-USER = input("Mysql username:")
-PASS = input("Password:")
-import subprocess
-
-proc = subprocess.Popen(["mysql", "--user=%s" % USER, "--password=%s" % PASS, "database"],
-                        stdin=subprocess.PIPE,
-                        stdout=subprocess.PIPE)
-out, err = proc.communicate(file("/setup.sql").read())
+USER = str(raw_input("Mysql username:"))
+PASS = str(raw_input("Password:"))
+f = open('information', 'w')
+f.write(USER+","+PASS)
