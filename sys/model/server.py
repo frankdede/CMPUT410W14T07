@@ -1,3 +1,4 @@
+##server model
 class server:
     def __init__(self,sid,serve_name,url):
         self.sid = sid
