@@ -1,5 +1,5 @@
 ##server model
-class server:
+class Server:
     def __init__(self,sid,serve_name,url):
         self.sid = sid
         self.server_name = server_name

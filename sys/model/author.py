@@ -1,4 +1,4 @@
-class author:
+class Author:
     def __init__(self,aid,pwd,sid,nick_name):
         self.aid=aid
         self.pwd=pwd
