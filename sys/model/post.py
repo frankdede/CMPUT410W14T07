@@ -31,11 +31,12 @@ class Post:
     def tojson(self):
         import json
         return json.dumps({"aid":self.aid,"date":self.dates,"title":self.title,"message":self.message,"type":self.type,"permit":self.permission})
-    def jsontopost(self,jsonstring):
-        import json
-        dic = json.loads(jasonstring)
-        return Post(dic[aid],dic[date],dic[title],dic[message],dic[type],dic[permission])
     def __eq__(self,other):
+        return (self.aid==other.aid and self.dates==other.dates and self.title==other.title and self.message==other.message and self.type==other.type and self.permission==other.permission)
+def jsontopost(jsonstring):
+    import json
+    dic = json.loads(jsonstring)
+    return Post(dic["aid"],dic["date"],dic["title"],dic["message"],dic["type"],dic["permit"])
 if __name__=='__main__':
     a = Post(123,"dsada",2332,"adsasd",1212,"dsadas")
-    print a.tojson()
+    print a==(jsontopost(a.tojson()))
