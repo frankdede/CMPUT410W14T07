@@ -1,6 +1,8 @@
 import mysql.connector
 #read name and password from information file
 class Databasehelper:
+    def __init__(self):
+        self.cnx = None
     def readpassword(self):
         try:
             f = open('../../information','r')
@@ -31,10 +33,14 @@ class Databasehelper:
 # get dabase connector
     def getdabaseconnector(self):
         return self.cnx
+    def commit(self):
+        self.cnx.commit()
 # close current connection
     def close(self):
         self.cnx.close()
 # return cursor of database
+    def isconnect(self):
+        return self.cnx !=  None
     def getcursor(self):
         return self.cnx.cursor()
 if __name__ == "__main__":

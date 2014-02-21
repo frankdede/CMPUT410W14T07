@@ -12,9 +12,10 @@ PRIMARY KEY (sid)
 
 CREATE TABLE author(
 aid varchar(128),
+author_name varchar(128) NOT NULL,
 pwd varchar(128) NOT NULL,
 sid int default 1,
-nick_name varchar(128) NOT NULL,
+nick_name varchar(128),
 PRIMARY KEY (aid, sid),
 FOREIGN KEY (sid) REFERENCES servers (sid)
 );
@@ -40,3 +41,4 @@ FOREIGN KEY (aid) REFERENCES author (aid),
 FOREIGN KEY (fid) REFERENCES author (aid),
 FOREIGN KEY (sid) REFERENCES servers (sid)
 );
+INSERT INTO servers values(1,'localhost','localhost')
