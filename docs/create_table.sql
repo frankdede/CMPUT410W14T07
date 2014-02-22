@@ -11,8 +11,8 @@ PRIMARY KEY (sid)
 );
 
 CREATE TABLE author(
-aid varchar(128),
-author_name varchar(128) NOT NULL,
+aid varchar(128) NOT NULL UNIQUE,
+author_name varchar(128) NOT NULL UNIQUE,
 pwd varchar(128) NOT NULL,
 sid int default 1,
 nick_name varchar(128),
@@ -33,12 +33,12 @@ FOREIGN KEY (aid) REFERENCES author (aid)
 );
 
 CREATE TABLE circle(
-aid varchar(128),
-fid varchar(128),
+name1 varchar(128),
+name2 varchar(128),
 sid int,
-PRIMARY KEY (aid, fid, sid),
-FOREIGN KEY (aid) REFERENCES author (aid),
-FOREIGN KEY (fid) REFERENCES author (aid),
+PRIMARY KEY (name1, name2, sid),
+FOREIGN KEY (name1) REFERENCES author (author_name),
+FOREIGN KEY (name2) REFERENCES author (author_name),
 FOREIGN KEY (sid) REFERENCES servers (sid)
 );
 INSERT INTO servers values(1,'localhost','localhost')

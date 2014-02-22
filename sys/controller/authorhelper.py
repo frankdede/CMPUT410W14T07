@@ -24,13 +24,25 @@ class AuthorHelper:
         if not dbhelper.isconnect():
             dbhelper.connect()
         cur = dbhelper.getcursor()
-        query = "SELECT * FROM author WHERE author_name=%s AND sid=1"
-        cur.execute(query,(username))
+        query = "SELECT * FROM author WHERE author_name='%s' AND sid=1"%username
+        cur.execute(query)
         if cur.fetchone() is None:
             return False
         else:
             return True
     # to add an author to database the server_id is defualtly 1 if server_id is not provided
+    def deleteauthor(self,dbhelper,username,server_id=1):
+        if not isinstance(dbhelper,Databasehelper):
+            raise NameError('invalid argument')
+        if not dbhelper.isconnect():
+            dbhelper.connect()
+        if self.checkauthorexist(dbhelper,username) is False:
+            return -1;
+        cur = dbhelper.getcursor()
+        query = "DELETE FROM  author WHERE author_name = '%s'"%(username)
+        ##print query
+        cur.execute(query)
+        dbhelper.commit()
     def addauthor(self,dbhelper,username,pwd,nick_name,server_id=1):
         if not isinstance(dbhelper,Databasehelper):
             raise NameError('invalid argument')
@@ -43,8 +55,12 @@ class AuthorHelper:
         ##print query
         cur.execute(query)
         dbhelper.commit()
+        return user_id
 if __name__ == '__main__':
     dbhelper = Databasehelper()
     authorhelper = AuthorHelper()
-    authorhelper.addauthor(dbhelper,"Admin","12345","Administrator")
-    print authorhelper.authorauthenticate(dbhelper,"Admin","12345")
+    import utility
+    username = utility.getid()
+    authorhelper.addauthor(dbhelper,username,"12345","Test-"+username)
+    print authorhelper.authorauthenticate(dbhelper,username,"12345")
+    authorhelper.deleteauthor(dbhelper,username)
