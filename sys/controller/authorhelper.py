@@ -1,5 +1,8 @@
 from databasehelper import *
 class AuthorHelper:
+    """
+    If the username and password are correct, it will return True otherwise fals
+    """
     def authorauthenticate(self,dbhelper,username,pwd):
         if not isinstance(dbhelper,Databasehelper):
             raise NameError('invalid argument')
@@ -8,6 +11,21 @@ class AuthorHelper:
         cur = dbhelper.getcursor()
         query = "SELECT * FROM author WHERE author_name=%s AND pwd=%s AND sid=1"
         cur.execute(query,(username,pwd))
+        if cur.fetchone() is None:
+            return False
+        else:
+            return True
+    """
+    to check the author whether is existed
+    """
+    def checkauthorexist(self,dbhelper,username):
+        if not isinstance(dbhelper,Databasehelper):
+            raise NameError('invalid argument')
+        if not dbhelper.isconnect():
+            dbhelper.connect()
+        cur = dbhelper.getcursor()
+        query = "SELECT * FROM author WHERE author_name=%s AND sid=1"
+        cur.execute(query,(username))
         if cur.fetchone() is None:
             return False
         else:
@@ -22,7 +40,7 @@ class AuthorHelper:
         import utility
         user_id =utility.getid()
         query = "INSERT INTO author VALUES('%s','%s','%s',%s,'%s')"%(user_id,username,pwd,server_id,nick_name)
-        print query
+        ##print query
         cur.execute(query)
         dbhelper.commit()
 if __name__ == '__main__':
