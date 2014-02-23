@@ -2,6 +2,7 @@ DROP TABLE IF EXISTS post;
 DROP TABLE IF EXISTS circle;
 DROP TABLE IF EXISTS author;
 DROP TABLE IF EXISTS servers;
+DROP TABLE IF EXISTS user_permission;
 
 CREATE TABLE servers(
 sid int,
@@ -33,7 +34,12 @@ permission enum('me', 'user', 'friends', 'fof', 'fomh', 'public') NOT NULL,
 PRIMARY KEY (pid),
 FOREIGN KEY (aid) REFERENCES author (aid)
 );
-
+CREATE TABLE user_permission(
+pid char(128) NOT NULL,
+aid char(128) NOT NULL,
+FOREIGN KEY(pid) REFERENCES post(pid),
+FOREIGN KEY(aid) REFERENCES author(aid)
+);
 CREATE TABLE circle(
 name1 varchar(128),
 name2 varchar(128),

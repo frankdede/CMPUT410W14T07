@@ -19,6 +19,17 @@ class PostHelper:
         print query
         cur.execute(query)
         dbhelper.commit()
+# for the specific person permission, you need to add it to user_permission table
+    def addpostpermission(self,dbhelper,pid,aid):
+        if not isinstance(dbhelper,Databasehelper):
+            raise NameError('invalid argument')
+        if not dbhelper.isconnect():
+            dbhelper.connect()
+        cur = dbhelper.getcursor()
+        query = "INSERT INTO user_permission VALUES('%s','%s')"%(pid,aid)
+        print query
+        cur.execute(query)
+        dbhelper.commit()
 #type argument should be one of ['pid','aid','time','message','title','permission']
 #Ussage: updatepost(type="html", permmision="public") check keyword argument
     def updatepost(self,dbhelper,**kargs):
@@ -53,6 +64,41 @@ class PostHelper:
         print query
         cur.execute(query)
         dbhelper.commit()
+# get list of post that the user by aid can browse
+    def getpostlist(self,dbhelper,aid):
+        if not isinstance(dbhelper,Databasehelper):
+            raise NameError('invalid argument')
+        if not dbhelper.isconnect():
+            dbhelper.connect()
+        cur = dbhelper.getcursor()
+        #get permission with public
+        query = "SELECT * FROM post WHERE permission='public' AND sid='%d'"%(name1,sid)
+        cur.execute(query)
+        re = []
+        for fid in cur:
+            re.append(fid)
+        utility.addpath('../model')
+        #get permission with me
+        query = "SELECT * FROM post WHERE permission='me' and aid='%s'"%(aid)
+        cur.execute(query)
+        for fid in cur:
+            re.append(fid)
+        #get permission with user
+        query = "SELECT * FROM post WHERE permission = 'user' and pid IN (SELECT pid from user_permission WHERE aid='%s')"%(aid)
+        cur.execute(query)
+        for fid in cur:
+            re.append(fid)
+        #get permission with friends
+        query = "SELECT * FROM post WHERE permission = 'friends' and aid IN  (SELECT aid from author WHERE author_name IN (SELECT name1 FROM circle WHERE name2 ='%s' ))"%(aid)
+        for fid in cur;
+            re.append(fid)
+        #get permission with fof
+        query = "SELECT * FROM post WHERE permission = 'fof' and aid IN  (SELECT aid from author WHERE author_name IN (SELECT name1 FROM circle WHERE name2 IN (SELECT name1 FROM circle WHERE name2 = '%s')))"%(aid)
+        for fid in cur;
+            re.append(fid)
+        #get permission with friends
+        
+        return re
 if __name__ == '__main__':
     dbhelper = Databasehelper()
     posthelper = PostHelper()
