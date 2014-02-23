@@ -25,7 +25,7 @@ FOREIGN KEY (sid) REFERENCES servers (sid)
 CREATE TABLE post(
 pid varchar(128) NOT NULL,
 aid varchar(128),
-dates date NOT NULL,
+time TIMESTAMP NOT NULL,
 title varchar(128) NOT NULL,
 message varchar(1024),
 type enum('html','txt','markdown') NOT NULL,

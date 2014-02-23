@@ -29,6 +29,8 @@ class Post:
         self.permission=permission
     def setdates(self,dates):
         self.dates = dates
+    def getpid(self):
+        return self.pid
     def tojson(self):
         import json
         return json.dumps({"pid":self.pid,"aid":self.aid,"date":self.dates,"title":self.title,"message":self.message,"type":self.type,"permit":self.permission})
