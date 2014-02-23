@@ -19,7 +19,9 @@ nick_name varchar(128),
 PRIMARY KEY (aid, sid),
 FOREIGN KEY (sid) REFERENCES servers (sid)
 );
-
+/* fof firends of friend 
+  fomh friends of my host
+ */
 CREATE TABLE post(
 pid varchar(128) NOT NULL,
 aid varchar(128),
@@ -27,7 +29,7 @@ dates date NOT NULL,
 title varchar(128) NOT NULL,
 message varchar(1024),
 type enum('html','txt','markdown') NOT NULL,
-permission enum('me', 'user', 'friends', 'friends of friends', 'friends on my host', 'public') NOT NULL,
+permission enum('me', 'user', 'friends', 'fof', 'fomh', 'public') NOT NULL,
 PRIMARY KEY (pid),
 FOREIGN KEY (aid) REFERENCES author (aid)
 );

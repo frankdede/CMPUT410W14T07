@@ -39,6 +39,18 @@ it returns -1
         for fid in cur:
             re.append(fid[0])
         return re
+    def getfriendoffriend(self,dbhelper,name1,sid=1):
+        if not isinstance(dbhelper,Databasehelper):
+            raise NameError('invalid argument')
+        if not dbhelper.isconnect():
+            dbhelper.connect()
+        cur = dbhelper.getcursor()
+        query = "SELECT name2 FROM circle WHERE name1 in (SELECT name2 FROM circle WHERE name1='%s' AND sid='%d')"%(name1,sid)
+        cur.execute(query)
+        re = []
+        for fid in cur:
+            re.append(fid[0])
+        return re
 if __name__ == '__main__':
     from authorhelper import *
     dbhelper = Databasehelper()
@@ -48,5 +60,8 @@ if __name__ == '__main__':
     circlehelper = CircleHelper()
     circlehelper.addnewcircle(dbhelper,"test1","test2")
     circlehelper.addnewcircle(dbhelper,"test1","test3")
+    circlehelper.addnewcircle(dbhelper,"test2","test3")
     li = circlehelper.getfriendlist(dbhelper,"test1")
+    print li
+    li =circlehelper.getfriendoffriend(dbhelper,"test1")
     print li
