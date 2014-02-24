@@ -72,7 +72,7 @@ class PostHelper:
             dbhelper.connect()
         cur = dbhelper.getcursor()
         #get permission with public
-        query = "SELECT * FROM post WHERE permission='public' AND sid='%d'"%(name1,sid)
+        query = "SELECT * FROM post WHERE permission='public'"
         cur.execute(query)
         re = []
         for fid in cur:
@@ -89,12 +89,17 @@ class PostHelper:
         for fid in cur:
             re.append(fid)
         #get permission with friends
-        query = "SELECT * FROM post WHERE permission = 'friends' and aid IN  (SELECT aid from author WHERE author_name IN (SELECT name1 FROM circle WHERE name2 ='%s' ))"%(aid)
-        for fid in cur;
+        import authorhelper
+        author_name = AuthorHelper().getnamebyaid(dbhelper,aid)
+        query = "SELECT * FROM post WHERE permission = 'friends' and aid IN  (SELECT aid from author WHERE author_name IN (SELECT name1 FROM circle WHERE name2 ='%s' ))"%(author_name)
+        cur.execute(query)
+        for fid in cur:
             re.append(fid)
         #get permission with fof
-        query = "SELECT * FROM post WHERE permission = 'fof' and aid IN  (SELECT aid from author WHERE author_name IN (SELECT name1 FROM circle WHERE name2 IN (SELECT name1 FROM circle WHERE name2 = '%s')))"%(aid)
-        for fid in cur;
+        query = "SELECT * FROM post WHERE permission = 'fof' and aid IN  (SELECT aid from author WHERE author_name IN (SELECT name1 FROM circle WHERE name2 IN (SELECT name1 FROM circle WHERE name2 = '%s')))"%(author_name)
+        cur.execute(query)
+        print query
+        for fid in cur:
             re.append(fid)
         #get permission with friends
         
@@ -107,6 +112,8 @@ if __name__ == '__main__':
     time = utility.gettime()
     utility.addpath('../model')
     from  authorhelper import *
-    aid = AuthorHelper().getaidbyname(dbhelper,"test1")
+    aid = AuthorHelper().getaidbyname(dbhelper,"test3")
     from  post import *
-    posthelper.insertpost(dbhelper,Post(pid,aid,time,"helloworld","Test content","txt","public"))
+    li = posthelper.getpostlist(dbhelper,aid)
+    for i in li:
+        print i

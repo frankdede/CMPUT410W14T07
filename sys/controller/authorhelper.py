@@ -43,6 +43,19 @@ class AuthorHelper:
             return first
         else:
             return first[0]
+    def getnamebyaid(self,dbhelper,aid):
+        if not isinstance(dbhelper,Databasehelper):
+            raise NameError('invalid argument')
+        if not dbhelper.isconnect():
+            dbhelper.connect()
+        cur = dbhelper.getcursor()
+        query = "SELECT author_name FROM author WHERE aid='%s' AND sid=1"%aid
+        cur.execute(query)
+        first = cur.fetchone()
+        if first is None:
+            return first
+        else:
+            return first[0]
     # to add an author to database the server_id is defualtly 1 if server_id is not provided
     def deleteauthor(self,dbhelper,username,server_id=1):
         if not isinstance(dbhelper,Databasehelper):
