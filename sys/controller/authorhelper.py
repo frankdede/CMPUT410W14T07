@@ -1,7 +1,7 @@
 from databasehelper import *
 class AuthorHelper:
     """
-    If the username and password are correct, it will return True otherwise fals
+    If the username and password are correct, it will return True otherwise false
     """
     def authorauthenticate(self,dbhelper,username,pwd):
         if not isinstance(dbhelper,Databasehelper):
@@ -56,6 +56,17 @@ class AuthorHelper:
             return first
         else:
             return first[0]
+    def updatepassword(self,dbhelper,user_id,newpassword):
+        if not isinstance(dbhelper,Databasehelper):
+            raise NameError('invalid argument')
+        if not dbhelper.isconnect():
+            dbhelper.connect()
+        cur = dbhelper.getcursor()
+        query = "UPDATE author SET pwd = '%s' WHERE aid='%s'"%(newpassword,user_id)
+        ##print query
+        cur.execute(query)
+        dbhelper.commit()
+
     # to add an author to database the server_id is defualtly 1 if server_id is not provided
     def deleteauthor(self,dbhelper,username,server_id=1):
         if not isinstance(dbhelper,Databasehelper):
@@ -85,8 +96,11 @@ class AuthorHelper:
 if __name__ == '__main__':
     dbhelper = Databasehelper()
     authorhelper = AuthorHelper()
-    import utility
-    username = utility.getid()
-    authorhelper.addauthor(dbhelper,username,"12345","Test-"+username)
-    print authorhelper.authorauthenticate(dbhelper,username,"12345")
-    authorhelper.deleteauthor(dbhelper,username)
+    #import utility
+    #username = utility.getid()
+    authorhelper.deleteauthor(dbhelper,"test5")
+    authorhelper.addauthor(dbhelper,"test5","12345","Test")
+    print authorhelper.authorauthenticate(dbhelper,"test5","12345")
+    #authorhelper.deleteauthor(dbhelper,username)
+    id = authorhelper.getaidbyname(dbhelper,"test5")
+    authorhelper.updatepassword(dbhelper,id,"allhappy")

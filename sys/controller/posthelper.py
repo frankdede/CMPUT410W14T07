@@ -1,7 +1,7 @@
 from databasehelper import *
 class PostHelper:
     """
-    to check the author whether is existed
+    insert a new post into database
     """
     def insertpost(self,dbhelper,post):
         if not isinstance(dbhelper,Databasehelper):
@@ -31,24 +31,32 @@ class PostHelper:
         cur.execute(query)
         dbhelper.commit()
 #type argument should be one of ['pid','aid','time','message','title','permission']
-#Ussage: updatepost(type="html", permmision="public") check keyword argument
-    def updatepost(self,dbhelper,**kargs):
+#Ussage: updatepost(databasehelper,pid,type="html", permmision="public") check keyword argument
+    def updatepost(self,dbhelper,pid,**kargs,user_id=''):
         if not isinstance(dbhelper,Databasehelper):
             raise NameError('invalid argument')
         if not dbhelper.isconnect():
             dbhelper.connect()
         cur = dbhelper.getcursor()
         for type in kargs:
+            newcontent = kargs[type]
             if type in ['pid','aid','time','message','title','permission']:
-                if type == 'type' and newcontent in['html','txt','markdown']:
-                    pass
-                elif type == 'permission' and newcontent in['me','user','friends','fof','fomh','public']:
-                    pass
+                if type == 'type' and newcontent not in['html','txt','markdown']:
+                    return None
+                elif type == 'permission' and newcontent not in['me','user','friends','fof','fomh','public']:
+                    return None
+                elif type == 'permission' and newcontent == 'user' and user_id =='':
+                    return None
                 else:
-                    query = "UPDATE post SET %s='%s'"%(type,kargs[type])
+                    query = "UPDATE post SET %s='%s' WHERE pid='%s'"%(type,newcontent,pid)
                     print query
                     cur.execute(query)
-                    dbhelper.commit()
+                    if type == 'permission' and newcontent !='user':
+                        query = "DELETE FROM user_permission WHERE pid='%s'"%(pid)
+                        cur.execute(query)
+                        dbhelper.commit()
+                    elif type == 'permission':
+                        addpostpermission(dbhelper,pid,user_id);
 # delete a post or server post by pid, aid,you need indicate in type argument
     def deletepost(self,dbhelper,type,key):
         if not isinstance(dbhelper,Databasehelper):
