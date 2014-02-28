@@ -16,8 +16,9 @@ it returns -1
             query ="INSERT INTO circle VALUES('%s','%s',%d)"%(name1,name2,sid)
             cur.execute(query)
             dbhelper.commit()
+            return True
         else:
-            return -1
+            return False
     def deletecircle(self,dbhelper,name1,name2):
         if not isinstance(dbhelper,Databasehelper):
             raise NameError('invalid argument')
@@ -27,6 +28,7 @@ it returns -1
         query = "DELETE FROM circle WHERE name1=%s AND name2=%s AND sid=1"
         cur.execute(query,(name1,name2))
         dbhelper.commit()
+        return cur.rowcount>0
     def getfriendlist(self,dbhelper,name1,sid=1):
         if not isinstance(dbhelper,Databasehelper):
             raise NameError('invalid argument')

@@ -64,8 +64,9 @@ class AuthorHelper:
         cur = dbhelper.getcursor()
         query = "UPDATE author SET pwd = '%s' WHERE aid='%s'"%(newpassword,user_id)
         ##print query
-        cur.execute(query)
+        result = cur.execute(query)
         dbhelper.commit()
+        return cur.rowcount>0
 
     # to add an author to database the server_id is defualtly 1 if server_id is not provided
     def deleteauthor(self,dbhelper,username,server_id=1):
@@ -80,6 +81,7 @@ class AuthorHelper:
         ##print query
         cur.execute(query)
         dbhelper.commit()
+        return cur.rowcount>0
     def addauthor(self,dbhelper,username,pwd,nick_name,server_id=1):
         if not isinstance(dbhelper,Databasehelper):
             raise NameError('invalid argument')
