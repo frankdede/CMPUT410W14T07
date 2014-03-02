@@ -29,6 +29,18 @@ it returns -1
         cur.execute(query,(name1,name2))
         dbhelper.commit()
         return cur.rowcount>0
+#remove  author's all friends 
+    def removecircle(self,dbhelper,name1):
+        if not isinstance(dbhelper,Databasehelper):
+            raise NameError('invalid argument')
+        if not dbhelper.isconnect():
+            dbhelper.connect()
+        cur = dbhelper.getcursor()
+        query = "DELETE FROM circle WHERE name1=%s AND sid=1"
+        cur.execute(query,(name1,name2))
+        dbhelper.commit()
+        return cur.rowcount>0
+#get friend list of a author
     def getfriendlist(self,dbhelper,name1,sid=1):
         if not isinstance(dbhelper,Databasehelper):
             raise NameError('invalid argument')
@@ -41,6 +53,7 @@ it returns -1
         for fid in cur:
             re.append(fid[0])
         return re
+#get list of friend of friends
     def getfriendoffriend(self,dbhelper,name1,sid=1):
         if not isinstance(dbhelper,Databasehelper):
             raise NameError('invalid argument')

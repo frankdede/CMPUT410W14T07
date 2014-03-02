@@ -56,6 +56,17 @@ class AuthorHelper:
             return first
         else:
             return first[0]
+    def updateNickName(self,dbhelper,user_id,newnickname):
+        if not isinstance(dbhelper,Databasehelper):
+            raise NameError('invalid argument')
+        if not dbhelper.isconnect():
+            dbhelper.connect()
+        cur = dbhelper.getcursor()
+        query = "UPDATE author SET pwd = '%s' WHERE nick_name='%s'"%(newnickname,user_id)
+        ##print query
+        result = cur.execute(query)
+        dbhelper.commit()
+        return cur.rowcount>0
     def updatepassword(self,dbhelper,user_id,newpassword):
         if not isinstance(dbhelper,Databasehelper):
             raise NameError('invalid argument')
