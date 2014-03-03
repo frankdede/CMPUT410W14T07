@@ -14,8 +14,8 @@ app.config.from_object(__name__)
 app.secret_key = os.urandom(24)
 @app.route('/', methods=['GET', 'POST'])
 def root():
-	if 'username' in session:
-		pass
+	if 'logged_in' in session:
+		return render_template('header.html', error=error)
 	else:
 		return redirect(url_for('login'))
 @app.route('/login', methods=['GET', 'POST'])
@@ -25,12 +25,14 @@ def login():
 		username =request.form['username']
 		password =request.form['password']
 		if ahelper.authorauthenticate(dbhelper,username,password):
-			session['username'] = username;
+			session['logged_in'] = username
+			error="login successful"
 		else:
-			error = "Username or Password Not Match"
-        return render_template('header.html', error=error)
+			error= "Username or Password Not Match"
+	return render_template('header.html', error=error)
 @app.route('/register', methods=['PUT', 'POST'])
 def register():
+	error = None
 	username=request.form['username']
 	password=request.form['password']
 	nick_name=request.form['nick_name']

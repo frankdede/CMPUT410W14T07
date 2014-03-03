@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bootstrap 101 Template</title>
+    <title>Distrubute Social Network</title>
 
     <!-- Bootstrap -->
     <link href="{{url_for('static',filename='css/bootstrap.min.css')}}" rel="stylesheet">
@@ -21,11 +21,80 @@
     <script src="{{url_for('static',filename='js/bootstrap.min.js')}}"></script>
   </head>
   <body>
+<nav class="navbar navbar-default" role="navigation">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">Brand</a>
+    </div>
 
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="#">Stream</a></li>
+        <li><a href="#">Post</a></li>
+        <li class="Partner">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="#">Action</a></li>
+            <li><a href="#">Another action</a></li>
+            <li><a href="#">Something else here</a></li>
+            <li class="divider"></li>
+            <li><a href="#">Separated link</a></li>
+            <li class="divider"></li>
+            <li><a href="#">One more separated link</a></li>
+          </ul>
+        </li>
+      </ul>
+      <form class="navbar-form navbar-left" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search">
+        </div>
+        <button type="submit" class="btn btn-default">Submit</button>
+      </form>
+      <ul class="nav navbar-nav navbar-right">
+        {%if  error%}
+        <p class="navbar-text">{{error}}</p>
+        {%endif%}
+        {%if not session.logged_in%}
+        <li><button class="btn btn-default navbar-btn" data-toggle="modal" data-target="#myModal">Login</button></li>
+        {%else%}
+        <li class="dropdown">
+        <a class="dropdown-toggle" href="#" id ="message_menue" >Message <span class="badge">42</span></a>
+        {%endif%}
+        <ul class="dropdown-menu" id="message_dropdown" aria-labelledby="message_menue">
+            <li><a href="#">message1</a></li>
+            <li><a href="#">message2</a></li>
+            <li><a href="#">message3</a></li>
+            <li class="divider"></li>
+            <li><a href="#">Clear All</a></li>
+          </ul>
+        </li>
+        <li class="dropdown">
+          {%if not session.logged_in%}
+          <li><a href="#">Guest</a></li>
+          {%else%}
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{session.logged_in}} <b class="caret"></b></a>
+          {%endif%}
+          <ul class="dropdown-menu">
+            <li><a href="#">Action</a></li>
+            <li><a href="#">Another action</a></li>
+            <li><a href="#">Something else here</a></li>
+            <li class="divider"></li>
+            <li><a href="{{url_for('logout')}}">Logout</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
     <h1>Hello, world!</h1>
-    <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
-  Launch demo modal
-</button>
     <div class="modal fade" id="myModal">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -38,30 +107,28 @@
         <table id ="login_table" style="width=40%">
         <tr>
           <td>Username:</td>
-          <td><input type="text" name="username"></td>
+          <td><input type="text" name="username" id="login_username"></td>
         </tr>
         <tr id ="password_row">
           <td>Password:</td>
-          <td><input type="password" name="password"></td>
+          <td><input type="password" name="password" id="login_password"></td>
         </tr>
-        <tr><p class="error">{{error}}</p></tr>
         </table>
       </form>
         <form id="register_form" action="{{url_for('register')}}" method="post">
         <table id ="register_table" style="width=40%">
         <tr>
           <td>Username:</td>
-          <td><input type="text" name="username"></td>
+          <td><input type="text" name="username" id="register_name"></td>
         </tr>
         <tr>
           <td>Password:</td>
-          <td><input type="password" name="password"></td>
+          <td><input type="password" name="password" id = "register_psw"></td>
         </tr>
         <tr>
           <td>Nick name:</td>
-          <td><input type="text" name="nick_name"></td>
+          <td><input type="text" name="nick_name" id = "register_nick_name"></td>
         </tr>
-        <tr><p class="error">{{error}}</p></tr>
         </table>
       </form>
       </div>
