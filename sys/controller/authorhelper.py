@@ -105,7 +105,7 @@ class AuthorHelper:
         ##print query
         cur.execute(query)
         dbhelper.commit()
-        return user_id
+        return cur.rowcount>0
 if __name__ == '__main__':
     dbhelper = Databasehelper()
     authorhelper = AuthorHelper()

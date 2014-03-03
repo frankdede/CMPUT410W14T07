@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Log</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel = stylesheet type = text/css href = "static/css/bootstrap.css">
+    <!-- Custom styles for this template -->
+    <link rel = stylesheet type = text/css href = "static/css/signin.css">
+    <script src="static/js/jquery-1.11.0.min.js"></script>
+    <script src="static/js/register.js"></script>
+</head>
+
+	<body>
+    		<div class="container">
+      			<form class="form-signin" role="form" action = "{{url_for('check')}}" method=post>
+				{% if error %}
+					<h2 class="form-signin-heading">Error: {{error}}</h2>
+				{% else %}
+        				<h2 class="form-signin-heading">Please sign in</h2>
+				{% endif %}
+        			<input class="form-control" placeholder="Email address" type="email" name="username">
+        			<input class="form-control" placeholder="Password" type="password" name="password">
+                        	<a id="register">Register</a>
+        			<button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+      			</form>
+   		</div>
+		<div class="popBackground">&nbsp;</div>
+        	<div class="popWindow">
+            		<form action = "{{url_for('register')}}" class="form-signin" role="form" method=post>
+                    		<h2>Register</h2>
+                    		<input class="form-control" placeholder="Email address" type="email" name="register_username">
+        			<input class="form-control" placeholder="Password" type="password" name="register_password">
+                    		<button>Submit</button>
+				<button type="button" class="cancel">Cancel</button>
+            		</form>
+        	</div>
+  	</body>
+</html>

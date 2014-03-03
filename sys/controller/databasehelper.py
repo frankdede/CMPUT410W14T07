@@ -5,7 +5,7 @@ class Databasehelper:
         self.cnx = None
     def readpassword(self):
         try:
-            f = open('../../information','r')
+            f = open('information','r')
             list = f.read(256)
             name = list.split(',')[0]
             password = list.split(',')[1]
@@ -20,7 +20,9 @@ class Databasehelper:
 #create connection to database
     def connect(self):
         from mysql.connector import errorcode
-        name,password = self.readpassword()
+        name =""
+        password=""
+        name,password = self.readpassword() 
         try:
             self.cnx = mysql.connector.connect(user=name, password=password,host='127.0.0.1',database='c410')
         except mysql.connector.Error as err:
