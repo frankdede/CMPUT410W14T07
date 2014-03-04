@@ -1,4 +1,4 @@
-$( "#register_table" ).hide();
+$("#register_table").hide();
 $("#message_dropdown").hide();
 var click = 0;
 var message_click= 0;
@@ -14,15 +14,25 @@ $("#message_menue").hover(function(){
     });
 $("#button_login").click(function(){
   if (click==0) {
-      var name = $(#login_username).val();
-      var psw = $(#login_password).val();
-      $.post("login",$(#login_form).seriliza()).done(function(data){
-          alert(data);
+      var name = $("#login_username").val();
+      var psw = $("#login_password").val();
+      $.post("login",$("#login_form").serialize()).done(function(data){
+          if(data ==="False"){
+            $("#login_error").text("The password or username you entered is incorrect");
+          }else if (data ==="True"){
+            window.location.replace("/");
+          }
       })
-      //$("#login_form").submit();
     }
   else{
-      $("#register_form").submit();
+      $.post("register",$("#register_form").serialize()).done(function(data){
+          if(data ==="False"){
+            $("#register_error").text("The username is existed");
+            $("#register_form")[0].reset();
+          }else if (data ==="True"){
+            window.location.replace("/");
+          }
+      })
   }
     });
 $("#re_button").click(function(){

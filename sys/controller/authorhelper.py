@@ -98,6 +98,8 @@ class AuthorHelper:
             raise NameError('invalid argument')
         if not dbhelper.isconnect():
             dbhelper.connect()
+        if self.checkauthorexist(dbhelper,username):
+            return False
         cur = dbhelper.getcursor()
         import utility
         user_id =utility.getid()
