@@ -1,22 +1,26 @@
+USE c410;
+DROP TABLE IF EXISTS comments;
+DROP TABLE IF EXISTS user_permission;
 DROP TABLE IF EXISTS post;
 DROP TABLE IF EXISTS circle;
 DROP TABLE IF EXISTS author;
 DROP TABLE IF EXISTS servers;
-DROP TABLE IF EXISTS user_permission;
-DROP TABLE IF EXISTS comments;
+
 CREATE TABLE servers(
 sid int,
 servers_name varchar(128) NOT NULL,
 url varchar(128) NOT NULL,
 PRIMARY KEY (sid)
 );
-CREATE TABLE comments (
+
+/*CREATE TABLE comments (
   time TIMESTAMP,
   pid varchar(128),
   aid varchar(128),
   content varchar(128),
   FOREIGN KEY(pid) references post(pid),
   FOREIGN KEY(aid) references author(aid));
+*/
 CREATE TABLE author(
 aid varchar(128) NOT NULL UNIQUE,
 author_name varchar(128) NOT NULL UNIQUE,

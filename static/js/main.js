@@ -2,7 +2,7 @@ $("#register_table").hide();
 $("#message_dropdown").hide();
 var click = 0;
 var message_click= 0;
-$("#message_menue").hover(function(){
+$("#message_menue").on("click",function(){
   if (message_click==0) {
       $("#message_dropdown").show();
       message_click = 1;
