@@ -1,4 +1,5 @@
 USE c410;
+DROP TABLE IF exists message;
 DROP TABLE IF EXISTS comments;
 DROP TABLE IF EXISTS user_permission;
 DROP TABLE IF EXISTS post;
@@ -59,4 +60,13 @@ FOREIGN KEY (name1) REFERENCES author (author_name),
 FOREIGN KEY (name2) REFERENCES author (author_name),
 FOREIGN KEY (sid) REFERENCES servers (sid)
 );
-INSERT INTO servers values(1,'localhost','localhost')
+CREATE TABLE message(
+time timestamp,
+request_name char(128),
+requested_name char(128),
+read_check char(1),  /*'1' readed, '0' unread */
+FOREIGN KEY (request_name) REFERENCES author (author_name),
+FOREIGN KEY (requested_name) REFERENCES author (author_name),
+primary key (time,request_name,requested_name)
+);
+INSERT INTO servers values(1,'localhost','localhost');
