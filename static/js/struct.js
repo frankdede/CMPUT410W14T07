@@ -1,6 +1,8 @@
 $.get("/author/123", function(data){
-	$("#struct-content").html(data);
-	installClickListener();
+	if(data){
+		$("#struct-content").html(data);
+		installClickListener();
+	}
 });
 
 function installClickListener(){

@@ -56,10 +56,13 @@ def register():
 def logout():
 	session.pop('logged_in', None)
 	return redirect(url_for('login'))
+
 @app.route('/author/<id>')
 def renderStruct(id):
-	return render_template('struct.html')
-
+	if 'logged_in' in session:
+		return render_template('struct.html')
+	else:
+		return redirect('/templates/error/404.html');
 
 if __name__ == '__main__':
 	app.debug = True
