@@ -9,6 +9,8 @@
     <!-- Bootstrap -->
     <link href="{{url_for('static',filename='css/bootstrap.min.css')}}" rel="stylesheet">
      <link href="{{url_for('static',filename='css/main.css')}}" rel="stylesheet">
+     <!-- Struct css-->
+     <link href="{{url_for('static',filename='css/struct.css')}}" rel="stylesheet">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -20,7 +22,7 @@
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="{{url_for('static',filename='js/bootstrap.min.js')}}"></script>
   </head>
-  <body>
+<body>
 <nav class="navbar navbar-default" role="navigation">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
@@ -91,8 +93,7 @@
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>
-    <h1>Hello, world!</h1>
-    <div class="modal fade" id="myModal">
+<div class="modal fade" id="myModal">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -141,8 +142,13 @@
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
-
+<div id="struct-content"></div>
+    
     <script src="{{url_for('static',filename='js/main.js')}}"></script>
+    {%if session.logged_in%}
+      <script src="{{url_for('static',filename='js/struct.js')}}" >
+      </script>
+    {%endif%}
     
   </body>
 </html>
