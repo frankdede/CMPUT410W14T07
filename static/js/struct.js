@@ -41,7 +41,7 @@ function getAllRawPostData(){
 		if(data){
 			console.log(data);
 		}
-	}
+	});
 }
 
 function addPostToList($id, $text,$speed)

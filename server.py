@@ -7,13 +7,13 @@ from posthelper import *
 from databasehelper import *
 DEBUG = True
 # create a new database obj
-dbhelper = Databasehelper()
+dbHelper = Databasehelper()
 # connect
-dbhelper.connect()
+dbHelper.connect()
 
-ahelper = AuthorHelper()
+ahelper = AuthorHelper(dbHelper)
 # use the conneted dbHelper to initialize postHelper obj
-postHelper = PostHelper(dbhelper)
+postHelper = PostHelper(dbHelper)
 
 app = Flask(__name__)
 app.config.from_object(__name__)
@@ -31,7 +31,7 @@ def login():
 	if request.method == 'POST':
 		username =request.form['username']
 		password =request.form['password']
-		if ahelper.authorauthenticate(dbhelper,username,password):
+		if ahelper.authorAuthenticate(username,password):
 			session['logged_in'] = username
 			error="login successful"
 			re = make_response("True")

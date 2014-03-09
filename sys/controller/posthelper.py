@@ -30,7 +30,7 @@ class PostHelper:
           cur.execute(query)
           self.dbHelper.commit()
 
-        except: mysql.connector.Error as err:
+        except mysql.connector.Error as err:
 
           print("SQLException from addPost(): {}".format(err))
           return False
@@ -51,7 +51,7 @@ class PostHelper:
           cur.execute(query)
           self.dbHelper.commit()
 
-        except: mysql.connector.Error as err:
+        except mysql.connector.Error as err:
 
           print("SQLException from addPost(): {}".format(err))
           return False
@@ -74,7 +74,7 @@ class PostHelper:
           cur.execute(query)
           self.dbHelper.commit()
 
-        except: mysql.connector.Error as err:
+        except mysql.connector.Error as err:
 
           print("SQLException from addPost(): {}".format(err))
           return False
@@ -94,7 +94,7 @@ class PostHelper:
           cur.execute(query)
           self.dbHelper.commit()
 
-        except: mysql.connector.Error as err:
+        except mysql.connector.Error as err:
 
           print("SQLException from updateTitle(): {}".format(err))
           return False
@@ -116,7 +116,7 @@ class PostHelper:
           cur.execute(query)
           self.dbHelper.commit()
 
-        except: mysql.connector.Error as err:
+        except mysql.connector.Error as err:
 
           print("SQLException from updateTime(): {}".format(err))
           return False
@@ -138,6 +138,7 @@ class PostHelper:
 
         if newPermission == 'user':
             #TODO:Change the following
+            print("neeed to be fixed")
             #self.addUserPermission(dbhelper,pid,user)
         else:
             query = "DELETE FROM user_permission WHERE pid='%s'"%(pid)
@@ -146,7 +147,7 @@ class PostHelper:
           cur.execute(query)
           self.dbHelper.commit()
 
-        except: mysql.connector.Error as err:
+        except mysql.connector.Error as err:
 
           print("SQLException from updatePermission(): {}".format(err))
           return False
@@ -168,7 +169,7 @@ class PostHelper:
           cur.execute(query)
           self.dbHelper.commit()
 
-        except: mysql.connector.Error as err:
+        except mysql.connector.Error as err:
 
           print("SQLException from deletePostByPid(): {}".format(err))
           return False
@@ -190,7 +191,7 @@ class PostHelper:
           cur.execute(query)
           self.dbHelper.commit()
 
-        except: mysql.connector.Error as err:
+        except mysql.connector.Error as err:
 
           print("SQLException from addPost(): {}".format(err))
           return False
@@ -212,7 +213,7 @@ class PostHelper:
           cur.execute(query)
           self.dbHelper.commit()
 
-        except: mysql.connector.Error as err:
+        except mysql.connector.Error as err:
 
           print("SQLException from getPostList 1st Query: {}".format(err))
           return None
@@ -230,7 +231,7 @@ class PostHelper:
           cur.execute(query)
           self.dbHelper.commit()
 
-        except: mysql.connector.Error as err:
+        except mysql.connector.Error as err:
 
           print("SQLException from getPostList 2nd Query: {}".format(err))
           return None
@@ -244,7 +245,7 @@ class PostHelper:
           cur.execute(query)
           self.dbHelper.commit()
 
-        except: mysql.connector.Error as err:
+        except mysql.connector.Error as err:
 
           print("SQLException from getPostList 3rd Query: {}".format(err))
           return None
@@ -261,7 +262,7 @@ class PostHelper:
           cur.execute(query)
           self.dbHelper.commit()
 
-        except: mysql.connector.Error as err:
+        except mysql.connector.Error as err:
 
           print("SQLException from getPostList 4th Query: {}".format(err))
           return None
@@ -276,7 +277,7 @@ class PostHelper:
           cur.execute(query)
           self.dbHelper.commit()
 
-        except: mysql.connector.Error as err:
+        except mysql.connector.Error as err:
 
           print("SQLException from getPostList 5th Query: {}".format(err))
           return None
@@ -291,7 +292,7 @@ class PostHelper:
           cur.execute(query)
           self.dbHelper.commit()
 
-        except: mysql.connector.Error as err:
+        except mysql.connector.Error as err:
 
           print("SQLException from getPostList 6th Query: {}".format(err))
           return None
