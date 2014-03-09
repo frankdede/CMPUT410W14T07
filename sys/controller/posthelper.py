@@ -32,7 +32,17 @@ class PostHelper:
 
         except mysql.connector.Error as err:
 
-          print("SQLException from addPost(): {}".format(err))
+          print("****************************************")
+          print("SQLException from addPost():")
+          print("Error code:", err.errno)
+          print("SQLSTATE value:", err.sqlstate)
+          print("Error message:", err.msg)
+          print("Might be query issue:",query)
+          print("****************************************")
+          return False
+
+        except Exception as err:
+          print("General Exception from addPost():".format(err))
           return False
 
         return cur.rowcount>0
@@ -48,12 +58,23 @@ class PostHelper:
         query = "INSERT INTO user_permission VALUES('%s','%s')"%(pid,aid)
 
         try:
+
           cur.execute(query)
           self.dbHelper.commit()
 
         except mysql.connector.Error as err:
 
-          print("SQLException from addPost(): {}".format(err))
+          print("****************************************")
+          print("SQLException is raised by addPostPermission():")
+          print("Error code:", err.errno)
+          print("SQLSTATE value:", err.sqlstate)
+          print("Error message:", err.msg)
+          print("Might be query issue:",query)
+          print("****************************************")
+          return False
+
+        except Exception as err:
+          print("General Exception from addPostPermission():".format(err))
           return False
 
         return cur.rowcount>0
@@ -76,12 +97,22 @@ class PostHelper:
 
         except mysql.connector.Error as err:
 
-          print("SQLException from addPost(): {}".format(err))
+          print("****************************************")
+          print("SQLException is raised by updateMessage():")
+          print("Error code:", err.errno)
+          print("SQLSTATE value:", err.sqlstate)
+          print("Error message:", err.msg)
+          print("Might be query issue:",query)
+          print("****************************************")
+          return False
+
+        except Exception as err:
+          print("General Exception is raised by updateMessage():".format(err))
           return False
 
         return cur.rowcount>0
 
-    def updateTitle(self,pid,newtitle):
+    def updateMessage(self,pid,newtitle):
         """
         to update the title of post
         pid -- post id
@@ -96,7 +127,17 @@ class PostHelper:
 
         except mysql.connector.Error as err:
 
-          print("SQLException from updateTitle(): {}".format(err))
+          print("****************************************")
+          print("SQLException is raised by updateTime():")
+          print("Error code:", err.errno)
+          print("SQLSTATE value:", err.sqlstate)
+          print("Error message:", err.msg)
+          print("Might be query issue:",query)
+          print("****************************************")
+          return False
+
+        except Exception as err:
+          print("General Exception is raised by updateTime():".format(err))
           return False
 
         return cur.rowcount>0
@@ -118,7 +159,18 @@ class PostHelper:
 
         except mysql.connector.Error as err:
 
-          print("SQLException from updateTime(): {}".format(err))
+          print("****************************************")
+          print("SQLException is raised by updateTime():")
+          print("Error code:", err.errno)
+          print("SQLSTATE value:", err.sqlstate)
+          print("Error message:", err.msg)
+          print("Might be query issue:",query)
+          print("****************************************")
+
+          return False
+
+        except Exception as err:
+          print("General Exception is raised by authorAuthenticate():".format(err))
           return False
 
         return cur.rowcount>0
@@ -149,7 +201,17 @@ class PostHelper:
 
         except mysql.connector.Error as err:
 
-          print("SQLException from updatePermission(): {}".format(err))
+          print("****************************************")
+          print("SQLException is raised by updatePermission():")
+          print("Error code:", err.errno)
+          print("SQLSTATE value:", err.sqlstate)
+          print("Error message:", err.msg)
+          print("Might be query issue:",query)
+          print("****************************************")
+          return False
+
+        except Exception as err:
+          print("General Exception is raised by updatePermission():".format(err))
           return False
 
         return cur.rowcount>0
@@ -171,7 +233,17 @@ class PostHelper:
 
         except mysql.connector.Error as err:
 
-          print("SQLException from deletePostByPid(): {}".format(err))
+          print("****************************************")
+          print("SQLException is raised by deletePostByPid():")
+          print("Error code:", err.errno)
+          print("SQLSTATE value:", err.sqlstate)
+          print("Error message:", err.msg)
+          print("Might be query issue:",query)
+          print("****************************************")
+          return False
+
+        except Exception as err:
+          print("General Exception is raised by deletePostByPid():".format(err))
           return False
 
         return cur.rowcount>0
@@ -193,7 +265,17 @@ class PostHelper:
 
         except mysql.connector.Error as err:
 
-          print("SQLException from addPost(): {}".format(err))
+          print("****************************************")
+          print("SQLException is raised by deletePostByAid():")
+          print("Error code:", err.errno)
+          print("SQLSTATE value:", err.sqlstate)
+          print("Error message:", err.msg)
+          print("Might be query issue:",query)
+          print("****************************************")
+          return False
+
+        except Exception as err:
+          print("General Exception from deletePostByAid():".format(err))
           return False
 
         return cur.rowcount>0
@@ -215,7 +297,17 @@ class PostHelper:
 
         except mysql.connector.Error as err:
 
-          print("SQLException from getPostList 1st Query: {}".format(err))
+          print("****************************************")
+          print("SQLException from getPostList():")
+          print("Error code:", err.errno)
+          print("SQLSTATE value:", err.sqlstate)
+          print("Error message:", err.msg)
+          print("1st Query:",query)
+          print("****************************************")
+          return None
+
+        except Exception as err:
+          print("General Exception from getPostList() 1st block:".format(err))
           return None
 
         for fid in cur:
@@ -233,7 +325,17 @@ class PostHelper:
 
         except mysql.connector.Error as err:
 
-          print("SQLException from getPostList 2nd Query: {}".format(err))
+          print("****************************************")
+          print("SQLException from getPostList():")
+          print("Error code:", err.errno)
+          print("SQLSTATE value:", err.sqlstate)
+          print("Error message:", err.msg)
+          print("2nd Query:",query)
+          print("****************************************")
+          return None
+
+        except Exception as err:
+          print("General Exception from getPostList() 2nd block:".format(err))
           return None
 
         for fid in cur:
@@ -247,7 +349,17 @@ class PostHelper:
 
         except mysql.connector.Error as err:
 
-          print("SQLException from getPostList 3rd Query: {}".format(err))
+          print("****************************************")
+          print("SQLException from getPostList():")
+          print("Error code:", err.errno)
+          print("SQLSTATE value:", err.sqlstate)
+          print("Error message:", err.msg)
+          print("3rd Query:",query)
+          print("****************************************")
+          return None
+
+        except Exception as err:
+          print("General Exception from getPostList() 3rd block:".format(err))
           return None
 
         for fid in cur:
@@ -255,6 +367,15 @@ class PostHelper:
         #get the post if aid is the author's friend
 
         authorName = self.getNameByAid(aid)
+
+        try:
+          if(authorName == None):
+            raise Exception('Failed to get the name by id in getPostList() function')
+        except Exception as err:
+          print("***************************************")
+          print(err.args)
+          print("***************************************")
+          return None
 
         query = "SELECT * FROM post WHERE permission = 'friends' and aid IN  (SELECT aid from author WHERE author_name IN (SELECT name1 FROM circle WHERE name2 ='%s' ))"%(authorName)
 
@@ -264,7 +385,17 @@ class PostHelper:
 
         except mysql.connector.Error as err:
 
-          print("SQLException from getPostList 4th Query: {}".format(err))
+          print("****************************************")
+          print("SQLException from getPostList():")
+          print("Error code:", err.errno)
+          print("SQLSTATE value:", err.sqlstate)
+          print("Error message:", err.msg)
+          print("4th Query",query)
+          print("****************************************")
+          return None
+
+        except Exception as err:
+          print("General Exception from getPostList() 4th block:".format(err))
           return None
 
         for fid in cur:
@@ -279,7 +410,17 @@ class PostHelper:
 
         except mysql.connector.Error as err:
 
-          print("SQLException from getPostList 5th Query: {}".format(err))
+          print("****************************************")
+          print("SQLException from getPostList():")
+          print("Error code:", err.errno)
+          print("SQLSTATE value:", err.sqlstate)
+          print("Error message:", err.msg)
+          print("5th Query",query)
+          print("****************************************")
+          return None
+
+        except Exception as err:
+          print("General Exception from getPostList() 5th block:".format(err))
           return None
 
         for fid in cur:
@@ -294,7 +435,17 @@ class PostHelper:
 
         except mysql.connector.Error as err:
 
-          print("SQLException from getPostList 6th Query: {}".format(err))
+          print("****************************************")
+          print("SQLException from getPostList():")
+          print("Error code:", err.errno)
+          print("SQLSTATE value:", err.sqlstate)
+          print("Error message:", err.msg)
+          print("6th Query:",query)
+          print("****************************************")
+          return None
+
+        except Exception as err:
+          print("General Exception from getPostList() 6th block:".format(err))
           return None
 
         for fid in cur:

@@ -33,7 +33,6 @@ class AuthorHelper:
 
         except Exception as err:
             print("General Exception from authorAuthenticate():".format(err))
-            print
             return False
     """
     to check the author whether is existed
@@ -73,7 +72,7 @@ class AuthorHelper:
             cur.execute(query)
             first = cur.fetchone()
             if first is None:
-                return first
+                return None
             else:
                 return first[0]
 
@@ -87,10 +86,11 @@ class AuthorHelper:
             print("Might be query issue:",query)
             print("****************************************")
             print("Might be query issue",query)
-            return False
+            return None
 
         except Exception as err:
             print("General Exception from getAidByAuthorName():".format(err))
+            return None
 
     def getNameByAid(self,aid):
 
@@ -100,7 +100,7 @@ class AuthorHelper:
             cur.execute(query)
             first = cur.fetchone()
             if first is None:
-                return first
+                return None
             else:
                 return first[0]
 
@@ -113,11 +113,12 @@ class AuthorHelper:
             print("Error message:", err.msg)
             print("Might be query issue:",query)
             print("****************************************")
-            return False
+            return None
 
         except Exception as err:
 
             print("General Exception from getNameByAid():".format(err))
+            return None
 
     def updateNickNameByUserId(self,userId,newNickName):
 
@@ -141,6 +142,7 @@ class AuthorHelper:
 
         except Exception as err:
             print("General Exception from updateNickNameByUserId():".format(err))
+            return False
 
         return cur.rowcount>0
 
@@ -168,6 +170,7 @@ class AuthorHelper:
 
         except Exception as err:
             print("General Exception from updatePasswordByUserId():".format(err))
+            return False
 
         return cur.rowcount>0
 
@@ -198,6 +201,7 @@ class AuthorHelper:
 
         except Exception as err:
             print("General Exception from deleteAuthor():".format(err))
+            return False
 
         return cur.rowcount>0
 
@@ -229,5 +233,6 @@ class AuthorHelper:
 
         except Exception as err:
             print("General Exception from addAuthor():".format(err))
+            return False
 
         return cur.rowcount>0

@@ -2,6 +2,7 @@
 /* count number of message qeues on the list view */
 var $postListViewCount = 0;
 var $MAX_ITEM = 0;
+
 $.get("/author/"+$authorName, function(data){
 
 	if(data){
