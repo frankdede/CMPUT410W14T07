@@ -146,6 +146,10 @@
     
     <script src="{{url_for('static',filename='js/main.js')}}"></script>
     {%if session.logged_in%}
+      <script>
+        // Gobal Session info(author_name)
+        var $authorName = "{{session.logged_in}}"
+      </script>
       <script src="{{url_for('static',filename='js/struct.js')}}" >
       </script>
     {%endif%}

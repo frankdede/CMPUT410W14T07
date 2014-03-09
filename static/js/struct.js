@@ -1,6 +1,9 @@
-var $ulPaddingTop;
 
-$.get("/author/123", function(data){
+/* count number of message qeues on the list view */
+var $postListViewCount = 0;
+var $MAX_ITEM = 0;
+$.get("/author/"+$authorName, function(data){
+
 	if(data){
 		$("#struct-content").html(data);
 		installClickListener();
@@ -21,33 +24,48 @@ function installClickListener(){
 	});
 
 	$("#postSubmitBtn").click(function(){
-		smoothAdd('postListView','hello');
+		addPostToList('postListView','hello',250);
 	});
 
 
 }
 
-function addPost($id, $text)
+function setRefreshTimer(){
+	setInterval(function(){
+		getAllRawPostData();
+	},10000);
+}
+
+function getAllRawPostData(){
+	$.get("/pull/"+$authorName,function(data){
+		if(data){
+			console.log(data);
+		}
+	}
+}
+
+function addPostToList($id, $text,$speed)
 {
-	var $element = $('#' + $id);
+	var $el = $('#' + $id);
 
 	var $ulHeight = $el.height();
 
-	//hide the overflow 
+	//hide the overflow
 	$el.css({
 		height:   $ulHeight,
-		overflow: 'hidden'
 	});
 
 	var $ulPaddingTop    = parseInt($el.css('padding-top'));
 	var $ulPaddingBottom = parseInt($el.css('padding-bottom'));
 
 	$el.prepend('<li>' + $text + '</li>');
+	$postListViewCount
 
 	var $first = $('li:first', $el);
 	var $last  = $('li:last',  $el);
 
 	var $foh = $first.outerHeight();
+
 
 	var $heightDiff = $foh - $last.outerHeight();
 
@@ -61,13 +79,9 @@ function addPost($id, $text)
 
 	$last.css('position', 'relative');
 
-	$el.animate({ height: $h + $heightDiff }, 1500)
+	$el.animate({ height: $ulHeight + $heightDiff });
 
-	$first.animate({ top: 0 }, 250, function() {
+	$first.animate({ top: 0 },$speed, function() {
 		$first.animate({ marginTop: $oldMarginTop });
 	});
 }
-
-//function setRefreshTimer(){
-//
-//}
