@@ -2,7 +2,19 @@ $("#register_table").hide();
 $("#message_dropdown").hide();
 var click = 0;
 var message_click= 0;
-$("#message_menue").on("click",function(){
+
+function refresh_message_list(){
+  $.get("ajax/uid",function(data){
+    $.getJSON(data+"/messages.json",function(data2){
+      $(body).append(data2);
+  });
+  });
+}
+$("#search_button").click(function(){
+  event.preventDefault();
+  refresh_message_list()
+});
+/*$("#message_menue").on("click",function(){
   if (message_click==0) {
       $("#message_dropdown").show();
       message_click = 1;
@@ -11,7 +23,7 @@ $("#message_menue").on("click",function(){
       $("#message_dropdown").hide();
       message_click = 0;
   }
-    });
+    });*/
 $("#button_login").click(function(){
   if (click==0) {
       var name = $("#login_username").val();
@@ -20,6 +32,7 @@ $("#button_login").click(function(){
           if(data ==="False"){
             $("#login_error").text("The password or username you entered is incorrect");
           }else if (data ==="True"){
+            username = name;
             window.location.replace("/");
           }
       })

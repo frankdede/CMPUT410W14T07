@@ -4,9 +4,11 @@ import flask
 from flask import Flask, request, redirect, url_for, g, render_template, flash, session, abort,make_response
 import sys,os
 sys.path.append('sys/controller')
+sys.path.append('sys/model')
 from authorhelper import *
 from posthelper import *
 from databasehelper import *
+from messagehelper import *
 DEBUG = True
 # create a new database obj
 dbHelper = Databasehelper()
@@ -16,6 +18,7 @@ dbHelper.connect()
 ahelper = AuthorHelper(dbHelper)
 # use the conneted dbHelper to initialize postHelper obj
 postHelper = PostHelper(dbHelper)
+msghelper = Messagehelper()
 
 app = Flask(__name__)
 app.config.from_object(__name__)
@@ -25,13 +28,14 @@ error = None
 # default path
 @app.route('/', methods=['GET', 'POST'])
 def root():
-	if 'logged_in' in session:
-		return render_template('header.html')
-	else:
-		return redirect(url_for('login'))
+    if 'logged_in' in session:
+        username = session['logged_in']
+        mesg_num = msghelpergetMessageCountByAuthorName(dbhelper,username)
+        return render_template('header.html')
+    else:
+        return redirect(url_for('login'))
 
 # login page
-
 @app.route('/login', methods=['GET', 'POST'])
 def login():
 	if request.method == 'POST':
@@ -50,7 +54,6 @@ def login():
 	return render_template('header.html')
 
 # register page
-
 @app.route('/register', methods=['PUT', 'POST'])
 def register():
     if request.method == 'POST':
@@ -67,13 +70,29 @@ def register():
             re.headers['Content-Type']='text/plain'
             return re
 	return redirect(url_for('/'))
-
 # logout
 @app.route('/logout')
 def logout():
 	session.pop('logged_in', None)
 	return redirect(url_for('login'))
-
+@app.route('/ajax/uid')
+def getuid():
+    if session['logged_in'] is None:
+        abort(404)
+    else:
+        re = make_response(session['logged_in'])
+        re.headers['Content-Type']='text/plain'
+        return re
+@app.route('/<username>/messages.json', methods=['GET'])
+def messages(username):
+    if username !=session['logged_in']:
+        abort(404)
+    else:
+        import json
+        list = msghelper.getMessageListByAuthorName(dbhelper,username)
+        re = make_response(json.dumps(list))
+        re.headers['Content-Type']='application/json'
+        return re
 @app.route('/author/<authorName>')
 def renderStruct(authorName):
 	if 'logged_in' in session:
