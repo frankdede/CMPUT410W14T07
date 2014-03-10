@@ -9,6 +9,7 @@ from authorhelper import *
 from posthelper import *
 from databasehelper import *
 from messagehelper import *
+
 DEBUG = True
 # create a new database obj
 dbHelper = Databasehelper()
@@ -18,7 +19,8 @@ dbHelper.connect()
 ahelper = AuthorHelper(dbHelper)
 # use the conneted dbHelper to initialize postHelper obj
 postHelper = PostHelper(dbHelper)
-msghelper = Messagehelper()
+msgHelper = Messagehelper(dbHelper)
+
 app = Flask(__name__)
 app.config.from_object(__name__)
 app.secret_key = os.urandom(24)
@@ -29,7 +31,7 @@ error = None
 def root():
     if 'logged_in' in session:
         username = session['logged_in']
-        mesg_num = msghelper.getMessageCountByAuthorName(dbHelper,username)
+        mumMsg = msgHelper.getMessageCountByAuthorName(username)
         return render_template('header.html')
     else:
         return redirect(url_for('login'))
@@ -77,14 +79,16 @@ def register():
             re.headers['Content-Type']='text/plain'
             return re
     return redirect(url_for('/'))
-@app.route('/<username>/messages.json', methods=['GET'])
-def messages(username):
-    if username !=session['logged_in']:
+
+
+@app.route('/<authorName>/messages.json', methods=['GET'])
+def messages(authorName):
+    if authorName !=session['logged_in']:
         abort(404)
     else:
-        jsonstring = msghelper.getUnreadMessageListByAuthorName(dbHelper,username)
-        print jsonstring
+        jsonstring = msghelper.getUnreadMessageListByAuthorName(username)
         return jsonstring,200
+
 # logout
 @app.route('/logout')
 def logout():
@@ -105,7 +109,7 @@ def getUpdatedPosts(authorName):
         aid = ahelper.getAidByAuthorName(authorName)
 
         if aid == None:
-            return flask.jsonify({'1':'100'}),200
+            return josn.dumps({'aid':None}),200
         else:    
             post = postHelper.getPostList(aid)
             return post,200
