@@ -38,11 +38,18 @@ function setRefreshTimer(){
 }
 
 function getAllRawPostData(){
-	$.get("/pull/"+$authorName,function(data){
-		if(data){
-			console.log(data);
+	$.get("/pull/"+$authorName,function($data){
+		if($data){
+			var $postList = JSON.parse($data);
+			updatePostList($postList);
 		}
 	});
+}
+
+function updatePostList($list){
+	for(var $i = 0 ; $i < $list.length; $i++){
+
+	}
 }
 
 function addPostToList($id, $text,$speed)

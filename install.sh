@@ -4,7 +4,7 @@
 # directories
 _create_db_path="./docs/create_table.sql"
 #_drop_db_path="./docs/Queries/drop_tables.sql"
-#_insert_test_path="./docs/Queries/data_for_testing.sql"
+_insert_test_path="./docs/testing_data.sql"
 _db_name="c410" 
 
 # mysql info
@@ -52,7 +52,7 @@ rebuild_all(){
     # create tables through pipe
     mysql -u "$mysql_name" -p"$mysql_password" -h "$_HOST" "$_db_name" < "$_create_db_path" --verbose
     
-#    mysql -u "$mysql_name" -p"$mysql_password" -h "$_HOST" "$_db_name" < "$_insert_test_path" --verbose
+    mysql -u "$mysql_name" -p"$mysql_password" -h "$_HOST" "$_db_name" < "$_insert_test_path" --verbose
 }
 
 # flags
