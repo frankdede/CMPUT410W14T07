@@ -59,4 +59,3 @@ FOREIGN KEY (name1) REFERENCES author (author_name),
 FOREIGN KEY (name2) REFERENCES author (author_name),
 FOREIGN KEY (sid) REFERENCES servers (sid)
 );
-INSERT INTO servers values(1,'localhost','localhost')
