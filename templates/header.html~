@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Distrubute Social Network</title>
+
+    <!-- Bootstrap -->
+    <link href="{{url_for('static',filename='css/bootstrap.min.css')}}" rel="stylesheet">
+     <link href="{{url_for('static',filename='css/main.css')}}" rel="stylesheet">
+     <!-- Struct css-->
+     <link href="{{url_for('static',filename='css/struct.css')}}" rel="stylesheet">
+     <link href="{{url_for('static',filename='css/permission.css')}}" rel="stylesheet">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="{{url_for('static',filename='js/bootstrap.min.js')}}"></script>
+    <script src="{{url_for('static',filename='js/permission.js')}}"></script>
+  </head>
+<body>
+<nav class="navbar navbar-default" role="navigation">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">Brand</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="#">Stream</a></li>
+        <li><a href="#">Post</a></li>
+        <li class="Partner">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="#">Action</a></li>
+            <li><a href="#">Another action</a></li>
+            <li><a href="#">Something else here</a></li>
+            <li class="divider"></li>
+            <li><a href="#">Separated link</a></li>
+            <li class="divider"></li>
+            <li><a href="#">One more separated link</a></li>
+          </ul>
+        </li>
+      </ul>
+      <form class="navbar-form navbar-left" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search">
+        </div>
+        <button type="submit" class="btn btn-default">Submit</button>
+      </form>
+      <ul class="nav navbar-nav navbar-right">
+        {%if not session.logged_in%}
+        <li><button class="btn btn-default navbar-btn" data-toggle="modal" data-target="#myModal">Login</button></li>
+        {%else%}
+        <li class="dropdown">
+        <a class="dropdown-toggle" href="#" id ="message_menue" >Message <span class="badge">42</span></a>
+        {%endif%}
+        <ul class="dropdown-menu" id="message_dropdown" aria-labelledby="message_menue">
+            <li><a href="#">message1</a></li>
+            <li><a href="#">message2</a></li>
+            <li><a href="#">message3</a></li>
+            <li class="divider"></li>
+            <li><a href="#">Clear All</a></li>
+          </ul>
+        </li>
+        <li class="dropdown">
+          {%if not session.logged_in%}
+          <li><a href="#">Guest</a></li>
+          {%else%}
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{session.logged_in}} <b class="caret"></b></a>
+          {%endif%}
+          <ul class="dropdown-menu">
+            <li><a href="#">Action</a></li>
+            <li><a href="#">Another action</a></li>
+            <li><a href="#">Something else here</a></li>
+            <li class="divider"></li>
+            <li><a href="{{url_for('logout')}}">Logout</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+<div class="modal fade" id="myModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="modal_title">Welcome</h4>
+      </div>
+      <div class="modal-body">
+        <form id="login_form" action="{{url_for('login')}}" method="post">
+        <table id ="login_table" style="width=40%">
+        <tr>
+          <td>Username:</td>
+          <td><input type="text" name="username" id="login_username" autofocus></td>
+        </tr>
+        <tr id ="password_row">
+          <td>Password:</td>
+          <td><input type="password" name="password" id="login_password"></td>
+        </tr>
+        <tr>
+          <td></td><td><font color="red"><strong id="login_error"></font></strong></td>
+        </tr>
+        </table>
+      </form>
+        <form id="register_form" action="{{url_for('register')}}" method="post">
+        <table id ="register_table" style="width=40%">
+        <tr>
+          <td>Username:</td>
+          <td><input type="text" name="username" id="register_name" autofocus></td>
+        </tr>
+        <tr>
+          <td>Password:</td>
+          <td><input type="password" name="password" id = "register_psw"></td>
+        </tr>
+        <tr>
+          <td>Nick name:</td>
+          <td><input type="text" name="nick_name" id = "register_nick_name"></td>
+        </tr>
+        <tr><td></td><td><font color="red"><strong id="register_error"></strong></font></td></tr>
+        </table>
+      </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" id="re_button">Register</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id ="button_login" >Log in</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<div id="struct-content"></div>
+    
+    <script src="{{url_for('static',filename='js/main.js')}}"></script>
+    {%if session.logged_in%}
+      <script>
+        // Gobal Session info(author_name)
+        var $authorName = "{{session.logged_in}}"
+      </script>
+      <script src="{{url_for('static',filename='js/struct.js')}}" >
+      </script>
+    {%endif%}
+    
+  </body>
+</html>
