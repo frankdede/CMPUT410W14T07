@@ -17,10 +17,37 @@
 
 }
 #postListView li {
-	border: 1px 
-	solid #ddd;
-    margin: 0.25em; 
-    padding: 0.5em;
-    height:10em;
+	border: 1px
+	margin-top:0.5em; 
+	solid #ddd; 
+    padding: 0.2em;
+    height:14em;
     background-color: #eee;
+}
+.postViewHeading{
+	text-overflow: ellipsis;
+	display:inline;
+	margin-right: 0.5em;
+}
+.postViewBody{
+	height: 7.5em;
+}
+.postViewSubHeading{
+	text-overflow: ellipsis;
+	display: inline;
+	color:grey;
+}
+.postViewPermissionFooter{
+	text-overflow: ellipsis;
+	display: inline;
+	color:grey;
+	position: relative;
+	left:0.5em;
+}
+.postViewTimeFooter{
+	text-overflow: ellipsis;
+	display: inline;
+	color:grey;
+	position: relative;
+	left:35em;
 }
