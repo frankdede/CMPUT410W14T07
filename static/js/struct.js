@@ -3,29 +3,37 @@
 var $postListViewCount = 0;
 var $MAX_ITEM = 0;
 var $GLOBAL_POST_VIEW_LIST = new Array();
+/* Choose Text by default*/
+var $SELECTED_POST_TYPE = 'Text';
+
+/* struct.js runs from here. Placing the mid panel first*/
 $.get("/author/"+$authorName, function(data){
 
 	if(data){
 		$("#struct-content").html(data);
 		installClickListener();
+
 	}
 });
 
 function installClickListener(){
 	$("#textOption").click(function(){
-		alert("text");
+		$("#postSelectedType").html('Text');
+		$SELECTED_POST_TYPE = 'Text';
 	});
 
 	$("#picOption").click(function(){
-		alert("pic");
+		$("#postSelectedType").html('Picture');
+		$SELECTED_POST_TYPE = 'Picture';
 	});
 
 	$("#htmlOption").click(function(){
-		alert("html");
+		$("#postSelectedType").html('HTML');
+		$SELECTED_POST_TYPE = 'HTML';
 	});
 
 	$("#postSubmitBtn").click(function(){
-
+		
 	});
 	getAllRawPostData();
 	setRefreshTimer();
@@ -47,11 +55,13 @@ function getAllRawPostData(){
 	});
 }
 
+function getEditPostVal(){
+	return $('#postContent').val();
+}
+
 function updatePostList($list){
 	/* iterate through the list */
-	console.log('test');
 	for (var $key in $list){
-		console.log($key);
 		/* If the key is not in the global list */
 		var found =jQuery.inArray($key, $GLOBAL_POST_VIEW_LIST);
 			/*add this pair into the global list*/

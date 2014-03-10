@@ -1,0 +1,4 @@
+.listStyle		{ width:100%; height: 400px;overflow:scroll;}
+.listStyle tr td 	{ border:1px solid gray;height:100px}
+.listStyle td 		{ text-align: center;}
+#post_list		{ width:100%; }

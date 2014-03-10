@@ -68,6 +68,6 @@ recipient varchar(128),
 sender varchar(128),
 status boolean,
 PRIMARY KEY (recipient,sender),
-FOREIGN KEY (recipient) REFERENCES author(aid),
-FOREIGN KEY (sender) REFERENCES author(aid)
+FOREIGN KEY (recipient) REFERENCES author(author_name),
+FOREIGN KEY (sender) REFERENCES author(author_name)
 );
