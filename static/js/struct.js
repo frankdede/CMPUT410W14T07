@@ -65,12 +65,12 @@ function updatePostList($list){
 		var $permission = $list[$key].permission;
 
 		var $html = createPostViewHtml($title,$date,$message,$type,$permission);
-		addPostToList('postListView',$html,250);
+		//addPostToList('postListView',$html,250);
 	}
 }
 
 function createPostViewHtml($title,$date,$message,$type,$permission){
-	var $li = "<li>" +
+	var $li = "<li class=\"postViewItem\">" +
 	"<div class=\"panel panel-default\">" +
 	"<div class=\"panel-heading\">" +
 	"<h4 class=\"postViewHeading\">" +

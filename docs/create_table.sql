@@ -1,4 +1,5 @@
 USE c410;
+DROP TABLE IF EXISTS message;
 DROP TABLE IF EXISTS comments;
 DROP TABLE IF EXISTS user_permission;
 DROP TABLE IF EXISTS post;
@@ -50,6 +51,7 @@ aid char(128) NOT NULL,
 FOREIGN KEY(pid) REFERENCES post(pid),
 FOREIGN KEY(aid) REFERENCES author(aid)
 );
+
 CREATE TABLE circle(
 name1 varchar(128),
 name2 varchar(128),
@@ -58,4 +60,14 @@ PRIMARY KEY (name1, name2, sid),
 FOREIGN KEY (name1) REFERENCES author (author_name),
 FOREIGN KEY (name2) REFERENCES author (author_name),
 FOREIGN KEY (sid) REFERENCES servers (sid)
+);
+
+CREATE TABLE message(
+time timestamp,
+recipient varchar(128),
+sender varchar(128),
+status boolean,
+PRIMARY KEY (recipient,sender),
+FOREIGN KEY (recipient) REFERENCES author(aid),
+FOREIGN KEY (sender) REFERENCES author(aid)
 );
