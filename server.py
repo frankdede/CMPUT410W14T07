@@ -33,9 +33,15 @@ def root():
         return render_template('header.html')
     else:
         return redirect(url_for('login'))
-
+@app.route('/ajax/uid')
+def getuid():
+    if 'logged_in' not in session:
+        abort(404)
+    else:
+        re = make_response(session['logged_in'])
+        re.headers['Content-Type']='text/plain'
+        return re
 # login page
-
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -95,7 +101,6 @@ def renderStruct(authorName):
 # get all the new posts that a specific author can view from the server
 @app.route('/pull/<authorName>')
 def getUpdatedPosts(authorName):
-
     if ('logged_in' in session) and (session['logged_in'] == authorName):
         aid = ahelper.getAidByAuthorName(authorName)
 
@@ -103,11 +108,9 @@ def getUpdatedPosts(authorName):
             return flask.jsonify({'1':'100'}),200
         else:    
             post = postHelper.getPostList(aid)
-
-         return post,200
-     else:
-         return redirect('/templates/error/404.html'),404;
-
+            return post,200
+    else:
+         return redirect('/templates/error/404.html'),404
 if __name__ == '__main__':
     app.debug = True
     app.run()
