@@ -1,121 +1,238 @@
+from mysql.connector.errors import Error
 from databasehelper import *
+import utility
 class AuthorHelper:
     """
     If the username and password are correct, it will return True otherwise false
     """
-    def authorauthenticate(self,dbhelper,username,pwd):
-        if not isinstance(dbhelper,Databasehelper):
-            raise NameError('invalid argument')
-        if not dbhelper.isconnect():
-            dbhelper.connect()
-        cur = dbhelper.getcursor()
-        query = "SELECT * FROM author WHERE author_name=%s AND pwd=%s AND sid=1"
-        cur.execute(query,(username,pwd))
-        if cur.fetchone() is None:
+    dbHelper = None
+    def __init__(self,dbHelper):
+        self.dbHelper = dbHelper
+
+    def authorAuthenticate(self,authorName,password):
+
+        cur = self.dbHelper.getcursor()
+        query = "SELECT * FROM author WHERE author_name='%s' AND pwd='%s' AND sid=1"%(authorName,password)
+        
+        try:
+            cur.execute(query)
+            if cur.fetchone() is None:
+                return False
+            else:
+                return True
+
+        except mysql.connector.Error as err:
+            print("****************************************")
+            print("SQLException from authorAuthenticate():")
+            print("Error code:", err.errno)
+            print("SQLSTATE value:", err.sqlstate)
+            print("Error message:", err.msg)
+            print("Might be query issue:",query)
+            print("****************************************")
             return False
-        else:
-            return True
+
+        except Exception as err:
+            print("General Exception from authorAuthenticate():".format(err))
+            return False
     """
     to check the author whether is existed
     """
-    def checkauthorexist(self,dbhelper,username):
-        if not isinstance(dbhelper,Databasehelper):
-            raise NameError('invalid argument')
-        if not dbhelper.isconnect():
-            dbhelper.connect()
-        cur = dbhelper.getcursor()
-        query = "SELECT * FROM author WHERE author_name='%s' AND sid=1"%username
-        cur.execute(query)
-        if cur.fetchone() is None:
+    def doesAuthorExist(self,authorName):
+
+        cur = self.dbHelper.getcursor()
+        query = "SELECT * FROM author WHERE author_name='%s' AND sid=1"%authorName
+
+        try:
+            cur.execute(query)
+            if cur.fetchone() is None:
+                return False
+            else:
+                return True
+        except mysql.connector.Error as err:
+
+            print("****************************************")
+            print("SQLException from doesAuthorExist():")
+            print("Error code:", err.errno)
+            print("SQLSTATE value:", err.sqlstate)
+            print("Error message:", err.msg)
+            print("Might be query issue:",query)
+            print("****************************************")
             return False
-        else:
-            return True
-    def getaidbyname(self,dbhelper,username):
-        if not isinstance(dbhelper,Databasehelper):
-            raise NameError('invalid argument')
-        if not dbhelper.isconnect():
-            dbhelper.connect()
-        cur = dbhelper.getcursor()
-        query = "SELECT aid FROM author WHERE author_name='%s' AND sid=1"%username
-        cur.execute(query)
-        first = cur.fetchone()
-        if first is None:
-            return first
-        else:
-            return first[0]
-    def getnamebyaid(self,dbhelper,aid):
-        if not isinstance(dbhelper,Databasehelper):
-            raise NameError('invalid argument')
-        if not dbhelper.isconnect():
-            dbhelper.connect()
-        cur = dbhelper.getcursor()
+
+        except Exception as err:
+            print("General Exception from doesAuthorExist():".format(err))
+            return False
+
+    def getAidByAuthorName(self,authorName):
+
+        cur = self.dbHelper.getcursor()
+        query = "SELECT aid FROM author WHERE author_name='%s' AND sid=1"%authorName
+
+        try:
+            cur.execute(query)
+            first = cur.fetchone()
+            if first is None:
+                return None
+            else:
+                return first[0]
+
+        except mysql.connector.Error as err:
+
+            print("****************************************")
+            print("SQLException from getAidByAuthorName():")
+            print("Error code:", err.errno)
+            print("SQLSTATE value:", err.sqlstate)
+            print("Error message:", err.msg)
+            print("Might be query issue:",query)
+            print("****************************************")
+            print("Might be query issue",query)
+            return None
+
+        except Exception as err:
+            print("General Exception from getAidByAuthorName():".format(err))
+            return None
+
+    def getAuthorNameByAid(self,aid):
+
+        cur = self.dbHelper.getcursor()
         query = "SELECT author_name FROM author WHERE aid='%s' AND sid=1"%aid
-        cur.execute(query)
-        first = cur.fetchone()
-        if first is None:
-            return first
-        else:
-            return first[0]
-    def updateNickName(self,dbhelper,user_id,newnickname):
-        if not isinstance(dbhelper,Databasehelper):
-            raise NameError('invalid argument')
-        if not dbhelper.isconnect():
-            dbhelper.connect()
-        cur = dbhelper.getcursor()
-        query = "UPDATE author SET pwd = '%s' WHERE nick_name='%s'"%(newnickname,user_id)
-        ##print query
-        result = cur.execute(query)
-        dbhelper.commit()
+        try:
+            cur.execute(query)
+            first = cur.fetchone()
+            if first is None:
+                return None
+            else:
+                return first[0]
+
+        except mysql.connector.Error as err:
+
+            print("****************************************")
+            print("SQLException from getNameByAid():")
+            print("Error code:", err.errno)
+            print("SQLSTATE value:", err.sqlstate)
+            print("Error message:", err.msg)
+            print("Might be query issue:",query)
+            print("****************************************")
+            return None
+
+        except Exception as err:
+
+            print("General Exception from getNameByAid():".format(err))
+            return None
+
+    def updateNickNameByUserId(self,userId,newNickName):
+
+        cur = self.dbHelper.getcursor()
+        query = "UPDATE author SET pwd = '%s' WHERE nick_name='%s'"%(newNickName,userId)
+        
+        try:
+          cur.execute(query)
+          self.dbHelper.commit()
+
+        except mysql.connector.Error as err:
+
+          print("****************************************")
+          print("SQLException from updateNickNameByUserId():")
+          print("Error code:", err.errno)
+          print("SQLSTATE value:", err.sqlstate)
+          print("Error message:", err.msg)
+          print("Might be query issue:",query)
+          print("****************************************")
+          return False
+
+        except Exception as err:
+            print("General Exception from updateNickNameByUserId():".format(err))
+            return False
+
         return cur.rowcount>0
-    def updatepassword(self,dbhelper,user_id,newpassword):
-        if not isinstance(dbhelper,Databasehelper):
-            raise NameError('invalid argument')
-        if not dbhelper.isconnect():
-            dbhelper.connect()
-        cur = dbhelper.getcursor()
-        query = "UPDATE author SET pwd = '%s' WHERE aid='%s'"%(newpassword,user_id)
-        ##print query
-        result = cur.execute(query)
-        dbhelper.commit()
+
+        
+
+    def updatePasswordByUserId(self,userId,newPassword):
+
+        cur = self.dbHelper.getcursor()
+        query = "UPDATE author SET pwd = '%s' WHERE aid='%s'"%(newPassword,user_id)
+
+        try:
+          cur.execute(query)
+          self.dbHelper.commit()
+
+        except mysql.connector.Error as err:
+
+          print("****************************************")
+          print("SQLException from updatePasswordByUserId():")
+          print("Error code:", err.errno)
+          print("SQLSTATE value:", err.sqlstate)
+          print("Error message:", err.msg)
+          print("Might be query issue:",query)
+          print("****************************************")
+          return False
+
+        except Exception as err:
+            print("General Exception from updatePasswordByUserId():".format(err))
+            return False
+
         return cur.rowcount>0
 
     # to add an author to database the server_id is defualtly 1 if server_id is not provided
-    def deleteauthor(self,dbhelper,username,server_id=1):
-        if not isinstance(dbhelper,Databasehelper):
-            raise NameError('invalid argument')
-        if not dbhelper.isconnect():
-            dbhelper.connect()
-        if self.checkauthorexist(dbhelper,username) is False:
-            return -1;
-        cur = dbhelper.getcursor()
-        query = "DELETE FROM  author WHERE author_name = '%s'"%(username)
-        ##print query
-        cur.execute(query)
-        dbhelper.commit()
-        return cur.rowcount>0
-    def addauthor(self,dbhelper,username,pwd,nick_name,server_id=1):
-        if not isinstance(dbhelper,Databasehelper):
-            raise NameError('invalid argument')
-        if not dbhelper.isconnect():
-            dbhelper.connect()
-        if self.checkauthorexist(dbhelper,username):
+    def deleteAuthor(self,authorName,serverId=1):
+
+        cur = self.dbHelper.getcursor()
+
+        if self.doesAuthorExist(authorName) is False:
             return False
-        cur = dbhelper.getcursor()
-        import utility
-        user_id =utility.getid()
-        query = "INSERT INTO author VALUES('%s','%s','%s',%s,'%s')"%(user_id,username,pwd,server_id,nick_name)
+
+        query = "DELETE FROM author WHERE author_name = '%s'"%authorName
         ##print query
-        cur.execute(query)
-        dbhelper.commit()
+        try:
+          cur.execute(query)
+          self.dbHelper.commit()
+
+        except mysql.connector.Error as err:
+
+          print("****************************************")
+          print("SQLException from deleteAuthor():")
+          print("Error code:", err.errno)
+          print("SQLSTATE value:", err.sqlstate)
+          print("Error message:", err.msg)
+          print("Might be query issue:",query)
+          print("****************************************")
+          return False
+
+        except Exception as err:
+            print("General Exception from deleteAuthor():".format(err))
+            return False
+
         return cur.rowcount>0
-if __name__ == '__main__':
-    dbhelper = Databasehelper()
-    authorhelper = AuthorHelper()
-    #import utility
-    #username = utility.getid()
-    authorhelper.deleteauthor(dbhelper,"test5")
-    authorhelper.addauthor(dbhelper,"test5","12345","Test")
-    print authorhelper.authorauthenticate(dbhelper,"test5","12345")
-    #authorhelper.deleteauthor(dbhelper,username)
-    id = authorhelper.getaidbyname(dbhelper,"test5")
-    authorhelper.updatepassword(dbhelper,id,"allhappy")
+
+    def addAuthor(self,authorName,password,nickName,serverId=1):
+
+        cur = self.dbHelper.getcursor()
+
+        if self.doesAuthorExist(authorName) is True:
+
+            return False
+
+        userId =utility.getid()
+        query = "INSERT INTO author VALUES('%s','%s','%s',%s,'%s')"%(userId,authorName,password,serverId,nickName)
+        ##print query
+        try:
+          cur.execute(query)
+          self.dbHelper.commit()
+
+        except mysql.connector.Error as err:
+
+          print("****************************************")
+          print("SQLException from addAuthor():")
+          print("Error code:", err.errno)
+          print("SQLSTATE value:", err.sqlstate)
+          print("Error message:", err.msg)
+          print("Might be query issue:",query)
+          print("****************************************")
+          return False
+
+        except Exception as err:
+            print("General Exception from addAuthor():".format(err))
+            return False
+
+        return cur.rowcount>0

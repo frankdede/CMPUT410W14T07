@@ -1,0 +1,55 @@
+<!-- Left panel -->
+<div id="struct-left-panel" class="col-md-3">
+  .col-md-3
+</div>
+<!-- Mid panel -->
+<div id="struct-message-panel" class="col-md-6" >
+  <!-- the mid-upper div -->
+  <div>
+  <textarea id="postContent" type="text" class=" textBox form-control" rows="5" placeholder="Please post here..."></textarea>
+  <div class="btn-toolbar" role="toolbar" >
+    <!-- Dropdown -->
+    <div class="btn-group" >
+      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+        <span id="postSelectedType">text</span><span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu " role="menu">
+        <li id="textOption" class="postFormatDropdown"><a>Text</a></li>
+        <li id="picOption"><a>Picture</a></li>
+        <li id="htmlOption"><a>Html</a></li>
+      </ul>
+    </div>
+    <!-- Permission btn -->
+    <button id="postPermissionBtn" type="button"  class="btn btn-default " data-toggle="modal" data-target="#postPermissionModal" >Permission</button>
+    <!-- Submit btn -->
+    <button id="postSubmitBtn" type="button" style="right:20px;position: absolute;"class="btn btn-default ">Sumbit</button>
+  </div>
+  <!-- permission modal: is hidden by default-->
+  <div class="modal fade" id="postPermissionModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title" id="myModalLabel">Shared with</h4>
+        </div>
+        <div class="modal-body">
+          ...
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+  <!-- the mid-lower div -->
+  <div>
+    <ul id="postListView">
+    </ul>
+  </div>
+</div>
+<!-- Right panel -->
+<div id="right-message-panel" class="col-md-3" >
+  .col-md-3
+</div>
