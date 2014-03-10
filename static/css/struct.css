@@ -17,9 +17,7 @@
 
 }
 #postListView li{
-	border: 1px
-	margin-top:0.5em; 
-	solid: #ddd; 
+	border: 1px;
     padding: 0.2em;
     height:14em;
     background-color: #eee;
@@ -49,5 +47,5 @@
 	display: inline;
 	color:grey;
 	position: relative;
-	left:35em;
+	left:26em;
 }
