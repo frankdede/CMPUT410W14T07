@@ -91,12 +91,12 @@ class Messagehelper:
 if __name__ =="__main__":
     dbhelper = Databasehelper()
     mhelper = Messagehelper()
-    mhelper.addNewMessage(dbhelper,"test1","admin")
-    mhelper.addNewMessage(dbhelper,"test2","admin")
-    a = mhelper.getMessageListByAuthorName(dbhelper,"admin")
+    mhelper.addNewMessage(dbhelper,"mark","frank")
+    mhelper.addNewMessage(dbhelper,"pual","frank")
+    a = mhelper.getMessageListByAuthorName(dbhelper,"frank")
     print a
     #print mhelper.setMessageRead(dbhelper,"test1","test2")
     print "----------------------------"
-    print mhelper.getMessageCountByAuthorName(dbhelper,"admin")
+    print mhelper.getMessageCountByAuthorName(dbhelper,"frank")
     #print mhelper.deleteAllMessageByAuthorName(dbhelper,"test2")
     #print mhelper.getUnreadMessageListByAuthorName(dbhelper,"test1")
