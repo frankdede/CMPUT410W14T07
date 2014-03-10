@@ -24,17 +24,16 @@ app = Flask(__name__)
 app.config.from_object(__name__)
 app.secret_key = os.urandom(24)
 error = None
-
+mesg_num = 0
 # default path
 @app.route('/', methods=['GET', 'POST'])
 def root():
     if 'logged_in' in session:
         username = session['logged_in']
-        mesg_num = msghelpergetMessageCountByAuthorName(dbhelper,username)
-        return render_template('header.html')
+        mesg_num = msghelper.getMessageCountByAuthorName(dbHelper,username)
+        return render_template('header.html',mesg_num=mesg_num)
     else:
         return redirect(url_for('login'))
-
 # login page
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -77,7 +76,7 @@ def logout():
 	return redirect(url_for('login'))
 @app.route('/ajax/uid')
 def getuid():
-    if session['logged_in'] is None:
+    if 'logged_in' not in session:
         abort(404)
     else:
         re = make_response(session['logged_in'])
@@ -88,11 +87,9 @@ def messages(username):
     if username !=session['logged_in']:
         abort(404)
     else:
-        import json
-        list = msghelper.getMessageListByAuthorName(dbhelper,username)
-        re = make_response(json.dumps(list))
-        re.headers['Content-Type']='application/json'
-        return re
+        jsonstring = msghelper.getUnreadMessageListByAuthorName(dbHelper,username)
+        print jsonstring
+        return jsonstring,200
 @app.route('/author/<authorName>')
 def renderStruct(authorName):
 	if 'logged_in' in session and session['logged_in'] == authorName:

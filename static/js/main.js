@@ -6,7 +6,14 @@ var message_click= 0;
 function refresh_message_list(){
   $.get("ajax/uid",function(data){
     $.getJSON(data+"/messages.json",function(data2){
-      $(body).append(data2);
+      $("body").append("<p>"+data2+"</p>");
+      var items = JSON.parse(data2)
+      for(var i = 0 ; i < items.length; i++){
+        var name = items.requested_name+" want to be your friend";
+        $('#message_menue').append("<li><a href='#'>"+name+"</a></li>");
+  }
+      
+
   });
   });
 }

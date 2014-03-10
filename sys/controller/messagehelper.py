@@ -1,5 +1,5 @@
 from databasehelper import *
-import sys
+import sys,json
 sys.path.append('../model')
 from message import *
 class Messagehelper:
@@ -45,7 +45,7 @@ class Messagehelper:
         re = []
         for item in cur:
             re.append(Message(item[1],item[2],str(item[0]),item[3]).tojson())
-        return re
+        return json.dumps(re)
     """
     to get a list of unread message of a requester
     """
@@ -60,8 +60,8 @@ class Messagehelper:
         cur.execute(query)
         re = []
         for item in cur:
-            re.append(Message(str(tem[0]),item[1],item[2],item[3]))
-        return re
+            re.append(Message(item[1],item[2],str(item[0]),item[3]).tojson())
+        return json.dumps(re)
     """
     To get the number of message
     """
@@ -74,7 +74,10 @@ class Messagehelper:
         query ="SELECT count(*) FROM  message  WHERE read_check = '0' AND requested_name = '%s'"%(re_name)
         cur.execute(query)
         i = cur.fetchone()
-        return i[0]
+        if i is not None:
+            return i[0]
+        else:
+            return 0
     def deleteAllMessageByAuthorName(self,dbhelper,red_name):
         if not isinstance(dbhelper,Databasehelper):
             raise NameError('invalid argument')
@@ -91,8 +94,7 @@ if __name__ =="__main__":
     mhelper.addNewMessage(dbhelper,"test1","admin")
     mhelper.addNewMessage(dbhelper,"test2","admin")
     a = mhelper.getMessageListByAuthorName(dbhelper,"admin")
-    for i in a:
-        print i
+    print a
     #print mhelper.setMessageRead(dbhelper,"test1","test2")
     print "----------------------------"
     print mhelper.getMessageCountByAuthorName(dbhelper,"admin")
