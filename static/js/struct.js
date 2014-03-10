@@ -25,16 +25,17 @@ function installClickListener(){
 	});
 
 	$("#postSubmitBtn").click(function(){
-		addPostToList('postListView','hello',250);
+
 	});
+	getAllRawPostData();
 	setRefreshTimer();
 
 }
 
 function setRefreshTimer(){
-	//setInterval(function(){
+	setInterval(function(){
 		getAllRawPostData();
-	//},1000);
+	},10000);
 }
 
 function getAllRawPostData(){
@@ -56,21 +57,23 @@ function updatePostList($list){
 			/*add this pair into the global list*/
 		if(found == -1){
 			$GLOBAL_POST_VIEW_LIST.push($key);
+			
+			var $date = $list[$key].date;
+			var $title = $list[$key].title;
+			var $message = $list[$key].message;
+			var $type = $list[$key].type;
+			var $permission = $list[$key].permission;
+
+			var $html = createPostViewHtml($title,$date,$message,$type,$permission);
+			addPostToList('postListView',$html,250);
 		}
 			/*Prepare for creating new post html*/
-		var $date = $list[$key].date;
-		var $title = $list[$key].title;
-		var $message = $list[$key].message;
-		var $type = $list[$key].type;
-		var $permission = $list[$key].permission;
-
-		var $html = createPostViewHtml($title,$date,$message,$type,$permission);
-		//addPostToList('postListView',$html,250);
+		
 	}
 }
 
 function createPostViewHtml($title,$date,$message,$type,$permission){
-	var $li = "<li class=\"postViewItem\">" +
+	var $li = "<li style=\"margin-top:1em;\">" +
 	"<div class=\"panel panel-default\">" +
 	"<div class=\"panel-heading\">" +
 	"<h4 class=\"postViewHeading\">" +
