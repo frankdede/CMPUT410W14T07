@@ -11,3 +11,6 @@ INSERT INTO post values('p1','111111',NULL,'Sun Shine','What a beautiful day','t
 INSERT INTO post values('p2','222222',NULL,'Rainnig Day','You need an unberlla','txt','public');
 INSERT INTO post values('p3','333333',NULL,'Party','The city of Edmonton is hosting a BBQ party','txt','public');
 INSERT INTO post values('p4','333333',NULL,'LRT is Out of Service today','We apologize for the inconvenience','txt','public');
+
+INSERT INTO message VALUES(NULL,'111111','222222',0);
+INSERT INTO message VALUES(NULL,'222222','111111',0);

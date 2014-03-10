@@ -2,7 +2,7 @@
 /* count number of message qeues on the list view */
 var $postListViewCount = 0;
 var $MAX_ITEM = 0;
-
+var $GLOBAL_POST_VIEW_LIST = new Array();
 $.get("/author/"+$authorName, function(data){
 
 	if(data){
@@ -25,8 +25,9 @@ function installClickListener(){
 	});
 
 	$("#postSubmitBtn").click(function(){
-		addPostToList('postListView','hello',250);
+
 	});
+	getAllRawPostData();
 	setRefreshTimer();
 
 }
@@ -34,7 +35,7 @@ function installClickListener(){
 function setRefreshTimer(){
 	setInterval(function(){
 		getAllRawPostData();
-	},3000);
+	},10000);
 }
 
 function getAllRawPostData(){
@@ -47,12 +48,56 @@ function getAllRawPostData(){
 }
 
 function updatePostList($list){
-	for(var $i = 0 ; $i < $list.length; $i++){
+	/* iterate through the list */
+	console.log('test');
+	for (var $key in $list){
+		console.log($key);
+		/* If the key is not in the global list */
+		var found =jQuery.inArray($key, $GLOBAL_POST_VIEW_LIST);
+			/*add this pair into the global list*/
+		if(found == -1){
+			$GLOBAL_POST_VIEW_LIST.push($key);
+			
+			var $date = $list[$key].date;
+			var $title = $list[$key].title;
+			var $message = $list[$key].message;
+			var $type = $list[$key].type;
+			var $permission = $list[$key].permission;
 
+			var $html = createPostViewHtml($title,$date,$message,$type,$permission);
+			addPostToList('postListView',$html,250);
+		}
+			/*Prepare for creating new post html*/
+		
 	}
 }
 
-function addPostToList($id, $text,$speed)
+function createPostViewHtml($title,$date,$message,$type,$permission){
+	var $li = "<li style=\"margin-top:1em;\">" +
+	"<div class=\"panel panel-default\">" +
+	"<div class=\"panel-heading\">" +
+	"<h4 class=\"postViewHeading\">" +
+	$title +
+	"</h4>" +
+	"<small class=\"postViewSubHeading\">" +
+	$type +
+	"</small></div>" +
+	"<div class=\"panel-body postViewBody\"><span>" +
+	$message +
+	"</span></div>"+
+	"</div>"+
+	"<small class=\"postViewPermissionFooter\">"+
+	"Share with:" + $permission +
+	"</small>" +
+	"<small class=\"postViewTimeFooter\">"+
+	"Published on:" + $date +
+	"</small>" +
+	"</li>";
+
+	return $li;
+}
+
+function addPostToList($id, $html,$speed)
 {
 	var $el = $('#' + $id);
 
@@ -66,7 +111,8 @@ function addPostToList($id, $text,$speed)
 	var $ulPaddingTop    = parseInt($el.css('padding-top'));
 	var $ulPaddingBottom = parseInt($el.css('padding-bottom'));
 
-	$el.prepend('<li>' + $text + '</li>');
+	$el.prepend($html);
+
 	$postListViewCount
 
 	var $first = $('li:first', $el);
