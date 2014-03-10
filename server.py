@@ -76,23 +76,26 @@ def logout():
 
 @app.route('/author/<authorName>')
 def renderStruct(authorName):
-	if 'logged_in' in session:
+	if 'logged_in' in session and session['logged_in'] == authorName:
 		return render_template('struct.html')
 	else:
-		return redirect('/templates/error/404.html');
+		return redirect('/templates/error/404.html'),404;
 
 # get all the new posts that a specific author can view from the server
 @app.route('/pull/<authorName>')
 def getUpdatedPosts(authorName):
 
-	aid = ahelper.getAidByAuthorName(authorName)
+	if ('logged_in' in session) and (session['logged_in'] == authorName):
+		aid = ahelper.getAidByAuthorName(authorName)
 
-	if aid == None:
-		return flask.jsonify({'1':'100'}),200
-	else:	
-		post = postHelper.getPostList(aid)
+		if aid == None:
+			return flask.jsonify({'1':'100'}),200
+		else:	
+			post = postHelper.getPostList(aid)
 
- 	return post,200
+ 		return post,200
+ 	else:
+ 		return redirect('/templates/error/404.html'),404;
 
 if __name__ == '__main__':
 	app.debug = True
