@@ -1,12 +1,15 @@
 import mysql.connector
 from databasehelper import *
 from authorhelper import *
-import utility
+import sys
+sys.path.append("sys/model")
+from post import *
+import json
 class PostHelper:
     """
     #an post helper,which controls the post model
     """
-    dbHelper = None;
+    dbHelper = None
     def __init__(self,dbHelper):
         self.dbHelper = dbHelper
 
@@ -285,15 +288,14 @@ class PostHelper:
         get list of post that the user by aid can browse
         aid -- author id
         """
-        re = []
+        re = {}
         cur = self.dbHelper.getcursor()
 
         #get the post if it is public
-        query = "SELECT * FROM post WHERE permission='public'"
+        query = "SELECT * FROM post WHERE permission='public';"
 
         try:
           cur.execute(query)
-          self.dbHelper.commit()
 
         except mysql.connector.Error as err:
 
@@ -310,18 +312,26 @@ class PostHelper:
           print("General Exception from getPostList() 1st block:".format(err))
           return None
 
-        for fid in cur:
-            re.append(fid)
+        if cur != None:
+          for ele in cur:
 
-        #???????
-        utility.addpath('../model')
+            pid = ele[0]
+            aid = ele[1]
+            time = ele[2].strftime("%Y-%m-%d %H:%M:%S")
+            title = ele[3]
+            msg = ele[4]
+            msgType = ele[5]
+            permission = ele[6]
+
+            post = Post(pid,aid,time,title,msg,msgType,permission)
+
+            re[pid]=post.tojson()
 
         #get the post if aid is its author
         query = "SELECT * FROM post WHERE permission='me' and aid='%s'"%(aid)
 
         try:
           cur.execute(query)
-          self.dbHelper.commit()
 
         except mysql.connector.Error as err:
 
@@ -337,15 +347,26 @@ class PostHelper:
         except Exception as err:
           print("General Exception from getPostList() 2nd block:".format(err))
           return None
+          
+        if cur != None:
+          for ele in cur:
 
-        for fid in cur:
-            re.append(fid)
+            pid = ele[0]
+            aid = ele[1]
+            time = ele[2].strftime("%Y-%m-%d %H:%M:%S")
+            title = ele[3]
+            msg = ele[4]
+            msgType = ele[5]
+            permission = ele[6]
+            
+            post = Post(pid,aid,time,title,msg,msgType,permission)
+
+            re[pid]=post.tojson()
 
         #get the post if aid is specifiied user
         query = "SELECT * FROM post WHERE permission = 'user' and pid IN (SELECT pid from user_permission WHERE aid='%s')"%(aid)
         try:
           cur.execute(query)
-          self.dbHelper.commit()
 
         except mysql.connector.Error as err:
 
@@ -362,11 +383,24 @@ class PostHelper:
           print("General Exception from getPostList() 3rd block:".format(err))
           return None
 
-        for fid in cur:
-            re.append(fid)
+        if cur != None:
+          for ele in cur:
+
+            pid = ele[0]
+            aid = ele[1]
+            time = ele[2].strftime("%Y-%m-%d %H:%M:%S")
+            title = ele[3]
+            msg = ele[4]
+            msgType = ele[5]
+            permission = ele[6]
+            
+            post = Post(pid,aid,time,title,msg,msgType,permission)
+
+            re[pid]=post.tojson()
         #get the post if aid is the author's friend
 
-        authorName = self.getNameByAid(aid)
+        authorHelper = AuthorHelper(self.dbHelper)
+        authorName = authorHelper.getAuthorNameByAid(aid)
 
         try:
           if(authorName == None):
@@ -381,7 +415,6 @@ class PostHelper:
 
         try:
           cur.execute(query)
-          self.dbHelper.commit()
 
         except mysql.connector.Error as err:
 
@@ -398,15 +431,26 @@ class PostHelper:
           print("General Exception from getPostList() 4th block:".format(err))
           return None
 
-        for fid in cur:
-            re.append(fid)
+        if cur != None:
+          for ele in cur:
+
+            pid = ele[0]
+            aid = ele[1]
+            time = ele[2].strftime("%Y-%m-%d %H:%M:%S")
+            title = ele[3]
+            msg = ele[4]
+            msgType = ele[5]
+            permission = ele[6]
+
+            post = Post(pid,aid,time,title,msg,msgType,permission)
+
+            re[pid]=post.tojson()
         #get the post if aid is the author's friends`s friend
 
         query = "SELECT * FROM post WHERE permission = 'fof' and aid IN  (SELECT aid from author WHERE author_name IN (SELECT name1 FROM circle WHERE name2 IN (SELECT name1 FROM circle WHERE name2 = '%s')))"%(authorName)
 
         try:
           cur.execute(query)
-          self.dbHelper.commit()
 
         except mysql.connector.Error as err:
 
@@ -423,15 +467,27 @@ class PostHelper:
           print("General Exception from getPostList() 5th block:".format(err))
           return None
 
-        for fid in cur:
-            re.append(fid)
+        if cur != None:
+          for ele in cur:
+
+            pid = ele[0]
+            aid = ele[1]
+            time = ele[2].strftime("%Y-%m-%d %H:%M:%S")
+            title = ele[3]
+            msg = ele[4]
+            msgType = ele[5]
+            permission = ele[6]
+
+            post = Post(pid,aid,time,title,msg,msgType,permission)
+
+            re[pid]=post.tojson()
+
         #get the post if aid is in the same host as the permission's requirement
 
         query = "SELECT * FROM post WHERE permission='fomh' AND aid IN (SELECT a1.aid FROM author a1,author a2 WHERE a1.sid = a2.sid AND a2.aid = '%s')"%(aid)
 
         try:
           cur.execute(query)
-          self.dbHelper.commit()
 
         except mysql.connector.Error as err:
 
@@ -448,6 +504,19 @@ class PostHelper:
           print("General Exception from getPostList() 6th block:".format(err))
           return None
 
-        for fid in cur:
-            re.append(fid)
-        return re
+        if cur != None:
+          for ele in cur:
+
+            pid = ele[0]
+            aid = ele[1]
+            time = ele[2].strftime("%Y-%m-%d %H:%M:%S")
+            title = ele[3]
+            msg = ele[4]
+            msgType = ele[5]
+            permission = ele[6]
+
+            post = Post(pid,aid,time,title,msg,msgType,permission)
+
+            re[pid]=post.tojson()
+            
+        return json.dumps(re)

@@ -5,7 +5,7 @@ class AuthorHelper:
     """
     If the username and password are correct, it will return True otherwise false
     """
-    dbHelper = None;
+    dbHelper = None
     def __init__(self,dbHelper):
         self.dbHelper = dbHelper
 
@@ -92,7 +92,7 @@ class AuthorHelper:
             print("General Exception from getAidByAuthorName():".format(err))
             return None
 
-    def getNameByAid(self,aid):
+    def getAuthorNameByAid(self,aid):
 
         cur = self.dbHelper.getcursor()
         query = "SELECT author_name FROM author WHERE aid='%s' AND sid=1"%aid

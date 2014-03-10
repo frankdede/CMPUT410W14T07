@@ -27,14 +27,14 @@ function installClickListener(){
 	$("#postSubmitBtn").click(function(){
 		addPostToList('postListView','hello',250);
 	});
-
+	setRefreshTimer();
 
 }
 
 function setRefreshTimer(){
 	setInterval(function(){
 		getAllRawPostData();
-	},10000);
+	},3000);
 }
 
 function getAllRawPostData(){
