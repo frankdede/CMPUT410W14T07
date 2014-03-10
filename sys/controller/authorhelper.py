@@ -17,8 +17,10 @@ class AuthorHelper:
         try:
             cur.execute(query)
             if cur.fetchone() is None:
+                cur.close()
                 return False
             else:
+                cur.close()
                 return True
 
         except mysql.connector.Error as err:
@@ -45,8 +47,10 @@ class AuthorHelper:
         try:
             cur.execute(query)
             if cur.fetchone() is None:
+                cur.close()
                 return False
             else:
+                cur.close()
                 return True
         except mysql.connector.Error as err:
 

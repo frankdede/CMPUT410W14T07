@@ -9,17 +9,22 @@ from authorhelper import *
 from posthelper import *
 from databasehelper import *
 from messagehelper import *
+from circlehelper import *
 
 DEBUG = True
 # create a new database obj
 dbHelper = Databasehelper()
 # connect
 dbHelper.connect()
+dbHelper.setAutoCommit()
 
 ahelper = AuthorHelper(dbHelper)
 # use the conneted dbHelper to initialize postHelper obj
 postHelper = PostHelper(dbHelper)
+# 
 msgHelper = Messagehelper(dbHelper)
+#
+circleHelper = CircleHelper(dbHelper)
 
 app = Flask(__name__)
 app.config.from_object(__name__)
@@ -134,7 +139,31 @@ def uploadPostToServer(authorName):
             newPost = Post(None,aid,None,'',msg,msgType,permission)
             result = postHelper.addPost(newPost)
             return json.dumps({'aid':result}),200
-        
+
+# This is used to get friend list from database
+@app.route('/<authorName>/post/getPermissionList/',methods=['GET'])
+def getPermissionList(authorName):
+
+    if ('logged_in' in session) and (session['logged_in'] == authorName):
+        if request.method == 'GET':
+            # Get the permission: friend or fof, from parameter 
+            permission = request.args.get('option')
+
+            if permission == "friend":
+                friendlist = circleHelper.getFriendList(authorName)
+                if friendlist != None:
+                    return json.dumps(friendlist),200
+
+            elif permission == "fof":
+                fof = circleHelper.getFriendOfFriend(authorName)
+
+                if fof != None:
+                    return json.dumps(fof),200
+            else:
+                return "null",200
+        return "null",200
+    abort(404)
+
 if __name__ == '__main__':
     app.debug = True
     app.run()

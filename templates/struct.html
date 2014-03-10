@@ -35,11 +35,11 @@
             </div>
             <div class="modal-body">
           <select name = "permission" onchange = "permission_selected(this)">
-            <option value="" disabled selected style="display:none;" >Type</option>
-            <option value = "public">public</option>
-            <option value = "me">me</option>
-            <option value = "friend">friend</option>
-            <option value = "fof">friend's friend</option>
+              <option value="type" autocomplete="off" selected >Type</option>
+            <option value = "public" autocomplete="off">public</option>
+            <option value = "me" autocomplete="off">me</option>
+            <option value = "friend" autocomplete="off">friend</option>
+            <option value = "fof" autocomplete="off">friend's friend</option>
             <!--<option value = "fomh">friends on my host</option>-->
           </select>
           <div  class="listStyle">
@@ -53,6 +53,7 @@
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->
   </div><!-- /.modal -->
+    <script src="{{url_for('static',filename='js/permission.js')}}"></script>
   <!-- the mid-lower div -->
   <div>
     <ul id="postListView">

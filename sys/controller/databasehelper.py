@@ -33,6 +33,8 @@ class Databasehelper:
             else:
                 print(err)
 # get dabase connector
+    def setAutoCommit(self):
+        self.cnx.autocommit = True
     def getdabaseconnector(self):
         return self.cnx
     def commit(self):

@@ -1,45 +1,44 @@
 function permission_selected(sel){
+	var postListTable=document.getElementById("post_list"); 
+	while(postListTable.hasChildNodes()){
+		postListTable.removeChild(postListTable.firstChild);
+	}
 	//get user name
-	var userId=1;
+	var userId=$authorName;
 	//get select option value
 	var option = sel.options[sel.selectedIndex].value;
-	alert(option);
 	if(option==="friend"||option==="fof"){
 		//combine paramter
 		var send={"userid":userId,"option":option};
 		//send reuqest and get response
-		$.get("post/getPermissionList",send).done(function(data){
-			//TODO: This should return the list of friend or friend of friend
-			alert(data);
-		});
-		var postListTable=document.getElementById("post_list"); 
-		//TODO: number should be the length of list 
-		// var number = Object.keys(data).length;
-		var number =100;
-		var count=0;
-		var rowNumber=0;
-		if(number>0){
-			for(var i=0;i<number;i++){
-				if(count==0){
-					var row=postListTable.insertRow(rowNumber);
-				}
-				var cell=row.insertCell(count);
-				//TODO: This should be the name of friend
-				cell.innerHTML="NEW";
-				var br = document.createElement("br");
-				cell.appendChild(br);
-				var checkbox = document.createElement("input");
-				checkbox.type="checkbox";
-				//TODO: checkbox's value should be the name of friend
-				checkbox.value="checkbox"+i;
-				cell.appendChild(checkbox);
-				count=count+1;
-				if(count==3){
-					count=0;
-					rowNumber=rowNumber+1;
+		$.get("/"+userId+"/post/getPermissionList",send).done(function(data){
+			data=JSON.parse(data);
+			console.log(data);
+			var number=Object.keys(data).length;
+			var count=0;
+			var rowNumber=0;
+			if(number>0){
+				for(var i=0;i<number;i++){
+					if(count==0){
+						var row=postListTable.insertRow(rowNumber);
+					}
+					var cell=row.insertCell(count);
+					cell.innerHTML=data[i];
+					var br = document.createElement("br");
+					cell.appendChild(br);
+					var checkbox = document.createElement("input");
+					checkbox.type="checkbox";
+					checkbox.value=data[i];
+					checkbox.name="checkbox";
+					cell.appendChild(checkbox);
+					count=count+1;
+					if(count==3){
+						count=0;
+						rowNumber=rowNumber+1;
+					}
 				}
 			}
-		}
+		});
 	}
 }
 $("#permissionSelected").click(function(){
@@ -55,9 +54,7 @@ $("#permissionSelected").click(function(){
 		type:"post",
 		contentType:"application/json",
 		success: function(data){
-			alert(data);
 			window.location.replace("/");
 		}
 	});
  });
-

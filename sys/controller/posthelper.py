@@ -520,4 +520,5 @@ class PostHelper:
 
             re[pid]=post.tojson()
             
+        cur.close() 
         return json.dumps(re)
