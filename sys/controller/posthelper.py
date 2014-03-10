@@ -1,6 +1,7 @@
 import mysql.connector
 from databasehelper import *
 from authorhelper import *
+import utility
 import sys
 sys.path.append("sys/model")
 from post import *
@@ -21,11 +22,11 @@ class PostHelper:
     def addPost(self,post):
 
         cur = self.dbhelper.getcursor()
-        pid = post.getpid()
+        pid = utility.getid()
         aid = post.getaid()
         title = post.gettitle()
-        message = post.getmessage()
-        type = post.gettype()
+        msg = post.getmessage()
+        msgType = post.gettype()
         permission = post.getpermission()
         query = "INSERT INTO post VALUES('%s','%s',NULL,'%s','%s','%s','%s')"%(pid,aid,title,message,type,permission)
 

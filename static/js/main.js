@@ -3,11 +3,10 @@ var click = 0;
 var message_click= 0;
 function refresh_message_list(){
   $.get("ajax/uid",function(data){
-    $.getJSON(data+"/messages.json",function(data2){
+    $.getJSON(data+"/messages",function(data2){
       $.each(data2,function(i,field){
-        $("body").append("<p>"+field+"</p>");
         var item = jQuery.parseJSON(field);
-        $("body").append("<p>"+item.request_name+"</p>");
+        $("#message_dropdown1").prepend("<li><a href='#'><strong>"+item.request_name+"</strong> wants to be your friend</a></li>");
 
       });
         //var name = items.requested_name+" want to be your friend";
