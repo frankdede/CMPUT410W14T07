@@ -14,7 +14,7 @@ function permission_selected(sel){
 	//get user name
 	var userId=$authorName;
 	//get select option value
-	var option = sel.options[sel.selectedIndex].value;
+	option = sel.options[sel.selectedIndex].value;
 	if(option==="friend"||option==="fof"){
 		//combine paramter
 		var send={"userid":userId,"option":option};

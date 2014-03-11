@@ -6,13 +6,14 @@
 <div id="struct-message-panel" class="col-md-6" >
   <!-- the mid-upper div -->
   <div>
-  <textarea id="postContent" type="text" class=" textBox form-control" rows="5" placeholder="Please post here..."></textarea>
+    <input id ="postTitle"type="text" class="postEditTitle form-control " placeholder="title">
+    <textarea id="postContent" type="text" class=" textBox form-control" rows="5" placeholder="Please post here..."></textarea>
+
   <div class="btn-toolbar" role="toolbar" >
     <!-- Dropdown -->
     
     <div class="btn-group" >
-
-      <button id="postSelectedType" class="btn btn-default status">status</button>
+      <button id="postSelectedType" class="btn btn-default status">Text</button>
       <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
       <span class="caret"></span>
       </button>
@@ -22,10 +23,12 @@
         <li id="htmlOption"><a>HTML</a></li>
       </ul>
     </div>
+
     <!-- Permission btn -->
     <button id="postPermissionBtn" type="button"  class="btn btn-default " data-toggle="modal" data-target="#postingPermissionModal" >Permission</button>
     <!-- Submit btn -->
     <button id="postSubmitBtn" type="button" style="right:20px;position: absolute;"class="btn btn-primary ">Sumbit</button>
+    </div>
   </div>
   <!-- permission modal: is hidden by default-->
   

@@ -4,7 +4,7 @@ var $postListViewCount = 0;
 var $MAX_ITEM = 0;
 var $GLOBAL_POST_VIEW_LIST = new Array();
 /* Choose Text by default*/
-var $SELECTED_POST_TYPE = 'Text';
+var $SELECTED_POST_TYPE = 'text';
 
 /* struct.js runs from here. Placing the mid panel first*/
 $.get("/author/"+$authorName, function(data){
@@ -33,11 +33,30 @@ function installClickListener(){
 	});
 
 	$("#postSubmitBtn").click(function(){
-		
-	});
-	getAllRawPostData();
-	setRefreshTimer();
 
+		var $postObj = getJsonPostObj();
+		if($postObj['permission'] != null && $postObj['message'] != '' && postObj['title']){
+			submitPostToServer($postObj);
+
+		}else{
+			alert("Please complete your form correctly before submit");
+		}
+	});
+
+		getAllRawPostData();
+		setRefreshTimer();
+}
+
+function submitPostToServer($postObj){
+	console.log(JSON.stringify($postObj))
+	$.post('/'+ $authorName +'/post/',JSON.stringify($postObj)).done(function(data){
+			var $re = JSON.parse($data);
+			if (re['status']){
+				getAllRawPostData();
+			}else{
+				alert('Please submit again.');
+			}
+	});
 }
 
 function setRefreshTimer(){
@@ -47,7 +66,7 @@ function setRefreshTimer(){
 }
 
 function getAllRawPostData(){
-	$.get("/pull/"+$authorName,function($data){
+	$.get("/"+ $authorName +"/pull/",function($data){
 		if($data){
 			var $postList = JSON.parse($data);
 			updatePostList($postList);
@@ -55,8 +74,21 @@ function getAllRawPostData(){
 	});
 }
 
-function getEditPostVal(){
-	return $('#postContent').val();
+function getJsonPostObj(){
+	var $msg = $('#postContent').val();
+	var $title =$('#postTitle').val();
+	/*msgType can be null*/
+	var $msgType = $SELECTED_POST_TYPE;
+	var $permissionType = option;
+
+	var $post = {
+				 title: $title,
+				 message: $msg,
+				 type: $msgType.toLowerCase(),
+				 permission: $permissionType				 
+				};
+
+	return $post;
 }
 
 function updatePostList($list){
