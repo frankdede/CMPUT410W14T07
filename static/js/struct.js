@@ -35,7 +35,7 @@ function installClickListener(){
 	$("#postSubmitBtn").click(function(){
 
 		var $postObj = getJsonPostObj();
-		if($postObj['permission'] != null && $postObj['message'] != '' && postObj['title']){
+		if($postObj['permission'] != null && $postObj['message'] != '' && postObj['title'] != ''){
 			submitPostToServer($postObj);
 
 		}else{
