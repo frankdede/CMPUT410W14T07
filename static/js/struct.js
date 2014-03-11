@@ -35,7 +35,7 @@ function installClickListener(){
 	$("#postSubmitBtn").click(function(){
 
 		var $postObj = getJsonPostObj();
-		if($postObj['permission'] != null && $postObj['message'] != '' && postObj['title'] != ''){
+		if($postObj['permission'] != null && $postObj['message'] != '' && $postObj['title'] != ''){
 			submitPostToServer($postObj);
 
 		}else{
@@ -49,9 +49,9 @@ function installClickListener(){
 
 function submitPostToServer($postObj){
 	console.log(JSON.stringify($postObj))
-	$.post('/'+ $authorName +'/post/',JSON.stringify($postObj)).done(function(data){
+	$.post('/'+ $authorName +'/post/',JSON.stringify($postObj)).done(function($data){
 			var $re = JSON.parse($data);
-			if (re['status']){
+			if ($re['status']){
 				getAllRawPostData();
 			}else{
 				alert('Please submit again.');
