@@ -164,7 +164,7 @@ def getPermissionList(authorName):
             # Get the permission: friend or fof, from parameter 
             permission = request.args.get('option')
 
-            if permission == "friend":
+            if permission == "friend" or permission == "friends":
                 friendlist = circleHelper.getFriendList(authorName)
                 if friendlist != None:
                     return json.dumps(friendlist),200
