@@ -1,15 +1,16 @@
+var option;
 function permission_selected(sel){
 	var postListTable=document.getElementById("post_list"); 
 	while(postListTable.hasChildNodes()){
 		postListTable.removeChild(postListTable.firstChild);
 	}
 	//get user name
-	var userId="ca035f17-be35-4ed5-999a-04ee3a120385";
+	var userName=$authorName;
 	//get select option value
-	var option = sel.options[sel.selectedIndex].value;
+	option = sel.options[sel.selectedIndex].value;
 	if(option==="friend"||option==="fof"){
 		//combine paramter
-		var send={"userid":userId,"option":option};
+		var send={"userName":userName,"option":option};
 		//send reuqest and get response
 		$.get("post/getPermissionList",send).done(function(data){
 			data=JSON.parse(data);
@@ -41,14 +42,20 @@ function permission_selected(sel){
 	}
 }
 $("#permissionSelected").click(function(){
+	var url = "/post/"+option;
 	var checked = {};
-	$("input:checkbox[name=checkbox]:checked").each(function(){
-		var value = $(this).val();
-		var key=value+""
-		checked[key]=value;
-	});
+	if(option==="friend"||option==="fof"){
+		$("input:checkbox[name=checkbox]:checked").each(function(){
+			var value = $(this).val();
+			var key=value+""
+			checked[key]=value;
+		});
+	}
+	else if(option==="me"){
+		checked[$authorName]=$authorName;
+	}
 	$.ajax({
-		url:"/post",
+		url:url,
 		data:JSON.stringify(checked),
 		type:"post",
 		contentType:"application/json",
