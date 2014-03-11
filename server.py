@@ -101,9 +101,7 @@ def getUpdatedPosts(authorName):
 def getPermissionList():
     	if request.method == 'GET':
 		# Get the user ID from parameter
-		userId = request.args.get('userid')
-		# Use user ID to find user Name from database
-		userName=ahelper.getAuthorNameByAid(userId)
+		userName = request.args.get('userName')
 		# Get the permission: friend or fof, from parameter 
 		permission = request.args.get('option')
 		if permission == "friend":
