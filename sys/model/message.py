@@ -3,7 +3,7 @@ class Message:
     """
     to store message information
     """
-    def __init__(self,recipient,sender,time,read=0):
+    def __init__(self,recipient,sender,time,status=0):
         self.recipient = recipient
         self.sender = sender
         self.time = time

@@ -152,10 +152,10 @@ class AuthorHelper:
 
         
 
-    def updatePasswordByUserId(self,userId,newPassword):
+    def updatePasswordByAid(self,aid,newPassword):
 
         cur = self.dbHelper.getcursor()
-        query = "UPDATE author SET pwd = '%s' WHERE aid='%s'"%(newPassword,user_id)
+        query = "UPDATE author SET pwd = '%s' WHERE aid='%s'"%(newPassword,aid)
 
         try:
           cur.execute(query)
