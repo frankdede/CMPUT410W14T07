@@ -1,6 +1,7 @@
 import mysql.connector
 from databasehelper import *
 from authorhelper import *
+import utility
 import sys
 sys.path.append("sys/model")
 from post import *
@@ -20,14 +21,14 @@ class PostHelper:
         """
     def addPost(self,post):
 
-        cur = self.dbhelper.getcursor()
-        pid = post.getpid()
+        cur = self.dbHelper.getcursor()
+        pid = utility.getid()
         aid = post.getaid()
-        title = post.gettitle()
-        message = post.getmessage()
-        type = post.gettype()
-        permission = post.getpermission()
-        query = "INSERT INTO post VALUES('%s','%s',NULL,'%s','%s','%s','%s')"%(pid,aid,title,message,type,permission)
+        postTitle = post.gettitle()
+        postMsg = post.getmessage()
+        postMsgType = post.gettype()
+        postPermission = post.getpermission()
+        query = "INSERT INTO post VALUES('%s','%s',NULL,'%s','%s','%s','%s')"%(pid,aid,postTitle,postMsg,postMsgType,postPermission)
 
         try:
           cur.execute(query)
@@ -115,7 +116,7 @@ class PostHelper:
 
         return cur.rowcount>0
 
-    def updateMessage(self,pid,newtitle):
+    def updateTitle(self,pid,newtitle):
         """
         to update the title of post
         pid -- post id
@@ -226,9 +227,7 @@ class PostHelper:
         pid -- post id
         """
         cur = self.dbHelper.getcursor()
-        query=""
-        if type == "pid":
-            query = "DELETE FROM post WHERE pid = '%s'"%(key)
+        query = "DELETE FROM post WHERE pid = '%s'"%(pid)
 
         try:
           cur.execute(query)
@@ -258,9 +257,7 @@ class PostHelper:
         dbhelper -- database helper
         """
         cur = self.dbHelper.getcursor()
-        query=""
-        if type == "aid":
-            query = "DELETE FROM post WHERE aid = '%s'"%(aid)
+        query = "DELETE FROM post WHERE aid = '%s'"%(aid)
 
         try:
           cur.execute(query)
@@ -519,4 +516,5 @@ class PostHelper:
 
             re[pid]=post.tojson()
             
+        cur.close() 
         return json.dumps(re)

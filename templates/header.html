@@ -11,6 +11,7 @@
      <link href="{{url_for('static',filename='css/main.css')}}" rel="stylesheet">
      <!-- Struct css-->
      <link href="{{url_for('static',filename='css/struct.css')}}" rel="stylesheet">
+     <link href="{{url_for('static',filename='css/permission.css')}}" rel="stylesheet">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -18,9 +19,11 @@
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="{{url_for('static',filename='js/jquery-1.10.2.min.js')}}"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="{{url_for('static',filename='js/bootstrap.min.js')}}"></script>
+    <script src="{{url_for('static',filename='js/json2.js')}}"></script>
+    
   </head>
 <body>
 <nav class="navbar navbar-default" role="navigation">
@@ -58,20 +61,17 @@
         <div class="form-group">
           <input type="text" class="form-control" placeholder="Search">
         </div>
-        <button type="submit" class="btn btn-default">Submit</button>
+        <button type="submit" class="btn btn-default" id="search_button">Submit</button>
       </form>
       <ul class="nav navbar-nav navbar-right">
         {%if not session.logged_in%}
         <li><button class="btn btn-default navbar-btn" data-toggle="modal" data-target="#myModal">Login</button></li>
         {%else%}
         <li class="dropdown">
-        <a class="dropdown-toggle" href="#" id ="message_menue" >Message <span class="badge">42</span></a>
+        <a class="dropdown-toggle" href="#" id ="message_menue" data-toggle="dropdown" >Message <span class="badge">42</span></a>
         {%endif%}
-        <ul class="dropdown-menu" id="message_dropdown" aria-labelledby="message_menue">
-            <li><a href="#">message1</a></li>
-            <li><a href="#">message2</a></li>
-            <li><a href="#">message3</a></li>
-            <li class="divider"></li>
+        <ul class="dropdown-menu" id="message_dropdown1" aria-labelledby="message_menue">
+            <li class="divider" id="divider"></li>
             <li><a href="#">Clear All</a></li>
           </ul>
         </li>

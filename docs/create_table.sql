@@ -1,4 +1,5 @@
 USE c410;
+DROP TABLE IF EXISTS message;
 DROP TABLE IF EXISTS comments;
 DROP TABLE IF EXISTS user_permission;
 DROP TABLE IF EXISTS post;
@@ -39,7 +40,7 @@ aid varchar(128),
 time TIMESTAMP NOT NULL,
 title varchar(128) NOT NULL,
 message varchar(1024),
-type enum('html','txt','markdown') NOT NULL,
+type enum('html','text','markdown','picture') NOT NULL,
 permission enum('me', 'user', 'friends', 'fof', 'fomh', 'public') NOT NULL,
 PRIMARY KEY (pid),
 FOREIGN KEY (aid) REFERENCES author (aid)
@@ -50,6 +51,7 @@ aid char(128) NOT NULL,
 FOREIGN KEY(pid) REFERENCES post(pid),
 FOREIGN KEY(aid) REFERENCES author(aid)
 );
+
 CREATE TABLE circle(
 name1 varchar(128),
 name2 varchar(128),
@@ -59,4 +61,13 @@ FOREIGN KEY (name1) REFERENCES author (author_name),
 FOREIGN KEY (name2) REFERENCES author (author_name),
 FOREIGN KEY (sid) REFERENCES servers (sid)
 );
-INSERT INTO servers values(1,'localhost','localhost')
+
+CREATE TABLE message(
+time timestamp,
+recipient varchar(128),
+sender varchar(128),
+status boolean,
+PRIMARY KEY (recipient,sender),
+FOREIGN KEY (recipient) REFERENCES author(author_name),
+FOREIGN KEY (sender) REFERENCES author(author_name)
+);

@@ -11,16 +11,44 @@
 	list-style: none;
 	padding: 1em;
 	border: 0px ;
-	margin: 1em 0;
+	margin: 1em ;
 	height: 100em;
 	overflow: scroll;
 
 }
-#postListView li {
-	border: 1px 
-	solid #ddd;
-    margin: 0.25em; 
-    padding: 0.5em;
-    height:10em;
+#postListView li{
+	border: 1px;
+    padding: 0.2em;
+    height:14em;
     background-color: #eee;
+}
+.postViewHeading{
+	text-overflow: ellipsis;
+	display:inline;
+	margin-right: 0.5em;
+}
+.postViewBody{
+	height: 7.5em;
+}
+.postViewSubHeading{
+	text-overflow: ellipsis;
+	display: inline;
+	color:grey;
+}
+.postViewPermissionFooter{
+	text-overflow: ellipsis;
+	display: inline;
+	color:grey;
+	position: relative;
+	left:0.5em;
+}
+.postViewTimeFooter{
+	text-overflow: ellipsis;
+	display: inline;
+	color:grey;
+	position: relative;
+	left:26em;
+}
+.postEditTitle{
+	margin-bottom: 1em;
 }

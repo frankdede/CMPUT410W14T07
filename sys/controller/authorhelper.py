@@ -17,8 +17,10 @@ class AuthorHelper:
         try:
             cur.execute(query)
             if cur.fetchone() is None:
+                cur.close()
                 return False
             else:
+                cur.close()
                 return True
 
         except mysql.connector.Error as err:
@@ -45,8 +47,10 @@ class AuthorHelper:
         try:
             cur.execute(query)
             if cur.fetchone() is None:
+                cur.close()
                 return False
             else:
+                cur.close()
                 return True
         except mysql.connector.Error as err:
 
@@ -120,10 +124,10 @@ class AuthorHelper:
             print("General Exception from getNameByAid():".format(err))
             return None
 
-    def updateNickNameByUserId(self,userId,newNickName):
+    def updateNickNameByAid(self,aid,newNickName):
 
         cur = self.dbHelper.getcursor()
-        query = "UPDATE author SET pwd = '%s' WHERE nick_name='%s'"%(newNickName,userId)
+        query = "UPDATE author SET nick_name = '%s' WHERE aid = '%s'"%(newNickName,aid)
         
         try:
           cur.execute(query)
@@ -132,7 +136,7 @@ class AuthorHelper:
         except mysql.connector.Error as err:
 
           print("****************************************")
-          print("SQLException from updateNickNameByUserId():")
+          print("SQLException from updateNickNameByAid():")
           print("Error code:", err.errno)
           print("SQLSTATE value:", err.sqlstate)
           print("Error message:", err.msg)
@@ -141,17 +145,17 @@ class AuthorHelper:
           return False
 
         except Exception as err:
-            print("General Exception from updateNickNameByUserId():".format(err))
+            print("General Exception from updateNickNameByAid():".format(err))
             return False
 
         return cur.rowcount>0
 
         
 
-    def updatePasswordByUserId(self,userId,newPassword):
+    def updatePasswordByAid(self,aid,newPassword):
 
         cur = self.dbHelper.getcursor()
-        query = "UPDATE author SET pwd = '%s' WHERE aid='%s'"%(newPassword,user_id)
+        query = "UPDATE author SET pwd = '%s' WHERE aid='%s'"%(newPassword,aid)
 
         try:
           cur.execute(query)
