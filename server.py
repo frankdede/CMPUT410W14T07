@@ -149,7 +149,7 @@ def uploadPostToServer(authorName):
         if aid == None:
             return json.dumps({'status':False}),200
         else:
-            newPost = Post(None,aid,None,'',postMsg,postType,postPermission)
+            newPost = Post(None,aid,None,postTitle,postMsg,postType,postPermission)
             result = postHelper.addPost(newPost)
             return json.dumps({'status':result}),200
     else:

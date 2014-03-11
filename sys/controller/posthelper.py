@@ -116,7 +116,7 @@ class PostHelper:
 
         return cur.rowcount>0
 
-    def updateMessage(self,pid,newtitle):
+    def updateTitle(self,pid,newtitle):
         """
         to update the title of post
         pid -- post id

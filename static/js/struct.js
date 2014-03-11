@@ -4,7 +4,7 @@ var $postListViewCount = 0;
 var $MAX_ITEM = 0;
 var $GLOBAL_POST_VIEW_LIST = new Array();
 /* Choose Text by default*/
-var $SELECTED_POST_TYPE = 'txt';
+var $SELECTED_POST_TYPE = 'text';
 
 /* struct.js runs from here. Placing the mid panel first*/
 $.get("/author/"+$authorName, function(data){
@@ -35,10 +35,11 @@ function installClickListener(){
 	$("#postSubmitBtn").click(function(){
 
 		var $postObj = getJsonPostObj();
-		if($postObj['permission'] != null && $postObj['message'] != ''){
+		if($postObj['permission'] != null && $postObj['message'] != '' && postObj['title']){
 			submitPostToServer($postObj);
+
 		}else{
-			alert("Please complete your post before submit");
+			alert("Please complete your form correctly before submit");
 		}
 	});
 
@@ -49,7 +50,12 @@ function installClickListener(){
 function submitPostToServer($postObj){
 	console.log(JSON.stringify($postObj))
 	$.post('/'+ $authorName +'/post/',JSON.stringify($postObj)).done(function(data){
-		console.log(JSON.parse($data));
+			var $re = JSON.parse($data);
+			if (re['status']){
+				getAllRawPostData();
+			}else{
+				alert('Please submit again.');
+			}
 	});
 }
 
@@ -70,12 +76,13 @@ function getAllRawPostData(){
 
 function getJsonPostObj(){
 	var $msg = $('#postContent').val();
+	var $title =$('#postTitle').val();
 	/*msgType can be null*/
 	var $msgType = $SELECTED_POST_TYPE;
 	var $permissionType = option;
 
 	var $post = {
-				 title: null,
+				 title: $title,
 				 message: $msg,
 				 type: $msgType.toLowerCase(),
 				 permission: $permissionType				 
