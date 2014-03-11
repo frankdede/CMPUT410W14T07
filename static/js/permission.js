@@ -1,3 +1,11 @@
+/*Global to all js files */
+
+/*the checkboxs that the user checked*/
+var checked = {};
+/*the option that the user chose*/
+var option = null;
+
+
 function permission_selected(sel){
 	var postListTable=document.getElementById("post_list"); 
 	while(postListTable.hasChildNodes()){
@@ -42,19 +50,10 @@ function permission_selected(sel){
 	}
 }
 $("#permissionSelected").click(function(){
-	var checked = {};
 	$("input:checkbox[name=checkbox]:checked").each(function(){
 		var value = $(this).val();
 		var key=value+""
 		checked[key]=value;
 	});
-	$.ajax({
-		url:"/post",
-		data:JSON.stringify(checked),
-		type:"post",
-		contentType:"application/json",
-		success: function(data){
-			window.location.replace("/");
-		}
-	});
+	$('#postingPermissionModal').modal('hide');
  });
