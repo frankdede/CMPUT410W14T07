@@ -31,6 +31,16 @@ app.config.from_object(__name__)
 app.secret_key = os.urandom(24)
 error = None
 
+def flaskPostToJson():
+    '''Ah the joys of frameworks! They do so much work for you
+       that they get in the way of sane operation!'''
+    if (request.json != None):
+        return request.json
+    elif (request.data != None and request.data != ''):
+        return json.loads(request.data)
+    else:
+        return json.loads(request.form.keys()[0])
+
 # default path
 @app.route('/', methods=['GET', 'POST'])
 def root():
@@ -106,39 +116,44 @@ def renderStruct(authorName):
     if ('logged_in' in session) and (session['logged_in'] == authorName):
         return render_template('struct.html')
     else:
-        return redirect('/templates/error/404.html'),404;
+        return abort(404)
 
 # get all the new posts that a specific author can view from the server
-@app.route('/pull/<authorName>')
+@app.route('/<authorName>/pull/')
 def getUpdatedPost(authorName):
 
     if ('logged_in' in session) and (session['logged_in'] == authorName):
         aid = ahelper.getAidByAuthorName(authorName)
 
         if aid == None:
-            return json.dumps({'aid':None}),200
+            return json.dumps({'status':None}),200
         else:    
             post = postHelper.getPostList(aid)
             return post,200
     else:
-         return redirect('/templates/error/404.html'),404
+         return abort(404)
 
-@app.route('/post/<authorName>',methods=['PUT','POST'])
+@app.route('/<authorName>/post/',methods=['PUT','POST'])
 def uploadPostToServer(authorName):
 
     if ('logged_in' in session) and (session['logged_in'] == authorName):
 
         aid = ahelper.getAidByAuthorName(authorName)
-        msg = request.form['message']
-        permission = request.form['permission']
-        msgType = request.form['type']
+        
+        postObj = flaskPostToJson()
+        postTitle = postObj['title']
+        postMsg = postObj['message']
+        postType = postObj['type']
+        postPermission = postObj['permission']
 
         if aid == None:
-            return json.dumps({'aid':False}),200
+            return json.dumps({'status':False}),200
         else:
-            newPost = Post(None,aid,None,'',msg,msgType,permission)
+            newPost = Post(None,aid,None,'',postMsg,postType,postPermission)
             result = postHelper.addPost(newPost)
-            return json.dumps({'aid':result}),200
+            return json.dumps({'status':result}),200
+    else:
+        return abort(404)
 
 # This is used to get friend list from database
 @app.route('/<authorName>/post/getPermissionList/',methods=['GET'])
@@ -162,7 +177,8 @@ def getPermissionList(authorName):
             else:
                 return "null",200
         return "null",200
-    abort(404)
+    else:
+        return abort(404)
 
 if __name__ == '__main__':
     app.debug = True

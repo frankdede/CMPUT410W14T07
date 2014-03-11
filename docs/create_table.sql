@@ -40,7 +40,7 @@ aid varchar(128),
 time TIMESTAMP NOT NULL,
 title varchar(128) NOT NULL,
 message varchar(1024),
-type enum('html','txt','markdown') NOT NULL,
+type enum('html','text','markdown','picture') NOT NULL,
 permission enum('me', 'user', 'friends', 'fof', 'fomh', 'public') NOT NULL,
 PRIMARY KEY (pid),
 FOREIGN KEY (aid) REFERENCES author (aid)

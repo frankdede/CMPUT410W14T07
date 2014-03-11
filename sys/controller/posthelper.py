@@ -21,14 +21,14 @@ class PostHelper:
         """
     def addPost(self,post):
 
-        cur = self.dbhelper.getcursor()
+        cur = self.dbHelper.getcursor()
         pid = utility.getid()
         aid = post.getaid()
-        title = post.gettitle()
-        msg = post.getmessage()
-        msgType = post.gettype()
-        permission = post.getpermission()
-        query = "INSERT INTO post VALUES('%s','%s',NULL,'%s','%s','%s','%s')"%(pid,aid,title,message,type,permission)
+        postTitle = post.gettitle()
+        postMsg = post.getmessage()
+        postMsgType = post.gettype()
+        postPermission = post.getpermission()
+        query = "INSERT INTO post VALUES('%s','%s',NULL,'%s','%s','%s','%s')"%(pid,aid,postTitle,postMsg,postMsgType,postPermission)
 
         try:
           cur.execute(query)
