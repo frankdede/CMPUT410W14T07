@@ -38,7 +38,7 @@ it returns -1
             except mysql.connector.Error as err:
 
                 print("****************************************")
-                print("SQLException from addPost():")
+                print("SQLException from addNewCircle():")
                 print("Error code:", err.errno)
                 print("SQLSTATE value:", err.sqlstate)
                 print("Error message:", err.msg)
@@ -57,7 +57,7 @@ it returns -1
     def deleteCircle(self,name1,name2):
 
         cur = self.dbHelper.getcursor()
-        query = "DELETE FROM circle WHERE name1=%s AND name2=%s AND sid=1"%(name1,name2)
+        query = "DELETE FROM circle WHERE name1='%s' AND name2='%s' AND sid=1"%(name1,name2)
         try:
             cur.execute(query)
             self.dbHelper.commit()
@@ -83,7 +83,7 @@ it returns -1
     def removeCircle(self,name1):
         
         cur = self.dbHelper.getcursor()
-        query = "DELETE FROM circle WHERE name1=%s AND sid=1"%(name1,name2)
+        query = "DELETE FROM circle WHERE name1='%s' AND sid=1"%(name1)
         try:
             cur.execute(query)
             self.dbHelper.commit()

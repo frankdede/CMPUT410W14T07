@@ -227,9 +227,7 @@ class PostHelper:
         pid -- post id
         """
         cur = self.dbHelper.getcursor()
-        query=""
-        if type == "pid":
-            query = "DELETE FROM post WHERE pid = '%s'"%(key)
+        query = "DELETE FROM post WHERE pid = '%s'"%(pid)
 
         try:
           cur.execute(query)
@@ -259,9 +257,7 @@ class PostHelper:
         dbhelper -- database helper
         """
         cur = self.dbHelper.getcursor()
-        query=""
-        if type == "aid":
-            query = "DELETE FROM post WHERE aid = '%s'"%(aid)
+        query = "DELETE FROM post WHERE aid = '%s'"%(aid)
 
         try:
           cur.execute(query)
