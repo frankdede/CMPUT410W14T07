@@ -9,11 +9,14 @@
   <textarea id="postContent" type="text" class=" textBox form-control" rows="5" placeholder="Please post here..."></textarea>
   <div class="btn-toolbar" role="toolbar" >
     <!-- Dropdown -->
+    
     <div class="btn-group" >
+
+      <button id="postSelectedType" class="btn btn-default status">status</button>
       <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-        <span id="postSelectedType">Text</span><span class="caret"></span>
+      <span class="caret"></span>
       </button>
-      <ul class="dropdown-menu " role="menu">
+      <ul class="dropdown-menu dropdown-inverse" role="menu">
         <li id="textOption"><a>Text</a></li>
         <li id="picOption"><a>Picture</a></li>
         <li id="htmlOption"><a>HTML</a></li>
@@ -22,7 +25,7 @@
     <!-- Permission btn -->
     <button id="postPermissionBtn" type="button"  class="btn btn-default " data-toggle="modal" data-target="#postingPermissionModal" >Permission</button>
     <!-- Submit btn -->
-    <button id="postSubmitBtn" type="button" style="right:20px;position: absolute;"class="btn btn-default ">Sumbit</button>
+    <button id="postSubmitBtn" type="button" style="right:20px;position: absolute;"class="btn btn-primary ">Sumbit</button>
   </div>
   <!-- permission modal: is hidden by default-->
   
@@ -31,24 +34,24 @@
         <div class="modal-content">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-              <h4 class="modal-title" id="modal_title">Welcome</h4>
+              <h4 class="modal-title" id="modal_title">Shared with</h4>
             </div>
             <div class="modal-body">
           <select name = "permission" onchange = "permission_selected(this)">
-              <option value="type" autocomplete="off" selected >Type</option>
+            <option value="type" autocomplete="off" selected >Type</option>
             <option value = "public" autocomplete="off">public</option>
             <option value = "me" autocomplete="off">me</option>
             <option value = "friend" autocomplete="off">friend</option>
             <option value = "fof" autocomplete="off">friend's friend</option>
             <!--<option value = "fomh">friends on my host</option>-->
           </select>
-          <div  class="listStyle">
+          <div class="listStyle">
             <table id="post_list">
             </table>
           </div>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-primary" id ="permissionSelected" >Select</button>
+              <button type="button" class="btn btn-primary" id ="permissionSelected" >Save</button>
             </div>
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->

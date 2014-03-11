@@ -116,7 +116,7 @@ it returns -1
         except mysql.connector.Error as err:
 
           print("****************************************")
-          print("SQLException from addNewCircle():")
+          print("SQLException from getFriendList():")
           print("Error code:", err.errno)
           print("SQLSTATE value:", err.sqlstate)
           print("Error message:", err.msg)
@@ -125,7 +125,7 @@ it returns -1
           return None
 
         except Exception as err:
-          print("General Exception from addNewCircle():".format(err))
+          print("General Exception from getFriendList():".format(err))
           return None
 
         re = []
@@ -154,7 +154,7 @@ it returns -1
           return False
 
         except Exception as err:
-          print("General Exception from addNewCircle():".format(err))
+          print("General Exception from getFriendOfFriend():".format(err))
           return False
         re = []
         for fid in cur:
