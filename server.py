@@ -1,3 +1,4 @@
+
 import json
 import flask
 from flask import Flask, request, redirect, url_for, g, render_template, flash, session, abort,make_response
@@ -116,11 +117,11 @@ def getPermissionList():
 	return "null"
 
 # This is used to receive post target
-@app.route('/post/<option>',methods=['PUT', 'POST'])
-def post(option):
+@app.route('/post/<situation>',methods=['PUT', 'POST'])
+def post(situation):
     	if request.method == 'POST':
 		data = request.data
-		return data
+		return "situation is: "+situation
 	return "null"
 
 if __name__ == '__main__':
