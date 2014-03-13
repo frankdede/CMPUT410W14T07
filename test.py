@@ -15,8 +15,12 @@ import utility
 import post
 DEBUG = True
 
-import unittest
+
+<<<<<<< HEAD
 # for merge only
+
+# confict !
+
 # rebuild the database before run this test
 class TestController(unittest.TestCase):
 
