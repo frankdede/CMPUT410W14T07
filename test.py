@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+
 import mysql.connector
 import json
 import sys,os
@@ -15,7 +16,7 @@ import post
 DEBUG = True
 
 import unittest
-
+# for merge only
 # rebuild the database before run this test
 class TestController(unittest.TestCase):
 
