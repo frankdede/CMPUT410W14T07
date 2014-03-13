@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+
 import mysql.connector
 import json
 import sys,os
@@ -14,7 +15,11 @@ import utility
 import post
 DEBUG = True
 
-import unittest
+
+<<<<<<< HEAD
+# for merge only
+
+# confict !
 
 # rebuild the database before run this test
 class TestController(unittest.TestCase):
