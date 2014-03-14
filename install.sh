@@ -47,12 +47,12 @@ insert_all(){
 
 rebuild_all(){
     # create database
-#    mysql -u "$mysql_name" -p"$mysql_password" -h "$_HOST" --verbose -e "$_create_db_query"
+    # mysql -u "$mysql_name" -p"$mysql_password" -h "$_HOST" --verbose -e "$_create_db_query"
     
     # create tables through pipe
     mysql -u "$mysql_name" -p"$mysql_password" -h "$_HOST" "$_db_name" < "$_create_db_path" --verbose
     
-    mysql -u "$mysql_name" -p"$mysql_password" -h "$_HOST" "$_db_name" < "$_insert_test_path" --verbose
+    #mysql -u "$mysql_name" -p"$mysql_password" -h "$_HOST" "$_db_name" < "$_insert_test_path" --verbose
 }
 
 # flags
