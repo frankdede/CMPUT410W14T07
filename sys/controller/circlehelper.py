@@ -7,8 +7,8 @@ it returns -1
     def __init__(self,dbHelper):
         self.dbHelper = dbHelper
 
-    def addNewCircle(self,name1,name2,sid=1):
-
+    def addFriendForLocalAuthor(self,localAid,aid):
+        # HAVEN'T DONE YET
         cur = self.dbHelper.getcursor()
         query = "SELECT * FROM circle WHERE name1='%s' AND name2='%s' AND sid=%d"%(name1,name2,sid)
         try:
@@ -17,7 +17,7 @@ it returns -1
         except mysql.connector.Error as err:
 
           print("****************************************")
-          print("SQLException from addNewCircle():")
+          print("SQLException from addFriendForLocalAuthor():")
           print("Error code:", err.errno)
           print("SQLSTATE value:", err.sqlstate)
           print("Error message:", err.msg)
@@ -26,7 +26,7 @@ it returns -1
           return False
 
         except Exception as err:
-          print("General Exception from addNewCircle():".format(err))
+          print("General Exception from addFriendForLocalAuthor():".format(err))
           return False
 
         if cur.fetchone() is None:
@@ -54,7 +54,7 @@ it returns -1
         else:
             return False
 
-    def deleteCircle(self,name1,name2):
+    def removeFriendOfLocalAuthor(self,localAid,aid):
 
         cur = self.dbHelper.getcursor()
         query = "DELETE FROM circle WHERE name1='%s' AND name2='%s' AND sid=1"%(name1,name2)
@@ -80,7 +80,7 @@ it returns -1
         return cur.rowcount>0
 
 #remove  author's all friends 
-    def removeCircle(self,name1):
+    def removeAllFriendsOfAuthor(self,localAid):
         
         cur = self.dbHelper.getcursor()
         query = "DELETE FROM circle WHERE name1='%s' AND sid=1"%(name1)
@@ -106,7 +106,7 @@ it returns -1
         return cur.rowcount>0
 
 #get friend list of a author
-    def getFriendList(self,name1,sid=1):
+    def getFriendList(self,localAid,sid=1):
 
         cur = self.dbHelper.getcursor()
         query = "SELECT name2 FROM circle WHERE name1='%s' AND sid='%d'"%(name1,sid)
@@ -135,7 +135,7 @@ it returns -1
         return re
 
 #get list of friend of friends
-    def getFriendOfFriend(self,name1,sid=1):
+    def getFriendOfFriendList(self,name1,sid=1):
 
         cur = self.dbHelper.getcursor()
         query = "SELECT name2 FROM circle WHERE name1 in (SELECT name2 FROM circle WHERE name1='%s' AND sid='%d')"%(name1,sid)
