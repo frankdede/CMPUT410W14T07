@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+
 import unittest
 import mysql.connector
 import json
@@ -9,7 +10,6 @@ from authorhelper import *
 from circlehelper import *
 from databasehelper import *
 from posthelper import *
-import time
 import utility
 import post
 DEBUG = True
@@ -18,7 +18,7 @@ DEBUG = True
 class TestController(unittest.TestCase):
 
     def setUp(self):
-        
+        # DO NOT CHANGE HERE
         dbHelper = Databasehelper()
         dbHelper.connect()
         dbHelper.setAutoCommit()
@@ -27,13 +27,17 @@ class TestController(unittest.TestCase):
         self.circlehelper = CircleHelper(dbHelper)
         self.posthelper = PostHelper(dbHelper)
 
+
     def test_authorAuthenticate(self):
         # Test By: Guanqi
         result = self.authorhelper.authorAuthenticate("frank", "12345")
         self.assertTrue(result == True, "ERROR on authorAuthenticate")
-    
+
+    ''' The best way to avoid collision is to use timestamp'''
+    ''' concatnate a string with current time(time in milliseconds)'''
+
     def test_updateNickNameByAid(self):
-        # Test By : Guanqi 
+        # Test By : Guanqi
         result = self.authorhelper.updateNickNameByAid("111111", "nickname"+str(int(time.time()*1000)))
         self.assertTrue(result == True, "ERROR on updateNickName")
     
@@ -42,21 +46,36 @@ class TestController(unittest.TestCase):
         result = self.authorhelper.updatePasswordByAid("111111","password"+str(int(time.time()*1000)))
         self.assertTrue(result == True, "ERROR on updatePassword")
         
+    
+    ''' Here is a good example for you to test both add and delete API '''
+    ''' Test your insert methods before test the delete ones '''
+
     def test_addAndDeleteAuthor(self):
         # Test By : Guanqi
         result = self.authorhelper.addAuthor("coniewt", "201486", "Conie")
         self.assertTrue(result != None, "ERROR on addAuthor")
 
         # Test By : Guanqi
+        # JASON ENCODING EXAMPLE:
+        # In order to decode the json object, call function json.loads(your_josn_object)
+        # and then it will return a dictionary object.
+
         result = self.authorhelper.deleteAuthor(json.loads(result)["aid"])
         self.assertTrue(result == True, "ERROR on deleteAuthor")
 
-'''PLEASE rebuild the database everytime before run all the tests!!!'''
+
+
+    '''PLEASE rebuild the database everytime before run all the tests!!!'''
+    def test_getFriendList(self):
+
+        friends = self.circlehelper.getFriendList('111111')
+        friendsObj= json.loads(friends)
+        print(friendsObj)
+        #self.assertTrue(friendsObj)
+        #self.assertTrue(add == True, "ERROR on addnewcircle")
+
+
     '''    
-    def testcicle(self):
-        add = self.circlehelper.addNewCircle("frank", "mark")
-        self.assertTrue(add == True, "ERROR on addnewcircle")
-        
         add = self.circlehelper.addNewCircle("frank", "owen")
         self.assertTrue(add == True, "ERROR on addnewcircle")
 
