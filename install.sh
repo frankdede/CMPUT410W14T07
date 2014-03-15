@@ -52,7 +52,7 @@ rebuild_all(){
     # create tables through pipe
     mysql -u "$mysql_name" -p"$mysql_password" -h "$_HOST" "$_db_name" < "$_create_db_path" --verbose
     
-    #mysql -u "$mysql_name" -p"$mysql_password" -h "$_HOST" "$_db_name" < "$_insert_test_path" --verbose
+    mysql -u "$mysql_name" -p"$mysql_password" -h "$_HOST" "$_db_name" < "$_insert_test_path" --verbose
 }
 
 # flags

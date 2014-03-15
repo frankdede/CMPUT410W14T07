@@ -1,6 +1,8 @@
 from mysql.connector.errors import Error
 from databasehelper import *
 import utility
+import json
+
 class AuthorHelper:
     """
     If the username and password are correct, it will return True otherwise false
@@ -139,9 +141,6 @@ class AuthorHelper:
 
         cur = self.dbHelper.getcursor()
 
-        if self.doesAuthorExist(authorName) is False:
-            return False
-
         query = ("DELETE FROM author "
                  "WHERE aid = '%s'") %(aid)
         
@@ -168,8 +167,8 @@ class AuthorHelper:
         cur = self.dbHelper.getcursor()
         aid =utility.getid()
 
-        query = ("INSERT INTO author(aid,name,nick_name,pwd,sid,) "
-                 "VALUES('%s','%s','%s',%s,'%s')")%(aid,authorName,nickName,password,sid)
+        query = ("INSERT INTO author(aid,name,nick_name,pwd,sid) "
+                 "VALUES('%s','%s','%s','%s',%s)")%(aid,authorName,nickName,password,sid)
        
         try:
           cur.execute(query)
@@ -187,6 +186,6 @@ class AuthorHelper:
 
         if cur.rowcount > 0:
 
-            return json.dumps({'aid',aid})
+            return json.dumps({"aid":aid})
 
         return False

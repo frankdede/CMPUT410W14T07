@@ -1,6 +1,5 @@
 #!/usr/bin/env python
-
-
+import unittest
 import mysql.connector
 import json
 import sys,os
@@ -10,18 +9,12 @@ from authorhelper import *
 from circlehelper import *
 from databasehelper import *
 from posthelper import *
-from random import randint
+import time
 import utility
 import post
 DEBUG = True
 
-
-<<<<<<< HEAD
-# for merge only
-
-# confict !
-
-# rebuild the database before run this test
+'''PLEASE rebuild the database everytime before run all the tests!!!'''
 class TestController(unittest.TestCase):
 
     def setUp(self):
@@ -34,32 +27,32 @@ class TestController(unittest.TestCase):
         self.circlehelper = CircleHelper(dbHelper)
         self.posthelper = PostHelper(dbHelper)
 
-    def testauthor(self):
-        author = self.authorhelper.authorAuthenticate("frank", "12345")
-        self.assertTrue(author == True, "ERROR on authorauthenticate")
+    def test_authorAuthenticate(self):
+        # Test By: Guanqi
+        result = self.authorhelper.authorAuthenticate("frank", "12345")
+        self.assertTrue(result == True, "ERROR on authorAuthenticate")
+    
+    def test_updateNickNameByAid(self):
+        # Test By : Guanqi 
+        result = self.authorhelper.updateNickNameByAid("111111", "nickname"+str(int(time.time()*1000)))
+        self.assertTrue(result == True, "ERROR on updateNickName")
+    
+    def test_updateUpdatePasswordByAid(self):
+        # Test By : Guanqi
+        result = self.authorhelper.updatePasswordByAid("111111","password"+str(int(time.time()*1000)))
+        self.assertTrue(result == True, "ERROR on updatePassword")
         
-        name = self.authorhelper.doesAuthorExist("frank")
-        self.assertTrue(name == True, "ERROR on checkauthorexist")
-        
-        aid = self.authorhelper.getAidByAuthorName("frank")
-        self.assertTrue(aid != None, "ERROR on getaidbyname")
-        
-        name = self.authorhelper.getAuthorNameByAid("111111")
-        self.assertTrue(name != None, "ERROR on getnamebyaid")
-        
-        update = self.authorhelper.updateNickNameByAid("111111", "newnickname"+str(randint(0,100000000000)))
-        self.assertTrue(update == True, "ERROR on updateNickName")
-        
-        update = self.authorhelper.updatePasswordByAid("222222", str(randint(0,100000000000)))
-        self.assertTrue(update == True, "ERROR on updatepassword")
-        
-        add = self.authorhelper.addAuthor("coniewt", "201486", "Conie")
-        self.assertTrue(add == True, "ERROR on addauthor")
+    def test_addAndDeleteAuthor(self):
+        # Test By : Guanqi
+        result = self.authorhelper.addAuthor("coniewt", "201486", "Conie")
+        self.assertTrue(result != None, "ERROR on addAuthor")
 
-        delete = self.authorhelper.deleteAuthor("coniewt")
-        self.assertTrue(delete == True, "ERROR on deleteauthor")
-        
-        
+        # Test By : Guanqi
+        result = self.authorhelper.deleteAuthor(json.loads(result)["aid"])
+        self.assertTrue(result == True, "ERROR on deleteAuthor")
+
+'''PLEASE rebuild the database everytime before run all the tests!!!'''
+    '''    
     def testcicle(self):
         add = self.circlehelper.addNewCircle("frank", "mark")
         self.assertTrue(add == True, "ERROR on addnewcircle")
@@ -102,7 +95,7 @@ class TestController(unittest.TestCase):
 
         delaid = self.posthelper.deletePostByAid("111111")
         self.assertTrue(delaid == True, "ERROR on deletepostbyaid")
-        
+      '''  
         
 
 if __name__ == '__main__':
