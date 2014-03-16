@@ -39,13 +39,10 @@ class PostHelper:
           print("Error message:", err.msg)
           print("Might be query issue:",query)
           print("****************************************")
-          return False
+          return None
 
-        except Exception as err:
-          print("General Exception from addPost():".format(err))
-          return False
-
-        return cur.rowcount>0
+        if cur.rowcount>0:
+          
 
         """add a user permission to post in databse
         dbhelper -- databse helper
