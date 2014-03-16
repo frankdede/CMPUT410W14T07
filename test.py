@@ -11,6 +11,7 @@ from authorhelper import *
 from circlehelper import *
 from databasehelper import *
 from posthelper import *
+from requesthelper import *
 # models
 import author
 import post
@@ -30,6 +31,7 @@ class TestController(unittest.TestCase):
         self.authorhelper = AuthorHelper(dbHelper)
         self.circlehelper = CircleHelper(dbHelper)
         self.posthelper = PostHelper(dbHelper)
+        self.requesthelper = RequestHelper(dbHelper)
     '''
      ====================   AuthorHelper  ====================
      PLEASE rebuild the database before run all the tests!!!
@@ -99,38 +101,40 @@ class TestController(unittest.TestCase):
     '''
 
     def test_addNewRequest(self):
-        result = self.requesthelper.addNewRequest('111111','222222')
+        # Tested By : Guanqi
+        result = self.requesthelper.addNewRequest('222222','111111')
         requestObj = json.loads(result)
-        self.assertTrue(requstObj['recipient_id'] =='111111',"ERROR on addNewRequest ")
-        self.assertTrue(requstObj['sender_id'] == '222222',"ERROR on addNewRequest ")
+        self.assertTrue(requestObj['recipient_id'] =='222222',"ERROR on addNewRequest ")
+        self.assertTrue(requestObj['sender_id'] == '111111',"ERROR on addNewRequest ")
 
     def test_deleteRequest(self):
-
+        # Tested By : Guanqi
         result = self.requesthelper.deleteRequest('111111','222222')
-        self.assertTrue(requst == True,"ERROR on deleteRequest ")
+        self.assertTrue(result == True,"ERROR on deleteRequest ")
 
     def test_getRequestListByAid(self):
-
+        # Tested By : Guanqi
         result = self.requesthelper.getRequestListByAid('111111')
         self.assertTrue(result != None,"ERROR on getRequestListByAid ")
 
         requestList = json.loads(result)
 
-        for item in requestList
+        for item in requestList:
             self.assertTrue(item['sender_id']!= None,"ERROR on getRequestListByAid ")
             self.assertTrue(item['time'] != None, "ERROR on getRequestListByAid")
 
     def test_getRequestCountByAid(self):
-
+        # Tested By : Guanqi
         result = self.requesthelper.getRequestCountByAid('111111')
         count = json.loads(result)
 
-        self.assertTrue(count['count']  == ,"ERROR on getRequestListByAid ")
-
+        self.assertTrue(count['count'] == 3 ,"ERROR on getRequestListByAid ")
+    
     def test_deleteAllRequestByAid(self):
-
-
-
+        # Tested By : Guanqi
+        result = self.requesthelper.deleteAllRequestByAid('222222')
+        self.assertTrue(result == True,"ERROR on deleteAllRequestByAid ")
+    
     '''
         delete = self.circlehelper.deleteCircle("frank", "mark")
         self.assertTrue(delete == True, "ERROR on deletecircle")

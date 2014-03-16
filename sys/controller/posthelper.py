@@ -7,18 +7,11 @@ sys.path.append("sys/model")
 from post import *
 import json
 class PostHelper:
-    """
-    #an post helper,which controls the post model
-    """
+  
     dbHelper = None
     def __init__(self,dbHelper):
         self.dbHelper = dbHelper
 
-        """
-        to add a post to databse
-        dbhelper -- the databasehelper
-        post -- the post object
-        """
     def addPost(self,aid,title,content,type,permission):
 
         cur = self.dbHelper.getcursor()
@@ -42,13 +35,10 @@ class PostHelper:
           return None
 
         if cur.rowcount>0:
+          return True
+        else:
+          return False
           
-
-        """add a user permission to post in databse
-        dbhelper -- databse helper
-        pid -- post id
-        aid -- author id
-        """
     def addPostPermission(self,dbhelper,pid,aid):
 
         cur = self.dbHelper.getcursor()
@@ -74,13 +64,7 @@ class PostHelper:
 #type argument should be one of ['pid','aid','time','message','title','permission']
 #Usage: updatepost(databasehelper,pid,type="html", permmision="public") check keyword argument
     def updateMessage(self,pid,newContent):
-        """
-        to update the message in post
-        Keyword arguments:
-        dbhelper  -- database helper
-        pid -- post id
-        newcontent -- the new Content in post
-        """
+      
         cur = self.dbHelper.getcursor()
         query = "UPDATE post SET message='%s' WHERE pid='%s'"%(newContent,pid)
 
@@ -102,11 +86,7 @@ class PostHelper:
         return cur.rowcount>0
 
     def updateTitle(self,pid,newtitle):
-        """
-        to update the title of post
-        pid -- post id
-        newtitle -- new title need to be updated
-        """
+        
         cur = self.dbHelper.getcursor()
         query = "UPDATE post SET title='%s' WHERE pid='%s'"%(newtitle,pid)
 
@@ -128,10 +108,7 @@ class PostHelper:
         return cur.rowcount>0
 
     def updateTime(self,dbhelper,pid,time = ''):
-        """
-        to update the time of post
-        time -- time format should be like 2014-03-01 01:37:50, the default time is current time.
-        """
+        
         cur = self.dbHelper.getcursor()
         if time  == '':
             query = "UPDATE post SET time=NULL WHERE pid='%s'"%(pid)
@@ -159,12 +136,7 @@ class PostHelper:
 
     # HAVEN'T BEEN COMPLETED YET
     def updatePermission(self,pid,newPermission,user=''):
-        """
-        to update the permission
-        pid -- post id
-        newpermission -- the new permission need to be update
-        user -- if the new permission is user, user is the aid
-        """
+        
         cur = self.dbHelper.getcursor()
         query = "UPDATE post SET permission='%s' WHERE pid='%s'"%(newPermission,pid)
         cur.execute(query)
@@ -194,11 +166,7 @@ class PostHelper:
         return cur.rowcount>0
 
     def deletePostByPid(self,pid):
-        """
-         delete a post or server post by pid, aid
-        dbhelper -- database helper
-        pid -- post id
-        """
+       
         cur = self.dbHelper.getcursor()
         query = "DELETE FROM post WHERE pid = '%s'"%(pid)
 
@@ -220,11 +188,7 @@ class PostHelper:
         return cur.rowcount>0
 
     def deletePostByAid(self,aid):
-        """
-        to delete a post by authorid
-        aid -- author id
-        dbhelper -- database helper
-        """
+        
         cur = self.dbHelper.getcursor()
         query = "DELETE FROM post WHERE aid = '%s'"%(aid)
 
@@ -246,10 +210,7 @@ class PostHelper:
         return cur.rowcount>0
 
     def getPostList(self,aid):
-        """
-        get list of post that the user by aid can browse
-        aid -- author id
-        """
+
         re = {}
         cur = self.dbHelper.getcursor()
 

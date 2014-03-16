@@ -37,7 +37,7 @@ class RequestHelper:
           return None
 
     """
-    Delete a reuest based on recipientId and senderId
+    Delete a request based on recipientId and senderId
 
     """
     def deleteRequest(self,recipientId,senderId):
@@ -58,7 +58,7 @@ class RequestHelper:
           print("Might be query issue:",query)
           print("****************************************")
           return False
-
+          
         return cur.rowcount>0
 
     """
