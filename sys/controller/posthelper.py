@@ -19,20 +19,16 @@ class PostHelper:
         dbhelper -- the databasehelper
         post -- the post object
         """
-    def addPost(self,post):
+    def addPost(self,aid,title,content,type,permission):
 
         cur = self.dbHelper.getcursor()
+
         pid = utility.getid()
-        aid = post.getaid()
-        postTitle = post.gettitle()
-        postMsg = post.getmessage()
-        postMsgType = post.gettype()
-        postPermission = post.getpermission()
-        query = "INSERT INTO post VALUES('%s','%s',NULL,'%s','%s','%s','%s')"%(pid,aid,postTitle,postMsg,postMsgType,postPermission)
+
+        query = "INSERT INTO post VALUES('%s','%s',NULL,'%s','%s','%s','%s')"%(pid,aid,title,content,type,permission)
 
         try:
           cur.execute(query)
-          self.dbHelper.commit()
 
         except mysql.connector.Error as err:
 

@@ -1,18 +1,27 @@
-from databasehelper import*
+import json
+from mysql.connector.errors import Error
+from databasehelper import *
+import utility
+import sys
+sys.path.append("sys/model")
+from author import *
+
+
 class CircleHelper:
-    """ add a new friend because the relationship is unique. If the relationship is already existed
-it returns -1
-    """
+
     dbHelper = None
+
     def __init__(self,dbHelper):
         self.dbHelper = dbHelper
 
-    def addNewCircle(self,name1,name2,sid=1):
+    def addFriendForAuthor(self,aid1,aid2):
 
         cur = self.dbHelper.getcursor()
-        query = "SELECT * FROM circle WHERE name1='%s' AND name2='%s' AND sid=%d"%(name1,name2,sid)
+        data = [(aid1,aid2),(aid2,aid1)]
+        query ="INSERT INTO circle VALUES('%s','%s')"
+
         try:
-          cur.execute(query)
+          cur.executemany(query,data)
 
         except mysql.connector.Error as err:
 
@@ -21,46 +30,22 @@ it returns -1
           print("Error code:", err.errno)
           print("SQLSTATE value:", err.sqlstate)
           print("Error message:", err.msg)
-          print("Might be query issue:",query)
+          print("Query:",query)
           print("****************************************")
-          return False
+          return None
 
-        except Exception as err:
-          print("General Exception from addNewCircle():".format(err))
-          return False
-
-        if cur.fetchone() is None:
-            query ="INSERT INTO circle VALUES('%s','%s',%d)"%(name1,name2,sid)
-            try:
-                cur.execute(query)
-                self.dbHelper.commit()
-
-            except mysql.connector.Error as err:
-
-                print("****************************************")
-                print("SQLException from addNewCircle():")
-                print("Error code:", err.errno)
-                print("SQLSTATE value:", err.sqlstate)
-                print("Error message:", err.msg)
-                print("Might be query issue:",query)
-                print("****************************************")
-                return False
-
-            except Exception as err:
-                print("General Exception from addPost():".format(err))
-                return False
-
-            return cur.rowcount>0
+        if cur.rowcount == 2 :
+          return json.dumps({'aid1':aid1,'aid2':aid2})
         else:
-            return False
+          return False;
 
-    def deleteCircle(self,name1,name2):
-
+    def deleteFriendOfAuthor(self,aid1,aid2):
+        # No matter how you pass aid1 and aid2 ,this function will delete it for you
         cur = self.dbHelper.getcursor()
-        query = "DELETE FROM circle WHERE name1='%s' AND name2='%s' AND sid=1"%(name1,name2)
+        query = ("DELETE FROM circle WHERE "
+                "(aid1='%s' AND aid2='%s') OR (aid1='%s' AND aid2='%s')")%(aid1,aid2,aid2,aid1)
         try:
             cur.execute(query)
-            self.dbHelper.commit()
 
         except mysql.connector.Error as err:
 
@@ -69,47 +54,20 @@ it returns -1
             print("Error code:", err.errno)
             print("SQLSTATE value:", err.sqlstate)
             print("Error message:", err.msg)
-            print("Might be query issue:",query)
+            print("Query:",query)
             print("****************************************")
-            return False
-
-        except Exception as err:
-            print("General Exception from deleteCircle():".format(err))
             return False
 
         return cur.rowcount>0
 
-#remove  author's all friends 
-    def removeCircle(self,name1):
-        
+    def getFriendList(self,aid):
+
+        result = []
         cur = self.dbHelper.getcursor()
-        query = "DELETE FROM circle WHERE name1='%s' AND sid=1"%(name1)
-        try:
-            cur.execute(query)
-            self.dbHelper.commit()
-
-        except mysql.connector.Error as err:
-
-            print("****************************************")
-            print("SQLException from deleteCircle():")
-            print("Error code:", err.errno)
-            print("SQLSTATE value:", err.sqlstate)
-            print("Error message:", err.msg)
-            print("Might be query issue:",query)
-            print("****************************************")
-            return False
-
-        except Exception as err:
-            print("General Exception from deleteCircle():".format(err))
-            return False
-
-        return cur.rowcount>0
-
-#get friend list of a author
-    def getFriendList(self,name1,sid=1):
-
-        cur = self.dbHelper.getcursor()
-        query = "SELECT name2 FROM circle WHERE name1='%s' AND sid='%d'"%(name1,sid)
+        query = ("SELECT A.aid,A.name,A.email,A.gender,A.city,A.img_path,A.sid,A.nick_name "
+                 "FROM author A "
+                 "WHERE A.aid in "
+                 "(SELECT C.aid2 FROM circle C WHERE C.aid1='%s')")%(aid)
         try:
           cur.execute(query);
 
@@ -120,25 +78,33 @@ it returns -1
           print("Error code:", err.errno)
           print("SQLSTATE value:", err.sqlstate)
           print("Error message:", err.msg)
-          print("Might be query issue:",query)
+          print("Query:",query)
           print("****************************************")
           return None
 
-        except Exception as err:
-          print("General Exception from getFriendList():".format(err))
-          return None
+        for row in cur:
+            friend = Author(row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7])
+            result.append(friend.tojson())
 
-        re = []
-        for fid in cur:
-            re.append(fid[0])
-        cur.close()
-        return re
+        return json.dumps(result)
 
-#get list of friend of friends
-    def getFriendOfFriend(self,name1,sid=1):
+    def getFriendOfMyHomeServerList(self,aid):
+        # DO NOT DELETE THE COMMENT
+        # TODO:
+        #
+        # Find the all the friends that are from our server through author's aid
+        #
+        # [Success] Returns an jason array of author objects / empty jason array
+        # [Exception Caught] return null
+        print('getFriendOfMyHomeServerList')
 
+    def getFriendOfFriendList(self,aid):
+        result = []
         cur = self.dbHelper.getcursor()
-        query = "SELECT name2 FROM circle WHERE name1 in (SELECT name2 FROM circle WHERE name1='%s' AND sid='%d')"%(name1,sid)
+        query = ("SELECT A.aid,A.name,A.email,A.gender,A.city,A.img_path,A.sid,A.nick_name "
+                 "FROM author A WHERE A.aid IN "
+                 "(SELECT C2.aid2 FROM circle C2 WHERE C2.aid2 <>'%s' AND C2.aid1 IN "
+                 "(SELECT C1.aid2 FROM circle C1 WHERE C1.aid1 = '%s'))")%(aid,aid)
         try:
           cur.execute(query)
           
@@ -149,14 +115,13 @@ it returns -1
           print("Error code:", err.errno)
           print("SQLSTATE value:", err.sqlstate)
           print("Error message:", err.msg)
-          print("Might be query issue:",query)
+          print("Query:",query)
           print("****************************************")
-          return False
+          return None
 
-        except Exception as err:
-          print("General Exception from getFriendOfFriend():".format(err))
-          return False
-        re = []
-        for fid in cur:
-            re.append(fid[0])
-        return re
+        result = []
+        for row in cur:
+            friend = Author(row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7])
+            result.append(friend.tojson())
+
+        return json.dumps(result)
