@@ -46,7 +46,7 @@ class AuthorHelper:
     def getAllAuthorObjectsForLocalServer(self):
         # DO NOT DELETE THE COMMENT
         # TODO:
-        # [SUCCESS] return an array of author objects for local server
+        # [SUCCESS] return an jason array of author objects for local server
         # e.g. {{'aid':xxxxx,'name':xxxxxxx ...},{'aid':xxxxx,'name':xxxxxxx..}}
         # [Exception Caught] return null
         # [Failed] return null
@@ -80,7 +80,7 @@ class AuthorHelper:
         # [Failed] return false
         print('addRemoteAuthor')
 
-    def updateAuthorInfo(self,aid,email,gender,city,birthday,img_path):
+    def updateAuthorInfo(self,aid,email,gender,city,birthday,imgPath):
         # DO NOT DELETE THE COMMENT
         # TODO:
         # [Success] return true

@@ -1,17 +1,21 @@
 #!/usr/bin/env python
-
+import subprocess
 import unittest
 import mysql.connector
 import json
 import sys,os
 sys.path.append("sys/controller")
 sys.path.append("sys/model")
+# helpers
 from authorhelper import *
 from circlehelper import *
 from databasehelper import *
 from posthelper import *
-import utility
+# models
+import author
 import post
+import time
+import utility
 DEBUG = True
 
 '''PLEASE rebuild the database everytime before run all the tests!!!'''
@@ -63,17 +67,15 @@ class TestController(unittest.TestCase):
         result = self.authorhelper.deleteAuthor(json.loads(result)["aid"])
         self.assertTrue(result == True, "ERROR on deleteAuthor")
 
-
-
     '''PLEASE rebuild the database everytime before run all the tests!!!'''
     def test_getFriendList(self):
 
         friends = self.circlehelper.getFriendList('111111')
-        friendsObj= json.loads(friends)
-        print(friendsObj)
-        #self.assertTrue(friendsObj)
-        #self.assertTrue(add == True, "ERROR on addnewcircle")
+        friendsObj= author.parseList(friends)
 
+        for friend in friendsObj:
+            self.assertTrue(friend.getName() != None,"ERROR on getFriendList ")
+            self.assertTrue(friend.getAid() != None,"ERROR on getFriendList")
 
     '''    
         add = self.circlehelper.addNewCircle("frank", "owen")

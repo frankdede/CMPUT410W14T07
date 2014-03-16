@@ -20,3 +20,6 @@ INSERT INTO circle values('444444','222222');
 
 INSERT INTO circle values('333333','444444');
 INSERT INTO circle values('444444','333333');
+
+INSERT INTO circle values('333333','555555');
+INSERT INTO circle values('555555','333333')

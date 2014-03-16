@@ -1,10 +1,11 @@
+import json
 from mysql.connector.errors import Error
 from databasehelper import *
 import utility
 import sys
 sys.path.append("sys/model")
-from post import *
-import json
+from author import *
+
 
 class CircleHelper:
 
@@ -63,7 +64,7 @@ class CircleHelper:
 
         result = []
         cur = self.dbHelper.getcursor()
-        query = ("SELECT A.aid,A.name,A.email,A.city,A.img_path,A.sid,A.nick_name"
+        query = ("SELECT A.aid,A.name,A.email,A.gender,A.city,A.img_path,A.sid,A.nick_name "
                  "FROM author A "
                  "WHERE A.aid in "
                  "(SELECT C.aid2 FROM circle C WHERE C.aid1='%s')")%(aid)
@@ -82,16 +83,26 @@ class CircleHelper:
           return None
 
         for row in cur:
-            friend = Author(row[0],row[1],row[2],row[3],row[4],row[5],row[6])
+            friend = Author(row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7])
             result.append(friend.tojson())
 
-        return json.dumps(reuslt)
+        return json.dumps(result)
 
+    def getFriendOfMyHomeServerList(self,aid):
+        # DO NOT DELETE THE COMMENT
+        # TODO:
+        #
+        # Find the all the friends that are from our server through author's aid
+        #
+        # [Success] Returns an jason array of author objects / empty jason array
+        # [Exception Caught] return null
+        print('getFriendOfMyHomeServerList')
 
     def getFriendOfFriendList(self,aid):
         result = []
         cur = self.dbHelper.getcursor()
-        query = ("SELECT A.aid,A.name,A.nick_name,A.email,A.city,A.img_path FROM author A WHERE A.aid IN "
+        query = ("SELECT A.aid,A.name,A.email,A.gender,A.city,A.img_path,A.sid,A.nick_name "
+                 "FROM author A WHERE A.aid IN "
                  "(SELECT C2.aid2 FROM circle C2 WHERE C2.aid2 <>'%s' AND C2.aid1 IN "
                  "(SELECT C1.aid2 FROM circle C1 WHERE C1.aid1 = '%s'))")%(aid,aid)
         try:
@@ -106,11 +117,11 @@ class CircleHelper:
           print("Error message:", err.msg)
           print("Query:",query)
           print("****************************************")
-          return False
+          return None
 
         result = []
         for row in cur:
-            friend = Author(row[0],row[1],row[2],row[3],row[4],row[5],row[6])
+            friend = Author(row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7])
             result.append(friend.tojson())
 
-        return json.dumps(reuslt)
+        return json.dumps(result)
