@@ -82,7 +82,7 @@ class CircleHelper:
           return None
 
         for row in cur:
-            friend = Author(row[0],row[1],row[2],row[3],row.img[4],row[5],row[6])
+            friend = Author(row[0],row[1],row[2],row[3],row[4],row[5],row[6])
             result.append(friend.tojson())
 
         return json.dumps(reuslt)
@@ -110,7 +110,7 @@ class CircleHelper:
 
         result = []
         for row in cur:
-            friend = Author(row[0],row[1],row[2],row[3],row.img[4],row[5],row[6])
+            friend = Author(row[0],row[1],row[2],row[3],row[4],row[5],row[6])
             result.append(friend.tojson())
 
         return json.dumps(reuslt)
