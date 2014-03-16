@@ -41,7 +41,27 @@ class AuthorHelper:
         # [Success] return an jason author object
         # [Exception Caught] return null
         # [Failed] return null
-        print('getAuthorObjectByAid')
+        cur = self.dbHelper.getcursor()
+        query = "SELECT * FROM author WHERE aid='%s'"%(aid)
+        try:
+            cur.execute(query)
+        except mysql.connector.Error as err:
+            print("****************************************")
+            print("SQLException from getFriendOfFriend():")
+            print("Error code:", err.errno)
+            print("SQLSTATE value:", err.sqlstate)
+            print("Error message:", err.msg)
+            print("Query:",query)
+            print("****************************************")
+            return None
+        row = cur.fetchone()
+        if re is None:
+            cur.close()
+            return None
+        else:
+            cur.close()
+            friend = Author(row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7])
+            return friend
 
     def getAllAuthorObjectsForLocalServer(self):
         # DO NOT DELETE THE COMMENT
@@ -50,9 +70,25 @@ class AuthorHelper:
         # e.g. {{'aid':xxxxx,'name':xxxxxxx ...},{'aid':xxxxx,'name':xxxxxxx..}}
         # [Exception Caught] return null
         # [Failed] return null
-
-        print('getAllAuthorObjectFromLocalServer')
-
+        result = []
+        cur = self.dbHelper.getcursor()
+        query = ("SELECT aid,name,email,gender,city,img_path,sid,nick_name from author WHERE sid = 1")
+        try:
+            cur.execute(query)
+        except mysql.connector.Error as err:
+            print("****************************************")
+            print("SQLException from getFriendOfFriend():")
+            print("Error code:", err.errno)
+            print("SQLSTATE value:", err.sqlstate)
+            print("Error message:", err.msg)
+            print("Query:",query)
+            print("****************************************")
+            return None
+        result = []
+        for row in cur:
+            author = Author(row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7])
+            result.append(author)
+        return result
     def getAllAuthorObjectsForRemoteServer(self):
         # DO NOT DELETE THE COMMENT
         # TODO:
@@ -60,19 +96,49 @@ class AuthorHelper:
         # e.g. {{'aid':xxxxx,'name':xxxxxxx ...},{'aid':xxxxx,'name':xxxxxxx..}}
         # [Exception Caught] return null
         # [Failed] return null
-
-        print('getAllAuthorObjectForRemoteServer')
-
+        result = []
+        cur = self.dbHelper.getcursor()
+        query = ("SELECT aid,name,email,gender,city,img_path,sid,nick_name from author WHERE sid != 1")
+        try:
+            cur.execute(query)
+        except mysql.connector.Error as err:
+            print("****************************************")
+            print("SQLException from getFriendOfFriend():")
+            print("Error code:", err.errno)
+            print("SQLSTATE value:", err.sqlstate)
+            print("Error message:", err.msg)
+            print("Query:",query)
+            print("****************************************")
+            return None
+        for row in cur:
+            author = Author(row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7])
+            result.append(author)
+        return result
     def addLocalAuthor(self,authorName,nickName,password):
         # DO NOT DELETE THE COMMENT 
         # TODO:
         # [Success] return {'aid':xxxxx } (jason type)
         # [Exception Caught] return false
         # [Failed] return false
-
+        cur = self.dbHelper.getcursor()
+        import utility
+        aid = utility.getid()
+        query = ("INSERT INTO author values('%s','%s','%s','%s',1,'','','','','')"%(aid,authorname,nickname,password))
+        try:
+            cur.execute(query)
+        except mysql.connector.Error as err:
+            print("****************************************")
+            print("SQLException from getFriendOfFriend():")
+            print("Error code:", err.errno)
+            print("SQLSTATE value:", err.sqlstate)
+            print("Error message:", err.msg)
+            print("Query:",query)
+            print("******************************")
+            return None
+        import json
+        return json.dumps({'aid',aid})
         print('addLocalAuthor')
-
-    def addRemoteAuthor(self,authorName,sid):
+    def addRemoteAuthor(self,thorName,sid):
         # DO NOT DELETE THE COMMENT
         # TODO:
         # [Success] return {'aid':xxxxx } (jason type)

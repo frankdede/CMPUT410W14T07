@@ -42,7 +42,19 @@ class TestController(unittest.TestCase):
 
     ''' The best way to avoid collision is to use timestamp'''
     ''' concatnate a string with current time(time in milliseconds)'''
-
+    def test_getAuthorObjectByAid(self):
+        result = self.getAuthorObjectByAid("111111")
+        self.assertTrue(result.getName()=='frank',"Error on getAuthorObjectByAid")
+    def test_getAllAuthorObjectsForLocalServer(self):
+        result = self.getAllAuthorObjectsForLocalServer()
+        self.assertTrue(result!=None,"ERROR on getAllAuthorObjectsForLocalServer")
+    def test_getAllAuthorObjectsForRemoteServer(self):
+        result = self.getAllAuthorObjectsForRemoteServer()
+        self.assertTrue(result!=None,"ERROR on getAllAuthorObjectsForRemoteServer")
+    def test_addLocalAuthor(self):
+        result = self.authorhelper.addLocalAuthor("coniewti1", "201486", "Conie")
+        self.assertTrue(result != None, "ERROR on addAuthor")
+    # need a add remote author
     def test_updateNickNameByAid(self):
         # Tested By : Guanqi
         result = self.authorhelper.updateNickNameByAid("111111", "nickname"+str(int(time.time()*1000)))
