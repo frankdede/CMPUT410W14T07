@@ -30,7 +30,9 @@ class TestController(unittest.TestCase):
         self.authorhelper = AuthorHelper(dbHelper)
         self.circlehelper = CircleHelper(dbHelper)
         self.posthelper = PostHelper(dbHelper)
-
+    '''
+     ====================   AuthorHelper  ====================
+    '''
 
     def test_authorAuthenticate(self):
         # Test By: Guanqi
@@ -67,6 +69,9 @@ class TestController(unittest.TestCase):
         result = self.authorhelper.deleteAuthor(json.loads(result)["aid"])
         self.assertTrue(result == True, "ERROR on deleteAuthor")
 
+    '''
+     ====================   CircleHelper  ====================
+    '''
     '''PLEASE rebuild the database everytime before run all the tests!!!'''
     def test_getFriendList(self):
 
@@ -77,10 +82,11 @@ class TestController(unittest.TestCase):
             self.assertTrue(friend.getName() != None,"ERROR on getFriendList ")
             self.assertTrue(friend.getAid() != None,"ERROR on getFriendList")
 
-    '''    
-        add = self.circlehelper.addNewCircle("frank", "owen")
+    def test_getFriendOfFriendList(self):
+        add = self.circlehelper.getFriendOfFriendList("frank", "owen")
         self.assertTrue(add == True, "ERROR on addnewcircle")
 
+    '''
         delete = self.circlehelper.deleteCircle("frank", "mark")
         self.assertTrue(delete == True, "ERROR on deletecircle")
         
