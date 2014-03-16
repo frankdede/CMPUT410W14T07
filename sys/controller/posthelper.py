@@ -70,10 +70,6 @@ class PostHelper:
           print("****************************************")
           return False
 
-        except Exception as err:
-          print("General Exception from addPostPermission():".format(err))
-          return False
-
         return cur.rowcount>0
 #type argument should be one of ['pid','aid','time','message','title','permission']
 #Usage: updatepost(databasehelper,pid,type="html", permmision="public") check keyword argument
@@ -103,10 +99,6 @@ class PostHelper:
           print("****************************************")
           return False
 
-        except Exception as err:
-          print("General Exception is raised by updateMessage():".format(err))
-          return False
-
         return cur.rowcount>0
 
     def updateTitle(self,pid,newtitle):
@@ -131,10 +123,6 @@ class PostHelper:
           print("Error message:", err.msg)
           print("Might be query issue:",query)
           print("****************************************")
-          return False
-
-        except Exception as err:
-          print("General Exception is raised by updateTime():".format(err))
           return False
 
         return cur.rowcount>0
@@ -164,10 +152,6 @@ class PostHelper:
           print("Might be query issue:",query)
           print("****************************************")
 
-          return False
-
-        except Exception as err:
-          print("General Exception is raised by authorAuthenticate():".format(err))
           return False
 
         return cur.rowcount>0
@@ -207,10 +191,6 @@ class PostHelper:
           print("****************************************")
           return False
 
-        except Exception as err:
-          print("General Exception is raised by updatePermission():".format(err))
-          return False
-
         return cur.rowcount>0
 
     def deletePostByPid(self,pid):
@@ -235,10 +215,6 @@ class PostHelper:
           print("Error message:", err.msg)
           print("Might be query issue:",query)
           print("****************************************")
-          return False
-
-        except Exception as err:
-          print("General Exception is raised by deletePostByPid():".format(err))
           return False
 
         return cur.rowcount>0
@@ -267,10 +243,6 @@ class PostHelper:
           print("****************************************")
           return False
 
-        except Exception as err:
-          print("General Exception from deletePostByAid():".format(err))
-          return False
-
         return cur.rowcount>0
 
     def getPostList(self,aid):
@@ -296,10 +268,6 @@ class PostHelper:
           print("Error message:", err.msg)
           print("1st Query:",query)
           print("****************************************")
-          return None
-
-        except Exception as err:
-          print("General Exception from getPostList() 1st block:".format(err))
           return None
 
         if cur != None:
@@ -333,10 +301,6 @@ class PostHelper:
           print("2nd Query:",query)
           print("****************************************")
           return None
-
-        except Exception as err:
-          print("General Exception from getPostList() 2nd block:".format(err))
-          return None
           
         if cur != None:
           for ele in cur:
@@ -367,10 +331,6 @@ class PostHelper:
           print("Error message:", err.msg)
           print("3rd Query:",query)
           print("****************************************")
-          return None
-
-        except Exception as err:
-          print("General Exception from getPostList() 3rd block:".format(err))
           return None
 
         if cur != None:
