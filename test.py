@@ -32,10 +32,11 @@ class TestController(unittest.TestCase):
         self.posthelper = PostHelper(dbHelper)
     '''
      ====================   AuthorHelper  ====================
+     PLEASE rebuild the database before run all the tests!!!
     '''
 
     def test_authorAuthenticate(self):
-        # Test By: Guanqi
+        # Tested By: Guanqi
         result = self.authorhelper.authorAuthenticate("frank", "12345")
         self.assertTrue(result == True, "ERROR on authorAuthenticate")
 
@@ -43,12 +44,12 @@ class TestController(unittest.TestCase):
     ''' concatnate a string with current time(time in milliseconds)'''
 
     def test_updateNickNameByAid(self):
-        # Test By : Guanqi
+        # Tested By : Guanqi
         result = self.authorhelper.updateNickNameByAid("111111", "nickname"+str(int(time.time()*1000)))
         self.assertTrue(result == True, "ERROR on updateNickName")
     
     def test_updateUpdatePasswordByAid(self):
-        # Test By : Guanqi
+        # Tested By : Guanqi
         result = self.authorhelper.updatePasswordByAid("111111","password"+str(int(time.time()*1000)))
         self.assertTrue(result == True, "ERROR on updatePassword")
         
@@ -57,11 +58,11 @@ class TestController(unittest.TestCase):
     ''' Test your insert methods before test the delete ones '''
 
     def test_addAndDeleteAuthor(self):
-        # Test By : Guanqi
+        # Tested By : Guanqi
         result = self.authorhelper.addAuthor("coniewt", "201486", "Conie")
         self.assertTrue(result != None, "ERROR on addAuthor")
 
-        # Test By : Guanqi
+        # Tested By : Guanqi
         # JASON ENCODING EXAMPLE:
         # In order to decode the json object, call function json.loads(your_josn_object)
         # and then it will return a dictionary object.
@@ -71,10 +72,11 @@ class TestController(unittest.TestCase):
 
     '''
      ====================   CircleHelper  ====================
+     PLEASE rebuild the database before run all the tests!!!
     '''
-    '''PLEASE rebuild the database everytime before run all the tests!!!'''
-    def test_getFriendList(self):
 
+    def test_getFriendList(self):
+        # Tested By : Guanqi
         friends = self.circlehelper.getFriendList('111111')
         friendsObj= author.parseList(friends)
 
@@ -83,8 +85,13 @@ class TestController(unittest.TestCase):
             self.assertTrue(friend.getAid() != None,"ERROR on getFriendList")
 
     def test_getFriendOfFriendList(self):
-        add = self.circlehelper.getFriendOfFriendList("frank", "owen")
-        self.assertTrue(add == True, "ERROR on addnewcircle")
+        # Tested By : Guanqi
+        friends = self.circlehelper.getFriendOfFriendList('111111')
+        print(friends)
+        for friend in friendsObj:
+            self.assertTrue(friend.getName() != None,"ERROR on getFriendList ")
+            self.assertTrue(friend.getAid() != None,"ERROR on getFriendList")
+
 
     '''
         delete = self.circlehelper.deleteCircle("frank", "mark")
