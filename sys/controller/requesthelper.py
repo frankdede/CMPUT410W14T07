@@ -2,82 +2,78 @@ import mysql.connector
 from databasehelper import *
 import sys
 import json
-sys.path.append("sys/model")
-from message import *
-class Messagehelper:
-    """ add a new message if it is unsuccessful, it returns -1
-    """
+
+class RequestHelper:
+
     dbHelper = None
     def __init__(self,dbHelper):
         self.dbHelper = dbHelper
 
-    def addNewMessage(self,re_name,red_name):
+    def addNewRequest(self,recipientId,senderId):
 
         cur = self.dbHelper.getcursor()
-        query ="INSERT INTO message VALUES(NULL,'%s','%s','0')"%(re_name,red_name)
+        query ="INSERT INTO request VALUES(NULL,'%s','%s')"%(recipientId,senderId)
 
         try:
           cur.execute(query)
-          self.dbHelper.commit()
 
         except mysql.connector.Error as err:
 
           print("****************************************")
-          print("SQLException from addNewMessage():")
+          print("SQLException from addNewRequest():")
+          print("Error code:", err.errno)
+          print("SQLSTATE value:", err.sqlstate)
+          print("Error message:", err.msg)
+          print("Might be query issue:",query)
+          print("****************************************")
+          return None
+
+        if cur.rowcount>0:
+
+          return json.dumps({'recipient_id':recipientId,'sender_id':senderId})
+
+        else:
+
+          return None
+
+    """
+    Delete a request based on recipientId and senderId
+
+    """
+    def deleteRequest(self,recipientId,senderId):
+
+        cur = self.dbHelper.getcursor()
+        query =("DELETE FROM request "
+                "WHERE recipient_id = '%s' AND sender_id = '%s'")%(recipientId,senderId)
+        try:
+          cur.execute(query)
+
+        except mysql.connector.Error as err:
+
+          print("****************************************")
+          print("SQLException from deleteRequest():")
           print("Error code:", err.errno)
           print("SQLSTATE value:", err.sqlstate)
           print("Error message:", err.msg)
           print("Might be query issue:",query)
           print("****************************************")
           return False
-
-        except Exception as err:
-          print("General Exception from addNewMessage():".format(err))
-          return False
-
+          
         return cur.rowcount>0
 
     """
-    to set message read by its primary key(re_name,red_name,time)
+    get a list of message of a same recipient
     """
-    def setMessageRead(self,recipient,sender):
-
+    def getRequestListByAid(self,recipientId):
+        result = []
         cur = self.dbHelper.getcursor()
-        query ="UPDATE message SET status = 1 WHERE recipient = '%s' and sender = '%s'"%(time,recipient,sender)
-        try:
-          cur.execute(query)
-          self.dbHelper.commit()
 
-        except mysql.connector.Error as err:
-
-          print("****************************************")
-          print("SQLException from addNewMessage():")
-          print("Error code:", err.errno)
-          print("SQLSTATE value:", err.sqlstate)
-          print("Error message:", err.msg)
-          print("Might be query issue:",query)
-          print("****************************************")
-          return False
-
-        except Exception as err:
-          print("General Exception from addNewMessage():".format(err))
-          return False
-
-        return cur.rowcount>0
-    """
-    get a list of message of a same requester
-    """
-    def getMessageListByAuthorName(self,recipient):
-        re = []
-        cur = self.dbHelper.getcursor()
-        query ="SELECT * FROM  message  WHERE recipient = '%s'"%(recipient)
+        query =("SELECT sender_id,time "
+               "FROM request WHERE recipient_id = '%s'")%(recipientId)
 
         try:
             cur.execute(query)
-            for item in cur:
-                re.append(Message(item[1],item[2],str(item[0]),item[3]).tojson())
-            return json.dumps(re)
-
+          
         except mysql.connector.Error as err:
 
             print("****************************************")
@@ -89,27 +85,28 @@ class Messagehelper:
             print("****************************************")
             return None
 
-        except Exception as err:
-            print("General Exception from getMessageListByAuthorName():".format(err))
-            return None
+        for row in cur:
+                result.append({'sender_id':row[0],'time':str(row[1])})
+
+        return json.dumps(result)
+
     """
-    to get a list of unread message of a requester
+    To get the number of requests
     """
-    def getUnreadMessageListByAuthorName(self,recipient):
+    def getRequestCountByAid(self,recipientId):
 
         cur = self.dbHelper.getcursor()
-        query ="SELECT * FROM  message  WHERE status = 0 AND recipient = '%s'"%(recipient)
+
+        query = ("SELECT count(*) FROM request "
+                 "WHERE recipient_id = '%s'")%(recipientId)
         try:
             cur.execute(query)
-            re = []
-            for item in cur:
-                re.append(Message(item[1],item[2],str(item[0]),item[3]).tojson())
-            return json.dumps(re)
+            row = cur.fetchone()
 
         except mysql.connector.Error as err:
 
             print("****************************************")
-            print("SQLException from getUnreadMessageListByAuthorName():")
+            print("SQLException from getRequestCountByAid():")
             print("Error code:", err.errno)
             print("SQLSTATE value:", err.sqlstate)
             print("Error message:", err.msg)
@@ -117,60 +114,28 @@ class Messagehelper:
             print("****************************************")
             return None
 
-        except Exception as err:
-            print("General Exception from getUnreadMessageListByAuthorName():".format(err))
-            return None
-    """
-    To get the number of message
-    """
-    def getMessageCountByAuthorName(self,recipient):
+        if row != None:
+            return json.dumps({'count':row[0]})
+        else:
+            return json.dumps({'count':0})
 
-        cur = self.dbHelper.getcursor()
-        query ="SELECT count(*) FROM  message  WHERE status = 0 AND recipient = '%s'"%(recipient)
-        try:
-            cur.execute(query)
-            i = cur.fetchone()
-            if i is not None:
-                return i[0]
-            else:
-                return 0
-
-        except mysql.connector.Error as err:
-
-            print("****************************************")
-            print("SQLException from getMessageCountByAuthorName():")
-            print("Error code:", err.errno)
-            print("SQLSTATE value:", err.sqlstate)
-            print("Error message:", err.msg)
-            print("Might be query issue:",query)
-            print("****************************************")
-            return None
-
-        except Exception as err:
-            print("General Exception from getMessageCountByAuthorName():".format(err))
-            return None
-
-    def deleteAllMessageByAuthorName(self,sender):
+    def deleteAllRequestByAid(self,recipient_id):
         
         cur = self.dbHelper.getcursor()
-        query = "DELETE FROM message WHERE recipient ='%s'"%(sender)
+        query = "DELETE FROM request WHERE recipient_id ='%s'"%(recipient_id)
+
         try:
           cur.execute(query)
-          self.dbHelper.commit()
 
         except mysql.connector.Error as err:
 
           print("****************************************")
-          print("SQLException from addNewMessage():")
+          print("SQLException from deleteAllRequestByAid():")
           print("Error code:", err.errno)
           print("SQLSTATE value:", err.sqlstate)
           print("Error message:", err.msg)
           print("Might be query issue:",query)
           print("****************************************")
-          return False
-
-        except Exception as err:
-          print("General Exception from addNewMessage():".format(err))
           return False
 
         return cur.rowcount>0
