@@ -145,7 +145,6 @@ class AuthorHelper:
         aid = utility.getid()
         password = ""
         nickName = ""
-        authorName = ""
         query = ("INSERT INTO author(aid,name,nick_name,pwd,sid) "
                  "VALUES('%s','%s','%s','%s',%s)")%(aid,authorName,nickName,password,sid)
         try:
