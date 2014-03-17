@@ -42,7 +42,31 @@ class AuthorHelper:
         # [Success] return an jason author object
         # [Exception] return null
         # [Failed] return null
-        print('getAuthorObjectByAid')
+        cur = self.dbHelper.getcursor()
+        query = "SELECT * FROM author WHERE aid = '%s'"%(aid)
+        try:
+            cur.execute(query)
+            row = cur.fetchone()
+            cur.close()
+            if row is None:
+               return None
+
+            else:
+               objects_list = []
+               author = Author(row[0],row[1],row[2],row[4],row[5],row[6],row[7],row[8],row[9])
+               objects_list.append(author.tojson())
+               j = json.dumps(objects_list)
+               return j
+ 
+        except mysql.connector.Error as err:
+            print("****************************************")
+            print("SQLException from getAuthorObjectByAid():")
+            print("Error code:", err.errno)
+            print("SQLSTATE value:", err.sqlstate)
+            print("Error message:", err.msg)
+            print("Might be query issue:",query)
+            print("****************************************")
+            return None
 
     def getAllAuthorObjectsForLocalServer(self):
         # DO NOT DELETE THE COMMENT
@@ -51,8 +75,32 @@ class AuthorHelper:
         # e.g. {{'aid':xxxxx,'name':xxxxxxx ...},{'aid':xxxxx,'name':xxxxxxx..}}
         # [Exception] return null
         # [Failed] return null
+        cur = self.dbHelper.getcursor()
+        query = "SELECT * FROM author WHERE sid = 1"
+        try:
+            cur.execute(query)
+            rows = cur.fetchall()
+            cur.close()
+            if rows is None:
+               return None
 
-        print('getAllAuthorObjectFromLocalServer')
+            else:
+               objects_list = []
+               for row in rows:
+                   author = Author(row[0],row[1],row[2],row[4],row[5],row[6],row[7],row[8],row[9])
+                   objects_list.append(author.tojson())
+               j = json.dumps(objects_list)
+               return j
+ 
+        except mysql.connector.Error as err:
+            print("****************************************")
+            print("SQLException from getAllAuthorObjectsForLocalServer():")
+            print("Error code:", err.errno)
+            print("SQLSTATE value:", err.sqlstate)
+            print("Error message:", err.msg)
+            print("Might be query issue:",query)
+            print("****************************************")
+            return None
 
     def getAllAuthorObjectsForRemoteServer(self):
         # DO NOT DELETE THE COMMENT
@@ -61,17 +109,32 @@ class AuthorHelper:
         # e.g. {{'aid':xxxxx,'name':xxxxxxx ...},{'aid':xxxxx,'name':xxxxxxx..}}
         # [Exception] return null
         # [Failed] return null
+        cur = self.dbHelper.getcursor()
+        query = "SELECT * FROM author WHERE sid != 1"
+        try:
+            cur.execute(query)
+            rows = cur.fetchall()
+            cur.close()
+            if rows is None:
+               return None
 
-        print('getAllAuthorObjectForRemoteServer')
-
-    def addLocalAuthor(self,authorName,nickName,password):
-        # DO NOT DELETE THE COMMENT 
-        # TODO:
-        # [Success] return {'aid':xxxxx } (jason type)
-        # [Exception] return false
-        # [Failed] return false
-
-        print('addLocalAuthor')
+            else:
+               objects_list = []
+               for row in rows:
+                   author = Author(row[0],row[1],row[2],row[4],row[5],row[6],row[7],row[8],row[9])
+                   objects_list.append(author.tojson())
+               j = json.dumps(objects_list)
+               return j
+ 
+        except mysql.connector.Error as err:
+            print("****************************************")
+            print("SQLException from getAllAuthorObjectsForLocalServer():")
+            print("Error code:", err.errno)
+            print("SQLSTATE value:", err.sqlstate)
+            print("Error message:", err.msg)
+            print("Might be query issue:",query)
+            print("****************************************")
+            return None
 
     def addRemoteAuthor(self,authorName,sid):
         # DO NOT DELETE THE COMMENT
@@ -79,15 +142,55 @@ class AuthorHelper:
         # [Success] return {'aid':xxxxx } (jason type)
         # [Exception] return false
         # [Failed] return false
-        print('addRemoteAuthor')
+        aid = utility.getid()
+        password = ""
+        nickName = ""
+        authorName = ""
+        query = ("INSERT INTO author(aid,name,nick_name,pwd,sid) "
+                 "VALUES('%s','%s','%s','%s',%s)")%(aid,authorName,nickName,password,sid)
+        try:
+            cur.execute(query)
 
+        except mysql.connector.Error as err:
+            print("****************************************")
+            print("SQLException from addRemoteAuthor():")
+            print("Error code:", err.errno)
+            print("SQLSTATE value:", err.sqlstate)
+            print("Error message:", err.msg)
+            print("Might be query issue:",query)
+            print("****************************************")
+            return False
+        if cur.rowcount > 0:
+            cur.close()
+            return json.dumps({"aid":aid})
+
+        cur.close()
+        return False
     def updateAuthorInfo(self,aid,email,gender,city,birthday,img_path):
         # DO NOT DELETE THE COMMENT
         # TODO:
         # [Success] return true
         # [Exception] return false
         # [Failed] return false
-        print('addRemoteAuthor')
+        query = "UPDATE author SET email = '%s', gender = '%s',city = '%s',birthday = '%s', img_path = '%s' WHERE aid = '%s'"%(email,gender,city,birthday,img_path,aid)
+        try:
+            cur.execute(query)
+
+        except mysql.connector.Error as err:
+            print("****************************************")
+            print("updateAuthorInfo():")
+            print("Error code:", err.errno)
+            print("SQLSTATE value:", err.sqlstate)
+            print("Error message:", err.msg)
+            print("Might be query issue:",query)
+            print("****************************************")
+            return False
+        if cur.rowcount > 0:
+            cur.close()
+            return json.dumps({"aid":aid})
+
+        cur.close()
+        return False
 
     def updateNickNameByAid(self,aid,newNickName):
 
