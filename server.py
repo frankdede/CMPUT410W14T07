@@ -8,7 +8,7 @@ sys.path.append('sys/model')
 from authorhelper import *
 from posthelper import *
 from databasehelper import *
-from messagehelper import *
+
 from circlehelper import *
 
 DEBUG = True
@@ -22,7 +22,7 @@ ahelper = AuthorHelper(dbHelper)
 # use the conneted dbHelper to initialize postHelper obj
 postHelper = PostHelper(dbHelper)
 # 
-msgHelper = Messagehelper(dbHelper)
+#msgHelper = Messagehelper(dbHelper)
 #
 circleHelper = CircleHelper(dbHelper)
 

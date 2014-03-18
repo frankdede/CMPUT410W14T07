@@ -116,6 +116,7 @@ class AuthorHelper:
             author = Author(row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7])
             result.append(author)
         return result
+
     def addLocalAuthor(self,authorName,nickName,password):
         # DO NOT DELETE THE COMMENT 
         # TODO:
@@ -139,7 +140,7 @@ class AuthorHelper:
             return None
         import json
         return json.dumps({'aid',aid})
-        print('addLocalAuthor')
+
     def addRemoteAuthor(self,thorName,sid):
         # DO NOT DELETE THE COMMENT
         # TODO:

@@ -96,7 +96,30 @@ class CircleHelper:
         #
         # [Success] Returns an jason array of author objects / empty jason array
         # [Exception Caught] return null
-        print('getFriendOfMyHomeServerList')
+        result = []
+        cur = self.dbHelper.getcursor()
+        query = ("SELECT A.aid,A.name,A.email,A.gender,A.city,A.img_path,A.sid,A.nick_name "
+                 "FROM author A "
+                 "WHERE A.aid in (SELECT C.aid2 FROM circle C WHERE C.aid1='%s') AND sid = 1")%(aid)
+        try:
+          cur.execute(query);
+
+        except mysql.connector.Error as err:
+
+          print("****************************************")
+          print("SQLException from getFriendOfMyHomeServerList():")
+          print("Error code:", err.errno)
+          print("SQLSTATE value:", err.sqlstate)
+          print("Error message:", err.msg)
+          print("Query:",query)
+          print("****************************************")
+          return None
+
+        for row in cur:
+            friend = Author(row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7])
+            result.append(friend.tojson())
+
+        return json.dumps(result)
 
     def getFriendOfFriendList(self,aid):
         result = []
