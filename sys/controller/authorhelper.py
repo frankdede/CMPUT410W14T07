@@ -174,7 +174,7 @@ class AuthorHelper:
         query = "UPDATE author SET email = '%s', gender = '%s',city = '%s',birthday = '%s', img_path = '%s' WHERE aid = '%s'"%(email,gender,city,birthday,img_path,aid)
         try:
             cur.execute(query)
-
+            return True
         except mysql.connector.Error as err:
             print("****************************************")
             print("updateAuthorInfo():")
@@ -184,12 +184,6 @@ class AuthorHelper:
             print("Might be query issue:",query)
             print("****************************************")
             return False
-        if cur.rowcount > 0:
-            cur.close()
-            return json.dumps({"aid":aid})
-
-        cur.close()
-        return False
 
     def updateNickNameByAid(self,aid,newNickName):
 
