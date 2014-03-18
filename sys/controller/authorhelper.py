@@ -141,7 +141,7 @@ class AuthorHelper:
         import json
         return json.dumps({'aid',aid})
 
-    def addRemoteAuthor(self,thorName,sid):
+    def addRemoteAuthor(self,authorName,sid):
         # DO NOT DELETE THE COMMENT
         # TODO:
         # [Success] return {'aid':xxxxx } (jason type)
