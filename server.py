@@ -8,7 +8,7 @@ sys.path.append('sys/model')
 from authorhelper import *
 from posthelper import *
 from databasehelper import *
-from messagehelper import *
+from requesthelper import *
 from circlehelper import *
 
 DEBUG = True
@@ -22,7 +22,7 @@ ahelper = AuthorHelper(dbHelper)
 # use the conneted dbHelper to initialize postHelper obj
 postHelper = PostHelper(dbHelper)
 # 
-msgHelper = Messagehelper(dbHelper)
+reHelper = RequetHelper(dbHelper)
 #
 circleHelper = CircleHelper(dbHelper)
 
@@ -46,7 +46,7 @@ def flaskPostToJson():
 def root():
     if 'logged_in' in session:
         username = session['logged_in']
-        mumMsg = msgHelper.getMessageCountByAuthorName(username)
+        mumMsg = reHelper.getMessageCountByAuthorName(username)
         return render_template('header.html')
     else:
         return redirect(url_for('login'))
@@ -101,7 +101,7 @@ def messages(authorName):
     if ('logged_in' not in session) or (authorName !=session['logged_in']):
         abort(404)
     else:
-        jsonstring = msghelper.getUnreadMessageListByAuthorName(username)
+        jsonstring = reHelper.getUnreadMessageListByAuthorName(username)
         return jsonstring,200
 
 # logout
