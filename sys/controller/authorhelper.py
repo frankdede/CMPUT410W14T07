@@ -12,8 +12,9 @@ class AuthorHelper:
         self.dbHelper = dbHelper
 
     def authorAuthenticate(self,authorName,password):
-        # TESTED BY: Guanqi 
+
         cur = self.dbHelper.getcursor()
+        #Refactored: Author_name is changed to name
         query = "SELECT * FROM author WHERE name='%s' AND pwd='%s' AND sid=1"%(authorName,password)
         
         try:
@@ -39,7 +40,7 @@ class AuthorHelper:
         # DO NOT DELETE THE COMMENT
         # TODO:
         # [Success] return an jason author object
-        # [Exception Caught] return null
+        # [Exception] return null
         # [Failed] return null
         cur = self.dbHelper.getcursor()
         query = "SELECT * FROM author WHERE aid='%s'"%(aid)
@@ -66,9 +67,9 @@ class AuthorHelper:
     def getAllAuthorObjectsForLocalServer(self):
         # DO NOT DELETE THE COMMENT
         # TODO:
-        # [SUCCESS] return an jason array of author objects for local server
+        # [SUCCESS] return an array of author objects for local server
         # e.g. {{'aid':xxxxx,'name':xxxxxxx ...},{'aid':xxxxx,'name':xxxxxxx..}}
-        # [Exception Caught] return null
+        # [Exception] return null
         # [Failed] return null
         result = []
         cur = self.dbHelper.getcursor()
@@ -89,12 +90,13 @@ class AuthorHelper:
             author = Author(row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7])
             result.append(author)
         return result
+
     def getAllAuthorObjectsForRemoteServer(self):
         # DO NOT DELETE THE COMMENT
         # TODO:
         # [SUCCESS] return an json array of author objects for remote server
         # e.g. {{'aid':xxxxx,'name':xxxxxxx ...},{'aid':xxxxx,'name':xxxxxxx..}}
-        # [Exception Caught] return null
+        # [Exception] return null
         # [Failed] return null
         result = []
         cur = self.dbHelper.getcursor()
@@ -142,20 +144,53 @@ class AuthorHelper:
         # DO NOT DELETE THE COMMENT
         # TODO:
         # [Success] return {'aid':xxxxx } (jason type)
-        # [Exception Caught] return false
+        # [Exception] return false
         # [Failed] return false
-        print('addRemoteAuthor')
+        aid = utility.getid()
+        password = ""
+        nickName = ""
+        query = ("INSERT INTO author(aid,name,nick_name,pwd,sid) "
+                 "VALUES('%s','%s','%s','%s',%s)")%(aid,authorName,nickName,password,sid)
+        try:
+            cur.execute(query)
 
-    def updateAuthorInfo(self,aid,email,gender,city,birthday,imgPath):
+        except mysql.connector.Error as err:
+            print("****************************************")
+            print("SQLException from addRemoteAuthor():")
+            print("Error code:", err.errno)
+            print("SQLSTATE value:", err.sqlstate)
+            print("Error message:", err.msg)
+            print("Might be query issue:",query)
+            print("****************************************")
+            return False
+        if cur.rowcount > 0:
+            cur.close()
+            return json.dumps({"aid":aid})
+
+        cur.close()
+        return False
+    def updateAuthorInfo(self,aid,email,gender,city,birthday,img_path):
         # DO NOT DELETE THE COMMENT
         # TODO:
         # [Success] return true
-        # [Exception Caught] return false
+        # [Exception] return false
         # [Failed] return false
-        print('addRemoteAuthor')
+        query = "UPDATE author SET email = '%s', gender = '%s',city = '%s',birthday = '%s', img_path = '%s' WHERE aid = '%s'"%(email,gender,city,birthday,img_path,aid)
+        try:
+            cur.execute(query)
+            return True
+        except mysql.connector.Error as err:
+            print("****************************************")
+            print("updateAuthorInfo():")
+            print("Error code:", err.errno)
+            print("SQLSTATE value:", err.sqlstate)
+            print("Error message:", err.msg)
+            print("Might be query issue:",query)
+            print("****************************************")
+            return False
 
     def updateNickNameByAid(self,aid,newNickName):
-        # TESTED BY: Guanqi 
+
         cur = self.dbHelper.getcursor()
         query = "UPDATE author SET nick_name = '%s' WHERE aid = '%s'"%(newNickName,aid)
         
@@ -178,7 +213,7 @@ class AuthorHelper:
         return cur.rowcount>0
 
     def updatePasswordByAid(self,aid,newPassword):
-        # TESTED BY: Guanqi 
+
         cur = self.dbHelper.getcursor()
         query = "UPDATE author SET pwd = '%s' WHERE aid='%s'"%(newPassword,aid)
 
@@ -203,7 +238,7 @@ class AuthorHelper:
     # to add an author to database the server_id is defualtly 1 if server_id is not provided
 
     def deleteAuthor(self,aid):
-        # TESTED BY: Guanqi 
+
         cur = self.dbHelper.getcursor()
 
         query = ("DELETE FROM author "
@@ -228,7 +263,7 @@ class AuthorHelper:
         return cur.rowcount>0
 
     def addAuthor(self,authorName,password,nickName,sid=1):
-        # TESTED BY: Guanqi 
+
         cur = self.dbHelper.getcursor()
         aid =utility.getid()
 
