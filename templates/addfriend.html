@@ -16,35 +16,14 @@
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="{{url_for('static',filename='js/bootstrap.min.js')}}"></script>
     <script src="{{url_for('static',filename='js/json2.js')}}"></script>
-    
+    <script src="{{url_for('static',filename='js/addauthor.js')}}"></script>
   </head>
   <body>
 <div class="panel panel-default">
   <!-- Default panel contents -->
   <!-- Table -->
-  <table class="table">
-    <div class="row">
-      <div class="col-lg-6">
-        <div class="input-group">
-          <p class="form-control">Hi
-            <button type="button" class="btn btn-default btn-xs">
-              <span class="glyphicon glyphicon-star"></span> Star
-            </button>
-          </p>
-        </div><!-- /input-group -->
-      </div><!-- /.col-lg-6 -->
-    </div><!-- /.row -->
-    <div class="row">
-      <div class="col-lg-6">
-        <div class="input-group">
-          <span class="input-group-addon">
-          <button type="button" class="btn btn-default btn-sm">
-            <span class="glyphicon glyphicon-star"></span> Star
-          </button>
-          </span>
-    </div><!-- /input-group -->
-  </div><!-- /.col-lg-6 -->
-</div><!-- /.row -->
+  <table class="table" id="add_author_table">
+    
   </table>
 </div>
   </body>

@@ -46,7 +46,19 @@ def flaskPostToJson():
 def root():
         #username = session['logged_in']
         #mumMsg = reHelper.getMessageCountByAuthorName(username)
+    
     return render_template('addfriend.html')
+@app.route('/authorlist.json', methods=['GET'])
+def authorlist():
+    #test data
+    tem =['Mark','Hello','Frank']
+    jsonstring= json.dumps(tem)
+    return jsonstring
+@app.route('/<aid>/request/<aname>',methods=['post'])
+def make_request(aid,aname):
+    re = make_response("ok")
+    re.headers['Content-Type']='test/plain'
+    return re
 if __name__ == '__main__':
     app.debug = True
     app.run()
