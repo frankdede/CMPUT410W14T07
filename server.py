@@ -8,11 +8,7 @@ sys.path.append('sys/model')
 from authorhelper import *
 from posthelper import *
 from databasehelper import *
-<<<<<<< HEAD
 from requesthelper import *
-=======
-
->>>>>>> 5b33953a51208ddac950d4a00d70cc2a1789a5ae
 from circlehelper import *
 
 DEBUG = True
