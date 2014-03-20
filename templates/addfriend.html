@@ -9,6 +9,7 @@
     <!-- Bootstrap -->
     <link href="{{url_for('static',filename='css/bootstrap.min.css')}}" rel="stylesheet">
      <link href="{{url_for('static',filename='css/main.css')}}" rel="stylesheet">
+     <link href="{{url_for('static',filename='css/admin.css')}}" rel="stylesheet">
      <!-- Struct css-->
      <link href="{{url_for('static',filename='css/struct.css')}}" rel="stylesheet">
      <link href="{{url_for('static',filename='css/permission.css')}}" rel="stylesheet">
@@ -17,6 +18,7 @@
     <script src="{{url_for('static',filename='js/bootstrap.min.js')}}"></script>
     <script src="{{url_for('static',filename='js/json2.js')}}"></script>
     <script src="{{url_for('static',filename='js/addauthor.js')}}"></script>
+    <script src="{{url_for('static',filename='js/admin.js')}}"></script>
   </head>
   <body>
 <div class="panel panel-default">
@@ -37,3 +39,24 @@
   </div>
   </body>
   </html>
+<div id="struct-message-panel" class="col-md-3" >
+  All Authors
+<div>
+    <SELECT id="all_author" SIZE="8" MULTIPLE >
+      <OPTION SELECTED> Apples
+      <OPTION> Bananas
+      <OPTION> Oranges
+      <OPTION> Watermelon
+      <OPTION> Kiwi
+      <OPTION> Cantaloupe
+      <OPTION> Strawberries
+    </SELECT>
+  </div>
+</div>
+<div id="struct-message-panel" class="col-md-3" >
+<div id="title">.middle
+</div>
+</div>
+<div id="struct-message-panel" class="col-md-3" >
+.right
+</div>

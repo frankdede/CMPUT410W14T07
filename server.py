@@ -96,12 +96,12 @@ def register():
     return redirect(url_for('/'))
 
 
-@app.route('/<authorName>/messages.json', methods=['GET'])
+@app.route('/<aid>/messages.json', methods=['GET'])
 def messages(authorName):
     if ('logged_in' not in session) or (authorName !=session['logged_in']):
         abort(404)
     else:
-        jsonstring = reHelper.getUnreadMessageListByAuthorName(username)
+        jsonstring = reHelper.getRequestListByAid(aid)
         return jsonstring,200
 
 # logout

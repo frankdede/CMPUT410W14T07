@@ -59,6 +59,14 @@ def make_request(aid,aname):
     re = make_response("ok")
     re.headers['Content-Type']='test/plain'
     return re
+@app.route('/admin/authormanage/author_list.json',methods=['GET'])
+def get_all_author_list():
+    tem =['Mark','Hello','Frank']
+    jsonstring= json.dumps(tem)
+    return jsonstring
+@app.route('/admin/authormanage/delete/<aid>',methods=['GET'])
+def delete_author():
+    return jsonstring
 if __name__ == '__main__':
     app.debug = True
     app.run()
