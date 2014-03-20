@@ -27,6 +27,7 @@ $(document).ready(function(){
     var pos = parseInt($(this).attr("data"));
      $.post("123/request/"+author_list[pos],function(data){
       $("#addrow"+pos).slideUp();
+      get_author_list();
      });
 });
 });
