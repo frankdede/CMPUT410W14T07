@@ -1,11 +1,12 @@
 
 var author_list = new Array();
 function get_author_list(){
+    $("#add_author_table").empty();
     $.getJSON("authorlist.json",function(data2){
       $.each(data2,function(i,field){
         author_list[i] = field;
-        $("#add_author_table").prepend("<div class='row' style='width:300px'id='addrow"+i+"'> \
-      <div class='col-md-1'></div> \
+        $("#add_author_table").append("<div class='row' style='width:300px'id='addrow"+i+"'> \
+      <div class='col-md-1'>"+(i+1)+"</div> \
       <div class='col-md-6'> \
         <span class='glyphicon glyphicon-user'></span>  "+field+"</div> \
       <div class='col-md-3'> \
@@ -15,7 +16,7 @@ function get_author_list(){
               <span class='glyphicon glyphicon-plus'></span> Add \
             </button> \
       </div> \
-    </div>")
+    </div>");
       });
         //var name = items.requested_name+" want to be your friend";
         //$('#message_menue').append("<li><a href='#'>"+name+"</a></li>");

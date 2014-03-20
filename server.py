@@ -22,7 +22,7 @@ ahelper = AuthorHelper(dbHelper)
 # use the conneted dbHelper to initialize postHelper obj
 postHelper = PostHelper(dbHelper)
 # 
-reHelper = RequetHelper(dbHelper)
+reHelper = RequestHelper(dbHelper)
 #
 circleHelper = CircleHelper(dbHelper)
 
