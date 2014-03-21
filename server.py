@@ -1,7 +1,8 @@
 
 import json
 import flask
-from flask import Flask, request, redirect, url_for, g, render_template, flash, session, abort,make_response
+import markdown
+from flask import Flask, request, redirect, url_for, g, render_template, flash, session, abort,make_response, Markup
 import sys,os
 sys.path.append('sys/controller')
 sys.path.append('sys/model')
@@ -46,7 +47,7 @@ def flaskPostToJson():
 def root():
     if 'logged_in' in session:
         username = session['logged_in']
-        mumMsg = reHelper.getMessageCountByAuthorName(username)
+        #mumMsg = reHelper.getMessageCountByAuthorName(username)
         return render_template('header.html')
     else:
         return redirect(url_for('login'))
@@ -58,6 +59,9 @@ def getuid():
         re = make_response(session['logged_in'])
         re.headers['Content-Type']='text/plain'
         return re
+
+
+
 # login page
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -132,6 +136,22 @@ def getUpdatedPost(authorName):
             return post,200
     else:
          return abort(404)
+
+@app.route('/markdown')
+
+def index():
+  content = """
+Chapter
+=======
+
+Section
+-------
+
+* Item 1
+* Item 2
+"""
+  content = Markup(markdown.markdown(content))
+  return render_template('markdown.html', **locals())
 
 @app.route('/<authorName>/post/',methods=['PUT','POST'])
 def uploadPostToServer(authorName):
