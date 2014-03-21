@@ -40,6 +40,7 @@ class RequestHelper:
     Delete a request based on recipientId and senderId
 
     """
+        
     def deleteRequest(self,recipientId,senderId):
 
         cur = self.dbHelper.getcursor()
