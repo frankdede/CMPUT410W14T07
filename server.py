@@ -137,21 +137,16 @@ def getUpdatedPost(authorName):
     else:
          return abort(404)
 
-@app.route('/markdown')
+@app.route('/markdown',methods=['GET','POST'])
 
 def index():
-  content = """
-Chapter
-=======
+    if request.method == 'POST':
+       content = request.form['postMarkDown']
+       print content
+       content = Markup(markdown.markdown(content))
+       return render_template('markdown.html', **locals())
+    return render_template('markdown_input.html')
 
-Section
--------
-
-* Item 1
-* Item 2
-"""
-  content = Markup(markdown.markdown(content))
-  return render_template('markdown.html', **locals())
 
 @app.route('/<authorName>/post/',methods=['PUT','POST'])
 def uploadPostToServer(authorName):
