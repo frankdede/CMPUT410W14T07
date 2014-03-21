@@ -2,6 +2,8 @@
 import json
 import flask
 from flask import Flask, request, redirect, url_for, g, render_template, flash, session, abort,make_response
+from werkzeug.utils import secure_filename
+
 import sys,os
 sys.path.append('sys/controller')
 sys.path.append('sys/model')
@@ -10,7 +12,8 @@ from posthelper import *
 from databasehelper import *
 #from requesthelper import *
 from circlehelper import *
-
+#allowed file extension
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 DEBUG = True
 # create a new database obj
 dbHelper = Databasehelper()
@@ -28,6 +31,9 @@ circleHelper = CircleHelper(dbHelper)
 
 app = Flask(__name__)
 app.config.from_object(__name__)
+# add upload
+UPLOAD_FOLDER='/upload/image'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.secret_key = os.urandom(24)
 error = None
 
@@ -44,6 +50,12 @@ def flaskPostToJson():
 # default path
 @app.route('/', methods=['GET', 'POST'])
 def root():
+    #username = session['logged_in']
+    #mumMsg = reHelper.getMessageCountByAuthorName(username)
+    
+    return render_template('header.html')
+@app.route('/addfriend', methods=['GET', 'POST'])
+def addfriend():
         #username = session['logged_in']
         #mumMsg = reHelper.getMessageCountByAuthorName(username)
     
@@ -67,6 +79,21 @@ def get_all_author_list():
 @app.route('/admin/authormanage/delete/<aid>',methods=['GET'])
 def delete_author():
     return jsonstring
+def allowed_file(filename):
+    return '.' in filename and \
+        filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+@app.route('/<aid>/uploadprofile', methods=['GET', 'POST'])
+def upload_file():
+    if request.method == 'POST':
+        file = request.files['file']
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            return redirect(url_for('uploaded_file',
+                                    filename=filename))
+@app.route('/logout', methods=['GET', 'POST'])
+def logout():
+    pass
 if __name__ == '__main__':
     app.debug = True
     app.run()

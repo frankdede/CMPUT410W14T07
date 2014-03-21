@@ -1,6 +1,10 @@
-$("#register_table").hide();
 var click = 0;
 var message_click= 0;
+$(document).ready(function(){
+  $( "#datepicker" ).datepicker();
+  $("#register_table").hide();
+  $("#personal_body").hide();
+});
 function refresh_message_list(){
   $.get("ajax/uid",function(data){
     $.getJSON(data+"/messages",function(data2){
@@ -15,6 +19,17 @@ function refresh_message_list(){
   );
   });
 }
+var switcher = 0;
+$("#switcher").click(function(){
+  if (switcher==0){
+    $("#personal_body").slideDown();
+    switcher=1;
+  }else{
+    $("#personal_body").slideUp();
+    switcher = 0;
+  }
+
+});
 $("#search_button").click(function(){
   event.preventDefault();
   refresh_message_list()
@@ -44,7 +59,7 @@ $("#button_login").click(function(){
     });
 $("#re_button").click(function(){
   if (click==0) {
-    $("#login_table").hide();
+    $("#login_form").hide();
     $("#register_table").show();
     $("#re_button").text("Login");
     $("#button_login").text("Submit");
@@ -53,7 +68,7 @@ $("#re_button").click(function(){
      // odd clicks
   } else {
     $("#register_table").hide();
-    $("#login_table").show();
+    $("#login_form").show();
     $("#re_button").text("Register");
     $("#button_login").text("Login");
     $("#modal_title").text("Welcome");
