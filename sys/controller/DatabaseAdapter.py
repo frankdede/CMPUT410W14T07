@@ -33,16 +33,6 @@ class DatabaseAdapter:
             else:
                 print(err)
 # get dabase connector
-
-
-    def executeFetchStmt():
-
-
-    def executeUpdateStmt():
-
-
-
-
     def setAutoCommit(self):
         self.cnx.autocommit = True
     def getdabaseconnector(self):
@@ -57,6 +47,3 @@ class DatabaseAdapter:
         return self.cnx !=  None
     def getcursor(self):
         return self.cnx.cursor()
-if __name__ == "__main__":
-    databasehelper = Databasehelper()
-    databasehelper.connect()
