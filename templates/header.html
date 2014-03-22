@@ -25,6 +25,7 @@
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="{{url_for('static',filename='js/bootstrap.min.js')}}"></script>
     <script src="{{url_for('static',filename='js/json2.js')}}"></script>
+    <script src="{{url_for('static',filename='js/jquery.validate.min.js')}}"></script>
     <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
   </head>
 <body>
@@ -113,106 +114,91 @@
               <label for="exampleInputPassword1">Password:</label>
               <input type="password" class="form-control" name="password" id="login_password" placeholder="Password">
           </div>
-          <font color="red"><strong id="login_error"></strong></font>
         </form>
-        <form class="form-horizontal" role="form">
+<form class="form-horizontal" id="register_form">
 <!--register form-->
   <div class="panel panel-default">
-  <div class="panel-heading">Required Information</div>
-  <div class="panel-body">
-  <div class="form-group">
-    <label for="inputEmail3" class="col-sm-2 control-label">Email</label>
-    <div class="col-sm-10">
-      <input type="email" class="form-control" id="inputEmail3" placeholder="Email">
-    </div>
-  </div>
-  <div class="form-group">
+    <div class="panel-heading">Required Information</div>
+    <!--begin required information-->
+    <div class="panel-body">
+      <div class="form-group">
+        <label for="inputEmail3" class="col-sm-2 control-label">Email</label>
+        <div class="col-sm-10">
+        <input type="email" class="form-control" id="email" name="email" placeholder="Email">
+        </div>
+      </div>
+      <div class="form-group">
     <label for="inputEmail3" class="col-sm-2 control-label">Author Name</label>
     <div class="col-sm-10">
-      <input type="text" class="form-control" id="author_name" placeholder="Author Name">
+      <input type="text" class="form-control" id="author_name" name="author_name" placeholder="Author Name">
+    </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Password</label>
+        <div class="col-sm-10">
+        <input type="password" id="register_pwd" class="form-control" name="register_pwd" placeholder="Password">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Retype Password</label>
+        <div class="col-sm-10">
+        <input type="password" class="form-control" name ="re_pwd" id="re_pwd" placeholder="Password">
+        </div>
+      </div>
     </div>
   </div>
-  <div class="form-group">
-    <label class="col-sm-2 control-label">Password</label>
-    <div class="col-sm-10">
-      <input type="password" class="form-control" id="inputPassword3" placeholder="Password">
-    </div>
-  </div>
-  <div class="form-group">
-    <label class="col-sm-2 control-label">Retype Password</label>
-    <div class="col-sm-10">
-      <input type="password" class="form-control" id="inputPassword3" placeholder="Password">
-    </div>
-  </div>
-</div>
-</div>
 <!--End requirement pannel-->
 <!--begin personal information pannel-->
-<div class="panel panel-default">
-  <div class="panel-heading">
-    <button type="button" class="btn btn-default btn-xs" id="switcher">
-      <span class="glyphicon glyphicon-chevron-up" id="button_image"></span>
-    </button>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <button type="button" class="btn btn-default btn-xs" id="switcher">
+        <span class="glyphicon glyphicon-chevron-up" id="button_image"></span>
+      </button>
     Personal Information (Option)
-  </div>
-  <div class="panel-body" id="personal_body">
-    <div class="form-group">
-      <label class="col-sm-2 control-label">Nick Name</label>
-      <div class="col-sm-10">
-        <input type="text" class="form-control" id="inputPassword3" placeholder="Nick Name">
     </div>
-  </div>
-  <div class="form-group">
-    <label class="col-sm-2 control-label">Birthday</label>
-    <div class="col-sm-10">
-      <input type="text" id="datepicker" class="form-control" placeholder="Birthday">
-    </div>
-  </div>
-  <div class="form-group">
-    <label class="col-sm-2 control-label">Profile Upload</label>
-    <div class="col-sm-10">
-      <input type="file" id="profile">
-      <p class="help-block">Size of file is up to <strong>5 MB</strong></p>
-    </div>
-  </div>
-  <div class="form-group">
-    <label class="col-sm-2 control-label">Gender</label>
-    <div class="col-sm-10">
-    <div class="radio">
-      <label>
-      <input type="radio" name ="gender" value="male">Male
-    </label></div>
-    <div class="radio">
-    <label>
-      <input type="radio" name ="gender" value="Female">Female
-      </label>
-    </div>
-  </div>
-</div>
-</div>
-</div>
-</form>
-
-        <form id="register_form" action="{{url_for('register')}}" method="post">
-        <table id ="register_table" style="width=40%">
-        <tr>
-          <td>Username:</td>
-          <td><input type="text" name="username" id="register_name" autofocus></td>
-        </tr>
-        <tr>
-          <td>Password:</td>
-          <td><input type="password" name="password" id = "register_psw"></td>
-        </tr>
-        <tr>
-          <td>Nick name:</td>
-          <td><input type="text" name="nick_name" id = "register_nick_name"></td>
-        </tr>
-        <tr><td></td><td><font color="red"><strong id="register_error"></strong></font></td>
-        </tr>
-        </table>
-      </form>
+    <div class="panel-body" id="personal_body">
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Nick Name</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" name="nick_name" placeholder="Nick Name">
+        </div>
       </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Birthday</label>
+        <div class="col-sm-10">
+          <input type="text" name ="birthday" id="datepicker" class="form-control" placeholder="Birthday">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Profile Upload</label>
+        <div class="col-sm-10">
+          <input type="file" name="profile_image" id="profile">
+          <p class="help-block">Size of file is up to <strong>5 MB</strong></p>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Gender</label>
+        <div class="col-sm-10">
+          <div class="radio">
+            <label>
+              <input type="radio" name ="gender" value="male">Male
+            </label>
+          </div>
+          <div class="radio">
+            <label>
+              <input type="radio" name ="gender" value="Female">Female
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--End personal information pannel-->
+  </div>
+</form>
+</div>
+<!--End of register form-->
       <div class="modal-footer">
+        <font color="red"><strong id="error_code"></strong></font>
         <button type="button" class="btn btn-default" id="re_button">Register</button>
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         <button type="button" class="btn btn-primary" id ="button_login" >Log in</button>

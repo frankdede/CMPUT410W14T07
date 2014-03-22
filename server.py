@@ -3,6 +3,7 @@ import json
 import flask
 import markdown
 from flask import Flask, request, redirect, url_for, g, render_template, flash, session, abort,make_response, Markup
+from werkzeug.utils import secure_filename
 import sys,os
 sys.path.append('sys/controller')
 sys.path.append('sys/model')
@@ -26,9 +27,13 @@ postHelper = PostHelper(dbHelper)
 reHelper = RequestHelper(dbHelper)
 #
 circleHelper = CircleHelper(dbHelper)
-
+#Allowed file extensions
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 app = Flask(__name__)
 app.config.from_object(__name__)
+# add upload
+UPLOAD_FOLDER='/upload/image'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.secret_key = os.urandom(24)
 error = None
 
@@ -85,20 +90,36 @@ def login():
 @app.route('/register', methods=['PUT', 'POST'])
 def register():
     if request.method == 'POST':
-        authorName=request.form['username']
-        password=request.form['password']
+        #parse require information
+        email = request.form['email']
+        authorName=request.form['author_name']
+        password=request.form['register_pwd']
+        #parse optional information
+        file = request.files['profile_image']
         nickName=request.form['nick_name']
+        birthday =request.form['birthday']
+        gender = request.form['gender']
+        if file!=None and check_image(file)==False:
+            re = make_response("fileInvalid")
         if ahelper.addAuthor(authorName,password,nickName):
             re = make_response("True")
             session['logged_in'] = authorName
-            re.headers['Content-Type']='text/plain'
-            return re
         else:
             re = make_response("False")
             re.headers['Content-Type']='text/plain'
-            return re
+        return re
     return redirect(url_for('/'))
 
+def allowed_file(filename):
+    return '.' in filename and \
+        filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+def check_image(file):
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        return True
+    else:
+        return False
 
 @app.route('/<aid>/messages.json', methods=['GET'])
 def messages(authorName):
