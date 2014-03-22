@@ -32,7 +32,7 @@ ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 app = Flask(__name__)
 app.config.from_object(__name__)
 # add upload
-UPLOAD_FOLDER='/upload/image'
+UPLOAD_FOLDER='upload/image'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.secret_key = os.urandom(24)
 error = None
@@ -94,18 +94,26 @@ def register():
         email = request.form['email']
         authorName=request.form['author_name']
         password=request.form['register_pwd']
+        print password
         #parse optional information
         file = request.files['profile_image']
+        print file.filename
         nickName=request.form['nick_name']
         birthday =request.form['birthday']
-        gender = request.form['gender']
-        if file!=None and check_image(file)==False:
+        try:
+            gender = request.form['gender']
+        except KeyError:
+            gender = ""
+        print "checkpoint"
+        if file!="" and check_image(file)==False:
             re = make_response("fileInvalid")
-        if ahelper.addAuthor(authorName,password,nickName):
-            re = make_response("True")
-            session['logged_in'] = authorName
+#        if ahelper.addAuthor(authorName,password,nickName):
+#            re = make_response("True")
+#            session['logged_in'] = authorName
         else:
-            re = make_response("False")
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            re = make_response("True")
             re.headers['Content-Type']='text/plain'
         return re
     return redirect(url_for('/'))

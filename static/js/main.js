@@ -1,15 +1,51 @@
 var click = 0;
 var message_click= 0;
+var extentions =new Array("image/jpg","image/jpeg","image/png","image/gif");
 $(document).ready(function(){
   $( "#datepicker" ).datepicker();
   $("#register_form").hide();
   $("#personal_body").hide();
   register_form_checker();
 });
+function ajax_upload_file(){
+  var formData = new FormData($("#register_form")[0]);
+    $.ajax({
+        url: 'register',  //Server script to process data
+        type: 'POST',
+        // Form data
+        data: formData,
+        //Options to tell jQuery not to process data or worry about content-type.
+        contentType: false,
+        cache: false,
+        processData: false,
+        xhr: function() {  // Custom XMLHttpRequest
+            var myXhr = $.ajaxSettings.xhr();
+            if(myXhr.upload){ // Check if upload property exists
+                myXhr.upload.addEventListener('progress',function(e){
+                  if(e.lengthComputable){
+                    $('progress').attr({value:e.loaded,max:e.total});
+                  }
+                }, false); // For handling the progress of the upload
+            }
+            return myXhr;
+        },
+        async: false,
+        success: function(data) {
+          if(data ==="False"){
+            $("#error_code").text("The username is existed");
+            $("#register_form")[0].reset();
+          }else if (data ==="True"){
+            window.location.replace("/");
+          }
+        },
+    });
+}
 function register_form_checker(){
   $("#register_form").validate({
     debug: true,
     submitHandler: function(form) {
+      ajax_upload_file();
+      /*
       $.post("register",$("#register_form").serialize()).done(function(data){
           if(data ==="False"){
             $("#error_code").text("The username is existed");
@@ -20,7 +56,7 @@ function register_form_checker(){
           }else if (data ==="True"){
             window.location.replace("/");
           }
-      });
+      });*/
     },
     rules:{
       email: {
@@ -60,12 +96,17 @@ function register_form_checker(){
   });
 $('#profile').bind('change', function() {
   var size = this.files[0].size/1024/1024;
-  if (size>5) {
-      alert("This file size should not be greater than 5 MB");
-      var file = $('#profile');
-      file.replaceWith(file = file.clone(true));
-  }});
-  }
+  var type = this.files[0].type;
+  if(extentions.indexOf(type)==-1){
+    alert("jpg,png,gif can be allowed" );
+    file.replaceWith(file = file.clone(true));
+  }else if (size>5) {
+    alert("This file size should not be greater than 5 MB");
+    var file = $('#profile');
+    file.replaceWith(file = file.clone(true));
+    }
+  });
+}
 function refresh_message_list(){
   $.get("ajax/uid",function(data){
     $.getJSON(data+"/messages",function(data2){
@@ -108,6 +149,7 @@ $("#button_login").click(function(){
       })
     }
   else{
+      alert("HI");
       $("#register_form").submit();
   }
     });

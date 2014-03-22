@@ -26,6 +26,7 @@
     <script src="{{url_for('static',filename='js/bootstrap.min.js')}}"></script>
     <script src="{{url_for('static',filename='js/json2.js')}}"></script>
     <script src="{{url_for('static',filename='js/jquery.validate.min.js')}}"></script>
+    <script src="{{url_for('static',filename='js/jquery.form.min.js')}}"></script>
     <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
   </head>
 <body>
@@ -115,7 +116,7 @@
               <input type="password" class="form-control" name="password" id="login_password" placeholder="Password">
           </div>
         </form>
-<form class="form-horizontal" id="register_form">
+<form class="form-horizontal" id="register_form" method="post" enctype="multipart/form-data">
 <!--register form-->
   <div class="panel panel-default">
     <div class="panel-heading">Required Information</div>
@@ -194,6 +195,7 @@
     </div>
     <!--End personal information pannel-->
   </div>
+  <progress></progress>
 </form>
 </div>
 <!--End of register form-->
