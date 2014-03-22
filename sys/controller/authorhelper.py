@@ -1,6 +1,6 @@
 from mysql.connector.errors import Error
-from databasehelper import *
-import utility
+from DatabaseAdapter import *
+import Utility
 import json
 
 class AuthorHelper:

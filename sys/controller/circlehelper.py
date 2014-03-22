@@ -1,7 +1,7 @@
 import json
 from mysql.connector.errors import Error
-from databasehelper import *
-import utility
+from DatabaseHelper import *
+import Utility
 import sys
 sys.path.append("sys/model")
 from author import *

@@ -1,6 +1,6 @@
 import mysql.connector
 #read name and password from information file
-class Databasehelper:
+class DatabaseAdapter:
     def __init__(self):
         self.cnx = None
     def readpassword(self):
@@ -33,6 +33,16 @@ class Databasehelper:
             else:
                 print(err)
 # get dabase connector
+
+
+    def executeFetchStmt():
+
+
+    def executeUpdateStmt():
+
+
+
+
     def setAutoCommit(self):
         self.cnx.autocommit = True
     def getdabaseconnector(self):

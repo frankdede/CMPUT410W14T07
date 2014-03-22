@@ -1,5 +1,5 @@
 import mysql.connector
-from databasehelper import *
+from DatabaseAdapter import *
 import sys
 import json
 
@@ -11,9 +11,10 @@ class RequestHelper:
 
     def addNewRequest(self,recipientId,senderId):
 
-        cur = self.dbHelper.getcursor()
+        
         query ="INSERT INTO request VALUES(NULL,'%s','%s')"%(recipientId,senderId)
 
+        cur = self.dbHelper.getcursor()
         try:
           cur.execute(query)
 
@@ -115,6 +116,7 @@ class RequestHelper:
             print("****************************************")
             return None
 
+        
         if row != None:
             return json.dumps({'count':row[0]})
         else:

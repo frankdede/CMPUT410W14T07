@@ -7,11 +7,11 @@ from werkzeug.utils import secure_filename
 import sys,os
 sys.path.append('sys/controller')
 sys.path.append('sys/model')
-from authorhelper import *
-from posthelper import *
-from databasehelper import *
-from requesthelper import *
-from circlehelper import *
+from AuthorHelper import *
+from PostHelper import *
+from DatabaseHelper import *
+from RequestHelper import *
+from CircleHelper import *
 
 DEBUG = True
 # create a new database obj
@@ -39,7 +39,7 @@ error = None
 
 def flaskPostToJson():
     '''Ah the joys of frameworks! They do so much work for you
-       that they get in the way of sane operation!'''
+    that they get in the way of sane operation!'''
     if (request.json != None):
         return request.json
     elif (request.data != None and request.data != ''):
@@ -56,14 +56,14 @@ def root():
         return render_template('header.html')
     else:
         return redirect(url_for('login'))
-@app.route('/ajax/uid')
-def getuid():
-    if 'logged_in' not in session:
-        abort(404)
-    else:
-        re = make_response(session['logged_in'])
-        re.headers['Content-Type']='text/plain'
-        return re
+        @app.route('/ajax/uid')
+        def getuid():
+            if 'logged_in' not in session:
+                abort(404)
+            else:
+                re = make_response(session['logged_in'])
+                re.headers['Content-Type']='text/plain'
+                return re
 
 
 
@@ -83,7 +83,7 @@ def login():
             re = make_response("False")
             re.headers['Content-Type']='text/plain'
             return re
-    return render_template('header.html')
+            return render_template('header.html')
 
 # register page
 
@@ -104,38 +104,38 @@ def register():
             gender = request.form['gender']
         except KeyError:
             gender = ""
-        print "checkpoint"
-        if file!="" and check_image(file)==False:
-            re = make_response("fileInvalid")
+            print "checkpoint"
+            if file!="" and check_image(file)==False:
+                re = make_response("fileInvalid")
 #        if ahelper.addAuthor(authorName,password,nickName):
 #            re = make_response("True")
 #            session['logged_in'] = authorName
-        else:
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            re = make_response("True")
-            re.headers['Content-Type']='text/plain'
-        return re
+else:
+    filename = secure_filename(file.filename)
+    file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+    re = make_response("True")
+    re.headers['Content-Type']='text/plain'
+    return re
     return redirect(url_for('/'))
 
-def allowed_file(filename):
-    return '.' in filename and \
+    def allowed_file(filename):
+        return '.' in filename and \
         filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
-def check_image(file):
-    if file and allowed_file(file.filename):
-        filename = secure_filename(file.filename)
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        return True
-    else:
-        return False
+        def check_image(file):
+            if file and allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                return True
+            else:
+                return False
 
-@app.route('/<aid>/messages.json', methods=['GET'])
-def messages(authorName):
-    if ('logged_in' not in session) or (authorName !=session['logged_in']):
-        abort(404)
-    else:
-        jsonstring = reHelper.getRequestListByAid(aid)
-        return jsonstring,200
+                @app.route('/<aid>/messages.json', methods=['GET'])
+                def messages(authorName):
+                    if ('logged_in' not in session) or (authorName !=session['logged_in']):
+                        abort(404)
+                    else:
+                        jsonstring = reHelper.getRequestListByAid(aid)
+                        return jsonstring,200
 
 # logout
 @app.route('/logout')
@@ -143,13 +143,13 @@ def logout():
     session.pop('logged_in', None)
     return redirect(url_for('login'))
 
-@app.route('/author/<authorName>')
-def renderStruct(authorName):
+    @app.route('/author/<authorName>')
+    def renderStruct(authorName):
 
-    if ('logged_in' in session) and (session['logged_in'] == authorName):
-        return render_template('struct.html')
-    else:
-        return abort(404)
+        if ('logged_in' in session) and (session['logged_in'] == authorName):
+            return render_template('struct.html')
+        else:
+            return abort(404)
 
 # get all the new posts that a specific author can view from the server
 @app.route('/<authorName>/pull/')
@@ -163,41 +163,41 @@ def getUpdatedPost(authorName):
         else:    
             post = postHelper.getPostList(aid)
             return post,200
-    else:
-         return abort(404)
-
-@app.route('/markdown',methods=['GET','POST'])
-
-def index():
-    if request.method == 'POST':
-       content = request.form['postMarkDown']
-       print content
-       content = Markup(markdown.markdown(content))
-       return render_template('markdown.html', **locals())
-    return render_template('markdown_input.html')
-
-
-@app.route('/<authorName>/post/',methods=['PUT','POST'])
-def uploadPostToServer(authorName):
-
-    if ('logged_in' in session) and (session['logged_in'] == authorName):
-
-        aid = ahelper.getAidByAuthorName(authorName)
-        
-        postObj = flaskPostToJson()
-        postTitle = postObj['title']
-        postMsg = postObj['message']
-        postType = postObj['type']
-        postPermission = postObj['permission']
-
-        if aid == None:
-            return json.dumps({'status':False}),200
         else:
-            newPost = Post(None,aid,None,postTitle,postMsg,postType,postPermission)
-            result = postHelper.addPost(newPost)
-            return json.dumps({'status':result}),200
-    else:
-        return abort(404)
+           return abort(404)
+
+           @app.route('/markdown',methods=['GET','POST'])
+
+           def index():
+            if request.method == 'POST':
+             content = request.form['postMarkDown']
+             print content
+             content = Markup(markdown.markdown(content))
+             return render_template('markdown.html', **locals())
+             return render_template('markdown_input.html')
+
+
+             @app.route('/<authorName>/post/',methods=['PUT','POST'])
+             def uploadPostToServer(authorName):
+
+                if ('logged_in' in session) and (session['logged_in'] == authorName):
+
+                    aid = ahelper.getAidByAuthorName(authorName)
+
+                    postObj = flaskPostToJson()
+                    postTitle = postObj['title']
+                    postMsg = postObj['message']
+                    postType = postObj['type']
+                    postPermission = postObj['permission']
+
+                    if aid == None:
+                        return json.dumps({'status':False}),200
+                    else:
+                        newPost = Post(None,aid,None,postTitle,postMsg,postType,postPermission)
+                        result = postHelper.addPost(newPost)
+                        return json.dumps({'status':result}),200
+                    else:
+                        return abort(404)
 
 # This is used to get friend list from database
 @app.route('/<authorName>/post/getPermissionList/',methods=['GET'])
@@ -213,17 +213,17 @@ def getPermissionList(authorName):
                 if friendlist != None:
                     return json.dumps(friendlist),200
 
-            elif permission == "fof":
-                fof = circleHelper.getFriendOfFriend(authorName)
+                elif permission == "fof":
+                    fof = circleHelper.getFriendOfFriend(authorName)
 
-                if fof != None:
-                    return json.dumps(fof),200
-            else:
-                return "null",200
-        return "null",200
-    else:
-        return abort(404)
+                    if fof != None:
+                        return json.dumps(fof),200
+                    else:
+                        return "null",200
+                        return "null",200
+                    else:
+                        return abort(404)
 
-if __name__ == '__main__':
-    app.debug = True
-    app.run()
+                        if __name__ == '__main__':
+                            app.debug = True
+                            app.run()

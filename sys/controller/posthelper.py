@@ -1,7 +1,7 @@
 import mysql.connector
-from databasehelper import *
-from authorhelper import *
-import utility
+from DatabaseAdapter import *
+from AuthorHelper import *
+import Utility
 import sys
 sys.path.append("sys/model")
 from post import *
