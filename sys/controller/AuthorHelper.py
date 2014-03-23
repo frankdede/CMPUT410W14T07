@@ -19,12 +19,15 @@ class AuthorHelper:
         
         try:
             cur.execute(query)
-            if cur.fetchone() is None:
+            row = cur.fetchone()
+            if  row is None:
                 cur.close()
                 return False
             else:
+                re_aid =""
+                re_aid = row[0]
                 cur.close()
-                return True
+                return json.dumps({"aid":re_aid})
 
         except mysql.connector.Error as err:
             print("****************************************")
@@ -258,7 +261,7 @@ class AuthorHelper:
     def addAuthor(self,authorName,password,nickName,sid=1):
 
         cur = self.dbAdapter.getcursor()
-        aid =utility.getid()
+        aid =Utility.getid()
 
         query = ("INSERT INTO author(aid,name,nick_name,pwd,sid) "
                  "VALUES('%s','%s','%s','%s',%s)")%(aid,authorName,nickName,password,sid)

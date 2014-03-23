@@ -1,6 +1,7 @@
 var click = 0;
 var message_click= 0;
 var author_name ="";
+var author_id="";
 var extentions =new Array("image/jpg","image/jpeg","image/png","image/gif");
 $(document).ready(function(){
   $( "#datepicker" ).datepicker();
@@ -8,31 +9,54 @@ $(document).ready(function(){
   $("#personal_body").hide();
   register_form_checker();
   login_form_checker();
+  set_city_autocomplete();
 });
+function set_city_autocomplete(){
+  var city_list =["Edmonton",
+  "Calgray",
+  "Vancouver",
+  "Toronto",
+  "Yellownife",
+  "Ottawa",
+  "Wuhan",
+  "NewYork",
+  "Beijing",
+  "Nanjing"];
+  $( "#city" ).autocomplete({
+      source: city_list
+    });
+}
 function login_form_checker(){
-  $("#register_form").validate({
+  $("#login_form").validate({
     debug: true,
     submitHandler:function(){
-      var author_name = $("#login_username").val();
+      author_name = $("#login_username").val();
       $.post("login",$("#login_form").serialize()).done(function(data){
           if(data ==="False"){
             $("#error_code").text("The password or username you entered is incorrect");
-          }else if (data ==="True"){
-            window.location.replace("/");
+          }else{
+            author_id = $.parseJSON(data).aid;
+            if (author_id=="") {
+              $("#error_code").text("Unknown error");
+            }else{
+              window.location.replace("/"+author_id);
+            }
           }
       });
     },
     rules:{
       username: {
         required: true,
-        minlength: 5
+        minlength: 2
       },
-      password:{
-        required: true,
-        minilength:6
-      }
+    },
+    messages:{
+      username: {
+        required: "Please enter a username",
+        minlength: "Your username must consist of at least 5 characters"
+      },
     }
-  })
+  });
 }
 function ajax_upload_file(){
   var formData = new FormData($("#register_form")[0]);
