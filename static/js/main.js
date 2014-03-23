@@ -85,8 +85,13 @@ function ajax_upload_file(){
           if(data ==="False"){
             $("#error_code").text("The username is existed");
             $("#register_form")[0].reset();
-          }else if (data ==="True"){
-            window.location.replace("/");
+          }else{
+            author_id = $.parseJSON(data).aid;
+            if (author_id=="") {
+              $("#error_code").text("Unknown error");
+            }else{
+              window.location.replace("/"+author_id);
+            }
           }
         },
     });
@@ -147,7 +152,7 @@ $('#profile').bind('change', function() {
   });
 }
 function refresh_message_list(){
-  $.get("ajax/uid",function(data){
+  $.get("ajax/aid",function(data){
     $.getJSON(data+"/messages",function(data2){
       $.each(data2,function(i,field){
         var item = jQuery.parseJSON(field);
@@ -203,6 +208,3 @@ $("#re_button").click(function(){
      // even clicks
   }
 });
-
-
-

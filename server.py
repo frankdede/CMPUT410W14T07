@@ -60,10 +60,18 @@ def author_view(aid):
             return render_template('header.html')
     else:
         return redirect(url_for('login'))
-@app.route('/ajax/uid')
+@app.route('/ajax/aid')
 def getuid():
     if 'logged_in' not in session:
-        abort(404)
+        return redirect(url_for('login'))
+    else:
+        re = make_response(session['logged_id'])
+        re.headers['Content-Type']='text/plain'
+        return re
+@app.route('/ajax/author_name')
+def getaname():
+    if 'logged_in' not in session:
+        return redirect(url_for('login'))
     else:
         re = make_response(session['logged_in'])
         re.headers['Content-Type']='text/plain'
@@ -88,7 +96,6 @@ def login():
     return render_template('header.html')
 
 # register page
-
 @app.route('/register', methods=['PUT', 'POST'])
 def register():
     if request.method == 'POST':
@@ -97,10 +104,8 @@ def register():
         email = request.form['email']
         authorName=request.form['author_name']
         password=request.form['register_pwd']
-        print password
         #parse optional information
         file = request.files['profile_image']
-        print file.filename
         nickName=request.form['nick_name']
         birthday =request.form['birthday']
         city = request.form['city']
@@ -108,7 +113,6 @@ def register():
             gender = request.form['gender']
         except KeyError:
             gender = ""
-            print "checkpoint"
         aid_json = ahelper.addAuthor(authorName,password,nickName)
         if aid_json == False:
             re = make_response("False")
@@ -127,8 +131,13 @@ def register():
 def save_image(aid,file):
     filename = aid+file.name.rsplit('.', 1)[1]
     file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-
-@app.route('/<aid>/messages.json', methods=['GET'])
+@app.route('/<aid>/authorlist.json', methods=['GET'])
+def authorlist(aid):
+    #test data
+    tem =['Mark','Hello','Frank']
+    jsonstring= json.dumps(tem)
+    return jsonstring
+@app.route('/messages.json', methods=['GET'])
 def messages(authorName):
     if ('logged_in' not in session) or (authorName !=session['logged_in']):
         abort(404)
