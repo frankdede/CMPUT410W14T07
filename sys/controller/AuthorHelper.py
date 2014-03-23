@@ -57,10 +57,8 @@ class AuthorHelper:
             return None
         row = cur.fetchone()
         if re is None:
-            cur.close()
             return None
         else:
-            cur.close()
             friend = Author(row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7])
             return friend
 
@@ -138,7 +136,7 @@ class AuthorHelper:
             print("Query:",query)
             print("******************************")
             return None
-        import json
+            
         return json.dumps({'aid',aid})
 
     def addRemoteAuthor(self,authorName,sid):
@@ -165,7 +163,7 @@ class AuthorHelper:
             print("****************************************")
             return False
         if cur.rowcount > 0:
-            cur.close()
+
             return json.dumps({"aid":aid})
 
         cur.close()
