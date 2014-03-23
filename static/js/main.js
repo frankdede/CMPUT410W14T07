@@ -1,12 +1,39 @@
 var click = 0;
 var message_click= 0;
+var author_name ="";
 var extentions =new Array("image/jpg","image/jpeg","image/png","image/gif");
 $(document).ready(function(){
   $( "#datepicker" ).datepicker();
   $("#register_form").hide();
   $("#personal_body").hide();
   register_form_checker();
+  login_form_checker();
 });
+function login_form_checker(){
+  $("#register_form").validate({
+    debug: true,
+    submitHandler:function(){
+      var author_name = $("#login_username").val();
+      $.post("login",$("#login_form").serialize()).done(function(data){
+          if(data ==="False"){
+            $("#error_code").text("The password or username you entered is incorrect");
+          }else if (data ==="True"){
+            window.location.replace("/");
+          }
+      });
+    },
+    rules:{
+      username: {
+        required: true,
+        minlength: 5
+      },
+      password:{
+        required: true,
+        minilength:6
+      }
+    }
+  })
+}
 function ajax_upload_file(){
   var formData = new FormData($("#register_form")[0]);
     $.ajax({
@@ -45,18 +72,6 @@ function register_form_checker(){
     debug: true,
     submitHandler: function(form) {
       ajax_upload_file();
-      /*
-      $.post("register",$("#register_form").serialize()).done(function(data){
-          if(data ==="False"){
-            $("#error_code").text("The username is existed");
-            $("#register_form")[0].reset();
-          }
-          else if(data === "fileInvalid"){
-
-          }else if (data ==="True"){
-            window.location.replace("/");
-          }
-      });*/
     },
     rules:{
       email: {
@@ -98,7 +113,7 @@ $('#profile').bind('change', function() {
   var size = this.files[0].size/1024/1024;
   var type = this.files[0].type;
   if(extentions.indexOf(type)==-1){
-    alert("jpg,png,gif can be allowed" );
+    alert("The file is not supported for upload" );
     file.replaceWith(file = file.clone(true));
   }else if (size>5) {
     alert("This file size should not be greater than 5 MB");
@@ -138,18 +153,10 @@ $("#search_button").click(function(){
 });
 $("#button_login").click(function(){
   if (click==0) {
-      var name = $("#login_username").val();
-      var psw = $("#login_password").val();
-      $.post("login",$("#login_form").serialize()).done(function(data){
-          if(data ==="False"){
-            $("#error_code").text("The password or username you entered is incorrect");
-          }else if (data ==="True"){
-            window.location.replace("/");
-          }
-      })
+    $("#login_form").submit();
+      
     }
   else{
-      alert("HI");
       $("#register_form").submit();
   }
     });
