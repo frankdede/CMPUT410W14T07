@@ -1,6 +1,6 @@
 import json
 from mysql.connector.errors import Error
-from DatabaseHelper import *
+from DatabaseAdapter import *
 import Utility
 import sys
 sys.path.append("sys/model")

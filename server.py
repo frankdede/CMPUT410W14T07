@@ -1,4 +1,3 @@
-
 import json
 import flask
 import markdown
@@ -9,24 +8,24 @@ sys.path.append('sys/controller')
 sys.path.append('sys/model')
 from AuthorHelper import *
 from PostHelper import *
-from DatabaseHelper import *
+from DatabaseAdapter import *
 from RequestHelper import *
 from CircleHelper import *
 
 DEBUG = True
 # create a new database obj
-dbHelper = Databasehelper()
+dbAdapter = DatabaseAdapter()
 # connect
-dbHelper.connect()
-dbHelper.setAutoCommit()
+dbAdapter.connect()
+dbAdapter.setAutoCommit()
 
-ahelper = AuthorHelper(dbHelper)
-# use the conneted dbHelper to initialize postHelper obj
-postHelper = PostHelper(dbHelper)
+ahelper = AuthorHelper(dbAdapter)
+# use the conneted dbAdapter to initialize postHelper obj
+postHelper = PostHelper(dbAdapter)
 # 
-reHelper = RequestHelper(dbHelper)
+reHelper = RequestHelper(dbAdapter)
 #
-circleHelper = CircleHelper(dbHelper)
+circleHelper = CircleHelper(dbAdapter)
 #Allowed file extensions
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 app = Flask(__name__)
@@ -65,8 +64,6 @@ def root():
                 re.headers['Content-Type']='text/plain'
                 return re
 
-
-
 # login page
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -83,7 +80,7 @@ def login():
             re = make_response("False")
             re.headers['Content-Type']='text/plain'
             return re
-            return render_template('header.html')
+    return render_template('header.html')
 
 # register page
 
@@ -110,32 +107,33 @@ def register():
 #        if ahelper.addAuthor(authorName,password,nickName):
 #            re = make_response("True")
 #            session['logged_in'] = authorName
-else:
-    filename = secure_filename(file.filename)
-    file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-    re = make_response("True")
-    re.headers['Content-Type']='text/plain'
-    return re
+    else:
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        re = make_response("True")
+        re.headers['Content-Type']='text/plain'
+        return re
     return redirect(url_for('/'))
 
-    def allowed_file(filename):
-        return '.' in filename and \
-        filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
-        def check_image(file):
-            if file and allowed_file(file.filename):
-                filename = secure_filename(file.filename)
-                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-                return True
-            else:
-                return False
+def allowed_file(filename):
+    return '.' in filename and \
+    filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
-                @app.route('/<aid>/messages.json', methods=['GET'])
-                def messages(authorName):
-                    if ('logged_in' not in session) or (authorName !=session['logged_in']):
-                        abort(404)
-                    else:
-                        jsonstring = reHelper.getRequestListByAid(aid)
-                        return jsonstring,200
+def check_image(file):
+    if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            return True
+    else:
+            return False
+
+@app.route('/<aid>/messages.json', methods=['GET'])
+def messages(authorName):
+    if ('logged_in' not in session) or (authorName !=session['logged_in']):
+        abort(404)
+    else:
+        jsonstring = reHelper.getRequestListByAid(aid)
+        return jsonstring,200
 
 # logout
 @app.route('/logout')
@@ -143,13 +141,13 @@ def logout():
     session.pop('logged_in', None)
     return redirect(url_for('login'))
 
-    @app.route('/author/<authorName>')
-    def renderStruct(authorName):
+@app.route('/author/<authorName>')
+def renderStruct(authorName):
 
-        if ('logged_in' in session) and (session['logged_in'] == authorName):
-            return render_template('struct.html')
-        else:
-            return abort(404)
+    if ('logged_in' in session) and (session['logged_in'] == authorName):
+        return render_template('struct.html')
+    else:
+        return abort(404)
 
 # get all the new posts that a specific author can view from the server
 @app.route('/<authorName>/pull/')
@@ -163,41 +161,41 @@ def getUpdatedPost(authorName):
         else:    
             post = postHelper.getPostList(aid)
             return post,200
+    else:
+        return abort(404)
+
+@app.route('/markdown',methods=['GET','POST'])
+
+def index():
+    if request.method == 'POST':
+        content = request.form['postMarkDown']
+        print content
+        content = Markup(markdown.markdown(content))
+        return render_template('markdown.html', **locals())
+    return render_template('markdown_input.html')
+
+
+@app.route('/<authorName>/post/',methods=['PUT','POST'])
+def uploadPostToServer(authorName):
+
+    if ('logged_in' in session) and (session['logged_in'] == authorName):
+
+        aid = ahelper.getAidByAuthorName(authorName)
+
+        postObj = flaskPostToJson()
+        postTitle = postObj['title']
+        postMsg = postObj['message']
+        postType = postObj['type']
+        postPermission = postObj['permission']
+
+        if aid == None:
+            return json.dumps({'status':False}),200
         else:
-           return abort(404)
-
-           @app.route('/markdown',methods=['GET','POST'])
-
-           def index():
-            if request.method == 'POST':
-             content = request.form['postMarkDown']
-             print content
-             content = Markup(markdown.markdown(content))
-             return render_template('markdown.html', **locals())
-             return render_template('markdown_input.html')
-
-
-             @app.route('/<authorName>/post/',methods=['PUT','POST'])
-             def uploadPostToServer(authorName):
-
-                if ('logged_in' in session) and (session['logged_in'] == authorName):
-
-                    aid = ahelper.getAidByAuthorName(authorName)
-
-                    postObj = flaskPostToJson()
-                    postTitle = postObj['title']
-                    postMsg = postObj['message']
-                    postType = postObj['type']
-                    postPermission = postObj['permission']
-
-                    if aid == None:
-                        return json.dumps({'status':False}),200
-                    else:
-                        newPost = Post(None,aid,None,postTitle,postMsg,postType,postPermission)
-                        result = postHelper.addPost(newPost)
-                        return json.dumps({'status':result}),200
-                    else:
-                        return abort(404)
+            newPost = Post(None,aid,None,postTitle,postMsg,postType,postPermission)
+            result = postHelper.addPost(newPost)
+        return json.dumps({'status':result}),200
+    else:
+        return abort(404)
 
 # This is used to get friend list from database
 @app.route('/<authorName>/post/getPermissionList/',methods=['GET'])
@@ -221,9 +219,9 @@ def getPermissionList(authorName):
                     else:
                         return "null",200
                         return "null",200
-                    else:
-                        return abort(404)
+    else:
+        return abort(404)
 
-                        if __name__ == '__main__':
-                            app.debug = True
-                            app.run()
+if __name__ == '__main__':
+    app.debug = True
+    app.run()
