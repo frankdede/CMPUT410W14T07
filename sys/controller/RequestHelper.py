@@ -6,7 +6,7 @@ import json
 class RequestHelper:
 
     dbAdapter = None
-    def __init__(self,dbHelper):
+    def __init__(self,dbAdapter):
         self.dbAdapter = dbAdapter
 
     def addNewRequest(self,recipientId,senderId):
