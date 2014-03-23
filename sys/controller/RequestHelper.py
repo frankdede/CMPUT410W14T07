@@ -5,16 +5,16 @@ import json
 
 class RequestHelper:
 
-    dbHelper = None
+    dbAdapter = None
     def __init__(self,dbHelper):
-        self.dbHelper = dbHelper
+        self.dbAdapter = dbAdapter
 
     def addNewRequest(self,recipientId,senderId):
 
         
         query ="INSERT INTO request VALUES(NULL,'%s','%s')"%(recipientId,senderId)
 
-        cur = self.dbHelper.getcursor()
+        cur = self.dbAdapter.getcursor()
         try:
           cur.execute(query)
 
@@ -44,7 +44,7 @@ class RequestHelper:
         
     def deleteRequest(self,recipientId,senderId):
 
-        cur = self.dbHelper.getcursor()
+        cur = self.dbAdapter.getcursor()
         query =("DELETE FROM request "
                 "WHERE recipient_id = '%s' AND sender_id = '%s'")%(recipientId,senderId)
         try:
@@ -68,7 +68,7 @@ class RequestHelper:
     """
     def getRequestListByAid(self,recipientId):
         result = []
-        cur = self.dbHelper.getcursor()
+        cur = self.dbAdapter.getcursor()
 
         query =("SELECT sender_id,time "
                "FROM request WHERE recipient_id = '%s'")%(recipientId)
@@ -97,7 +97,7 @@ class RequestHelper:
     """
     def getRequestCountByAid(self,recipientId):
 
-        cur = self.dbHelper.getcursor()
+        cur = self.dbAdapter.getcursor()
 
         query = ("SELECT count(*) FROM request "
                  "WHERE recipient_id = '%s'")%(recipientId)
@@ -124,7 +124,7 @@ class RequestHelper:
 
     def deleteAllRequestByAid(self,recipient_id):
         
-        cur = self.dbHelper.getcursor()
+        cur = self.dbAdapter.getcursor()
         query = "DELETE FROM request WHERE recipient_id ='%s'"%(recipient_id)
 
         try:

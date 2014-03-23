@@ -8,13 +8,13 @@ from post import *
 import json
 class PostHelper:
   
-    dbHelper = None
-    def __init__(self,dbHelper):
-        self.dbHelper = dbHelper
+    dbAdapter = None
+    def __init__(self,dbAdapter):
+        self.dbAdapter = dbAdapter
 
     def addPost(self,aid,title,content,type,permission):
 
-        cur = self.dbHelper.getcursor()
+        cur = self.dbAdapter.getcursor()
 
         pid = utility.getid()
 
@@ -39,15 +39,15 @@ class PostHelper:
         else:
           return False
           
-    def addPostPermission(self,dbhelper,pid,aid):
+    def addPostPermission(self,dbAdapter,pid,aid):
 
-        cur = self.dbHelper.getcursor()
+        cur = self.dbAdapter.getcursor()
         query = "INSERT INTO user_permission VALUES('%s','%s')"%(pid,aid)
 
         try:
 
           cur.execute(query)
-          self.dbHelper.commit()
+          self.dbAdapter.commit()
 
         except mysql.connector.Error as err:
 
@@ -65,12 +65,12 @@ class PostHelper:
 #Usage: updatepost(databasehelper,pid,type="html", permmision="public") check keyword argument
     def updateMessage(self,pid,newContent):
       
-        cur = self.dbHelper.getcursor()
+        cur = self.dbAdapter.getcursor()
         query = "UPDATE post SET message='%s' WHERE pid='%s'"%(newContent,pid)
 
         try:
           cur.execute(query)
-          self.dbHelper.commit()
+          self.dbAdapter.commit()
 
         except mysql.connector.Error as err:
 
@@ -87,12 +87,12 @@ class PostHelper:
 
     def updateTitle(self,pid,newtitle):
         
-        cur = self.dbHelper.getcursor()
+        cur = self.dbAdapter.getcursor()
         query = "UPDATE post SET title='%s' WHERE pid='%s'"%(newtitle,pid)
 
         try:
           cur.execute(query)
-          self.dbHelper.commit()
+          self.dbAdapter.commit()
 
         except mysql.connector.Error as err:
 
@@ -107,9 +107,9 @@ class PostHelper:
 
         return cur.rowcount>0
 
-    def updateTime(self,dbhelper,pid,time = ''):
+    def updateTime(self,dbAdapter,pid,time = ''):
         
-        cur = self.dbHelper.getcursor()
+        cur = self.dbAdapter.getcursor()
         if time  == '':
             query = "UPDATE post SET time=NULL WHERE pid='%s'"%(pid)
         else:
@@ -117,7 +117,7 @@ class PostHelper:
 
         try:
           cur.execute(query)
-          self.dbHelper.commit()
+          self.dbAdapter.commit()
 
         except mysql.connector.Error as err:
 
@@ -137,20 +137,20 @@ class PostHelper:
     # HAVEN'T BEEN COMPLETED YET
     def updatePermission(self,pid,newPermission,user=''):
         
-        cur = self.dbHelper.getcursor()
+        cur = self.dbAdapter.getcursor()
         query = "UPDATE post SET permission='%s' WHERE pid='%s'"%(newPermission,pid)
         cur.execute(query)
 
         if newPermission == 'user':
             #TODO:Change the following
             print("neeed to be fixed")
-            #self.addUserPermission(dbhelper,pid,user)
+            #self.addUserPermission(dbAdapter,pid,user)
         else:
             query = "DELETE FROM user_permission WHERE pid='%s'"%(pid)
 
         try:
           cur.execute(query)
-          self.dbHelper.commit()
+          self.dbAdapter.commit()
 
         except mysql.connector.Error as err:
 
@@ -167,12 +167,12 @@ class PostHelper:
 
     def deletePostByPid(self,pid):
        
-        cur = self.dbHelper.getcursor()
+        cur = self.dbAdapter.getcursor()
         query = "DELETE FROM post WHERE pid = '%s'"%(pid)
 
         try:
           cur.execute(query)
-          self.dbHelper.commit()
+          self.dbAdapter.commit()
 
         except mysql.connector.Error as err:
 
@@ -189,12 +189,12 @@ class PostHelper:
 
     def deletePostByAid(self,aid):
         
-        cur = self.dbHelper.getcursor()
+        cur = self.dbAdapter.getcursor()
         query = "DELETE FROM post WHERE aid = '%s'"%(aid)
 
         try:
           cur.execute(query)
-          self.dbHelper.commit()
+          self.dbAdapter.commit()
 
         except mysql.connector.Error as err:
 
@@ -212,7 +212,7 @@ class PostHelper:
     def getPostList(self,aid):
 
         re = {}
-        cur = self.dbHelper.getcursor()
+        cur = self.dbAdapter.getcursor()
 
         #get the post if it is public
         query = "SELECT * FROM post WHERE permission='public';"
