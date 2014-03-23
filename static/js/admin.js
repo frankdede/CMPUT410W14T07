@@ -15,12 +15,3 @@ function check_select_change(){
 		$( "#title" ).text( str );
 	}).change();
 }
-var author_list = new Array();
-function get_author_list(){
-    $("#add_author_table").empty();
-    $.getJSON("authorlist.json",function(data2){
-      $.each(data2,function(i,field){
-
-      });
-      });
-}

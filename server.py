@@ -3,6 +3,7 @@ import flask
 import markdown
 from flask import Flask, request, redirect, url_for, g, render_template, flash, session, abort,make_response, Markup
 from werkzeug.utils import secure_filename
+from random import randrange
 import sys,os
 sys.path.append('sys/controller')
 sys.path.append('sys/model')
@@ -49,20 +50,32 @@ def flaskPostToJson():
 # default path
 @app.route('/', methods=['GET', 'POST'])
 def root():
+    return redirect(url_for('login'))
+@app.route('/<aid>', methods=['GET', 'POST'])
+def author_view(aid):
     if 'logged_in' in session:
-        username = session['logged_in']
+        if(session['logged_id']==aid):
+            username = session['logged_in']
         #mumMsg = reHelper.getMessageCountByAuthorName(username)
-        return render_template('header.html')
+            return render_template('header.html')
     else:
         return redirect(url_for('login'))
-        @app.route('/ajax/uid')
-        def getuid():
-            if 'logged_in' not in session:
-                abort(404)
-            else:
-                re = make_response(session['logged_in'])
-                re.headers['Content-Type']='text/plain'
-                return re
+@app.route('/ajax/aid')
+def getuid():
+    if 'logged_in' not in session:
+        return redirect(url_for('login'))
+    else:
+        re = make_response(session['logged_id'])
+        re.headers['Content-Type']='text/plain'
+        return re
+@app.route('/ajax/author_name')
+def getaname():
+    if 'logged_in' not in session:
+        return redirect(url_for('login'))
+    else:
+        re = make_response(session['logged_in'])
+        re.headers['Content-Type']='text/plain'
+        return re
 
 # login page
 @app.route('/login', methods=['GET', 'POST'])
@@ -70,64 +83,61 @@ def login():
     if request.method == 'POST':
         authorName =request.form['username']
         password =request.form['password']
-        if ahelper.authorAuthenticate(authorName,password):
-            session['logged_in'] = authorName
-            error="login successful"
-            re = make_response("True")
-            re.headers['Content-Type']='text/plain'
-            return re
-        else:
+        json_str = ahelper.authorAuthenticate(authorName,password)
+        if  json_str == False:
             re = make_response("False")
             re.headers['Content-Type']='text/plain'
             return re
+        else:
+            session['logged_in'] = authorName
+            session['logged_id'] = json.loads(json_str)['aid']
+            return json_str
+
     return render_template('header.html')
 
 # register page
-
 @app.route('/register', methods=['PUT', 'POST'])
 def register():
     if request.method == 'POST':
         #parse require information
+        gender=""
         email = request.form['email']
         authorName=request.form['author_name']
         password=request.form['register_pwd']
-        print password
         #parse optional information
         file = request.files['profile_image']
-        print file.filename
         nickName=request.form['nick_name']
         birthday =request.form['birthday']
+        city = request.form['city']
         try:
             gender = request.form['gender']
         except KeyError:
             gender = ""
-            print "checkpoint"
-            if file!="" and check_image(file)==False:
-                re = make_response("fileInvalid")
-#        if ahelper.addAuthor(authorName,password,nickName):
-#            re = make_response("True")
-#            session['logged_in'] = authorName
-    else:
-        filename = secure_filename(file.filename)
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        re = make_response("True")
-        re.headers['Content-Type']='text/plain'
-        return re
+        aid_json = ahelper.addAuthor(authorName,password,nickName)
+        if aid_json == False:
+            re = make_response("False")
+            re.headers['Content-Type']='text/plain'
+            return re
+        else:
+            aid = json.loads(aid_json)['aid']
+            session['logged_in'] = authorName
+            session['logged_id'] = aid
+            if(file!=None or file.name!=""):
+                save_image(aid,file)
+            if ahelper.updateAuthorInfo(aid,email,gender,city,birthday,path) ==False:
+                abort(500)
+            return aid_json
     return redirect(url_for('/'))
-
-def allowed_file(filename):
-    return '.' in filename and \
-    filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
-
-def check_image(file):
-    if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            return True
-    else:
-            return False
-
-@app.route('/<aid>/messages.json', methods=['GET'])
+def save_image(aid,file):
+    filename = aid+file.name.rsplit('.', 1)[1]
+    file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+@app.route('/<aid>/authorlist.json', methods=['GET'])
+def authorlist(aid):
+    #test data
+    tem =['Mark','Hello','Frank']
+    jsonstring= json.dumps(tem)
+    return jsonstring
+@app.route('/messages.json', methods=['GET'])
 def messages(authorName):
     if ('logged_in' not in session) or (authorName !=session['logged_in']):
         abort(404)
