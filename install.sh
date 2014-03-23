@@ -22,7 +22,7 @@ chmod -R "700" "$_create_db_path"
 #chmod -R "700" "$_drop_db_path"
 #chmod -R "700" "$_insert_test_path"
 
-echo -e "\n ===================== Petrinery Deployment Toolkit ===================== \n"
+echo -e "\n ===================== CMPUT410 Deployment Toolkit ===================== \n"
 login(){
     while [ "$mysql_password" == "" ] || [ "$mysql_name" == "" ] ; do 
         echo -n "Enter your mysql username:"

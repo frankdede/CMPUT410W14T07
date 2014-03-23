@@ -1,19 +1,19 @@
 from mysql.connector.errors import Error
-from databasehelper import *
-import utility
+from DatabaseAdapter import *
+import Utility
 import json
 
 class AuthorHelper:
     """
     If the username and password are correct, it will return True otherwise false
     """
-    dbHelper = None
-    def __init__(self,dbHelper):
-        self.dbHelper = dbHelper
+    dbAdapter = None
+    def __init__(self,dbAdapter):
+        self.dbAdapter = dbAdapter
 
     def authorAuthenticate(self,authorName,password):
 
-        cur = self.dbHelper.getcursor()
+        cur = self.dbAdapter.getcursor()
         #Refactored: Author_name is changed to name
         query = "SELECT * FROM author WHERE name='%s' AND pwd='%s' AND sid=1"%(authorName,password)
         
@@ -42,7 +42,7 @@ class AuthorHelper:
         # [Success] return an jason author object
         # [Exception] return null
         # [Failed] return null
-        cur = self.dbHelper.getcursor()
+        cur = self.dbAdapter.getcursor()
         query = "SELECT * FROM author WHERE aid='%s'"%(aid)
         try:
             cur.execute(query)
@@ -72,7 +72,7 @@ class AuthorHelper:
         # [Exception] return null
         # [Failed] return null
         result = []
-        cur = self.dbHelper.getcursor()
+        cur = self.dbAdapter.getcursor()
         query = ("SELECT aid,name,email,gender,city,img_path,sid,nick_name from author WHERE sid = 1")
         try:
             cur.execute(query)
@@ -99,7 +99,7 @@ class AuthorHelper:
         # [Exception] return null
         # [Failed] return null
         result = []
-        cur = self.dbHelper.getcursor()
+        cur = self.dbAdapter.getcursor()
         query = ("SELECT aid,name,email,gender,city,img_path,sid,nick_name from author WHERE sid != 1")
         try:
             cur.execute(query)
@@ -123,7 +123,7 @@ class AuthorHelper:
         # [Success] return {'aid':xxxxx } (jason type)
         # [Exception Caught] return false
         # [Failed] return false
-        cur = self.dbHelper.getcursor()
+        cur = self.dbAdapter.getcursor()
         import utility
         aid = utility.getid()
         query = ("INSERT INTO author values('%s','%s','%s','%s',1,'','','','','')"%(aid,authorname,nickname,password))
@@ -192,13 +192,11 @@ class AuthorHelper:
 
     def updateNickNameByAid(self,aid,newNickName):
 
-        cur = self.dbHelper.getcursor()
+        cur = self.dbAdapter.getcursor()
         query = "UPDATE author SET nick_name = '%s' WHERE aid = '%s'"%(newNickName,aid)
         
         try:
           cur.execute(query)
-          # Auto-commit
-          #self.dbHelper.commit()
 
         except mysql.connector.Error as err:
 
@@ -215,13 +213,11 @@ class AuthorHelper:
 
     def updatePasswordByAid(self,aid,newPassword):
 
-        cur = self.dbHelper.getcursor()
+        cur = self.dbAdapter.getcursor()
         query = "UPDATE author SET pwd = '%s' WHERE aid='%s'"%(newPassword,aid)
 
         try:
           cur.execute(query)
-          # Auto-commit
-          #self.dbHelper.commit()
 
         except mysql.connector.Error as err:
 
@@ -240,15 +236,13 @@ class AuthorHelper:
 
     def deleteAuthor(self,aid):
 
-        cur = self.dbHelper.getcursor()
+        cur = self.dbAdapter.getcursor()
 
         query = ("DELETE FROM author "
                  "WHERE aid = '%s'") %(aid)
         
         try:
           cur.execute(query)
-          # Auto-commit
-          #self.dbHelper.commit()
 
         except mysql.connector.Error as err:
 
@@ -265,7 +259,7 @@ class AuthorHelper:
 
     def addAuthor(self,authorName,password,nickName,sid=1):
 
-        cur = self.dbHelper.getcursor()
+        cur = self.dbAdapter.getcursor()
         aid =utility.getid()
 
         query = ("INSERT INTO author(aid,name,nick_name,pwd,sid) "

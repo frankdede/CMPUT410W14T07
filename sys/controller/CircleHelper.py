@@ -1,7 +1,7 @@
 import json
 from mysql.connector.errors import Error
-from databasehelper import *
-import utility
+from DatabaseAdapter import *
+import Utility
 import sys
 sys.path.append("sys/model")
 from author import *
@@ -9,14 +9,14 @@ from author import *
 
 class CircleHelper:
 
-    dbHelper = None
+    dbAdapter = None
 
-    def __init__(self,dbHelper):
-        self.dbHelper = dbHelper
+    def __init__(self,dbAdapter):
+        self.dbAdapter = dbAdapter
 
     def addFriendForAuthor(self,aid1,aid2):
 
-        cur = self.dbHelper.getcursor()
+        cur = self.dbAdapter.getcursor()
         data = [(aid1,aid2),(aid2,aid1)]
         query ="INSERT INTO circle VALUES('%s','%s')"
 
@@ -41,7 +41,7 @@ class CircleHelper:
 
     def deleteFriendOfAuthor(self,aid1,aid2):
         # No matter how you pass aid1 and aid2 ,this function will delete it for you
-        cur = self.dbHelper.getcursor()
+        cur = self.dbAdapter.getcursor()
         query = ("DELETE FROM circle WHERE "
                 "(aid1='%s' AND aid2='%s') OR (aid1='%s' AND aid2='%s')")%(aid1,aid2,aid2,aid1)
         try:
@@ -63,7 +63,7 @@ class CircleHelper:
     def getFriendList(self,aid):
 
         result = []
-        cur = self.dbHelper.getcursor()
+        cur = self.dbAdapter.getcursor()
         query = ("SELECT A.aid,A.name,A.email,A.gender,A.city,A.img_path,A.sid,A.nick_name "
                  "FROM author A "
                  "WHERE A.aid in "
@@ -97,7 +97,7 @@ class CircleHelper:
         # [Success] Returns an jason array of author objects / empty jason array
         # [Exception Caught] return null
         result = []
-        cur = self.dbHelper.getcursor()
+        cur = self.dbAdapter.getcursor()
         query = ("SELECT A.aid,A.name,A.email,A.gender,A.city,A.img_path,A.sid,A.nick_name "
                  "FROM author A "
                  "WHERE A.aid in (SELECT C.aid2 FROM circle C WHERE C.aid1='%s') AND sid = 1")%(aid)
@@ -123,7 +123,7 @@ class CircleHelper:
 
     def getFriendOfFriendList(self,aid):
         result = []
-        cur = self.dbHelper.getcursor()
+        cur = self.dbAdapter.getcursor()
         query = ("SELECT A.aid,A.name,A.email,A.gender,A.city,A.img_path,A.sid,A.nick_name "
                  "FROM author A WHERE A.aid IN "
                  "(SELECT C2.aid2 FROM circle C2 WHERE C2.aid2 <>'%s' AND C2.aid1 IN "

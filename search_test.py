@@ -7,27 +7,27 @@ from werkzeug.utils import secure_filename
 import sys,os
 sys.path.append('sys/controller')
 sys.path.append('sys/model')
-from authorhelper import *
-from posthelper import *
-from databasehelper import *
+from AuthorHelper import *
+from PostHelper import *
+from DatabaseAdapter import *
 #from requesthelper import *
-from circlehelper import *
+from CircleHelper import *
 #allowed file extension
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 DEBUG = True
 # create a new database obj
-dbHelper = Databasehelper()
+dbAdapter= DatabaseAdapter()
 # connect
-dbHelper.connect()
-dbHelper.setAutoCommit()
+dbAdapter.connect()
+dbAdapter.setAutoCommit()
 
-ahelper = AuthorHelper(dbHelper)
+ahelper = AuthorHelper(dbAdapter)
 # use the conneted dbHelper to initialize postHelper obj
-postHelper = PostHelper(dbHelper)
+postHelper = PostHelper(dbAdapter)
 # 
 #reHelper = RequetHelper(dbHelper)
 #
-circleHelper = CircleHelper(dbHelper)
+circleHelper = CircleHelper(dbAdapter)
 
 app = Flask(__name__)
 app.config.from_object(__name__)
@@ -89,8 +89,8 @@ def upload_file():
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            return redirect(url_for('uploaded_file',
-                                    filename=filename))
+            return redirect(url_for('uploaded_file',filename=filename))
+            
 @app.route('/logout', methods=['GET', 'POST'])
 def logout():
     pass

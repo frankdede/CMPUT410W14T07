@@ -7,11 +7,11 @@ import sys,os
 sys.path.append("sys/controller")
 sys.path.append("sys/model")
 # helpers
-from authorhelper import *
-from circlehelper import *
-from databasehelper import *
-from posthelper import *
-from requesthelper import *
+from AuthorHelper import *
+from CircleHelper import *
+from DatabaseHelper import *
+from PostHelper import *
+from RequestHelper import *
 # models
 import author
 import post
