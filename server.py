@@ -8,10 +8,10 @@ import sys,os
 sys.path.append('sys/controller')
 sys.path.append('sys/model')
 from AuthorHelper import *
-from PostHelper import *
 from DatabaseAdapter import *
 from RequestHelper import *
 from CircleHelper import *
+from PostController import *
 
 DEBUG = True
 # create a new database obj
@@ -22,7 +22,7 @@ dbAdapter.setAutoCommit()
 
 ahelper = AuthorHelper(dbAdapter)
 # use the conneted dbAdapter to initialize postHelper obj
-postHelper = PostHelper(dbAdapter)
+postcontroller = PostController(dbAdapter)
 # 
 reHelper = RequestHelper(dbAdapter)
 #
@@ -155,7 +155,7 @@ def logout():
 @app.route('/author/<authorName>')
 def renderStruct(authorName):
 
-    if ('logged_in' in session): #and (session['logged_in'] == authorName):
+    if ('logged_in' in session) and (session['logged_in'] == authorName):
         return render_template('struct.html')
     else:
         return abort(404)
@@ -169,7 +169,8 @@ def getUpdatedPost(authorName):
         if aid == None:
             return json.dumps({'status':None}),200
         else:    
-            post = postHelper.getPostList(aid)
+            post = postcontroller.getPost(aid)
+            print post
             return post,200
     else:
         return abort(404)

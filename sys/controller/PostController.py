@@ -1,5 +1,6 @@
 from PostHelper import *
 import json
+import sys
 class PostController:
     """
         to initial an instance of posthelper
@@ -15,15 +16,12 @@ class PostController:
     """
     def getPost(self,aid):
         post_list=[]
-        try:
-            post_list.extend(self.posthelper.getPublicPost())
-            post_list.extend(self.posthelper.getPrivatePost())
-            post_list.extend(self.posthelper.getFriendsFriendPost())
-            post_list.extend(self.posthelper.getFriendsPost())
-            post_list.extend(self.posthelper.getAuthorPost())
-            post_list.extend(self.posthelper.getMyHostFriendPost())
-        except TypeError:
-            return None
+        post_list.extend(self.posthelper.getPublicPost(aid))
+        post_list.extend(self.posthelper.getPrivatePost(aid))
+        post_list.extend(self.posthelper.getFriendsFriendPost(aid))
+        post_list.extend(self.posthelper.getFriendsPost(aid))
+        post_list.extend(self.posthelper.getAuthorPost(aid))
+        post_list.extend(self.posthelper.getMyHostFriendPost(aid))
         json_list=[]
         for i in post_list:
             if(i is None):
