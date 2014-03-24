@@ -9,6 +9,8 @@ INSERT INTO author values('444444','mark','Mark Duan','12345',1,'mark@gmail.com'
 INSERT INTO author values('555555','paul','Paul Xu','12345',1,'paul@gmail.com','male','edmonton','1992-01-01','/paul/1.jpg');
 INSERT INTO author values('666666','rose','Rose Xiang','12345',1,'rose@gmail.com','male','calgary','1993-01-01','/rose/1.jpg');
 
+INSERT INTO post values('1','444444',NULL,'Today is a brand new day','hello everyone','text','public');
+
 INSERT INTO circle values('111111','222222');
 INSERT INTO circle values('222222','111111');
 
@@ -28,4 +30,5 @@ INSERT INTO request values(NULL,'111111','222222');
 INSERT INTO request values(NULL,'111111','333333');
 INSERT INTO request values(NULL,'111111','444444');
 INSERT INTO request values(NULL,'111111','555555');
+insert into post values('2','111111',NULL,'Today is a brand new day','hello everyone','text','me');
 INSERT into post values('1','444444',NULL,'Today is a brand new day','hello everyone','text','public');

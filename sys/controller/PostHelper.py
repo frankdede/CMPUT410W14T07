@@ -271,7 +271,7 @@ class PostHelper:
         cur = self.dbAdapter.getcursor()
         
         #get the post if it is public
-        query = "SELECT pid,aid,time,title,content,type,permission FROM post WHERE permission='me' AND aid IN (SELECT aid1 FROM circle WHERE aid2 IN (SELECT aid1 FROM circle WHERE aid2='%s'));"%(aid)
+        query = "SELECT pid,aid,time,title,content,type,permission FROM post WHERE permission='fof' AND aid IN (SELECT aid1 FROM circle WHERE aid2 IN (SELECT aid1 FROM circle WHERE aid2='%s'));"%(aid)
         try:
             cur.execute(query)
         except mysql.connector.Error as err:

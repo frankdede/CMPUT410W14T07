@@ -102,7 +102,7 @@ function updatePostList($list){
 			
 			var $date = $list[$key].date;
 			var $title = $list[$key].title;
-			var $message = $list[$key].message;
+			var $message = $list[$key].content;
 			var $type = $list[$key].type;
 			var $permission = $list[$key].permission;
 
