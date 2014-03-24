@@ -16,16 +16,16 @@ class PostController:
     """
     def getPost(self,aid):
         post_list=[]
+        json_list={}
         post_list.extend(self.posthelper.getPublicPost(aid))
         post_list.extend(self.posthelper.getPrivatePost(aid))
         post_list.extend(self.posthelper.getFriendsFriendPost(aid))
         post_list.extend(self.posthelper.getFriendsPost(aid))
         post_list.extend(self.posthelper.getAuthorPost(aid))
         post_list.extend(self.posthelper.getMyHostFriendPost(aid))
-        json_list=[]
-        for i in post_list:
-            if(i is None):
+        for post in post_list:
+            if(post is None):
                 return None
             else:
-                json_list.append(i.tojson())
+                json_list[post.getPid()]=post.tojson()
         return json.dumps(json_list)
