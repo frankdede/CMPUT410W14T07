@@ -97,7 +97,7 @@ class RequestHelper:
                  "WHERE recipient_id = '%s'")%(recipientId)
         try:
             cur.execute(query)
-
+            result = cur.fetchone()
         except mysql.connector.Error as err:
 
             print("****************************************")
@@ -109,7 +109,7 @@ class RequestHelper:
             print("****************************************")
             return None
 
-        return cur.fetchone()
+        return result[0]
         
 
     def deleteAllRequestByAid(self,recipient_id):

@@ -56,8 +56,8 @@ def author_view(aid):
     if 'logged_in' in session:
         if(session['logged_id']==aid):
             username = session['logged_in']
-        #mumMsg = reHelper.getMessageCountByAuthorName(username)
-            return render_template('header.html')
+            msgCount = reHelper.getRequestCountByAid(aid)
+            return render_template('header.html',msgCount = msgCount)
     else:
         return redirect(url_for('login'))
 @app.route('/ajax/aid')
