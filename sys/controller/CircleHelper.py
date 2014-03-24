@@ -82,11 +82,7 @@ class CircleHelper:
           print("****************************************")
           return None
 
-        for row in cur:
-            friend = Author(row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7])
-            result.append(friend.tojson())
-
-        return json.dumps(result)
+        return cur.fetchall()
 
     def getFriendOfMyHomeServerList(self,aid):
         # DO NOT DELETE THE COMMENT
@@ -96,7 +92,6 @@ class CircleHelper:
         #
         # [Success] Returns an jason array of author objects / empty jason array
         # [Exception Caught] return null
-        result = []
         cur = self.dbAdapter.getcursor()
         query = ("SELECT A.aid,A.name,A.email,A.gender,A.city,A.img_path,A.sid,A.nick_name "
                  "FROM author A "
@@ -115,14 +110,10 @@ class CircleHelper:
           print("****************************************")
           return None
 
-        for row in cur:
-            friend = Author(row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7])
-            result.append(friend.tojson())
-
-        return json.dumps(result)
+        return cur.fetchall()
 
     def getFriendOfFriendList(self,aid):
-        result = []
+        
         cur = self.dbAdapter.getcursor()
         query = ("SELECT A.aid,A.name,A.email,A.gender,A.city,A.img_path,A.sid,A.nick_name "
                  "FROM author A WHERE A.aid IN "
@@ -142,9 +133,4 @@ class CircleHelper:
           print("****************************************")
           return None
 
-        result = []
-        for row in cur:
-            friend = Author(row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7])
-            result.append(friend.tojson())
-
-        return json.dumps(result)
+        return cur.fetchall()
