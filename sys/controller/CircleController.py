@@ -9,7 +9,7 @@ class CircleController:
         self.circleHelper = circleHelper(dbAdapter)
     
     '''
-    Add friend for an author
+    Add friend for an authorf13 x
     NOTE:Two-way Insertion
     @param String aid1
     @param String aid2

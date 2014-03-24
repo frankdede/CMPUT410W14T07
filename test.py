@@ -32,6 +32,8 @@ class TestController(unittest.TestCase):
         self.circlehelper = CircleHelper(dbHelper)
         self.posthelper = PostHelper(dbHelper)
         self.requesthelper = RequestHelper(dbHelper)
+
+    def test_getPost()
     '''
      ====================   AuthorHelper  ====================
      PLEASE rebuild the database before run all the tests!!!
