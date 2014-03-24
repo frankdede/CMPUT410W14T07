@@ -7,3 +7,4 @@ def gettime():
 def addpath(path):
     import sys
     sys.path.insert(0,path)
+    
