@@ -36,8 +36,8 @@ class CircleHelper:
 
         if cur.rowcount == 2 :
           return True
-        else:
-          return False;
+
+        return False
 
     def deleteFriendOfAuthor(self,aid1,aid2):
         # No matter how you pass aid1 and aid2 ,this function will delete it for you

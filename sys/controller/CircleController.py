@@ -7,12 +7,25 @@ class CircleController:
 
     def __init__(self,dbAdapter):
         self.circleHelper = circleHelper(dbAdapter)
-
-
+    
+    '''
+    Add friend for an author
+    NOTE:Two-way Insertion
+    @param String aid1
+    @param String aid2
+    @return Boolean Returns True if adding successfully,else False
+    '''
     def addFriendForAuthor(self,aid1,aid2):
 
         return self.circleHelper.addFriendForAuthor(aid1,aid2)
 
+    '''
+    Delete Author's Friend by aid and his/her friend's aid
+    NOTE:Two-way deletion
+    @param String aid1
+    @param String aid2
+    @return Boolean Returns True if adding successfully,else False
+    '''
     def deleteFriendOfAuthor(self,aid1,aid2):
 
         return self.circleHelper.deleteFriendOfAuthor(aid1,aid2)
