@@ -10,7 +10,8 @@ INSERT INTO author values('555555','paul','Paul Xu','12345',1,'paul@gmail.com','
 INSERT INTO author values('666666','rose','Rose Xiang','12345',1,'rose@gmail.com','male','calgary','1993-01-01','/rose/1.jpg');
 
 INSERT INTO post values('1','444444',NULL,'Today is a brand new day','hello everyone','text','public');
-
+INSERT into post values('5','777777',NULL,'belong to 777777','test permission fomh','text','fomh');
+INSERT INTO author values('777777','ET','ET','12345','192.178.0.2','rose@gmail.com','male','calgary','1993-01-01','/rose/1.jpg');
 INSERT INTO circle values('111111','222222');
 INSERT INTO circle values('222222','111111');
 
@@ -32,3 +33,5 @@ INSERT INTO request values(NULL,'111111','444444');
 INSERT INTO request values(NULL,'111111','555555');
 insert into post values('2','111111',NULL,'Today is a brand new day','hello everyone','text','me');
 INSERT into post values('1','444444',NULL,'Today is a brand new day','hello everyone','text','public');
+INSERT into post values('3','333333',NULL,'belong to 333333','test permission friends','text','friends');
+INSERT into post values('4','333333',NULL,'belong to 333333','test permission fof','text','fof');
