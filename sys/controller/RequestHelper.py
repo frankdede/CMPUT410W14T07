@@ -11,7 +11,6 @@ class RequestHelper:
 
     def addNewRequest(self,recipientId,senderId):
 
-        
         query ="INSERT INTO request VALUES(NULL,'%s','%s')"%(recipientId,senderId)
 
         cur = self.dbAdapter.getcursor()
@@ -27,15 +26,13 @@ class RequestHelper:
           print("Error message:", err.msg)
           print("Might be query issue:",query)
           print("****************************************")
-          return None
+          return False
 
         if cur.rowcount>0:
 
-          return json.dumps({'recipient_id':recipientId,'sender_id':senderId})
+          return True
 
-        else:
-
-          return None
+        return False
 
     """
     Delete a request based on recipientId and senderId
@@ -67,7 +64,7 @@ class RequestHelper:
     get a list of message of a same recipient
     """
     def getRequestListByAid(self,recipientId):
-        result = []
+
         cur = self.dbAdapter.getcursor()
 
         query =("SELECT sender_id,time "
@@ -87,10 +84,7 @@ class RequestHelper:
             print("****************************************")
             return None
 
-        for row in cur:
-                result.append({'sender_id':row[0],'time':str(row[1])})
-
-        return json.dumps(result)
+        return cur.fetchall()
 
     """
     To get the number of requests
@@ -103,7 +97,6 @@ class RequestHelper:
                  "WHERE recipient_id = '%s'")%(recipientId)
         try:
             cur.execute(query)
-            row = cur.fetchone()
 
         except mysql.connector.Error as err:
 
@@ -116,11 +109,8 @@ class RequestHelper:
             print("****************************************")
             return None
 
+        return cur.fetchone()
         
-        if row != None:
-            return json.dumps({'count':row[0]})
-        else:
-            return json.dumps({'count':0})
 
     def deleteAllRequestByAid(self,recipient_id):
         

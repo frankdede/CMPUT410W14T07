@@ -32,10 +32,10 @@ class CircleHelper:
           print("Error message:", err.msg)
           print("Query:",query)
           print("****************************************")
-          return None
+          return False
 
         if cur.rowcount == 2 :
-          return json.dumps({'aid1':aid1,'aid2':aid2})
+          return True
         else:
           return False;
 

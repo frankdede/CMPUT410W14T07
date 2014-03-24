@@ -1,4 +1,5 @@
 import CircleHelper
+import json
 
 class CircleController:
 
@@ -6,6 +7,11 @@ class CircleController:
 
     def __init__(self,dbAdapter):
         self.circleHelper = circleHelper(dbAdapter)
+
+
+    def addFriendForAuthor(self,aid1,aid2):
+
+        return self.circleHelper.addFriendForAuthor(aid1,aid2)
 
     def deleteFriendOfAuthor(self,aid1,aid2):
 
