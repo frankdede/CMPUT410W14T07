@@ -28,3 +28,4 @@ INSERT INTO request values(NULL,'111111','222222');
 INSERT INTO request values(NULL,'111111','333333');
 INSERT INTO request values(NULL,'111111','444444');
 INSERT INTO request values(NULL,'111111','555555');
+INSERT into post values('1','444444',NULL,'Today is a brand new day','hello everyone','text','public');
