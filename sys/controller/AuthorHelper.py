@@ -1,5 +1,8 @@
 from mysql.connector.errors import Error
 from DatabaseAdapter import *
+import sys
+sys.path.append("sys/model")
+from author import *
 import Utility
 import json
 
@@ -46,7 +49,7 @@ class AuthorHelper:
         # [Exception] return null
         # [Failed] return null
         cur = self.dbAdapter.getcursor()
-        query = "SELECT * FROM author WHERE aid='%s'"%(aid)
+        query = "SELECT aid,name,nick_name,sid,email,gender,city,birthday,img_path FROM author WHERE aid='%s'"%(aid)
         try:
             cur.execute(query)
         except mysql.connector.Error as err:
@@ -59,10 +62,10 @@ class AuthorHelper:
             print("****************************************")
             return None
         row = cur.fetchone()
-        if re is None:
+        if row is None:
             return None
         else:
-            friend = Author(row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7])
+            friend = Author(row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7],row[8])
             return friend
 
     def getAllAuthorObjectsForLocalServer(self):

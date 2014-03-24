@@ -89,6 +89,7 @@ def login():
             re.headers['Content-Type']='text/plain'
             return re
         else:
+            print json_str
             session['logged_in'] = authorName
             session['logged_id'] = json.loads(json_str)['aid']
             return json_str
@@ -154,7 +155,7 @@ def logout():
 @app.route('/author/<authorName>')
 def renderStruct(authorName):
 
-    if ('logged_in' in session) and (session['logged_in'] == authorName):
+    if ('logged_in' in session): #and (session['logged_in'] == authorName):
         return render_template('struct.html')
     else:
         return abort(404)
@@ -164,8 +165,7 @@ def renderStruct(authorName):
 def getUpdatedPost(authorName):
 
     if ('logged_in' in session) and (session['logged_in'] == authorName):
-        aid = ahelper.getAidByAuthorName(authorName)
-
+        aid = session['logged_id']
         if aid == None:
             return json.dumps({'status':None}),200
         else:    

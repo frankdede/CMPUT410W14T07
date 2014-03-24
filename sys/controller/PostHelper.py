@@ -208,227 +208,174 @@ class PostHelper:
           return False
 
         return cur.rowcount>0
-
-    def getPostList(self,aid):
-
-        re = {}
+    def getPublicPost(self,aid):
+        re = []
         cur = self.dbAdapter.getcursor()
-
+        
         #get the post if it is public
-        query = "SELECT * FROM post WHERE permission='public';"
-
+        query = "SELECT pid,aid,time,title,content,type,permission FROM post WHERE permission='public';"
         try:
-          cur.execute(query)
-
+            cur.execute(query)
         except mysql.connector.Error as err:
-
-          print("****************************************")
-          print("SQLException from getPostList():")
-          print("Error code:", err.errno)
-          print("SQLSTATE value:", err.sqlstate)
-          print("Error message:", err.msg)
-          print("1st Query:",query)
-          print("****************************************")
-          return None
-
+            print("****************************************")
+            print("SQLException from getPublicPost():")
+            print("Error code:", err.errno)
+            print("SQLSTATE value:", err.sqlstate)
+            print("Error message:", err.msg)
+            print("1st Query:",query)
+            print("****************************************")
+            return None
         if cur != None:
-          for ele in cur:
-
-            pid = ele[0]
-            aid = ele[1]
-            time = ele[2].strftime("%Y-%m-%d %H:%M:%S")
-            title = ele[3]
-            msg = ele[4]
-            msgType = ele[5]
-            permission = ele[6]
-
-            post = Post(pid,aid,time,title,msg,msgType,permission)
-
-            re[pid]=post.tojson()
-
-        #get the post if aid is its author
-        query = "SELECT * FROM post WHERE permission='me' and aid='%s'"%(aid)
-
+            for ele in cur:
+                pid = ele[0]
+                aid = ele[1]
+                time = ele[2].strftime("%Y-%m-%d %H:%M:%S")
+                title = ele[3]
+                msg = ele[4]
+                msgType = ele[5]
+                permission = ele[6]
+                post = Post(pid,aid,time,title,msg,msgType,permission)
+                re.append(post)
+            return re 
+    def getPrivatePost(self,aid):
+        re = []
+        cur = self.dbAdapter.getcursor()
+        
+        #get the post if it is public
+        query = "SELECT pid,aid,time,title,content,type,permission FROM post WHERE permission='me' AND aid='%s';"%(aid)
         try:
-          cur.execute(query)
-
+            cur.execute(query)
         except mysql.connector.Error as err:
-
-          print("****************************************")
-          print("SQLException from getPostList():")
-          print("Error code:", err.errno)
-          print("SQLSTATE value:", err.sqlstate)
-          print("Error message:", err.msg)
-          print("2nd Query:",query)
-          print("****************************************")
-          return None
-          
+            print("****************************************")
+            print("SQLException from getPublicPost():")
+            print("Error code:", err.errno)
+            print("SQLSTATE value:", err.sqlstate)
+            print("Error message:", err.msg)
+            print("1st Query:",query)
+            print("****************************************")
+            return None
         if cur != None:
-          for ele in cur:
-
-            pid = ele[0]
-            aid = ele[1]
-            time = ele[2].strftime("%Y-%m-%d %H:%M:%S")
-            title = ele[3]
-            msg = ele[4]
-            msgType = ele[5]
-            permission = ele[6]
-            
-            post = Post(pid,aid,time,title,msg,msgType,permission)
-
-            re[pid]=post.tojson()
-
-        #get the post if aid is specifiied user
-        query = "SELECT * FROM post WHERE permission = 'user' and pid IN (SELECT pid from user_permission WHERE aid='%s')"%(aid)
+            for ele in cur:
+                pid = ele[0]
+                aid = ele[1]
+                time = ele[2].strftime("%Y-%m-%d %H:%M:%S")
+                title = ele[3]
+                msg = ele[4]
+                msgType = ele[5]
+                permission = ele[6]
+                post = Post(pid,aid,time,title,msg,msgType,permission)
+                re.append(post)
+            return re
+    def getFriendsFriendPost(self,aid):
+        re = []
+        cur = self.dbAdapter.getcursor()
+        
+        #get the post if it is public
+        query = "SELECT pid,aid,time,title,content,type,permission FROM post WHERE permission='me' AND aid IN (SELECT aid1 FROM circle WHERE aid2 IN (SELECT aid1 FROM circle WHERE aid2='%s'));"%(aid)
         try:
-          cur.execute(query)
-
+            cur.execute(query)
         except mysql.connector.Error as err:
-
-          print("****************************************")
-          print("SQLException from getPostList():")
-          print("Error code:", err.errno)
-          print("SQLSTATE value:", err.sqlstate)
-          print("Error message:", err.msg)
-          print("3rd Query:",query)
-          print("****************************************")
-          return None
-
+            print("****************************************")
+            print("SQLException from getPublicPost():")
+            print("Error code:", err.errno)
+            print("SQLSTATE value:", err.sqlstate)
+            print("Error message:", err.msg)
+            print("1st Query:",query)
+            print("****************************************")
+            return None
         if cur != None:
-          for ele in cur:
-
-            pid = ele[0]
-            aid = ele[1]
-            time = ele[2].strftime("%Y-%m-%d %H:%M:%S")
-            title = ele[3]
-            msg = ele[4]
-            msgType = ele[5]
-            permission = ele[6]
-            
-            post = Post(pid,aid,time,title,msg,msgType,permission)
-
-            re[pid]=post.tojson()
-        #get the post if aid is the author's friend
-
-        authorHelper = AuthorHelper(self.dbHelper)
-        authorName = authorHelper.getAuthorNameByAid(aid)
-
+            for ele in cur:
+                pid = ele[0]
+                aid = ele[1]
+                time = ele[2].strftime("%Y-%m-%d %H:%M:%S")
+                title = ele[3]
+                msg = ele[4]
+                msgType = ele[5]
+                permission = ele[6]
+                post = Post(pid,aid,time,title,msg,msgType,permission)
+                re.append(post)
+            return re
+    def getFriendsPost(self,aid):
+        re = []
+        cur = self.dbAdapter.getcursor()
+        #get the post if it is public
+        query = "SELECT pid,aid,time,title,content,type,permission FROM post WHERE permission='friends' AND aid IN (SELECT aid1 FROM circle WHERE aid2 ='%s');"%(aid)
         try:
-          if(authorName == None):
-            raise Exception('Failed to get the name by id in getPostList() function')
-        except Exception as err:
-          print("***************************************")
-          print(err.args)
-          print("***************************************")
-          return None
-
-        query = "SELECT * FROM post WHERE permission = 'friends' and aid IN  (SELECT aid from author WHERE author_name IN (SELECT name1 FROM circle WHERE name2 ='%s' ))"%(authorName)
-
-        try:
-          cur.execute(query)
-
+            cur.execute(query)
         except mysql.connector.Error as err:
-
-          print("****************************************")
-          print("SQLException from getPostList():")
-          print("Error code:", err.errno)
-          print("SQLSTATE value:", err.sqlstate)
-          print("Error message:", err.msg)
-          print("4th Query",query)
-          print("****************************************")
-          return None
-
-        except Exception as err:
-          print("General Exception from getPostList() 4th block:".format(err))
-          return None
-
+            print("****************************************")
+            print("SQLException from getPublicPost():")
+            print("Error code:", err.errno)
+            print("SQLSTATE value:", err.sqlstate)
+            print("Error message:", err.msg)
+            print("1st Query:",query)
+            print("****************************************")
+            return None
         if cur != None:
-          for ele in cur:
-
-            pid = ele[0]
-            aid = ele[1]
-            time = ele[2].strftime("%Y-%m-%d %H:%M:%S")
-            title = ele[3]
-            msg = ele[4]
-            msgType = ele[5]
-            permission = ele[6]
-
-            post = Post(pid,aid,time,title,msg,msgType,permission)
-
-            re[pid]=post.tojson()
-        #get the post if aid is the author's friends`s friend
-
-        query = "SELECT * FROM post WHERE permission = 'fof' and aid IN  (SELECT aid from author WHERE author_name IN (SELECT name1 FROM circle WHERE name2 IN (SELECT name1 FROM circle WHERE name2 = '%s')))"%(authorName)
-
+            for ele in cur:
+                pid = ele[0]
+                aid = ele[1]
+                time = ele[2].strftime("%Y-%m-%d %H:%M:%S")
+                title = ele[3]
+                msg = ele[4]
+                msgType = ele[5]
+                permission = ele[6]
+                post = Post(pid,aid,time,title,msg,msgType,permission)
+                re.append(post)
+            return re
+    def getAuthorPost(self,aid):
+        re = []
+        cur = self.dbAdapter.getcursor()
+        #get the post if it is public
+        query = "SELECT pid,aid,time,title,content,type,permission FROM post WHERE permission='author' AND pid IN (SELECT pid FROM post_permission WHERE aid ='%s');"%(aid)
         try:
-          cur.execute(query)
-
+            cur.execute(query)
         except mysql.connector.Error as err:
-
-          print("****************************************")
-          print("SQLException from getPostList():")
-          print("Error code:", err.errno)
-          print("SQLSTATE value:", err.sqlstate)
-          print("Error message:", err.msg)
-          print("5th Query",query)
-          print("****************************************")
-          return None
-
-        except Exception as err:
-          print("General Exception from getPostList() 5th block:".format(err))
-          return None
-
+            print("****************************************")
+            print("SQLException from getAuthorPost():")
+            print("Error code:", err.errno)
+            print("SQLSTATE value:", err.sqlstate)
+            print("Error message:", err.msg)
+            print("Query:",query)
+            print("****************************************")
+            return None
         if cur != None:
-          for ele in cur:
-
-            pid = ele[0]
-            aid = ele[1]
-            time = ele[2].strftime("%Y-%m-%d %H:%M:%S")
-            title = ele[3]
-            msg = ele[4]
-            msgType = ele[5]
-            permission = ele[6]
-
-            post = Post(pid,aid,time,title,msg,msgType,permission)
-
-            re[pid]=post.tojson()
-
-        #get the post if aid is in the same host as the permission's requirement
-
-        query = "SELECT * FROM post WHERE permission='fomh' AND aid IN (SELECT a1.aid FROM author a1,author a2 WHERE a1.sid = a2.sid AND a2.aid = '%s')"%(aid)
-
+            for ele in cur:
+                pid = ele[0]
+                aid = ele[1]
+                time = ele[2].strftime("%Y-%m-%d %H:%M:%S")
+                title = ele[3]
+                msg = ele[4]
+                msgType = ele[5]
+                permission = ele[6]
+                post = Post(pid,aid,time,title,msg,msgType,permission)
+                re.append(post)
+            return re
+    def getMyHostFriendPost(self,aid):
+        re = []
+        cur = self.dbAdapter.getcursor()
+        #get the post if it is public
+        query = "SELECT pid,aid,time,title,content,type,permission FROM post WHERE permission='fomh' AND aid IN (SELECT aid1 FROM circle WHERE aid2='%s') AND EXISTS (SELECT * FROM author WHERE aid='%s' AND sid =1);"%(aid,aid)
         try:
-          cur.execute(query)
-
+            cur.execute(query)
         except mysql.connector.Error as err:
-
-          print("****************************************")
-          print("SQLException from getPostList():")
-          print("Error code:", err.errno)
-          print("SQLSTATE value:", err.sqlstate)
-          print("Error message:", err.msg)
-          print("6th Query:",query)
-          print("****************************************")
-          return None
-
-        except Exception as err:
-          print("General Exception from getPostList() 6th block:".format(err))
-          return None
-
+            print("****************************************")
+            print("SQLException from getAuthorPost():")
+            print("Error code:", err.errno)
+            print("SQLSTATE value:", err.sqlstate)
+            print("Error message:", err.msg)
+            print("Query:",query)
+            print("****************************************")
+            return None
         if cur != None:
-          for ele in cur:
-
-            pid = ele[0]
-            aid = ele[1]
-            time = ele[2].strftime("%Y-%m-%d %H:%M:%S")
-            title = ele[3]
-            msg = ele[4]
-            msgType = ele[5]
-            permission = ele[6]
-
-            post = Post(pid,aid,time,title,msg,msgType,permission)
-
-            re[pid]=post.tojson()
-            
-        cur.close() 
-        return json.dumps(re)
+            for ele in cur:
+                pid = ele[0]
+                aid = ele[1]
+                time = ele[2].strftime("%Y-%m-%d %H:%M:%S")
+                title = ele[3]
+                msg = ele[4]
+                msgType = ele[5]
+                permission = ele[6]
+                post = Post(pid,aid,time,title,msg,msgType,permission)
+                re.append(post)
+            return re
