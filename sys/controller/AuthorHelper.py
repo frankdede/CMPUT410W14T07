@@ -1,30 +1,36 @@
 from mysql.connector.errors import Error
-from databasehelper import *
-import utility
+from DatabaseAdapter import *
+import sys
+sys.path.append("sys/model")
+from author import *
+import Utility
 import json
 
 class AuthorHelper:
     """
     If the username and password are correct, it will return True otherwise false
     """
-    dbHelper = None
-    def __init__(self,dbHelper):
-        self.dbHelper = dbHelper
+    dbAdapter = None
+    def __init__(self,dbAdapter):
+        self.dbAdapter = dbAdapter
 
     def authorAuthenticate(self,authorName,password):
 
-        cur = self.dbHelper.getcursor()
+        cur = self.dbAdapter.getcursor()
         #Refactored: Author_name is changed to name
         query = "SELECT * FROM author WHERE name='%s' AND pwd='%s' AND sid=1"%(authorName,password)
         
         try:
             cur.execute(query)
-            if cur.fetchone() is None:
+            row = cur.fetchone()
+            if  row is None:
                 cur.close()
                 return False
             else:
+                re_aid =""
+                re_aid = row[0]
                 cur.close()
-                return True
+                return json.dumps({"aid":re_aid})
 
         except mysql.connector.Error as err:
             print("****************************************")
@@ -42,8 +48,8 @@ class AuthorHelper:
         # [Success] return an jason author object
         # [Exception] return null
         # [Failed] return null
-        cur = self.dbHelper.getcursor()
-        query = "SELECT * FROM author WHERE aid='%s'"%(aid)
+        cur = self.dbAdapter.getcursor()
+        query = "SELECT aid,name,nick_name,sid,email,gender,city,birthday,img_path FROM author WHERE aid='%s'"%(aid)
         try:
             cur.execute(query)
         except mysql.connector.Error as err:
@@ -56,12 +62,10 @@ class AuthorHelper:
             print("****************************************")
             return None
         row = cur.fetchone()
-        if re is None:
-            cur.close()
+        if row is None:
             return None
         else:
-            cur.close()
-            friend = Author(row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7])
+            friend = Author(row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7],row[8])
             return friend
 
     def getAllAuthorObjectsForLocalServer(self):
@@ -72,7 +76,7 @@ class AuthorHelper:
         # [Exception] return null
         # [Failed] return null
         result = []
-        cur = self.dbHelper.getcursor()
+        cur = self.dbAdapter.getcursor()
         query = ("SELECT aid,name,email,gender,city,img_path,sid,nick_name from author WHERE sid = 1")
         try:
             cur.execute(query)
@@ -99,7 +103,7 @@ class AuthorHelper:
         # [Exception] return null
         # [Failed] return null
         result = []
-        cur = self.dbHelper.getcursor()
+        cur = self.dbAdapter.getcursor()
         query = ("SELECT aid,name,email,gender,city,img_path,sid,nick_name from author WHERE sid != 1")
         try:
             cur.execute(query)
@@ -116,13 +120,14 @@ class AuthorHelper:
             author = Author(row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7])
             result.append(author)
         return result
+
     def addLocalAuthor(self,authorName,nickName,password):
         # DO NOT DELETE THE COMMENT 
         # TODO:
         # [Success] return {'aid':xxxxx } (jason type)
         # [Exception Caught] return false
         # [Failed] return false
-        cur = self.dbHelper.getcursor()
+        cur = self.dbAdapter.getcursor()
         import utility
         aid = utility.getid()
         query = ("INSERT INTO author values('%s','%s','%s','%s',1,'','','','','')"%(aid,authorname,nickname,password))
@@ -137,10 +142,10 @@ class AuthorHelper:
             print("Query:",query)
             print("******************************")
             return None
-        import json
+            
         return json.dumps({'aid',aid})
-        print('addLocalAuthor')
-    def addRemoteAuthor(self,thorName,sid):
+
+    def addRemoteAuthor(self,authorName,sid):
         # DO NOT DELETE THE COMMENT
         # TODO:
         # [Success] return {'aid':xxxxx } (jason type)
@@ -164,7 +169,7 @@ class AuthorHelper:
             print("****************************************")
             return False
         if cur.rowcount > 0:
-            cur.close()
+
             return json.dumps({"aid":aid})
 
         cur.close()
@@ -191,13 +196,11 @@ class AuthorHelper:
 
     def updateNickNameByAid(self,aid,newNickName):
 
-        cur = self.dbHelper.getcursor()
+        cur = self.dbAdapter.getcursor()
         query = "UPDATE author SET nick_name = '%s' WHERE aid = '%s'"%(newNickName,aid)
         
         try:
           cur.execute(query)
-          # Auto-commit
-          #self.dbHelper.commit()
 
         except mysql.connector.Error as err:
 
@@ -214,13 +217,11 @@ class AuthorHelper:
 
     def updatePasswordByAid(self,aid,newPassword):
 
-        cur = self.dbHelper.getcursor()
+        cur = self.dbAdapter.getcursor()
         query = "UPDATE author SET pwd = '%s' WHERE aid='%s'"%(newPassword,aid)
 
         try:
           cur.execute(query)
-          # Auto-commit
-          #self.dbHelper.commit()
 
         except mysql.connector.Error as err:
 
@@ -239,15 +240,13 @@ class AuthorHelper:
 
     def deleteAuthor(self,aid):
 
-        cur = self.dbHelper.getcursor()
+        cur = self.dbAdapter.getcursor()
 
         query = ("DELETE FROM author "
                  "WHERE aid = '%s'") %(aid)
         
         try:
           cur.execute(query)
-          # Auto-commit
-          #self.dbHelper.commit()
 
         except mysql.connector.Error as err:
 
@@ -264,8 +263,8 @@ class AuthorHelper:
 
     def addAuthor(self,authorName,password,nickName,sid=1):
 
-        cur = self.dbHelper.getcursor()
-        aid =utility.getid()
+        cur = self.dbAdapter.getcursor()
+        aid =Utility.getid()
 
         query = ("INSERT INTO author(aid,name,nick_name,pwd,sid) "
                  "VALUES('%s','%s','%s','%s',%s)")%(aid,authorName,nickName,password,sid)

@@ -1,5 +1,6 @@
 
 USE c410;
+DROP TABLE if exists signup_request;
 DROP TABLE IF EXISTS comments;
 DROP TABLE IF EXISTS request;
 DROP TABLE IF EXISTS post_permission;
@@ -79,4 +80,8 @@ CREATE TABLE comments (
   PRIMARY KEY(cid),
   FOREIGN KEY(pid) references post(pid),
   FOREIGN KEY(aid) references author(aid)
+);
+CREATE TABLE signup_request(
+	requester varchar(128) UNIQUE,
+	primary key(requester)
 );

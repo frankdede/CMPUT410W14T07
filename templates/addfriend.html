@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Distrubute Social Network</title>
+
+    <!-- Bootstrap -->
+    <link href="{{url_for('static',filename='css/bootstrap.min.css')}}" rel="stylesheet">
+     <link href="{{url_for('static',filename='css/main.css')}}" rel="stylesheet">
+     <link href="{{url_for('static',filename='css/admin.css')}}" rel="stylesheet">
+     <!-- Struct css-->
+     <link href="{{url_for('static',filename='css/struct.css')}}" rel="stylesheet">
+     <link href="{{url_for('static',filename='css/permission.css')}}" rel="stylesheet">
+     <script src="{{url_for('static',filename='js/jquery-1.10.2.min.js')}}"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="{{url_for('static',filename='js/bootstrap.min.js')}}"></script>
+    <script src="{{url_for('static',filename='js/json2.js')}}"></script>
+    <script src="{{url_for('static',filename='js/addauthor.js')}}"></script>
+    <script src="{{url_for('static',filename='js/admin.js')}}"></script>
+  </head>
+  <body>
+<div class="panel panel-default">
+  <!-- Default panel contents -->
+  <!-- Table -->
+  <div class="panel-heading">Panel heading without title</div>
+  <div class="panel-body">
+    <thead>
+      <div class='row' style='width:300px'>
+      <div class='col-md-1'>#</div>
+      <div class='col-md-6'>Author Name</div>
+      </div>
+    </thead>
+    <table class="table" id="add_author_table">  
+    </table>
+  </div>
+  </div>
+<div id="struct-message-panel" class="col-md-3" >
+  All Authors
+<div>
+    <SELECT id="all_author" SIZE="8" MULTIPLE>
+      <OPTION SELECTED> Apples
+      <OPTION> Bananas
+      <OPTION> Oranges
+      <OPTION> Watermelon
+      <OPTION> Kiwi
+      <OPTION> Cantaloupe
+      <OPTION> Strawberries
+    </SELECT>
+    <br>
+    <button type="button" class="btn btn-default btn-xs"id="delete_author">
+      <span class="glyphicon glyphicon-minus"></span>
+    </button>
+    <button type="button" class="btn btn-default btn-xs"id="add_author">
+      <span class="glyphicon glyphicon-plus"></span>
+    </button>
+    </br>
+  </div>
+</div>
+<div id="struct-message-panel" class="col-md-3" >
+<div class="btn-toolbar" role="toolbar">
+  <div class="btn-group">Post</div>
+  <div class="btn-group">Firends</div>
+  <SELECT id="post_group" SIZE="8" MULTIPLE></select>
+  <SELECT id="friend_group" SIZE="8" MULTIPLE></select>
+</div>
+</div>
+<div id="struct-message-panel" class="col-md-3" >
+.right
+</div>
+  </body>
+  </html>

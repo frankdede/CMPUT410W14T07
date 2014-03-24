@@ -7,11 +7,11 @@ import sys,os
 sys.path.append("sys/controller")
 sys.path.append("sys/model")
 # helpers
-from authorhelper import *
-from circlehelper import *
-from databasehelper import *
-from posthelper import *
-from requesthelper import *
+from AuthorHelper import *
+from CircleHelper import *
+from DatabaseHelper import *
+from PostHelper import *
+from RequestHelper import *
 # models
 import author
 import post
@@ -32,6 +32,8 @@ class TestController(unittest.TestCase):
         self.circlehelper = CircleHelper(dbHelper)
         self.posthelper = PostHelper(dbHelper)
         self.requesthelper = RequestHelper(dbHelper)
+
+    def test_getPost()
     '''
      ====================   AuthorHelper  ====================
      PLEASE rebuild the database before run all the tests!!!
@@ -56,6 +58,14 @@ class TestController(unittest.TestCase):
     def test_addLocalAuthor(self):
         result = self.authorhelper.addLocalAuthor("coniewti1", "201486", "Conie")
         self.assertTrue(result != None, "ERROR on addAuthor")
+    def test_updateAuthorInfo(self):
+        # Tested By : JiaoZhu
+        result = self.updateAuthorInfo("111111","jiaozhu@ualberta.ca","male","wuhan","11-11-1900","/helloworld")
+        self.assertTrue(result != None, "ERROR on updateAuthorInfo")
+    def test_addRemoteAuthor(self):
+         # Tested By : JiaoZhu
+        result = self.addRemoteAuthor("Jiaozhu","3")
+        self.assertTrue(result !=False, "ERROR on addRemoteAuthor")
     # need a add remote author
     def test_updateNickNameByAid(self):
         # Tested By : Guanqi
@@ -107,6 +117,14 @@ class TestController(unittest.TestCase):
             self.assertTrue(friend.getName() != None,"ERROR on getFriendList ")
             self.assertTrue(friend.getAid() != None,"ERROR on getFriendList")
 
+    def test_getFriendOfMyHomeServerList(self):
+        # Tested By : JiaoZhu
+        friends = self.getFriendOfMyHomeServerList('111111')
+        friendsObj = author.parse(friends)
+        
+        for friend in friendsObj:
+            self.assertTrue(friend.getName() != None,"ERROR on getFriendOfMyHomeServerList ")
+            self.assertTrue(friend.getAid() != None,"ERROR on getFriendOfMyHomeServerList")
     '''
      ====================   RequestHelper  ====================
      PLEASE rebuild the database before run all the tests!!!

@@ -12,6 +12,8 @@
      <!-- Struct css-->
      <link href="{{url_for('static',filename='css/struct.css')}}" rel="stylesheet">
      <link href="{{url_for('static',filename='css/permission.css')}}" rel="stylesheet">
+     <!--jquery Ui CSSS-->
+     <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css"> 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -23,7 +25,9 @@
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="{{url_for('static',filename='js/bootstrap.min.js')}}"></script>
     <script src="{{url_for('static',filename='js/json2.js')}}"></script>
-    
+    <script src="{{url_for('static',filename='js/jquery.validate.min.js')}}"></script>
+    <script src="{{url_for('static',filename='js/jquery.form.min.js')}}"></script>
+    <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
   </head>
 <body>
 <nav class="navbar navbar-default" role="navigation">
@@ -65,10 +69,10 @@
       </form>
       <ul class="nav navbar-nav navbar-right">
         {%if not session.logged_in%}
-        <li><button class="btn btn-default navbar-btn" data-toggle="modal" data-target="#myModal">Login</button></li>
+        <li><button id ="modal_bt" class="btn btn-default navbar-btn" data-toggle="modal" data-target="#myModal">Login</button></li>
         {%else%}
         <li class="dropdown">
-        <a class="dropdown-toggle" href="#" id ="message_menue" data-toggle="dropdown" >Message <span class="badge">42</span></a>
+        <a class="dropdown-toggle" href="#" id ="message_menue" data-toggle="dropdown" >Message <span class="badge">{{ msgCount }} </span></a>
         {%endif%}
         <ul class="dropdown-menu" id="message_dropdown1" aria-labelledby="message_menue">
             <li class="divider" id="divider"></li>
@@ -93,47 +97,114 @@
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>
-<div class="modal fade" id="myModal">
+<div class="modal fade" id="myModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;
+        </button>
         <h4 class="modal-title" id="modal_title">Welcome</h4>
       </div>
       <div class="modal-body">
-        <form id="login_form" action="{{url_for('login')}}" method="post">
-        <table id ="login_table" style="width=40%">
-        <tr>
-          <td>Username:</td>
-          <td><input type="text" name="username" id="login_username" autofocus></td>
-        </tr>
-        <tr id ="password_row">
-          <td>Password:</td>
-          <td><input type="password" name="password" id="login_password"></td>
-        </tr>
-        <tr>
-          <td></td><td><font color="red"><strong id="login_error"></font></strong></td>
-        </tr>
-        </table>
-      </form>
-        <form id="register_form" action="{{url_for('register')}}" method="post">
-        <table id ="register_table" style="width=40%">
-        <tr>
-          <td>Username:</td>
-          <td><input type="text" name="username" id="register_name" autofocus></td>
-        </tr>
-        <tr>
-          <td>Password:</td>
-          <td><input type="password" name="password" id = "register_psw"></td>
-        </tr>
-        <tr>
-          <td>Nick name:</td>
-          <td><input type="text" name="nick_name" id = "register_nick_name"></td>
-        </tr>
-        <tr><td></td><td><font color="red"><strong id="register_error"></strong></font></td></tr>
-        </table>
-      </form>
+        <form id="login_form"  class ="form-horizontal" action="{{url_for('login')}}" method="post">
+          <div class="form-group">
+              <label for="exampleInputAuthorname">Author Name:</label>
+              <input type="text" class="form-control" name="username" id="login_username" placeholder="Enter Author Name" autofocus>
+          </div>
+          <div class="form-group">
+              <label for="exampleInputPassword1">Password:</label>
+              <input type="password" class="form-control" name="password" id="login_password" placeholder="Password" required>
+          </div>
+        </form>
+<form class="form-horizontal" id="register_form" method="post" enctype="multipart/form-data">
+<!--register form-->
+  <div class="panel panel-default">
+    <div class="panel-heading">Required Information</div>
+    <!--begin required information-->
+    <div class="panel-body">
+      <div class="form-group">
+        <label for="inputEmail3" class="col-sm-2 control-label">Email</label>
+        <div class="col-sm-10">
+        <input type="email" class="form-control" id="email" name="email" placeholder="Email">
+        </div>
       </div>
+      <div class="form-group">
+    <label for="inputEmail3" class="col-sm-2 control-label">Author Name</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="author_name" name="author_name" placeholder="Author Name">
+    </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Password</label>
+        <div class="col-sm-10">
+        <input type="password" id="register_pwd" class="form-control" name="register_pwd" placeholder="Password">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Retype Password</label>
+        <div class="col-sm-10">
+        <input type="password" class="form-control" name ="re_pwd" id="re_pwd" placeholder="Password">
+        </div>
+      </div>
+    </div>
+  </div>
+<!--End requirement pannel-->
+<!--begin personal information pannel-->
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <button type="button" class="btn btn-default btn-xs" id="switcher">
+        <span class="glyphicon glyphicon-chevron-up" id="button_image"></span>
+      </button>
+    Personal Information (Option)
+    </div>
+    <div class="panel-body" id="personal_body">
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Nick Name</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" name="nick_name" placeholder="Nick Name">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Birthday</label>
+        <div class="col-sm-10">
+          <input type="text" name ="birthday" id="datepicker" class="form-control" placeholder="Birthday">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Profile Upload</label>
+        <div class="col-sm-10">
+          <input type="file" name="profile_image" id="profile">
+          <p class="help-block">Size of file is up to <strong>5 MB</strong></p>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label">City</label>
+        <div class="col-sm-10">
+          <input type="text" name ="city" id="city" class="form-control" placeholder="City" autocomplete="on">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Gender</label>
+        <div class="col-sm-10">
+          <div class="radio">
+            <label>
+              <input type="radio" name ="gender" value="male">Male
+            </label>
+          </div>
+          <div class="radio">
+            <label>
+              <input type="radio" name ="gender" value="Female">Female
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--End personal information pannel-->
+  </div>
+</form>
+</div>
+<!--End of register form-->
+<font color="red"><strong id="error_code"></strong></font>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" id="re_button">Register</button>
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -150,6 +221,8 @@
         // Gobal Session info(author_name)
         var $authorName = "{{session.logged_in}}"
       </script>
+               <!--add author js-->
+      <script src="{{url_for('static',filename='js/addauthor.js')}}"></script>
       <script src="{{url_for('static',filename='js/struct.js')}}" >
       </script>
     {%endif%}

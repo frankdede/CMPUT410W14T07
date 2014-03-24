@@ -1,6 +1,6 @@
 import mysql.connector
 #read name and password from information file
-class Databasehelper:
+class DatabaseAdapter:
     def __init__(self):
         self.cnx = None
     def readpassword(self):
@@ -47,6 +47,3 @@ class Databasehelper:
         return self.cnx !=  None
     def getcursor(self):
         return self.cnx.cursor()
-if __name__ == "__main__":
-    databasehelper = Databasehelper()
-    databasehelper.connect()
