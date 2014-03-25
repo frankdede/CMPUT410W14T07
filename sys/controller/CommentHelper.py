@@ -98,5 +98,4 @@ class CommentHelper:
             print("Might be query issue:",query)
             print("****************************************")
             return None
-
-       return cur.rowcount
+        return cur.rowcount

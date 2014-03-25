@@ -6,12 +6,15 @@ import json
 import sys,os
 sys.path.append("sys/controller")
 sys.path.append("sys/model")
+# Adapter
+from DatabaseAdapter import *
 # helpers
 from AuthorHelper import *
 from CircleHelper import *
-from DatabaseHelper import *
 from PostHelper import *
 from RequestHelper import *
+# Controllers 
+from CommentController import *
 # models
 import author
 import post
@@ -24,14 +27,18 @@ class TestController(unittest.TestCase):
 
     def setUp(self):
         # DO NOT CHANGE HERE
-        dbHelper = Databasehelper()
-        dbHelper.connect()
-        dbHelper.setAutoCommit()
-
-        self.authorhelper = AuthorHelper(dbHelper)
-        self.circlehelper = CircleHelper(dbHelper)
-        self.posthelper = PostHelper(dbHelper)
-        self.requesthelper = RequestHelper(dbHelper)
+        dbAdapter = DatabaseAdapter()
+        dbAdapter.connect()
+        dbAdapter.setAutoCommit()
+        # helpers
+        self.authorHelper = AuthorHelper(dbAdapter)
+        self.circleHelper = CircleHelper(dbAdapter)
+        self.postHelper = PostHelper(dbAdapter)
+        self.requestHelper = RequestHelper(dbAdapter)
+        # controllers
+        self.commentController = CommentController(dbAdapter)
+        self.requestController = RequestController(dbAdapter)
+        self.circleHelper = CircleHelper(dbAdapter)
 
     def test_getPost()
     '''
