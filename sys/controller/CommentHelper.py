@@ -17,7 +17,7 @@ class CommentHelper:
                 "C.content,"
                 "C.time "
                 "FROM author A, comments C "
-                "WHERE C.pid = %s AND C.aid = A.aid;")%(postId)
+                "WHERE C.pid = '%s' AND C.aid = A.aid;")%(postId)
         try:
             cur.execute(query)
 
