@@ -9,10 +9,12 @@ sys.path.append('sys/controller')
 sys.path.append('sys/model')
 from AuthorHelper import *
 from DatabaseAdapter import *
+
 from RequestHelper import *
 from CircleHelper import *
 from PostController import *
-
+from AuthorController import *
+from RequestController import *
 DEBUG = True
 # create a new database obj
 dbAdapter = DatabaseAdapter()
@@ -21,10 +23,11 @@ dbAdapter.connect()
 dbAdapter.setAutoCommit()
 
 ahelper = AuthorHelper(dbAdapter)
+aController = AuthorController(dbAdapter)
 # use the conneted dbAdapter to initialize postHelper obj
 postcontroller = PostController(dbAdapter)
-# 
-reHelper = RequestHelper(dbAdapter)
+#
+reController = RequestController(dbAdapter)
 #
 circleHelper = CircleHelper(dbAdapter)
 #Allowed file extensions
@@ -56,7 +59,7 @@ def author_view(aid):
     if 'logged_in' in session:
         if(session['logged_id']==aid):
             username = session['logged_in']
-            msgCount = reHelper.getRequestCountByAid(aid)
+            msgCount = reController.getRequestCountByAid(aid)
             return render_template('header.html',msgCount = msgCount)
     else:
         return redirect(url_for('login'))
@@ -134,16 +137,17 @@ def save_image(aid,file):
     file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 @app.route('/<aid>/authorlist.json', methods=['GET'])
 def authorlist(aid):
+    if ('logged_in' not in session) or (aid !=session['logged_id']):
+        abort(404)
     #test data
-    tem =['Mark','Hello','Frank']
-    jsonstring= json.dumps(tem)
-    return jsonstring
+    re = aController.getOtherAuthor(aid)
+    return re
 @app.route('/messages.json', methods=['GET'])
 def messages(authorName):
     if ('logged_in' not in session) or (authorName !=session['logged_in']):
         abort(404)
     else:
-        jsonstring = reHelper.getRequestListByAid(aid)
+        jsonstring = reController.getRequestListByAid(aid)
         return jsonstring,200
 
 # logout
@@ -151,7 +155,19 @@ def messages(authorName):
 def logout():
     session.pop('logged_in', None)
     return redirect(url_for('login'))
-
+# make request
+@app.route('/<aid>/author/request',methods=['GET'])
+def addfriend(aid):
+    if ('logged_in' not in session) or (session['logged_id'] != aid):
+        abort(400)
+    else:
+        try:
+            request_aid = request.args.get('recipient')
+            if reController.sendRequest(aid,request_aid) is True:
+                return redirect(url_for('/'+aid))
+        except KeyError:
+            return redirect(url_for('/'+aid))
+        abort(500)
 @app.route('/author/<authorName>')
 def renderStruct(authorName):
 

@@ -218,8 +218,9 @@
     <script src="{{url_for('static',filename='js/main.js')}}"></script>
     {%if session.logged_in%}
       <script>
-        // Gobal Session info(author_name)
+        // Gobal Session info(author_name,author_id)
         var $authorName = "{{session.logged_in}}"
+        var $authorid = "{{session.logged_id}}"
       </script>
                <!--add author js-->
       <script src="{{url_for('static',filename='js/addauthor.js')}}"></script>

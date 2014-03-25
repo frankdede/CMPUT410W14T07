@@ -1,4 +1,4 @@
-import CircleHelper
+from CircleHelper import *
 import json
 
 class CircleController:
@@ -6,7 +6,7 @@ class CircleController:
     circleHelper = None
 
     def __init__(self,dbAdapter):
-        self.circleHelper = circleHelper(dbAdapter)
+        self.circleHelper = CircleHelper(dbAdapter)
     
     '''
     Add friend for an authorf13 x

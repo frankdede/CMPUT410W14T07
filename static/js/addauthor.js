@@ -1,9 +1,8 @@
 var author_id;
-var author_name;
 var author_list = new Array();
 function get_author_list(){
     $("#add_author_table").empty();
-    $.getJSON(window.author_id+"/authorlist.json",function(data2){
+    $.getJSON(authorid+"/authorlist.json",function(data2){
       $.each(data2,function(i,field){
         author_list[i] = field;
         $("#add_author_table").append("<div class='row' style='width:300px'id='addrow"+i+"'> \
@@ -24,16 +23,14 @@ function get_author_list(){
   });
   }
 $(document).ready(function(){
-  author_id = get_author_id();
-  author_name = get_author_name();
   get_author_list();
   $('body').on('click', '#addfriendbt', function () {
     var pos = parseInt($(this).attr("data"));
-     $.post("123/request/"+author_list[pos],function(data){
+     $.get(authorid+"/author/request",{recipient:author_list[pos]},function(data){
       $("#addrow"+pos).slideUp();
       get_author_list();
      });
-});
+  });
 });
 function get_author_id(){
   $.get("/ajax/uid",function(data){

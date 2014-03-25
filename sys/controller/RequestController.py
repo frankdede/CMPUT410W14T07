@@ -1,5 +1,6 @@
 import mysql.connector
-import CircleController
+from CircleController import *
+from RequestHelper import *
 import json
 
 class RequestController:

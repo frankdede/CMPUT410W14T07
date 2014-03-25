@@ -68,12 +68,14 @@ class AuthorHelper:
             return friend
 
     def getAllAuthorObjectsForLocalServer(self):
-        # DO NOT DELETE THE COMMENT
-        # TODO:
-        # [SUCCESS] return an array of author objects for local server
-        # e.g. {{'aid':xxxxx,'name':xxxxxxx ...},{'aid':xxxxx,'name':xxxxxxx..}}
-        # [Exception] return null
-        # [Failed] return null
+        """
+        DO NOT DELETE THE COMMENT
+         TODO:
+         [SUCCESS] return an array of author objects for local server
+         e.g. {{'aid':xxxxx,'name':xxxxxxx ...},{'aid':xxxxx,'name':xxxxxxx..}}
+         [Exception] return null
+         [Failed] return null
+        """
         result = []
         cur = self.dbAdapter.getcursor()
         query = ("SELECT aid,name,email,gender,city,img_path,sid,nick_name from author WHERE sid = 1")
