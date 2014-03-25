@@ -92,7 +92,6 @@ def login():
             re.headers['Content-Type']='text/plain'
             return re
         else:
-            print json_str
             session['logged_in'] = authorName
             session['logged_id'] = json.loads(json_str)['aid']
             return json_str

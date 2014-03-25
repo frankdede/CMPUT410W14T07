@@ -65,7 +65,7 @@ class RequestController:
 
   def getRequestCountByAid(self,recipientId):
 
-    result = getRequestCountByAid(recipientId)
+    result = self.requestHelper.getRequestCountByAid(recipientId)
 
     if(result != None):
       if(result != 0):
