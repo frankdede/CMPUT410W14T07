@@ -29,5 +29,3 @@ class PostController:
             else:
                 json_list[post.getPid()]=post.tojson()
         return json.dumps(json_list)
-
-    def addPost():

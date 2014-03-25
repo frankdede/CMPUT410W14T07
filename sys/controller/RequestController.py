@@ -69,7 +69,7 @@ class RequestController:
 
     if(result != None):
       if(result != 0):
-        return json.dumps({'count':row[0]})
+        return json.dumps({'count':result})
       else:
         return json.dumps({'count':0})
     else:
