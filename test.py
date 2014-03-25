@@ -53,18 +53,17 @@ class TestController(unittest.TestCase):
      PLEASE rebuild the database before run all the tests!!!
     '''
 
-    def test_addNewRequest(self):
-        # Tested By : Guanqi
-        result = self.requesthelper.addNewRequest('222222','111111')
-        requestObj = json.loads(result)
-        self.assertTrue(requestObj['recipient_id'] =='222222',"ERROR on addNewRequest ")
-        self.assertTrue(requestObj['sender_id'] == '111111',"ERROR on addNewRequest ")
-
 
     '''
      ====================   CommentHelper  ====================
      PLEASE rebuild the database before run all the tests!!!
     '''
+
+    def test_getAllCommentsForPost(self):
+
+        result = self.commentController.getAllCommentsForPost('1')
+        self.assertTrue(result != None,"Failed to get all comments for post")
+
 
 if __name__ == '__main__':
         unittest.main()
