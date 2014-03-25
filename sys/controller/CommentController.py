@@ -37,13 +37,15 @@ class CommentController:
     '''
     Delete comment for a specific post
     @param String Comment ID
-    @return Boolean
+    @return Boolean Returns True if deleted successfully, else False
     '''
     def deleteCommentForPost(self,cid):
 
         return self.commentHelper.deleteCommentForPost(cid)
     '''
     Count number of comments for a specific post
+    @param String Post ID
+    @return Integer Returns the rowcount 
     '''
     def countCommentsForPost(self,pid):
 

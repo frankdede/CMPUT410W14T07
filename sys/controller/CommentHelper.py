@@ -99,6 +99,4 @@ class CommentHelper:
             print("****************************************")
             return None
 
-        if cur.rowcount > 0:
-            return cur.fetchall()
-        return None
+       return cur.rowcount
