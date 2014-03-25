@@ -12,12 +12,12 @@ class CommentHelper:
         cur = self.dbAdapter.getcursor()
         query = ("SELECT C.pid,"
                 "C.cid,"
-                "A.name,"
+                "C.aid,"
                 "A.nick_name,"
                 "C.content,"
                 "C.time "
                 "FROM author A, comments C "
-                "WHERE C.pid = %s;")%(postId)
+                "WHERE C.pid = %s AND C.aid = A.aid;")%(postId)
         try:
             cur.execute(query)
 

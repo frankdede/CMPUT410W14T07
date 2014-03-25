@@ -10,7 +10,6 @@ class AuthorHelper:
     """
     If the username and password are correct, it will return True otherwise false
     """
-    dbAdapter = None
     def __init__(self,dbAdapter):
         self.dbAdapter = dbAdapter
 

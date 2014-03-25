@@ -1,10 +1,10 @@
 import json
 class Comment:
-    def __init__(self,cid,name,aid,date,content):
+    def __init__(self,cid,aid,nickName,time,content):
         self.cid = cid
         self.aid = aid
-        self.name = name
-        self.date = date
+        self.nickName = nickName
+        self.time = time
         self.content = content
 
     def getCid(self):
@@ -13,8 +13,11 @@ class Comment:
     def getAid(self):
         return self.aid
 
-    def getDate(self):
-        return self.date
+    def getTime(self):
+        return self.time
+
+    def getNickName(self,nickName):
+        return self.nickName
 
     def getContent(self):
         return self.content
@@ -25,8 +28,11 @@ class Comment:
     def setAid(self,aid):
         self.aid = aid
 
-    def setDate(self,date):
-        self.date = date
+    def setTime(self,time):
+        self.time = time
+
+    def setNickName(self,nickName):
+        self.nickName = nickName
 
     def setContent(self,content):
         self.content = content
@@ -35,9 +41,9 @@ class Comment:
         result = {}
         result['cid'] = self.cid
         result['aid'] = self.aid
-        result['name'] = self.name
+        result['nick_name'] = self.nickName
         result['content'] = self.content
-        result['date'] = self.date
+        result['time'] = self.time
         return result
 
 def parse(jsonstring):
@@ -45,9 +51,9 @@ def parse(jsonstring):
     post = Post()
     post.setCid(dic['cid'])
     post.setAid(dic['aid'])
-    post.setDate(dic['date'])
+    post.setDate(dic['time'])
     post.setContent(dic['content'])
-    post.setName(dic['name'])
+    post.setName(dic['nick_name'])
     return post
 
 
