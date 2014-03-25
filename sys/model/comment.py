@@ -42,5 +42,14 @@ class Comment:
 
 def parse(jsonstring):
     dic = json.loads(jsonstring)
+    post = Post()
+    post.setCid(dic['cid'])
+    post.setAid(dic['aid'])
+    post.setDate(dic['date'])
+    post.setContent(dic['content'])
+    post.setName(dic['name'])
+    return post
+
+
 
 
