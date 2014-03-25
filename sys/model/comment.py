@@ -31,4 +31,16 @@ class Comment:
     def setContent(self,content):
         self.content = content
 
+    def tojson(self):
+        result = {}
+        result['cid'] = self.cid
+        result['aid'] = self.aid
+        result['name'] = self.name
+        result['content'] = self.content
+        result['date'] = self.date
+        return result
+
+def parse(jsonstring):
+    dic = json.loads(jsonstring)
+
 

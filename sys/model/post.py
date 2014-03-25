@@ -1,6 +1,6 @@
 import json
 class Post:
-    def __init__(self,pid,aid,name,date,title,content,comments,type,permission):
+    def __init__(self,pid,aid,name,date,title,content,commentList,type,permission):
         self.pid = pid
         self.aid = aid
         self.name = name
@@ -9,7 +9,7 @@ class Post:
         self.content=content
         self.type=type
         self.permission=permission
-        self.comments = comments
+        self.commentList = commentList
 
     def getPid(self):
         return self.pid
@@ -72,10 +72,10 @@ class Post:
         result['type'] = self.type
         result['permission'] = self.permission
 
-        if(self.comments != None):
-            for comment in self.comments:
+        if(self.commentList != None):
+            for comment in self.commentList:
                 commentsDict[comment.getCid()] = comment.tojson()
-        result['comments'] = commentsDict
+        result['commentList'] = commentsDict
 
         return result
 
