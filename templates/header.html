@@ -62,11 +62,11 @@
         </li>
         {%endif%}
       </ul>
-      <form class="navbar-form navbar-left" role="search">
-        <div class="form-group">
-          <input type="text" class="form-control" placeholder="Search">
+      <form class="navbar-form navbar-left">
+        <div class="form-group" id="search_form">
+          <input type="text" class="form-control" placeholder="Author Name" id="search_input">
         </div>
-        <button type="submit" class="btn btn-default" id="search_button">Submit</button>
+        <button type="submit" class="btn btn-default" id="search_button"><span class="glyphicon glyphicon-search"></span></button>
       </form>
       <ul class="nav navbar-nav navbar-right">
         {%if not session.logged_in%}
@@ -222,19 +222,30 @@
         <h4 class="modal-title" id="myModalLabel">Add Authors</h4>
       </div>
       <div class="modal-body">
-        <table class="table table-hover">  
-        <thead>
-        <tr>
-          <th>#</th>
-          <th>Author Name</th>
-          <th>Nick Name</th>
-          <th><th>
-        </tr>
-        </thead>
-        <tbody id="add_all_author_table">
-          <tr><td>1</td><td>hello</td><td>world</td><tr>
-        </tbody>
-        </table>
+        <div class="table-responsive">
+          <table class="table table-hover">  
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Author Name</th>
+                <th>Nick Name</th>
+                <th><th>
+              </tr>
+            </thead>
+            <tbody id="add_all_author_table">
+              <tr><td>1</td><td>hello</td><td>world</td><tr>
+            </tbody>
+          </table>
+        </div>
+        <ul class="pagination pagination-sm">
+          <li><a href="#">&laquo;</a></li>
+          <li><a href="#">1</a></li>
+          <li><a href="#">2</a></li>
+          <li><a href="#">3</a></li>
+          <li><a href="#">4</a></li>
+          <li><a href="#">5</a></li>
+          <li><a href="#">&raquo;</a></li>
+        </ul>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         <button type="button" class="btn btn-primary">Save changes</button>
