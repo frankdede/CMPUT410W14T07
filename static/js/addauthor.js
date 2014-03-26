@@ -1,14 +1,15 @@
 var author_id;
 var author_list = new Array();
-function get_author_list(){
+function get_author_list(aid){
     $("#add_author_table").empty();
-    $.getJSON(author_id+"/authorlist.json",function(data2){
+    $.getJSON(aid+"/authorlist.json",function(data2){
       $.each(data2,function(i,field){
+        console.log(field);
         author_list[i] = field;
         $("#add_author_table").append("<div class='row' style='width:300px'id='addrow"+i+"'> \
       <div class='col-md-1'>"+(i+1)+"</div> \
       <div class='col-md-6'> \
-        <span class='glyphicon glyphicon-user'></span>  "+field+"</div> \
+        <span class='glyphicon glyphicon-user'></span>  "+field.name+"</div> \
       <div class='col-md-3'> \
             <button type='button' class='btn btn-default btn-xs' id = 'addfriendbt' \
              data='"+
@@ -23,19 +24,18 @@ function get_author_list(){
   });
   }
 $(document).ready(function(){
-  author_id = get_author_id();
-  //get_author_list();
+  get_author_id();  
+});
+function get_author_id(){
+  $.get("/ajax/aid",function(data){
+    get_author_list(data);
   $('body').on('click', '#addfriendbt', function () {
     var pos = parseInt($(this).attr("data"));
-     $.get(author_id+"/author/request",{recipient:author_list[pos]},function(data){
+     $.get(data+"/author/request",{recipient:author_list[pos].aid},function(data2){
       $("#addrow"+pos).slideUp();
       get_author_list();
      });
   });
-});
-function get_author_id(){
-  $.get("/ajax/aid",function(data){
-    return data;
   });
 }
 function get_author_name(){

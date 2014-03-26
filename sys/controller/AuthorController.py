@@ -20,6 +20,14 @@ class AuthorController:
         tmp_list.extend(self.authorHelper.getAllAuthorObjectsForRemoteServer())
         for author in tmp_list:
             current_aid =author.getAid()
-            if current_aid != aid:
-                dic[aid] = author.getName()
+            if current_aid !=aid:
+                dic[current_aid] = author.getName()
         return json.dumps(dic)
+    def getRecommendedAuthor(self,aid):
+        """
+            to get list of recommended authors
+            @param: aid
+            @return: jsonstring with name and aid
+            """
+        tmp_list =self.authorHelper.getRecommendedAuthorList(aid)
+        return json.dumps(tmp_list)

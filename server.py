@@ -60,7 +60,8 @@ def author_view(aid):
         if(session['logged_id']==aid):
             username = session['logged_in']
             msgCount = reController.getRequestCountByAid(aid)
-            return render_template('header.html',msgCount = msgCount)
+            countnumber = json.loads(msgCount)['count']
+            return render_template('header.html',msgCount = countnumber)
     else:
         return redirect(url_for('login'))
 @app.route('/ajax/aid')
@@ -139,7 +140,7 @@ def authorlist(aid):
     if ('logged_in' not in session) or (aid !=session['logged_id']):
         abort(404)
     #test data
-    re = aController.getOtherAuthor(aid)
+    re = aController.getRecommendedAuthor(aid)
     return re
 @app.route('/messages.json', methods=['GET'])
 def messages(authorName):

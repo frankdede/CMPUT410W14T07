@@ -213,7 +213,7 @@ class PostHelper:
         cur = self.dbAdapter.getcursor()
         
         #get the post if it is public
-        query = "SELECT pid,aid,time,title,content,type,permission FROM post WHERE permission='public';"
+        query = "SELECT p.pid,p.aid,p.time,p.title,p.content,p.type,p.permission,a.name FROM post p,author a WHERE p.permission='public' and p.aid=a.aid;"
         try:
             cur.execute(query)
         except mysql.connector.Error as err:
@@ -234,7 +234,8 @@ class PostHelper:
                 msg = ele[4]
                 msgType = ele[5]
                 permission = ele[6]
-                post = Post(pid,aid,time,title,msg,msgType,permission)
+                name = ele[7]
+                post = Post(pid,aid,name,time,title,msg,msgType,permission)
                 re.append(post)
             return re 
     def getPrivatePost(self,aid):
@@ -242,7 +243,7 @@ class PostHelper:
         cur = self.dbAdapter.getcursor()
         
         #get the post if it is public
-        query = "SELECT pid,aid,time,title,content,type,permission FROM post WHERE permission='me' AND aid='%s';"%(aid)
+        query = "SELECT p.pid,p.aid,p.time,p.title,p.content,p.type,p.permission,a.name FROM post p,author a WHERE p.permission='me' AND p.aid='%s';"%(aid)
         try:
             cur.execute(query)
         except mysql.connector.Error as err:
@@ -263,7 +264,8 @@ class PostHelper:
                 msg = ele[4]
                 msgType = ele[5]
                 permission = ele[6]
-                post = Post(pid,aid,time,title,msg,msgType,permission)
+                name = ele[7]
+                post = Post(pid,aid,name,time,title,msg,msgType,permission)
                 re.append(post)
             return re
     def getFriendsFriendPost(self,aid):
@@ -271,7 +273,7 @@ class PostHelper:
         cur = self.dbAdapter.getcursor()
         
         #get the post if it is public
-        query = "SELECT pid,aid,time,title,content,type,permission FROM post WHERE permission='fof' AND aid IN (SELECT aid1 FROM circle WHERE aid2 IN (SELECT aid1 FROM circle WHERE aid2='%s'));"%(aid)
+        query = "SELECT p.pid,p.aid,p.time,p.title,p.content,p.type,p.permission,a.name FROM post p,author a WHERE p.permission='fof' AND p.aid IN (SELECT aid1 FROM circle WHERE aid2 IN (SELECT aid1 FROM circle WHERE aid2='%s'));"%(aid)
         try:
             cur.execute(query)
         except mysql.connector.Error as err:
@@ -292,14 +294,15 @@ class PostHelper:
                 msg = ele[4]
                 msgType = ele[5]
                 permission = ele[6]
-                post = Post(pid,aid,time,title,msg,msgType,permission)
+                name = ele[7]
+                post = Post(pid,aid,name,time,title,msg,msgType,permission)
                 re.append(post)
             return re
     def getFriendsPost(self,aid):
         re = []
         cur = self.dbAdapter.getcursor()
         #get the post if it is public
-        query = "SELECT pid,aid,time,title,content,type,permission FROM post WHERE permission='friends' AND aid IN (SELECT aid1 FROM circle WHERE aid2 ='%s');"%(aid)
+        query = "SELECT p.pid,p.aid,p.time,p.title,p.content,p.type,p.permission,a.name FROM post p,author a WHERE p.permission='friends' AND p.aid IN (SELECT aid1 FROM circle WHERE aid2 ='%s');"%(aid)
         try:
             cur.execute(query)
         except mysql.connector.Error as err:
@@ -320,14 +323,15 @@ class PostHelper:
                 msg = ele[4]
                 msgType = ele[5]
                 permission = ele[6]
-                post = Post(pid,aid,time,title,msg,msgType,permission)
+                name = ele[7]
+                post = Post(pid,aid,name,time,title,msg,msgType,permission)
                 re.append(post)
             return re
     def getAuthorPost(self,aid):
         re = []
         cur = self.dbAdapter.getcursor()
         #get the post if it is public
-        query = "SELECT pid,aid,time,title,content,type,permission FROM post WHERE permission='author' AND pid IN (SELECT pid FROM post_permission WHERE aid ='%s');"%(aid)
+        query = "SELECT p.pid,p.aid,p.time,p.title,p.content,p.type,p.permission,a.name FROM post p,author a WHERE p.permission='author' AND p.pid IN (SELECT pid FROM post_permission WHERE aid ='%s');"%(aid)
         try:
             cur.execute(query)
         except mysql.connector.Error as err:
@@ -348,14 +352,15 @@ class PostHelper:
                 msg = ele[4]
                 msgType = ele[5]
                 permission = ele[6]
-                post = Post(pid,aid,time,title,msg,msgType,permission)
+                name = ele[7]
+                post = Post(pid,aid,name,time,title,msg,msgType,permission)
                 re.append(post)
             return re
     def getMyHostFriendPost(self,aid):
         re = []
         cur = self.dbAdapter.getcursor()
         #get the post if it is public
-        query = "SELECT pid,aid,time,title,content,type,permission FROM post WHERE permission='fomh' AND aid IN (SELECT aid1 FROM circle WHERE aid2='%s') AND EXISTS (SELECT * FROM author WHERE aid='%s' AND sid =1);"%(aid,aid)
+        query = "SELECT p.pid,p.aid,p.time,p.title,p.content,p.type,p.permission,a.name FROM post p,author a WHERE p.permission='fomh' AND p.aid IN (SELECT aid1 FROM circle WHERE aid2='%s') AND EXISTS (SELECT * FROM author WHERE aid='%s' AND sid =1);"%(aid,aid)
         try:
             cur.execute(query)
         except mysql.connector.Error as err:
@@ -376,6 +381,7 @@ class PostHelper:
                 msg = ele[4]
                 msgType = ele[5]
                 permission = ele[6]
-                post = Post(pid,aid,time,title,msg,msgType,permission)
+                name = ele[7]
+                post = Post(pid,aid,name,time,title,msg,msgType,permission)
                 re.append(post)
             return re
