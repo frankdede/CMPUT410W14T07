@@ -96,8 +96,13 @@ def login():
             session['logged_in'] = authorName
             session['logged_id'] = json.loads(json_str)['aid']
             return json_str
-
-    return render_template('header.html')
+    if "logged_in" in session:
+        aid = session['logged_id']
+        msgCount = reController.getRequestCountByAid(aid)
+        countnumber = json.loads(msgCount)['count']
+        return render_template('header.html',msgCount = countnumber)
+    else:
+        return render_template('header.html')
 
 # register page
 @app.route('/register', methods=['PUT', 'POST'])
