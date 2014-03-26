@@ -12,9 +12,9 @@ class RequestController:
   def acceptRequestFromSender(self,recipientId,senderId):
 
     result = self.circleController.addFriendForAuthor(recipientId,senderId)
+    print(result)
     if (result == True):
-       return self.deleteRequest(recipientId,senderId)
-
+      print(self.requestHelper.deleteRequest(recipientId,senderId))
     return False
 
   '''

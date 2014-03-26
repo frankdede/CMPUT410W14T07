@@ -28,11 +28,7 @@ class RequestHelper:
           print("****************************************")
           return False
 
-        if cur.rowcount>0:
-
-          return True
-
-        return False
+        return cur.rowcount>0
 
     """
     Delete a request based on recipientId and senderId
@@ -46,7 +42,7 @@ class RequestHelper:
                 "WHERE recipient_id = '%s' AND sender_id = '%s'")%(recipientId,senderId)
         try:
           cur.execute(query)
-
+          print(query)
         except mysql.connector.Error as err:
 
           print("****************************************")
@@ -58,6 +54,7 @@ class RequestHelper:
           print("****************************************")
           return False
           
+        print(cur.rowcount)
         return cur.rowcount>0
 
     """
