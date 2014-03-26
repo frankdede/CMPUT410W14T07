@@ -73,11 +73,20 @@ class TestController(unittest.TestCase):
         result = self.requestController.deleteRequest('222222','111111')
         self.assertTrue(result == True,"Failed to delete a request")
     '''
-    def getAllRequestByAid(self):
+    def test_getAllRequestByAid(self):
         result = self.requestController.getAllRequestByAid('111111')
-        print(result)
         self.assertTrue(result != None,"Failed to get all request by aid")
 
+    def test_getRequestCountByAid(self):
+        result = self.requestController.getRequestCountByAid('111111')
+        self.assertTrue(result != None,"Failed to get request count by aid")
+        result = self.requestController.getRequestCountByAid('3123213213')
+        self.assertTrue(result != None,"The count should be zero")
+
+    def test_deleteAllRequestByAid(self):
+        result = self.requestController.deleteAllRequestByAid('111111')
+        self.assertTrue(result == True,"Failed to delete all request by aid")
+        
     '''
      ====================   CommentHelper  ====================
      PLEASE rebuild the database before run all the tests!!!

@@ -45,8 +45,7 @@ class RequestController:
   def getAllRequestByAid(self,recipientId):
 
     requestList = []
-    result = getRequestListByAid(recipientId)
-    print(result)
+    result = self.requestHelper.getRequestListByAid(recipientId)
     if(result != None):
       for row in result:
                 requestList.append({'sender_id':row[0],'time':str(row[1])})
@@ -66,7 +65,9 @@ class RequestController:
         return json.dumps({'count':0})
     else:
       return None
+  def deleteAllRequestByAid(self,recipientId):
 
+    return self.requestHelper.deleteAllRequestByAid(recipientId)
 
 
     
