@@ -16,7 +16,6 @@ class RequestHelper:
         cur = self.dbAdapter.getcursor()
         try:
           cur.execute(query)
-
         except mysql.connector.Error as err:
 
           print("****************************************")
@@ -27,7 +26,6 @@ class RequestHelper:
           print("Might be query issue:",query)
           print("****************************************")
           return False
-
         return cur.rowcount>0
 
     """
@@ -42,7 +40,7 @@ class RequestHelper:
                 "WHERE recipient_id = '%s' AND sender_id = '%s'")%(recipientId,senderId)
         try:
           cur.execute(query)
-          print(query)
+          
         except mysql.connector.Error as err:
 
           print("****************************************")
@@ -54,7 +52,6 @@ class RequestHelper:
           print("****************************************")
           return False
           
-        print(cur.rowcount)
         return cur.rowcount>0
 
     """

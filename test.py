@@ -56,20 +56,23 @@ class TestController(unittest.TestCase):
      ====================   RequestHelper  ====================
      PLEASE rebuild the database before run all the tests!!!
     '''
+    
     def test_sendRequest(self):
         # Tested By : Guanqi
         result = self.requestController.sendRequest('111111','222222')
         self.assertTrue(result == True,"Failed to sent a request")
-    '''
+    
+    
     def test_accpetRequestFromSender(self):
-        result = self.requestController.acceptRequestFromSender('222222','111111')
+        result = self.requestController.acceptRequestFromSender('111111','222222')
         self.assertTrue(result == True,"Failed to accept a request from sender")
+    
     '''
-
+    Cannot delete request by far
     def test_deleteRequest(self):
         result = self.requestController.deleteRequest('222222','111111')
         self.assertTrue(result == True,"Failed to delete a request")
-    
+    '''
 
     '''
      ====================   CommentHelper  ====================

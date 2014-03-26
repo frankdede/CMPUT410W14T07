@@ -14,7 +14,7 @@ class RequestController:
     result = self.circleController.addFriendForAuthor(recipientId,senderId)
     print(result)
     if (result == True):
-      print(self.requestHelper.deleteRequest(recipientId,senderId))
+      return self.requestHelper.deleteRequest(recipientId,senderId)
     return False
 
   '''
