@@ -169,9 +169,10 @@ def addfriend(aid):
         try:
             request_aid = request.args.get('recipient')
             if reController.sendRequest(aid,request_aid) is True:
-                return redirect(url_for('/'+aid))
+                re = make_response("OK")
+                return re
         except KeyError:
-            return redirect(url_for('/'+aid))
+            return redirect(url_for(aid))
         abort(500)
 @app.route('/author/<authorName>')
 def renderStruct(authorName):
