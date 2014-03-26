@@ -33,7 +33,7 @@ class RequestController:
   '''
   def sendRequest(self,senderId,recipientId):
 
-    return  addNewRequest(self,recipientId,senderId)
+    return  self.requestHelper.addNewRequest(self,recipientId,senderId)
 
   '''
     Delete a request by recipient ID and sender ID
@@ -43,7 +43,7 @@ class RequestController:
   '''
   def deleteRequest(self,recipientId,senderId):
 
-    return  deleteRequest(recipientId,senderId)
+    return  self.requestHelper.deleteRequest(recipientId,senderId)
 
   '''
     Get all the requests content based on recipient ID
