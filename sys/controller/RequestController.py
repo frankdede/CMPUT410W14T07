@@ -12,7 +12,6 @@ class RequestController:
   def acceptRequestFromSender(self,recipientId,senderId):
 
     result = self.circleController.addFriendForAuthor(recipientId,senderId)
-    print(result)
     if (result == True):
       return self.requestHelper.deleteRequest(recipientId,senderId)
     return False
@@ -47,7 +46,7 @@ class RequestController:
 
     requestList = []
     result = getRequestListByAid(recipientId)
-
+    print(result)
     if(result != None):
       for row in result:
                 requestList.append({'sender_id':row[0],'time':str(row[1])})

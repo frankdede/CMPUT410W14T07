@@ -73,6 +73,10 @@ class TestController(unittest.TestCase):
         result = self.requestController.deleteRequest('222222','111111')
         self.assertTrue(result == True,"Failed to delete a request")
     '''
+    def getAllRequestByAid(self):
+        result = self.requestController.getAllRequestByAid('111111')
+        print(result)
+        self.assertTrue(result != None,"Failed to get all request by aid")
 
     '''
      ====================   CommentHelper  ====================
