@@ -9,7 +9,7 @@ class RequestController:
     self.requestHelper = RequestHelper(dbAdapter)
     self.circleController = CircleController(dbAdapter)
 
-  def accpetRequestFromSender(self,recipientId,senderId):
+  def acceptRequestFromSender(self,recipientId,senderId):
 
     result = self.circleController.addFriendForAuthor(recipientId,senderId)
     if (result == True):
@@ -18,6 +18,7 @@ class RequestController:
     return False
 
   '''
+    (The Order of passing parameters matters)
     @param String senderId
     @param String recipientId
     @return Boolean 
@@ -28,8 +29,9 @@ class RequestController:
 
   '''
     Delete a request by recipient ID and sender ID
-    @param String senderId
+    (The Order of passing parameters matters)
     @param String recipientId
+    @param String senderId
     @return Boolean 
   '''
   def deleteRequest(self,recipientId,senderId):

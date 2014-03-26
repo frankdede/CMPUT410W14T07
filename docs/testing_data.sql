@@ -10,9 +10,6 @@ INSERT INTO author values('555555','paul','Paul Xu','12345',1,'paul@gmail.com','
 INSERT INTO author values('666666','rose','Rose Xiang','12345',1,'rose@gmail.com','male','calgary','1993-01-01','/rose/1.jpg');
 INSERT INTO author values('777777','ET','ET','12345',1,'rose@gmail.com','male','calgary','1993-01-01','/rose/1.jpg');
 
-INSERT INTO circle values('111111','222222');
-INSERT INTO circle values('222222','111111');
-
 INSERT INTO circle values('111111','333333');
 INSERT INTO circle values('333333','111111');
 

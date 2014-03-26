@@ -27,6 +27,7 @@ DEBUG = True
 '''PLEASE rebuild the database everytime before run all the tests!!!'''
 class TestController(unittest.TestCase):
     
+        
 
     def setUp(self):
         self.cid = None
@@ -56,8 +57,18 @@ class TestController(unittest.TestCase):
      PLEASE rebuild the database before run all the tests!!!
     '''
     def test_sendRequest(self):
+        # Tested By : Guanqi
         result = self.requestController.sendRequest('111111','222222')
         self.assertTrue(result == True,"Failed to sent a request")
+
+    def test_deleteRequest(self):
+        result = self.requestController.deleteRequest('222222','111111')
+        self.assertTrue(result == True,"Failed to delete a request")
+
+    def test_accpetRequestFromSender(self):
+        result = self.requestController.acceptRequestFromSender('222222','111111')
+        self.assertTrue(result == True,"Failed to accept a request from sender")
+
     '''
      ====================   CommentHelper  ====================
      PLEASE rebuild the database before run all the tests!!!
@@ -81,4 +92,9 @@ class TestController(unittest.TestCase):
 
 
 if __name__ == '__main__':
-        unittest.main()
+    print("**************************** Script Starts ****************************")
+    subprocess.call(["./install.sh", "-rebuild_all"])
+    print("**************************** Script Ends *********************************")
+    print("**************************** Test Starts *********************************")
+    unittest.main()
+        

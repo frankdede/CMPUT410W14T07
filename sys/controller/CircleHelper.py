@@ -17,8 +17,8 @@ class CircleHelper:
     def addFriendForAuthor(self,aid1,aid2):
 
         cur = self.dbAdapter.getcursor()
-        data = [(aid1,aid2),(aid2,aid1)]
-        query ="INSERT INTO circle VALUES('%s','%s')"
+        data = [(aid1,aid2),(aid2,aid1),]
+        query ="INSERT INTO circle VALUES(%s,%s)"
 
         try:
           cur.executemany(query,data)
