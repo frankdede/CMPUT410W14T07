@@ -55,8 +55,9 @@ class TestController(unittest.TestCase):
      ====================   RequestHelper  ====================
      PLEASE rebuild the database before run all the tests!!!
     '''
-
-
+    def test_sendRequest(self):
+        result = self.requestController.sendRequest('111111','222222')
+        self.assertTrue(result == True,"Failed to sent a request")
     '''
      ====================   CommentHelper  ====================
      PLEASE rebuild the database before run all the tests!!!

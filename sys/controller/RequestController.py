@@ -4,15 +4,6 @@ from RequestHelper import *
 import json
 
 class RequestController:
-  '''
-    An instance of RequestHelper Class
-  '''
-  requestHelper = None
-
-  '''
-    An instance of RequestHelper Class
-  '''
-  circleController = None
 
   def __init__(self,dbAdapter):
     self.requestHelper = RequestHelper(dbAdapter)
@@ -33,7 +24,7 @@ class RequestController:
   '''
   def sendRequest(self,senderId,recipientId):
 
-    return  self.requestHelper.addNewRequest(self,recipientId,senderId)
+    return  self.requestHelper.addNewRequest(recipientId,senderId)
 
   '''
     Delete a request by recipient ID and sender ID
