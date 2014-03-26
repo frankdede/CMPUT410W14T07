@@ -1,48 +1,41 @@
 import mysql.connector
-import CircleController
+from CircleController import *
+from RequestHelper import *
 import json
 
 class RequestController:
-  '''
-    An instance of RequestHelper Class
-  '''
-  requestHelper = None
-
-  '''
-    An instance of RequestHelper Class
-  '''
-  circleController = None
 
   def __init__(self,dbAdapter):
     self.requestHelper = RequestHelper(dbAdapter)
     self.circleController = CircleController(dbAdapter)
 
-  def accpetRequestFromSender(self,recipientId,senderId):
+  def acceptRequestFromSender(self,recipientId,senderId):
 
     result = self.circleController.addFriendForAuthor(recipientId,senderId)
     if (result == True):
-       return self.deleteRequest(recipientId,senderId)
-
+      return self.requestHelper.deleteRequest(recipientId,senderId)
     return False
 
   '''
+    (The Order of passing parameters matters)
     @param String senderId
     @param String recipientId
     @return Boolean 
   '''
   def sendRequest(self,senderId,recipientId):
 
-    return  addNewRequest(self,recipientId,senderId)
+    return  self.requestHelper.addNewRequest(recipientId,senderId)
 
   '''
     Delete a request by recipient ID and sender ID
-    @param String senderId
+    (The Order of passing parameters matters)
     @param String recipientId
+    @param String senderId
     @return Boolean 
   '''
   def deleteRequest(self,recipientId,senderId):
 
-    return  deleteRequest(recipientId,senderId)
+    return  self.requestHelper.deleteRequest(recipientId,senderId)
 
   '''
     Get all the requests content based on recipient ID
@@ -52,8 +45,7 @@ class RequestController:
   def getAllRequestByAid(self,recipientId):
 
     requestList = []
-    result = getRequestListByAid(recipientId)
-
+    result = self.requestHelper.getRequestListByAid(recipientId)
     if(result != None):
       for row in result:
                 requestList.append({'sender_id':row[0],'time':str(row[1])})
@@ -64,16 +56,18 @@ class RequestController:
 
   def getRequestCountByAid(self,recipientId):
 
-    result = getRequestCountByAid(recipientId)
+    result = self.requestHelper.getRequestCountByAid(recipientId)
 
     if(result != None):
       if(result != 0):
-        return json.dumps({'count':row[0]})
+        return json.dumps({'count':result})
       else:
         return json.dumps({'count':0})
     else:
       return None
+  def deleteAllRequestByAid(self,recipientId):
 
+    return self.requestHelper.deleteAllRequestByAid(recipientId)
 
 
     

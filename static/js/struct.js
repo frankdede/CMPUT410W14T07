@@ -62,8 +62,15 @@ function submitPostToServer($postObj){
 function setRefreshTimer(){
 	setInterval(function(){
 		getAllRawPostData();
+                getGithubNotification();
 	},10000);
 }
+
+function getGithubNotification(){
+	$.get("/"+ $authorName +"/github/notification",function(){
+	});
+}
+
 
 function getAllRawPostData(){
 	$.get("/"+ $authorName +"/pull/",function($data){

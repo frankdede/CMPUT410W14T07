@@ -48,24 +48,25 @@
       <ul class="nav navbar-nav">
         <li class="active"><a href="#">Stream</a></li>
         <li><a href="#">Post</a></li>
+        {%if session.logged_in%}
         <li class="Partner">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Circles <b class="caret"></b></a>
           <ul class="dropdown-menu">
-            <li><a href="#">Action</a></li>
-            <li><a href="#">Another action</a></li>
-            <li><a href="#">Something else here</a></li>
+            <li><a href="javascript:search_click()">Search Author</a></li>
+            <li><a href="#">Manage Author</a></li>
             <li class="divider"></li>
             <li><a href="#">Separated link</a></li>
             <li class="divider"></li>
             <li><a href="#">One more separated link</a></li>
           </ul>
         </li>
+        {%endif%}
       </ul>
-      <form class="navbar-form navbar-left" role="search">
-        <div class="form-group">
-          <input type="text" class="form-control" placeholder="Search">
+      <form class="navbar-form navbar-left">
+        <div class="form-group" id="search_form">
+          <input type="text" class="form-control" placeholder="Author Name" id="search_input">
         </div>
-        <button type="submit" class="btn btn-default" id="search_button">Submit</button>
+        <button type="submit" class="btn btn-default" id="search_button"><span class="glyphicon glyphicon-search"></span></button>
       </form>
       <ul class="nav navbar-nav navbar-right">
         {%if not session.logged_in%}
@@ -114,6 +115,7 @@
           <div class="form-group">
               <label for="exampleInputPassword1">Password:</label>
               <input type="password" class="form-control" name="password" id="login_password" placeholder="Password" required>
+<a href="{{authorize_url}}">Sign in with GitHub</a>
           </div>
         </form>
 <form class="form-horizontal" id="register_form" method="post" enctype="multipart/form-data">
@@ -213,18 +215,58 @@
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+<div class="modal fade" id="search_model" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Add Authors</h4>
+      </div>
+      <div class="modal-body">
+        <div class="table-responsive">
+          <table class="table table-hover">  
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Author Name</th>
+                <th>Nick Name</th>
+                <th><th>
+              </tr>
+            </thead>
+            <tbody id="add_all_author_table">
+              <tr><td>1</td><td>hello</td><td>world</td><tr>
+            </tbody>
+          </table>
+        </div>
+        <ul class="pagination pagination-sm">
+          <li><a href="#">&laquo;</a></li>
+          <li><a href="#">1</a></li>
+          <li><a href="#">2</a></li>
+          <li><a href="#">3</a></li>
+          <li><a href="#">4</a></li>
+          <li><a href="#">5</a></li>
+          <li><a href="#">&raquo;</a></li>
+        </ul>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 <div id="struct-content"></div>
     
     <script src="{{url_for('static',filename='js/main.js')}}"></script>
     {%if session.logged_in%}
       <script>
-        // Gobal Session info(author_name)
-        var $authorName = "{{session.logged_in}}"
+        // Gobal Session info(author_name,author_id)
+        var $authorName = "{{session.logged_in}}";
+        var $authorid = "{{session.logged_id}}";
       </script>
                <!--add author js-->
       <script src="{{url_for('static',filename='js/addauthor.js')}}"></script>
-      <script src="{{url_for('static',filename='js/struct.js')}}" >
-      </script>
+      <script src="{{url_for('static',filename='js/struct.js')}}" ></script>
     {%endif%}
     
   </body>

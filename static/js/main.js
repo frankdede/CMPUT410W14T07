@@ -176,10 +176,6 @@ $("#switcher").click(function(){
   }
 
 });
-$("#search_button").click(function(){
-  event.preventDefault();
-  refresh_message_list()
-});
 $("#button_login").click(function(){
   if (click==0) {
     $("#login_form").submit();

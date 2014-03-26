@@ -10,7 +10,6 @@ class AuthorHelper:
     """
     If the username and password are correct, it will return True otherwise false
     """
-    dbAdapter = None
     def __init__(self,dbAdapter):
         self.dbAdapter = dbAdapter
 
@@ -69,15 +68,17 @@ class AuthorHelper:
             return friend
 
     def getAllAuthorObjectsForLocalServer(self):
-        # DO NOT DELETE THE COMMENT
-        # TODO:
-        # [SUCCESS] return an array of author objects for local server
-        # e.g. {{'aid':xxxxx,'name':xxxxxxx ...},{'aid':xxxxx,'name':xxxxxxx..}}
-        # [Exception] return null
-        # [Failed] return null
+        """
+        DO NOT DELETE THE COMMENT
+         TODO:
+         [SUCCESS] return an array of author objects for local server
+         e.g. {{'aid':xxxxx,'name':xxxxxxx ...},{'aid':xxxxx,'name':xxxxxxx..}}
+         [Exception] return null
+         [Failed] return null
+        """
         result = []
         cur = self.dbAdapter.getcursor()
-        query = ("SELECT aid,name,email,gender,city,img_path,sid,nick_name from author WHERE sid = 1")
+        query = ("SELECT aid,name,nick_name,sid,email,gender,city,birthday,img_path from author WHERE sid = 1")
         try:
             cur.execute(query)
         except mysql.connector.Error as err:
@@ -91,8 +92,8 @@ class AuthorHelper:
             return None
         result = []
         for row in cur:
-            author = Author(row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7])
-            result.append(author)
+            friend = Author(row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7],row[8])
+            result.append(friend)
         return result
 
     def getAllAuthorObjectsForRemoteServer(self):
@@ -282,9 +283,22 @@ class AuthorHelper:
           print("Might be query issue:",query)
           print("****************************************")
           return False
-
-        if cur.rowcount > 0:
-
-            return json.dumps({"aid":aid})
-
-        return False
+        return json.dumps({"aid":aid})
+    def getRecommendedAuthorList(self,aid):
+        cur = self.dbAdapter.getcursor()
+        query = ("SELECT c2.aid2,a.name ,count(*)as num FROM circle c1,circle c2,author a WHERE c1.aid2 = c2.aid1 and c1.aid1 !=c2.aid2 and c1.aid1 ='%s' and a.aid=c2.aid2 group by c1.aid1,c2.aid2 order by num desc;")%(aid)
+        try:
+            cur.execute(query)
+        except mysql.connector.Error as err:
+            print("****************************************")
+            print("SQLException from addAuthor():")
+            print("Error code:", err.errno)
+            print("SQLSTATE value:", err.sqlstate)
+            print("Error message:", err.msg)
+            print("Might be query issue:",query)
+            print("****************************************")
+            return False
+        re = []
+        for row in cur:
+            re.append({"aid":row[0],"name":row[1]})
+        return re
