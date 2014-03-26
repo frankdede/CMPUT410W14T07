@@ -16,13 +16,18 @@ class AuthorController:
             @return jsonstring with name and aid
             """
         dic = {}
+        re = []
         tmp_list =self.authorHelper.getAllAuthorObjectsForLocalServer()
         tmp_list.extend(self.authorHelper.getAllAuthorObjectsForRemoteServer())
         for author in tmp_list:
             current_aid =author.getAid()
             if current_aid !=aid:
-                dic[current_aid] = author.getName()
-        return json.dumps(dic)
+                dic['aid'] = current_aid
+                dic['name'] = author.getName()
+                dic['nickname'] = author.getNickname()
+                re.append(dic)
+                dic ={}
+        return json.dumps(re)
     def getRecommendedAuthor(self,aid):
         """
             to get list of recommended authors

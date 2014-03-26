@@ -140,12 +140,18 @@ def register():
 def save_image(aid,file):
     filename = aid+file.name.rsplit('.', 1)[1]
     file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-@app.route('/<aid>/authorlist.json', methods=['GET'])
+@app.route('/<aid>/recommended_authorlist.json', methods=['GET'])
 def authorlist(aid):
     if ('logged_in' not in session) or (aid !=session['logged_id']):
         abort(404)
-    #test data
     re = aController.getRecommendedAuthor(aid)
+    return re
+@app.route('/<aid>/authorlist.json',methods=['GET'])
+def allauthorlist(aid):
+    if ('logged_in' not in session) or (aid !=session['logged_id']):
+        return redirect(url_for('/'))
+    re = aController.getOtherAuthor(aid)
+    print re
     return re
 @app.route('/messages.json', methods=['GET'])
 def messages(authorName):
@@ -171,9 +177,11 @@ def addfriend(aid):
             if reController.sendRequest(aid,request_aid) is True:
                 re = make_response("OK")
                 return re
+            else:
+                re = make_response("Existed")
+                return re
         except KeyError:
             return redirect(url_for(aid))
-        abort(500)
 @app.route('/author/<authorName>')
 def renderStruct(authorName):
 
