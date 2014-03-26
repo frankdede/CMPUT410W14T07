@@ -10,7 +10,8 @@ class CommentHelper:
     def getAllCommentsForPost(self,postId):
 
         cur = self.dbAdapter.getcursor()
-        query = ("SELECT C.pid,"
+
+        query = ("SELECT "
                 "C.cid,"
                 "C.aid,"
                 "A.nick_name,"
@@ -31,16 +32,14 @@ class CommentHelper:
             print("****************************************")
             return None
 
-        if cur.rowcount > 0:
-            return cur.fetchall()
-        return None
+        return cur.fetchall()
 
     #Add a comment to a specific post
     def addCommentForPost(self,aid,pid,content):
 
         cid = Utility.getid()
-        cur = self.dbApdater.getcursor()
-        query = ("INSERT INTO comments"
+        cur = self.dbAdapter.getcursor()
+        query = ("INSERT INTO comments "
                 "VALUES('%s','%s','%s',NULL,'%s')")%(cid,pid,aid,content)
 
         try:

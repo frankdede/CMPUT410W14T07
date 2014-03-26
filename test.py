@@ -26,8 +26,11 @@ DEBUG = True
 
 '''PLEASE rebuild the database everytime before run all the tests!!!'''
 class TestController(unittest.TestCase):
+    
 
     def setUp(self):
+        self.cid = None
+        self.aid = None
         # DO NOT CHANGE HERE
         dbAdapter = DatabaseAdapter()
         dbAdapter.connect()
@@ -60,9 +63,20 @@ class TestController(unittest.TestCase):
     '''
 
     def test_getAllCommentsForPost(self):
-
+    # Tested By : Guanqi
         result = self.commentController.getAllCommentsForPost('1')
         self.assertTrue(result != None,"Failed to get all comments for post")
+
+    def test_addCommentForPost(self):
+    # Tested By : Guanqi
+        cid = self.commentController.addCommentForPost('111111','1','Hello')
+
+        self.assertTrue(cid != None,"Failed to add comment for post")
+
+    def test_deleteCommentForPost(self):
+
+        result = self.commentController.deleteCommentForPost('1')
+        self.assertTrue(result == True,"Failed to delete comment for post")
 
 
 if __name__ == '__main__':

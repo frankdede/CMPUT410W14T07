@@ -19,7 +19,7 @@ class CommentController:
         if result != None:
             commentDict = {}
             for item in result:
-                comment = Comment(item['cid'],item['aid'],item['nick_name'],item['time'],item['content'])
+                comment = Comment(item[0],item[1],item[2],item[3],item[4].strftime("%Y-%m-%d %H:%M:%S"))
                 commentDict[comment.getCid()] = comment.tojson()
             return json.dumps(commentDict)
         return None

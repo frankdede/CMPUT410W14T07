@@ -1,6 +1,6 @@
 import json
 class Comment:
-    def __init__(self,cid,aid,nickName,time,content):
+    def __init__(self,cid,aid,nickName,content,time):
         self.cid = cid
         self.aid = aid
         self.nickName = nickName
