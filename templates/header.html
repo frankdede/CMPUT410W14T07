@@ -73,7 +73,7 @@
         <li><button id ="modal_bt" class="btn btn-default navbar-btn" data-toggle="modal" data-target="#myModal">Login</button></li>
         {%else%}
         <li class="dropdown">
-        <a class="dropdown-toggle" href="#" id ="message_menue" data-toggle="dropdown" >Message <span class="badge">{{ msgCount }} </span></a>
+        <a class="dropdown-toggle" href="#" onclick="javascript:refresh_message_list()" id ="message_menue" data-toggle="dropdown" >Message <span class="badge">{{ msgCount }} </span></a>
         {%endif%}
         <ul class="dropdown-menu" id="message_dropdown1" aria-labelledby="message_menue">
             <li class="divider" id="divider"></li>

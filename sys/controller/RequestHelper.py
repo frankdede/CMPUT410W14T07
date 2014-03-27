@@ -61,8 +61,8 @@ class RequestHelper:
 
         cur = self.dbAdapter.getcursor()
 
-        query =("SELECT sender_id,time "
-               "FROM request WHERE recipient_id = '%s'")%(recipientId)
+        query =("SELECT sender_id,time,name "
+               "FROM request,author WHERE aid = sender_id and recipient_id = '%s'")%(recipientId)
 
         try:
             cur.execute(query)

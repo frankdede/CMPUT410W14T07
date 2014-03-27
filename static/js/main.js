@@ -9,23 +9,7 @@ $(document).ready(function(){
   $("#personal_body").hide();
   register_form_checker();
   login_form_checker();
-  set_city_autocomplete();
 });
-function set_city_autocomplete(){
-  var city_list =["Edmonton",
-  "Calgray",
-  "Vancouver",
-  "Toronto",
-  "Yellownife",
-  "Ottawa",
-  "Wuhan",
-  "NewYork",
-  "Beijing",
-  "Nanjing"];
-  $( "#city" ).autocomplete({
-      source: city_list
-    });
-}
 function login_form_checker(){
   $("#login_form").validate({
     debug: true,
@@ -152,12 +136,19 @@ $('#profile').bind('change', function() {
   });
 }
 function refresh_message_list(){
+  event.preventDefault();
+  $("#message_dropdown1").empty();
   $.get("ajax/aid",function(data){
-    $.getJSON(data+"/messages",function(data2){
+    $.getJSON(data+"/messages.json",function(data2){
       $.each(data2,function(i,field){
-        var item = jQuery.parseJSON(field);
-        $("#message_dropdown1").prepend("<li><a href='#'><strong>"+item.request_name+"</strong> wants to be your friend</a></li>");
-
+        console.log(field);
+        $("#message_dropdown1").prepend(
+          "<li><a href='#'><strong>"+field.name+"</strong> wants to be your friend</a> \
+          <button type=\"button\" class=\"btn btn-default btn-xs\"> \
+  <span class=\"glyphicon glyphicon-ok\"></span> </button>\
+   <button type=\"button\" class=\"btn btn-default btn-xs\"> \
+  <span class=\"glyphicon glyphicon-remove\"></span> </button>\
+  </li>");
       });
         //var name = items.requested_name+" want to be your friend";
         //$('#message_menue').append("<li><a href='#'>"+name+"</a></li>");

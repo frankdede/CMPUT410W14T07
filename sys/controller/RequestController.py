@@ -48,7 +48,7 @@ class RequestController:
     result = self.requestHelper.getRequestListByAid(recipientId)
     if(result != None):
       for row in result:
-                requestList.append({'sender_id':row[0],'time':str(row[1])})
+                requestList.append({'sender_id':row[0],'name':row[2],'time':str(row[1])})
 
       return json.dumps(requestList)
     else:

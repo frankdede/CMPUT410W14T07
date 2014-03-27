@@ -63,6 +63,9 @@ def author_view(aid):
         return render_template('header.html',msgCount = countnumber)
     else:
         return redirect(url_for('login'))
+@app.route('/profile',methods=['GET'])
+def view_profile():
+    return render_template('profile.html')
 @app.route('/ajax/aid')
 def getuid():
     if 'logged_in' not in session:
@@ -164,12 +167,13 @@ def allauthorlist(aid):
     re = aController.getOtherAuthor(aid)
     print re
     return re
-@app.route('/messages.json', methods=['GET'])
-def messages(authorName):
-    if ('logged_in' not in session) or (authorName !=session['logged_in']):
+@app.route('/<aid>/messages.json', methods=['GET'])
+def messages(aid):
+    if ('logged_in' not in session) or (aid !=session['logged_id']):
         abort(404)
     else:
-        jsonstring = reController.getRequestListByAid(aid)
+        jsonstring = reController.getAllRequestByAid(aid)
+        print jsonstring
         return jsonstring,200
 
 # logout
