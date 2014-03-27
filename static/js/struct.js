@@ -47,8 +47,13 @@ function installClickListener(){
 		setRefreshTimer();
 }
 
+function installCommentBtnClickLisener($pid){
+	$("#"+$pid+"-expandBtn").click(function(){
+		$("#"+$pid).after("<li syt>dadsa</li>");
+	});
+}
+
 function submitPostToServer($postObj){
-	console.log(JSON.stringify($postObj))
 	$.post('/'+ $authorName +'/post/',JSON.stringify($postObj)).done(function($data){
 			var $re = JSON.parse($data);
 			if ($re['status']){
@@ -99,23 +104,24 @@ function updatePostList($list){
 			/*add this pair into the global list*/
 		if(found == -1){
 			$GLOBAL_POST_VIEW_LIST.push($key);
-			
+			console.log($list);
+			var $pid = $list[$key].pid;
 			var $date = $list[$key].date;
 			var $title = $list[$key].title;
 			var $message = $list[$key].content;
 			var $type = $list[$key].type;
 			var $permission = $list[$key].permission;
-
-			var $html = createPostViewHtml($title,$date,$message,$type,$permission);
+			var $html = createPostViewHtml($pid,$title,$date,$message,$type,$permission);
 			addPostToList('postListView',$html,250);
+			installCommentBtnClickLisener($pid);
 		}
 			/*Prepare for creating new post html*/
 		
 	}
 }
 
-function createPostViewHtml($title,$date,$message,$type,$permission){
-	var $li = "<li style=\"margin-top:1em;\">" +
+function createPostViewHtml($pid,$title,$date,$message,$type,$permission){
+	var $li = "<li id="+$pid+" style=\"margin-top:1em;\">" +
 	"<div class=\"panel panel-default\">" +
 	"<div class=\"panel-heading\">" +
 	"<h4 class=\"postViewHeading\">" +
@@ -132,8 +138,11 @@ function createPostViewHtml($title,$date,$message,$type,$permission){
 	"Share with:" + $permission +
 	"</small>" +
 	"<small class=\"postViewTimeFooter\">"+
-	"Published on:" + $date +
+	" | " + $date +
 	"</small>" +
+	"<small id=\""+$pid+"-expandBtn\" class=\"postViewComment\">"+
+	" | Comments(10)"+
+	"</small>"+
 	"</li>";
 
 	return $li;

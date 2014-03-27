@@ -64,7 +64,7 @@ class Post:
         result['pid'] = self.pid
         result['aid'] = self.aid
         result['name'] = self.name
-        result['tilte'] = self.title
+        result['title'] = self.title
         result['date'] = self.date
         result['content'] = self.content
         result['type'] = self.type

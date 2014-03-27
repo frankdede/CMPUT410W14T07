@@ -141,7 +141,6 @@ function refresh_message_list(){
   $.get("ajax/aid",function(data){
     $.getJSON(data+"/messages.json",function(data2){
       $.each(data2,function(i,field){
-        console.log(field);
         $("#message_dropdown1").prepend(
           "<li><a href='#'><strong>"+field.name+"</strong> wants to be your friend</a> \
           <button type=\"button\" class=\"btn btn-default btn-xs\"> \

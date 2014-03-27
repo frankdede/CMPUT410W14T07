@@ -13,7 +13,7 @@
 	border: 0px ;
 	margin: 1em ;
 	height: 50em;
-	overflow: scroll;
+	overflow: auto;
 
 }
 #postListView li{
@@ -40,14 +40,21 @@
 	display: inline;
 	color:grey;
 	position: relative;
-	left:0.5em;
+	left:1em;
 }
 .postViewTimeFooter{
 	text-overflow: ellipsis;
 	display: inline;
 	color:grey;
 	position: relative;
-	left:26em;
+	left:1em;
+}
+.postViewComment{
+    text-overflow: ellipsis;
+	display: inline;
+	color:grey;
+	position: relative;
+	left:1em;
 }
 .postEditTitle{
 	margin-bottom: 1em;
