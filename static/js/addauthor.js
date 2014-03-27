@@ -68,6 +68,7 @@ $(document).ready(function(){
 });
 function page_click(){
   $('body').on('click','#page_item',function(){
+    event.preventDefault();
     var pos = parseInt($(this).attr("data"));
     hide_all_row()
     for (var i = (pos-1)*item_per_page; i <(pos)*item_per_page; i++) {
