@@ -45,6 +45,7 @@ class TestController(unittest.TestCase):
         self.commentController = CommentController(dbAdapter)
         self.requestController = RequestController(dbAdapter)
         self.circleHelper = CircleHelper(dbAdapter)
+        self.authorController = AuthorController(dbAdapter)
 
     '''
      ====================   AuthorHelper  ====================

@@ -146,6 +146,18 @@ def authorlist(aid):
         abort(404)
     re = aController.getRecommendedAuthor(aid)
     return re
+# search authors with keyword
+@app.route('/<aid>/author/search',methods=['GET'])
+def search_author(aid):
+    if ('logged_in' not in session) or (aid !=session['logged_id']):
+        return redirect(url_for('/'))
+    try:
+        keyword = request.args.get('key')
+    except KeyError:
+        print keyword
+    if keyword!=None and keyword!="":
+        re = aController.searchAuthorByString(keyword)
+        return re
 @app.route('/<aid>/authorlist.json',methods=['GET'])
 def allauthorlist(aid):
     if ('logged_in' not in session) or (aid !=session['logged_id']):
@@ -200,7 +212,6 @@ def getUpdatedPost(authorName):
             return json.dumps({'status':None}),200
         else:    
             post = postcontroller.getPost(aid)
-            print post
             return post,200
     else:
         return abort(404)

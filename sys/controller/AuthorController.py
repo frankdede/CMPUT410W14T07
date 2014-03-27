@@ -3,6 +3,7 @@ from DatabaseAdapter import *
 import sys
 sys.path.append("sys/model")
 import json
+import Utility
 class AuthorController:
     """
         Author Contoller is used to control author helper
@@ -36,3 +37,24 @@ class AuthorController:
             """
         tmp_list =self.authorHelper.getRecommendedAuthorList(aid)
         return json.dumps(tmp_list)
+    def searchAuthorByString(self,keyword):
+        """
+            To search keyword inside a row string
+            """
+        list = Utility.parseKeyword(keyword)
+        print list
+        re =[]
+        tmp_list =[]
+        dic = {}
+        if(list!=None):
+            for i in list:
+                tmp_list.extend(self.authorHelper.searchAuthor(i))
+            for author in tmp_list:
+                current_aid =author.getAid()
+                dic['aid'] = current_aid
+                dic['name'] = author.getName()
+                dic['nickname'] = author.getNickname()
+                re.append(dic)
+                dic ={}
+            return json.dumps(re)
+        return None

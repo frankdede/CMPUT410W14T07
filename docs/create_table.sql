@@ -27,6 +27,7 @@ gender varchar(128),
 city varchar(128),
 birthday varchar(128),
 img_path varchar(128),
+FULLTEXT(name,nick_name),
 PRIMARY KEY (aid),
 CONSTRAINT name_sid UNIQUE (name,sid),
 FOREIGN KEY (sid) REFERENCES servers (sid)

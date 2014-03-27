@@ -118,7 +118,7 @@ class AuthorHelper:
             print("****************************************")
             return None
         for row in cur:
-            author = Author(row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7])
+            author = Author(row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7],row[8])
             result.append(author)
         return result
 
@@ -302,3 +302,23 @@ class AuthorHelper:
         for row in cur:
             re.append({"aid":row[0],"name":row[1]})
         return re
+    def searchAuthor(self,single_key):
+        result=[]
+        cur = self.dbAdapter.getcursor()
+        query = "SELECT aid,name,nick_name,sid,email,gender,city,birthday,img_path FROM author WHERE name like '%"+single_key+"%' or nick_name like '%"+single_key+"%';"
+        print query
+        try:
+            cur.execute(query)
+        except mysql.connector.Error as err:
+            print("****************************************")
+            print("SQLException from addAuthor():")
+            print("Error code:", err.errno)
+            print("SQLSTATE value:", err.sqlstate)
+            print("Error message:", err.msg)
+            print("Might be query issue:",query)
+            print("****************************************")
+            return False
+        for row in cur:
+            author = Author(row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7],row[8])
+            result.append(author)
+        return result

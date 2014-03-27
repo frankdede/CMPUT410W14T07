@@ -52,7 +52,7 @@
         <li class="Partner">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">Circles <b class="caret"></b></a>
           <ul class="dropdown-menu">
-            <li><a href="javascript:search_click()">Search Author</a></li>
+            <li><a href="javascript:void(0);" onclick="javascript:search_click()">Search Author</a></li>
             <li><a href="#">Manage Author</a></li>
             <li class="divider"></li>
             <li><a href="#">Separated link</a></li>
@@ -214,6 +214,7 @@
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+<!--Begin of search author modal-->
 <div class="modal fade" id="search_model" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -237,13 +238,8 @@
             </tbody>
           </table>
         </div>
-        <ul class="pagination pagination-sm">
-          <li><a href="#">&laquo;</a></li>
-          <li><a href="#">1</a></li>
-          <li><a href="#">2</a></li>
-          <li><a href="#">3</a></li>
-          <li><a href="#">4</a></li>
-          <li><a href="#">5</a></li>
+        <ul class="pagination pagination-sm" id="page_number">
+          <li id="page_num_begin"><a href="#" >&laquo;</a></li>
           <li><a href="#">&raquo;</a></li>
         </ul>
       <div class="modal-footer">
@@ -253,7 +249,7 @@
     </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+</div><!-- Endo of modal -->
 <div id="struct-content"></div>
     
     <script src="{{url_for('static',filename='js/main.js')}}"></script>
