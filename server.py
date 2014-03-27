@@ -56,12 +56,11 @@ def root():
     return redirect(url_for('login'))
 @app.route('/<aid>', methods=['GET', 'POST'])
 def author_view(aid):
-    if 'logged_in' in session:
-        if(session['logged_id']==aid):
-            username = session['logged_in']
-            msgCount = reController.getRequestCountByAid(aid)
-            countnumber = json.loads(msgCount)['count']
-            return render_template('header.html',msgCount = countnumber)
+    if 'logged_in' in session and aid ==session['logged_id']:
+        username = session['logged_in']
+        msgCount = reController.getRequestCountByAid(aid)
+        countnumber = json.loads(msgCount)['count']
+        return render_template('header.html',msgCount = countnumber)
     else:
         return redirect(url_for('login'))
 @app.route('/ajax/aid')

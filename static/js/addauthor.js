@@ -1,7 +1,7 @@
 var author_id;
 var recommended_author_list = new Array();
 var search_author_list = new Array();
-var item_per_page = 3;
+var item_per_page = 5;
 function get_recommended_author_list(aid){
     $("#add_author_table").empty();
     $.getJSON(aid+"/recommended_authorlist.json",function(data2){
@@ -31,16 +31,18 @@ function search_auther_list(aid,url){
       recive_size = data2.length;
       $.each(data2,function(i,field){
         search_author_list[i] = field;
-        if (i<item_per_page) {
-          $("#add_all_author_table").append("<tr><td>"+(i+1)+"</td><td>"+field.name+"</td> \
+          $("#add_all_author_table").append("<tr id='search_row_count"+i+"'><td>"+(i+1)+"</td><td>"+field.name+"</td> \
           <td>"+field.nickname+"</td><td><button type='button' class='btn btn-default btn-xs' id = 'searchaddfriendbt' \
              data='"+i+"'> \
               <span class='glyphicon glyphicon-plus'></span> Add \
             </button> \
             </td></tr>");
-        }
+          for(var i=item_per_page;i<recive_size;i++){
+            $("#search_row_count"+i).hide();
+          }
       });
-      display_page_number(recive_size);
+      remove_all_paging_bt(recive_size);
+      paginate(recive_size);
       $("#search_model").modal();
       $('body').on('click','#searchaddfriendbt',function(){
           var pos = parseInt($(this).attr("data"));
@@ -65,15 +67,22 @@ $(document).ready(function(){
   page_click();
 });
 function page_click(){
-  ('body').on('click','#page_item',function(){
+  $('body').on('click','#page_item',function(){
     var pos = parseInt($(this).attr("data"));
-    alert("pos:"+pos);
+    hide_all_row()
+    for (var i = (pos-1)*item_per_page; i <(pos)*item_per_page; i++) {
+       $("#search_row_count"+i).show();
+    };
   });
+}
+function hide_all_row(){
+  for (var i = 0; i < search_author_list.length; i++) {
+    $("#search_row_count"+i).hide();
+    }
 }
 function search_click(){
   event.preventDefault();
   raw_input = $("#search_input").val();
-  console.log(raw_input);
   if (raw_input.length>50) {
       $("#search_form").removeClass("form-group");
       $("#search_form").addClass("form-group has-error");
@@ -111,15 +120,16 @@ function get_author_name(){
     return data;
   });
 }
-function display_page_number(size){
+function paginate(size){
   var page_number = Math.ceil(size/3);
-  console.log(search_auther_list.length);
   for (var i = page_number; i >0; i--) {
     $("#page_num_begin").after("<li><a href=\"javascritp:void(0);\" id='page_item' data='"+i
-      +"' onclick='javascript:page_change()'>"+(i)+"</a></li>");
-  };
+      +"' >"+(i)+"</a></li>");
+  }
 }
-function page_change(){
-  event.preventDefault();
-  alert("Page change"+$(this).attr('data'));
+function remove_all_paging_bt(size){
+  var page_number = Math.ceil(size/3);
+  for (var i = 1; i <= page_number; i++) {
+    $("#page_item[data|=\""+i+"\"]").remove();
+  }
 }
