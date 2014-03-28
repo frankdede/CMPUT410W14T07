@@ -16,7 +16,7 @@ class PostHelper:
 
         cur = self.dbAdapter.getcursor()
 
-        pid = utility.getid()
+        pid = Utility.getid()
 
         query = "INSERT INTO post VALUES('%s','%s',NULL,'%s','%s','%s','%s')"%(pid,aid,title,content,type,permission)
 
