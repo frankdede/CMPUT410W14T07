@@ -1,12 +1,8 @@
 import json
 import flask
 import markdown
-<<<<<<< HEAD
-from flask import Flask, request, redirect, url_for, g, render_template, flash, session, abort,make_response, Markup,send_file
-=======
 from time import gmtime, strftime
-from flask import Flask, request, redirect, url_for, g, render_template, flash, session, abort,make_response, Markup, send_from_directory
->>>>>>> 8ce1177270bc2df37f2879b18d6bef4feca88294
+from flask import Flask, request, redirect, url_for, g, render_template, flash, session, abort,make_response, Markup, send_from_directory,send_file
 from werkzeug.utils import secure_filename
 from random import randrange
 import sys,os
