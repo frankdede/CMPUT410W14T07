@@ -2,7 +2,8 @@
 /* count number of message qeues on the list view */
 var $postListViewCount = 0;
 var $MAX_ITEM = 0;
-var $GLOBAL_POST_VIEW_LIST = new Array();
+var $POST_VIEW_LIST = new Array();
+var $COMMENTS_VIEW_LIST = new Array();
 /* Choose Text by default*/
 var $SELECTED_POST_TYPE = 'text';
 
@@ -11,12 +12,12 @@ $.get("/author/"+$authorName, function(data){
 
 	if(data){
 		$("#struct-content").html(data);
-		installClickListener();
+		setPostOptClickListener();
 
 	}
 });
 
-function installClickListener(){
+function setPostOptClickListener(){
 	$("#textOption").click(function(){
 		$("#postSelectedType").html('Text');
 		$SELECTED_POST_TYPE = 'Text';
@@ -47,7 +48,7 @@ function installClickListener(){
 		setRefreshTimer();
 }
 
-function installCommentBtnClickLisener($pid){
+function setCommentBtnClickLisener($pid){
 	$("#"+$pid+"-expandBtn").click(function(){
 		$("#"+$pid).after("<li syt>dadsa</li>");
 	});
@@ -100,10 +101,10 @@ function updatePostList($list){
 	/* iterate through the list */
 	for (var $key in $list){
 		/* If the key is not in the global list */
-		var found =jQuery.inArray($key, $GLOBAL_POST_VIEW_LIST);
+		var found =jQuery.inArray($key, $POST_VIEW_LIST);
 			/*add this pair into the global list*/
 		if(found == -1){
-			$GLOBAL_POST_VIEW_LIST.push($key);
+			$POST_VIEW_LIST.push($key);
 			console.log($list);
 			var $pid = $list[$key].pid;
 			var $date = $list[$key].date;
@@ -113,7 +114,7 @@ function updatePostList($list){
 			var $permission = $list[$key].permission;
 			var $html = createPostViewHtml($pid,$title,$date,$message,$type,$permission);
 			addPostToList('postListView',$html,250);
-			installCommentBtnClickLisener($pid);
+			setCommentBtnClickLisener($pid);
 		}
 			/*Prepare for creating new post html*/
 		

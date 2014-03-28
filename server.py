@@ -15,6 +15,8 @@ from CircleHelper import *
 from PostController import *
 from AuthorController import *
 from RequestController import *
+from CommentController import *
+
 DEBUG = True
 # create a new database obj
 dbAdapter = DatabaseAdapter()
@@ -30,6 +32,8 @@ postcontroller = PostController(dbAdapter)
 reController = RequestController(dbAdapter)
 #
 circleHelper = CircleHelper(dbAdapter)
+#
+commentController = CommentController(dbAdapter)
 #Allowed file extensions
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 app = Flask(__name__)
@@ -139,9 +143,11 @@ def register():
                 abort(500)
             return aid_json
     return redirect(url_for('/'))
+
 def save_image(aid,file):
     filename = aid+file.name.rsplit('.', 1)[1]
     file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
 @app.route('/<aid>/recommended_authorlist.json', methods=['GET'])
 def authorlist(aid):
     if ('logged_in' not in session) or (aid !=session['logged_id']):
@@ -206,10 +212,10 @@ def renderStruct(authorName):
         return abort(404)
 
 # get all the new posts that a specific author can view from the server
-@app.route('/<authorName>/pull/')
-def getUpdatedPost(authorName):
+@app.route('/<aid>/pull/')
+def getPostForAuthor(aid):
 
-    if ('logged_in' in session) and (session['logged_in'] == authorName):
+    if ('logged_in' in session) and (session['logged_in'] == aid):
         aid = session['logged_id']
         if aid == None:
             return json.dumps({'status':None}),200
@@ -224,10 +230,15 @@ def getUpdatedPost(authorName):
 def index():
     if request.method == 'POST':
         content = request.form['postMarkDown']
-        print content
         content = Markup(markdown.markdown(content))
         return render_template('markdown.html', **locals())
     return render_template('markdown_input.html')
+
+@app.route('/author/<aid>/post/<pid>/comments',methods=['GET'])
+def getAllCommentsForPost(aid,pid):
+
+    if ('logged_in' in session) and (session['logged_in'] == aid):
+        self.commentController.getAllCommentsForPost(pid)
 
 
 @app.route('/<authorName>/post/',methods=['PUT','POST'])

@@ -257,7 +257,9 @@
       <script>
         // Gobal Session info(author_name,author_id)
         var $authorName = "{{session.logged_in}}";
+
         var $authorid = "{{session.logged_id}}";
+        console.log($authorid);
       </script>
                <!--add author js-->
       <script src="{{url_for('static',filename='js/addauthor.js')}}"></script>
