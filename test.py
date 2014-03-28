@@ -14,6 +14,7 @@ from CircleHelper import *
 from PostHelper import *
 from RequestHelper import *
 # Controllers 
+from AuthorController import *
 from RequestController import *
 from CommentController import *
 from CircleController import *
