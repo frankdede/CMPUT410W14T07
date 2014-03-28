@@ -1,7 +1,7 @@
 import json
 import flask
 import markdown
-from flask import Flask, request, redirect, url_for, g, render_template, flash, session, abort,make_response, Markup
+from flask import Flask, request, redirect, url_for, g, render_template, flash, session, abort,make_response, Markup, send_from_directory
 from werkzeug.utils import secure_filename
 from random import randrange
 import sys,os
@@ -239,6 +239,26 @@ def getAllCommentsForPost(aid,pid):
 
     if ('logged_in' in session) and (session['logged_in'] == aid):
         self.commentController.getAllCommentsForPost(pid)
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.' ,1)[1] in app.config['ALLOWED_EXTENSIONS']
+
+@app.route('/test')
+def test():
+    return render_template('upload_image.html')
+
+@app.route('/upload',methods=['POST'])
+def upload():
+    file = request.files['file']
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'],filename))
+        return redirect(url_for('uploadImage',filename=filename))
+
+@app.route('/uploads/<filename>')
+def uploadImage(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'],filename)
+
 
 
 @app.route('/<authorName>/post/',methods=['PUT','POST'])
