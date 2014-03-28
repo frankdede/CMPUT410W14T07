@@ -2,6 +2,7 @@ var click = 0;
 var message_click= 0;
 var author_name ="";
 var author_id="";
+var request_list = Array();
 var extentions =new Array("image/jpg","image/jpeg","image/png","image/gif");
 $(document).ready(function(){
   $( "#datepicker" ).datepicker();
@@ -9,6 +10,7 @@ $(document).ready(function(){
   $("#personal_body").hide();
   register_form_checker();
   login_form_checker();
+  set_request_click_listener();
 });
 function login_form_checker(){
   $("#login_form").validate({
@@ -40,6 +42,30 @@ function login_form_checker(){
         minlength: "Your username must consist of at least 5 characters"
       },
     }
+  });
+}
+function set_request_click_listener(){
+  $('body').on('click','#accept_bt',function(){
+    var pos = parseInt($(this).attr("data"));
+    var aid = request_list[pos].sender_id;
+      var author = request_list[pos];
+      $.get(author_id+'/author/request/accept',{'sender':aid},function(data){
+        if (data == "OK") {
+          $(this).parent().hide();
+          var pre = parseInt($("#msgCount").text());
+          $("#msgCount").text(pre-1);
+        }else if(data =="Fail"){
+          alert("Connection eror");
+        }
+      });
+  });
+    $('body').on('click','#deny_bt',function(){
+    var pos = parseInt($(this).attr("data"));
+    var aid = request_list[pos].sender_id;
+      var author = request_list[pos];
+      $.get(author_id+'/author/request/deny',{'sender':aid},function(){
+        alert("Deny");
+      });
   });
 }
 function ajax_upload_file(){
@@ -141,17 +167,18 @@ function refresh_message_list(){
   $.get("ajax/aid",function(data){
     $.getJSON(data+"/messages.json",function(data2){
       $.each(data2,function(i,field){
+        request_list[i] = field;
         $("#message_dropdown1").prepend(
           "<li><a href='#'><strong>"+field.name+"</strong> wants to be your friend</a> \
-          <button type=\"button\" class=\"btn btn-default btn-xs\"> \
+          <button type=\"button\" class=\"btn btn-default btn-xs\"id ='accept_bt' \
+          data='"+i+"'> \
   <span class=\"glyphicon glyphicon-ok\"></span> </button>\
-   <button type=\"button\" class=\"btn btn-default btn-xs\"> \
+   <button type=\"button\" class=\"btn btn-default btn-xs\" id = 'deny_bt' \
+   data = '"+i+"'> \
   <span class=\"glyphicon glyphicon-remove\"></span> </button>\
   </li>");
       });
-        //var name = items.requested_name+" want to be your friend";
-        //$('#message_menue').append("<li><a href='#'>"+name+"</a></li>");
-  }
+    }
   );
   });
 }

@@ -1,7 +1,7 @@
 import json
 import flask
 import markdown
-from flask import Flask, request, redirect, url_for, g, render_template, flash, session, abort,make_response, Markup
+from flask import Flask, request, redirect, url_for, g, render_template, flash, session, abort,make_response, Markup,send_file
 from werkzeug.utils import secure_filename
 from random import randrange
 import sys,os
@@ -70,6 +70,19 @@ def author_view(aid):
 @app.route('/profile',methods=['GET'])
 def view_profile():
     return render_template('profile.html')
+@app.route('/<aid>/profile.json',methods=['GET'])
+def get_profile(aid):
+    try:
+        re_aid = request.args.get("aid")
+        print re_aid
+        re = aController.getAuthorByAid(re_aid)
+        print re
+        if re != False:
+            return re
+        return redirect(url_for('/'))
+    except KeyError:
+        return redirect(url_for('/'))
+
 @app.route('/ajax/aid')
 def getuid():
     if 'logged_in' not in session:
@@ -121,6 +134,7 @@ def register():
         password=request.form['register_pwd']
         #parse optional information
         file = request.files['profile_image']
+        print "--"+file.filename
         nickName=request.form['nick_name']
         birthday =request.form['birthday']
         city = request.form['city']
@@ -137,17 +151,22 @@ def register():
             aid = json.loads(aid_json)['aid']
             session['logged_in'] = authorName
             session['logged_id'] = aid
+            path =""
             if(file!=None or file.name!=""):
-                save_image(aid,file)
+                path = save_image(aid,file)
             if ahelper.updateAuthorInfo(aid,email,gender,city,birthday,path) ==False:
                 abort(500)
             return aid_json
     return redirect(url_for('/'))
 
 def save_image(aid,file):
-    filename = aid+file.name.rsplit('.', 1)[1]
-    file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-
+    filename = aid+"."+file.filename.rsplit('.', 1)[1]
+    path = os.path.join(app.config['UPLOAD_FOLDER'])
+    file.save(path, filename)
+    return path
+@app.route('image/view/<name>',methods=['GET'])
+def view_imagin():
+    pass
 @app.route('/<aid>/recommended_authorlist.json', methods=['GET'])
 def authorlist(aid):
     if ('logged_in' not in session) or (aid !=session['logged_id']):
@@ -162,7 +181,7 @@ def search_author(aid):
     try:
         keyword = request.args.get('key')
     except KeyError:
-        print keyword
+        return redirect(url_for('/'))
     if keyword!=None and keyword!="":
         re = aController.searchAuthorByString(keyword)
         return re
@@ -180,8 +199,7 @@ def messages(aid):
     else:
         jsonstring = reController.getAllRequestByAid(aid)
         print jsonstring
-        return jsonstring,200
-
+        return jsonstring
 # logout
 @app.route('/logout')
 def logout():
@@ -203,6 +221,35 @@ def addfriend(aid):
                 return re
         except KeyError:
             return redirect(url_for(aid))
+#accept request
+@app.route('/<aid>/author/request/accept',methods=['GET'])
+def accept_request(aid):
+    if ('logged_in' not in session) or (session['logged_id'] != aid):
+        return redirect(url_for('/'))
+    else:
+        try:
+            accept_aid = request.args.get('sender')
+            if reController.acceptRequestFromSender(aid,accept_aid):
+                re = make_response("OK")
+            else:
+                re = make_response("Fail")
+            return re
+        except KeyError:
+            return redirect(url_for('aid'))
+#accept request
+@app.route('/<aid>/author/request/deny',methods=['GET'])
+def deny_request(aid):
+    if ('logged_in' not in session) or (session['logged_id'] != aid):
+        return redirect(url_for('/'))
+    else:
+        try:
+            deny_aid = request.args.get('sender')
+            if reController.deleteRequest(accept_aid,aid):
+                re = make_response("OK")
+            else:
+                re = make_response("Fail")
+        except KeyError:
+            return redirect(url_for('aid'))
 @app.route('/author/<authorName>')
 def renderStruct(authorName):
 

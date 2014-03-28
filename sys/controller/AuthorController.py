@@ -42,7 +42,6 @@ class AuthorController:
             To search keyword inside a row string
             """
         list = Utility.parseKeyword(keyword)
-        print list
         re =[]
         tmp_list =[]
         dic = {}
@@ -58,3 +57,12 @@ class AuthorController:
                 dic ={}
             return json.dumps(re)
         return None
+    def getAuthorByAid(self,aid):
+        """
+            To get author json by aid
+            """
+        author = self.authorHelper.getAuthorObjectByAid(aid)
+        if author !=None:
+            return json.dumps(author.tojson())
+        else:
+            return False
