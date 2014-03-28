@@ -166,7 +166,7 @@ def save_image(aid,file):
     path = os.path.join(app.config['UPLOAD_FOLDER'])
     file.save(path, filename)
     return path
-@app.route('image/view/<name>',methods=['GET'])
+@app.route('/image/view/<name>',methods=['GET'])
 def view_imagin():
     pass
 @app.route('/<aid>/recommended_authorlist.json', methods=['GET'])
