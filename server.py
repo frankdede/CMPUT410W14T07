@@ -1,7 +1,12 @@
 import json
 import flask
 import markdown
+<<<<<<< HEAD
 from flask import Flask, request, redirect, url_for, g, render_template, flash, session, abort,make_response, Markup,send_file
+=======
+from time import gmtime, strftime
+from flask import Flask, request, redirect, url_for, g, render_template, flash, session, abort,make_response, Markup, send_from_directory
+>>>>>>> 8ce1177270bc2df37f2879b18d6bef4feca88294
 from werkzeug.utils import secure_filename
 from random import randrange
 import sys,os
@@ -9,7 +14,7 @@ sys.path.append('sys/controller')
 sys.path.append('sys/model')
 from AuthorHelper import *
 from DatabaseAdapter import *
-
+from PostHelper import *
 from RequestHelper import *
 from CircleHelper import *
 from PostController import *
@@ -27,6 +32,7 @@ dbAdapter.setAutoCommit()
 ahelper = AuthorHelper(dbAdapter)
 aController = AuthorController(dbAdapter)
 # use the conneted dbAdapter to initialize postHelper obj
+postHelper = PostHelper(dbAdapter)
 postcontroller = PostController(dbAdapter)
 #
 reController = RequestController(dbAdapter)
@@ -287,25 +293,45 @@ def getAllCommentsForPost(aid,pid):
     if ('logged_in' in session) and (session['logged_in'] == aid):
         self.commentController.getAllCommentsForPost(pid)
 
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.' ,1)[1] in app.config['ALLOWED_EXTENSIONS']
+
+@app.route('/test')
+def test():
+    return render_template('upload_image.html')
+
+@app.route('/upload',methods=['POST'])
+def upload():
+    file = request.files['file']
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'],filename))
+        return redirect(url_for('uploadImage',filename=filename))
+
+@app.route('/uploads/<filename>')
+def uploadImage(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'],filename)
+
+
 
 @app.route('/<authorName>/post/',methods=['PUT','POST'])
 def uploadPostToServer(authorName):
 
     if ('logged_in' in session) and (session['logged_in'] == authorName):
-
-        aid = ahelper.getAidByAuthorName(authorName)
-
+        aid = session['logged_id']
+        #aid = ahelper.getAidByAuthorName(authorName)
+        postName = authorName
         postObj = flaskPostToJson()
         postTitle = postObj['title']
         postMsg = postObj['message']
         postType = postObj['type']
         postPermission = postObj['permission']
-
+        postDate = strftime("%Y-%m-%d %H:%M:%S", gmtime())
         if aid == None:
             return json.dumps({'status':False}),200
         else:
-            newPost = Post(None,aid,None,postTitle,postMsg,postType,postPermission)
-            result = postHelper.addPost(newPost)
+            newPost = Post(None,aid,postName,postDate,postTitle,postMsg,postType,postPermission)
+            result = postHelper.addPost(aid,postTitle,postMsg,postType,postPermission)
         return json.dumps({'status':result}),200
     else:
         return abort(404)
