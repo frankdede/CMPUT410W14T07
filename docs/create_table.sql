@@ -1,5 +1,6 @@
 
 USE c410;
+DROP TABLE IF exists image;
 DROP TABLE if exists signup_request;
 DROP TABLE IF EXISTS comments;
 DROP TABLE IF EXISTS request;
@@ -85,4 +86,14 @@ CREATE TABLE comments (
 CREATE TABLE signup_request(
 	requester varchar(128) UNIQUE,
 	primary key(requester)
+);
+CREATE TABLE image(
+	image_id varchar(128),
+	time timestamp,
+	path varchar(128),
+	aid varchar(128),
+	pid varchar(128),
+	primary key (image_id),
+	FOREIGN KEY (aid) references author(aid),
+	FOREIGN KEY (pid) references post(pid)
 );
