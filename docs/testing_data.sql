@@ -2,6 +2,7 @@
 INSERT INTO servers values(1,'localhost','localhost');
 INSERT INTO servers values(2,'remote','192.178.0.2');
 
+INSERT INTO author values('000000','admin','Administrator','12345',1,'frank@gmail.com','male','edmonton','1992-01-01','/frank/1.jpg');
 INSERT INTO author values('111111','frank','Frank Huang','12345',1,'frank@gmail.com','male','edmonton','1992-01-01','/frank/1.jpg');
 INSERT INTO author values('222222','jack','Jack Wong','12345',1,'jack@gmail.com','male','toronto','1994-01-01','/jack/1.jpg');
 INSERT INTO author values('333333','william','William Zhang','12345',1,'william@gmail.com','male','calgary','1994-01-01','/william/1.jpg');

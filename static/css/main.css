@@ -2,3 +2,10 @@
 #myModal {
     width: 100%; /* respsonsive width */
 }
+div.col-sm-6{
+	overflow: hidden;
+}
+div.col-sm-6:hover{
+	text-overflow:inherit;
+	overflow:visible;
+}

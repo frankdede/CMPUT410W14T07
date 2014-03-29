@@ -72,11 +72,14 @@ def author_view(aid):
 @app.route('/profile',methods=['GET'])
 def view_profile():
     return render_template('profile.html')
+@app.route('/<aid>/profile/image/<imagename>',methods=['GET'])
+def view_profile_image(aid,imagename):
+    print imagename
+    return send_from_directory(app.config['UPLOAD_FOLDER'],imagename, as_attachment=False)
 @app.route('/<aid>/profile.json',methods=['GET'])
 def get_profile(aid):
     try:
         re_aid = request.args.get("aid")
-        print re_aid
         re = aController.getAuthorByAid(re_aid)
         print re
         if re != False:
