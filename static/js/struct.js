@@ -17,6 +17,7 @@ $.get("/author/"+$authorName, function(data){
 	}
 });
 
+//set listener for each option button
 function setPostOptClickListener(){
 	$("#textOption").click(function(){
 		$("#postSelectedType").html('Text');
@@ -48,12 +49,42 @@ function setPostOptClickListener(){
 		setRefreshTimer();
 }
 
+//Set a listener for each comment button
+//The id for each li is #pid-expendBtn
 function setCommentBtnClickLisener($pid){
+
+	afterCommentsList($pid);
+	appendReplyFormHtml($pid);
+
 	$("#"+$pid+"-expandBtn").click(function(){
-		$("#"+$pid).after("<li syt>dadsa</li>");
+		if($("#"+$pid+"-commentsList").is(":visible")){
+			$("#"+$pid+"-commentsList").hide();
+		}else{
+			$("#"+$pid+"-commentsList").show();
+		}
 	});
 }
 
+//Generate the html code of the reply form
+function appendReplyFormHtml($pid){
+	var $li = "<textarea id=\""+$pid+"-replyForm\" class=\"form-control\" rows=\"3\"></textarea>" +
+			"<button type=\"submit\" class=\"btn btn-default\">Reply</button>";
+
+	$("#"+$pid+"-commentsList").append($li);
+
+}
+
+function createCommentHtml($cid,$content){
+	var $li = "<div class=\"panel panel-default\">"+
+			"<div class=\"panel-body\"><span>"+$content+"</span></div>"+
+			"</div>";
+}
+
+function afterCommentsList($pid){
+	$("#"+$pid).after("<li id=\""+$pid+"-commentsList\" class=\"commentsListView\"></li>");
+}
+
+//Send the Post object in json over http
 function submitPostToServer($postObj){
 	$.post('/'+ $authorName +'/post/',JSON.stringify($postObj)).done(function($data){
 			var $re = JSON.parse($data);
@@ -65,6 +96,7 @@ function submitPostToServer($postObj){
 	});
 }
 
+//The timer for refreshing the postListView
 function setRefreshTimer(){
 	setInterval(function(){
 		getAllRawPostData();
@@ -80,6 +112,7 @@ function getAllRawPostData(){
 	});
 }
 
+// Convert the post to json object 
 function getJsonPostObj(){
 	var $msg = $('#postContent').val();
 	var $title =$('#postTitle').val();
@@ -122,7 +155,7 @@ function updatePostList($list){
 }
 
 function createPostViewHtml($pid,$title,$date,$message,$type,$permission){
-	var $li = "<li id="+$pid+" style=\"margin-top:1em;\">" +
+	var $li = "<li id="+$pid+" class=\"postListView\">" +
 	"<div class=\"panel panel-default\">" +
 	"<div class=\"panel-heading\">" +
 	"<h4 class=\"postViewHeading\">" +
