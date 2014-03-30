@@ -57,7 +57,11 @@ function setCommentBtnClickLisener($pid){
 	appendReplyFormHtml($pid);
 
 	$("#"+$pid+"-expandBtn").click(function(){
-		$("#"+$pid+"-commentsList").show();
+		if($("#"+$pid+"-commentsList").is(":visible")){
+			$("#"+$pid+"-commentsList").hide();
+		}else{
+			$("#"+$pid+"-commentsList").show();
+		}
 	});
 }
 
