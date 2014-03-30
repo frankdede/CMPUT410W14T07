@@ -16,12 +16,20 @@
 	overflow: auto;
 
 }
-#postListView li{
+.postListView {
+    margin-top:1em;
 	border: 1px;
     padding: 0.2em;
     height:14em;
     background-color: #eee;
 }
+
+.commentsListView {
+    display: none;
+    padding: 0.4em;
+    background-color: #DADADA;
+}
+
 .postViewHeading{
 	text-overflow: ellipsis;
 	display:inline;

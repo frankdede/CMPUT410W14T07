@@ -81,7 +81,7 @@ function createCommentHtml($cid,$content){
 }
 
 function afterCommentsList($pid){
-	$("#"+$pid).after("<li id=\""+$pid+"-commentsList\" style = \"display: none\"></li>");
+	$("#"+$pid).after("<li id=\""+$pid+"-commentsList\" class=\"commentsListView\"></li>");
 }
 
 //Send the Post object in json over http
@@ -155,7 +155,7 @@ function updatePostList($list){
 }
 
 function createPostViewHtml($pid,$title,$date,$message,$type,$permission){
-	var $li = "<li id="+$pid+" style=\"margin-top:1em;\">" +
+	var $li = "<li id="+$pid+" class=\"postListView\">" +
 	"<div class=\"panel panel-default\">" +
 	"<div class=\"panel-heading\">" +
 	"<h4 class=\"postViewHeading\">" +
