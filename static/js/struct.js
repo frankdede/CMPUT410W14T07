@@ -65,29 +65,40 @@ function setCommentBtnClickLisener($pid){
 	});
 
 	$("#"+$pid+"-commentsList > button").click(function(){
-		preAppendCommentHtml($pid,"dsds","dadsadsadsa");
+		preAppendCommentHtml($pid,"dsds","Test"+$pid);
 	});
 	
 }
 
 //Generate the html code of the reply form
 function appendReplyFormHtml($pid){
-	var $li = "<textarea id=\""+$pid+"-replyForm\" class=\"form-control\" rows=\"3\"></textarea>" +
+	var $li = "<textarea id=\""+$pid+"-replyForm\" class=\"form-control\" style=\"margin-top:1em\" rows=\"3\"></textarea>" +
 			"<button type=\"submit\" class=\"btn btn-default\">Reply</button>";
 
 	$("#"+$pid+"-commentsList").append($li);
 
 }
 
+//Append a comment li before the li of reply form 
 function preAppendCommentHtml($pid,$cid,$content){
-	var $li = "<div class=\"panel panel-default\">"+
-			"<div class=\"panel-body\"><span>"+$content+"</span></div>"+
+	var $li = "<div class=\"panel panel-default\" style=\"margin:0.3em\" >"+
+			"<div class=\"panel-body\">"+
+			"<p style=\"word-wrap:break-word;\">"+$content+"</p>"+
+			"</div>"+
 			"</div>";
 	$("#"+$pid+"-replyForm").before($li);
 }
 
+//Add the following li after the li of specific post
 function afterCommentsList($pid){
 	$("#"+$pid).after("<li id=\""+$pid+"-commentsList\" class=\"commentsListView\"></li>");
+}
+
+//Send the Comment object in json over http
+function submitCommentToServer($commentObj){
+	$.post('/'+$authorName+'/comments/',JSON.stringify($commentObj)).done(function($data){
+		
+	});
 }
 
 //Send the Post object in json over http
@@ -118,7 +129,25 @@ function getAllRawPostData(){
 	});
 }
 
-// Convert the post to json object 
+// Convert the comment information to json object
+function getJsonCommentObj($pid,$hostId,$pubDate,$cid){
+	var $msg = $("#"+$pid+"-commentsList > textarea").val()
+	var $comment = {
+			author:{
+				id:$authorid,
+				host:$hostId,
+				displayname:$authorName
+			},
+			comment:$msg,
+			pubDate:$pubDate,
+			guid:$cid
+	};
+
+	return $comment;
+}
+
+
+// Convert the post information to json object 
 function getJsonPostObj(){
 	var $msg = $('#postContent').val();
 	var $title =$('#postTitle').val();
@@ -170,9 +199,9 @@ function createPostViewHtml($pid,$title,$date,$message,$type,$permission){
 	"<small class=\"postViewSubHeading\">" +
 	$type +
 	"</small></div>" +
-	"<div class=\"panel-body postViewBody\"><span>" +
+	"<div class=\"panel-body postViewBody\"><p style=\"word-wrap:break-word;\">" +
 	$message +
-	"</span></div>"+
+	"</p></div>"+
 	"</div>"+
 	"<small class=\"postViewPermissionFooter\">"+
 	"Share with:" + $permission +
