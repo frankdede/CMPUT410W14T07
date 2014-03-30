@@ -1,8 +1,157 @@
 
     <!-- Left panel -->
-    <div id="struct-left-panel" class="col-md-3">
-      .col-md-3
-    </div>
+    <div id="struct-left-panel" class="col-md-3" >
+        <div class="panel panel-default">
+          <!-- Default panel contents -->
+          <!-- Table -->
+          <div class="panel-heading">Profile</div>
+          <div class="panel-body">
+            <h4 id ="name">User Name
+              <small id='edit_bt'>
+                <a>Edit</a>
+              </small>
+            </h4>
+            <div class="thumbnail">
+              <img src="{{url_for('static',filename='image/loading.gif')}}" alt="hi" class="img-rounded" id="profile_img">
+            </div>
+            <form class="form-horizontal" role="form">
+              <div class="form-group">
+                <div class="col-sm-4">
+                  <h4>Nick Name:</h4>
+                </div>
+                <div class="col-sm-6">
+                  <h4 id="profile_nick_name"></h4>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="col-sm-4">
+                  <h4>Gender:</h4>
+                </div>
+                <div class="col-sm-6">
+                  <h4 id="profile_gender"></h4>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="col-sm-4">
+                  <h4>Birthday:</h4>
+                </div>
+                <div class="col-sm-6">
+                  <h4 id="profile_birthday"><h4>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="col-sm-4">
+                    <h4>Email:</h4>
+                  </div>
+                  <div class="col-sm-6">
+                    <h4 id="profile_email"></h4>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="col-sm-4">
+                    <h4>City:</h4>
+                  </div>
+                  <div class="col-sm-6">
+                    <h4 id="profile_city"></h4>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div class="modal fade" id="edit_Modal" tabindex="-1" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;
+                </button>
+                <h4 class="modal-title" id="modal_title">Edit Information</h4>
+              </div>
+              <div class="modal-body">
+                <form class="form-horizontal" id="edit_form" method="post" enctype="multipart/form-data">
+                  <!--register form-->
+                  <div class="panel panel-default">
+                    <div class="panel-heading">Required Information</div>
+                    <!--begin required information-->
+                    <div class="panel-body">
+                      <div class="form-group">
+                        <label for="inputEmail3" class="col-sm-2 control-label">Email</label>
+                        <div class="col-sm-10">
+                          <input type="email" class="form-control" id="email" name="email" placeholder="Email" required>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label for="inputEmail3" class="col-sm-2 control-label">Author Name</label>
+                        <div class="col-sm-10">
+                          <input type="text" class="form-control" id="author_name" name="author_name" placeholder="Author Name">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!--End requirement pannel-->
+                  <!--begin personal information pannel-->
+                  <div class="panel panel-default">
+                    <div class="panel-heading">
+                      <button type="button" class="btn btn-default btn-xs" id="switcher">
+                        <span class="glyphicon glyphicon-chevron-up" id="button_image"></span>
+                      </button>
+                      Personal Information (Option)
+                    </div>
+                    <div class="panel-body" id="personal_body">
+                      <div class="form-group">
+                        <label class="col-sm-2 control-label">Nick Name</label>
+                        <div class="col-sm-10">
+                          <input type="text" class="form-control" id="nick_name" name="nick_name" placeholder="Nick Name">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="col-sm-2 control-label">Birthday</label>
+                        <div class="col-sm-10">
+                          <input type="text" name ="birthday" id="datepicker" class="form-control" placeholder="Birthday">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="col-sm-2 control-label">Profile Upload</label>
+                        <div class="col-sm-10">
+                          <input type="file" name="profile_image" id="profile">
+                          <p class="help-block">Size of file is up to <strong>5 MB</strong></p>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="col-sm-2 control-label">City</label>
+                        <div class="col-sm-10">
+                          <input type="text" name ="city" id="city" class="form-control" placeholder="City">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="col-sm-2 control-label">Gender</label>
+                        <div class="col-sm-10">
+                          <div class="radio">
+                            <label>
+                              <input type="radio" name ="gender" value="male">Male
+                            </label>
+                          </div>
+                          <div class="radio">
+                            <label>
+                              <input type="radio" name ="gender" value="Female">Female
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!--End personal information pannel-->
+                  </div>
+                </form>
+              </div>
+              <font color="red"><strong id="edit_error_code"></strong></font>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="clear_bt">Clear</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id ="submit_bt" >Submit</button>
+              </div>
+            </div>
+          </div>
+        </div>
     <!-- Mid panel -->
     <div id="struct-message-panel" class="col-md-6" >
       <!-- the mid-upper div -->

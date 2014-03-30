@@ -5,12 +5,15 @@ var item_per_page = 5;
 function get_recommended_author_list(aid){
     $("#add_author_table").empty();
     $.getJSON(aid+"/recommended_authorlist.json",function(data2){
+      var size = data2.length
       $.each(data2,function(i,field){
         recommended_author_list[i] = field;
         $("#add_author_table").append("<div class='row' style='width:300px'id='addrow"+i+"'> \
       <div class='col-md-1'>"+(i+1)+"</div> \
       <div class='col-md-6'> \
-        <span class='glyphicon glyphicon-user'></span>  <a>"+field.name+"</a></div> \
+        <span class='glyphicon glyphicon-user'></span>  <a class ='author_clicker' \
+       data-toggle=\"tooltip\" title=\"Some tooltip text!\"  id='clicker_"+i+"' data='"+i+"' \
+        >"+field.name+"</a></div> \
       <div class='col-md-3'> \
             <button type='button' class='btn btn-default btn-xs' id = 'addfriendbt' \
              data='"+
@@ -19,6 +22,9 @@ function get_recommended_author_list(aid){
             </button> \
       </div> \
     </div>");
+        if (i+1===size) {
+          $(".author_clicker").tooltip({title:"hi"});
+        }
       });
         //var name = items.requested_name+" want to be your friend";
         //$('#message_menue').append("<li><a href='#'>"+name+"</a></li>");
@@ -65,6 +71,7 @@ $(document).ready(function(){
     search_click();
   });
   page_click();
+  set_click_popover();
 });
 function page_click(){
   $('body').on('click','#page_item',function(){
@@ -133,4 +140,22 @@ function remove_all_paging_bt(size){
   for (var i = 1; i <= page_number; i++) {
     $("#page_item[data|=\""+i+"\"]").remove();
   }
+}
+function set_click_popover(){
+  
+  $(document).on("click",".author_clicker",function(){
+    pos = $(this).attr('data');
+    clicker = $(this);
+    aid = recommended_author_list[pos].aid;
+    $.getJSON(author_id+'/profile.json',{'aid':aid},function(data){
+      console.log(data);
+      console.log(clicker);
+      /*{
+          placement:"left",
+          animation: true,
+          title:data.name,
+          content:"Nikc name"+data.nick_name
+      });*/
+    });
+  });
 }

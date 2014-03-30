@@ -69,8 +69,8 @@ def author_view(aid):
         return render_template('header.html',msgCount = countnumber)
     else:
         return redirect(url_for('login'))
-@app.route('/profile',methods=['GET'])
-def view_profile():
+@app.route('/<aid>/profile',methods=['GET'])
+def view_profile(aid):
     return render_template('profile.html')
 @app.route('/<aid>/profile/image/<imagename>',methods=['GET'])
 def view_profile_image(aid,imagename):
