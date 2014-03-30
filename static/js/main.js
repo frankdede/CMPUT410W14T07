@@ -162,7 +162,6 @@ $('#profile').bind('change', function() {
   });
 }
 function refresh_message_list(){
-  event.preventDefault();
   $("#message_dropdown1").empty();
   $.get("ajax/aid",function(data){
     $.getJSON(data+"/messages.json",function(data2){
