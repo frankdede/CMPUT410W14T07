@@ -63,6 +63,11 @@ function setCommentBtnClickLisener($pid){
 			$("#"+$pid+"-commentsList").show();
 		}
 	});
+
+	$("#"+$pid+"-commentsList > button").click(function(){
+		preAppendCommentHtml($pid,"dsds","dadsadsadsa");
+	});
+	
 }
 
 //Generate the html code of the reply form
@@ -74,10 +79,11 @@ function appendReplyFormHtml($pid){
 
 }
 
-function createCommentHtml($cid,$content){
+function preAppendCommentHtml($pid,$cid,$content){
 	var $li = "<div class=\"panel panel-default\">"+
 			"<div class=\"panel-body\"><span>"+$content+"</span></div>"+
 			"</div>";
+	$("#"+$pid+"-replyForm").before($li);
 }
 
 function afterCommentsList($pid){
