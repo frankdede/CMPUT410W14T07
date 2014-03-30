@@ -64,7 +64,7 @@ function setCommentBtnClickLisener($pid){
 //Generate the html code of the reply form
 function appendReplyFormHtml($pid){
 	var $li = "<textarea id=\""+$pid+"-replyForm\" class=\"form-control\" rows=\"3\"></textarea>" +
-			"<button type=\"submit\" class=\"btn btn-default\">Reply<button>";
+			"<button type=\"submit\" class=\"btn btn-default\">Reply</button>";
 
 	$("#"+$pid+"-commentsList").append($li);
 
