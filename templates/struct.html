@@ -1,19 +1,4 @@
-<script type="text/javascript">
-function readURL(input) {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
 
-            reader.onload = function (e) {
-                $('#blah')
-                    .attr('src', e.target.result)
-                    .width(150)
-                    .height(100);
-            };
-
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
-</script>
     <!-- Left panel -->
     <div id="struct-left-panel" class="col-md-3">
       .col-md-3
@@ -23,13 +8,7 @@ function readURL(input) {
       <!-- the mid-upper div -->
       <div>
         <input id ="postTitle"type="text" class="postEditTitle form-control " placeholder="title">
-        <div contentEditable = "true" id="postContent" type="text" class=" textBox form-control" rows="5" placeholder="Please post here..."><style>#postContent {
-    width: 563px;
-    height: 150px;
-    margin-top: 5px;
-    padding:5px;
-}</style><img id ="blah" src="#"/></div>
-
+        <textarea id="postContent" type="text" class=" textBox form-control" rows="5" placeholder="Please post here..."></textarea>
         <div class="btn-toolbar" role="toolbar" >
           <!-- Dropdown -->
           
