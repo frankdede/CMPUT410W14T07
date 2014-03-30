@@ -1,3 +1,19 @@
+<script type="text/javascript">
+function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#blah')
+                    .attr('src', e.target.result)
+                    .width(150)
+                    .height(100);
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
     <!-- Left panel -->
     <div id="struct-left-panel" class="col-md-3">
       .col-md-3
@@ -7,7 +23,12 @@
       <!-- the mid-upper div -->
       <div>
         <input id ="postTitle"type="text" class="postEditTitle form-control " placeholder="title">
-        <textarea id="postContent" type="text" class=" textBox form-control" rows="5" placeholder="Please post here..."></textarea>
+        <div contentEditable = "true" id="postContent" type="text" class=" textBox form-control" rows="5" placeholder="Please post here..."><style>#postContent {
+    width: 563px;
+    height: 150px;
+    margin-top: 5px;
+    padding:5px;
+}</style><img id ="blah" src="#"/></div>
 
         <div class="btn-toolbar" role="toolbar" >
           <!-- Dropdown -->
@@ -26,8 +47,29 @@
 
           <!-- Permission btn -->
           <button id="postPermissionBtn" type="button"  class="btn btn-default " data-toggle="modal" data-target="#postingPermissionModal" >Permission</button>
+          <button id="postPicture" type="button" class = "btn btn-default" data-toggle = "modal" data-target="#uploadPicture">Add picture</button>
+<div class = "modal fade" id = "uploadPicture" tabindex = "-1" role = "dialog" aria-labelledby = "uploadPictureLabel" aria-hidden = "true">
+  <div class = "modal-dialog">
+   <div class = "modal-content">
+     <div class = "modal-header">
+       <h4 class = "modal-title" id = "uploadPictureLabel">Select picture</h4>
+     </div>
+    <div class = "modal-body">
+       <label for = "InputFile">Choose your portrait: </label>
+       <p class="help-block"> Jepg,Bmp,or Png file only. No more than 1MB.</p>
+       <input type="file" onchange="readURL(this);"/>
+       <img id ="blah" src="#" alt="your image" />
+    </div>
+    <div class = "modal-footer">
+        <button type = "button" class = "btn btn-default" data-dismiss= "modal">Close</button>
+        <button type = "button" class = "btn btn-primary">Save picture</button>
+    </div>
+  </div>
+ </div>
+</div>
           <!-- Submit btn -->
           <button id="postSubmitBtn" type="button" style="right:20px;position: absolute;"class="btn btn-primary ">Sumbit</button>
+          
         </div>
       </div>
       <!-- permission modal: is hidden by default-->
