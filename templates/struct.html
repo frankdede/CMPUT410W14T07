@@ -12,7 +12,7 @@
               </small>
             </h4>
             <div class="thumbnail">
-              <img src="{{url_for('static',filename='image/loading.gif')}}" alt="hi" class="img-rounded" id="profile_img">
+              <img src="{{url_for('static',filename='image/loading.gif')}}" alt="hi" class="img-rounded" id="profile_img" width=272px height=223px>
             </div>
             <form class="form-horizontal" role="form">
               <div class="form-group">
@@ -107,13 +107,13 @@
                       <div class="form-group">
                         <label class="col-sm-2 control-label">Birthday</label>
                         <div class="col-sm-10">
-                          <input type="text" name ="birthday" id="datepicker" class="form-control" placeholder="Birthday">
+                          <input type="text" name ="birthday" id="edit_datepicker" class="form-control" placeholder="Birthday">
                         </div>
                       </div>
                       <div class="form-group">
                         <label class="col-sm-2 control-label">Profile Upload</label>
                         <div class="col-sm-10">
-                          <input type="file" name="profile_image" id="profile">
+                          <input type="file" name="profile_image" id="ed_profile">
                           <p class="help-block">Size of file is up to <strong>5 MB</strong></p>
                         </div>
                       </div>

@@ -22,7 +22,7 @@ $(document).ready(function(){
 function refresh_circle_list(data){
 	$('#view_friends_table').empty();
 	for (var i = 0; i < data.length; i++) {
-		if (friend_list[i]=='undefined'{
+		if (friend_list[i]=='undefined'){
 			continue;
 		}
 		var field = data[i];

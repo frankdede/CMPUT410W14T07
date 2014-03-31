@@ -79,16 +79,46 @@ def view_profile_image(aid,imagename):
     return send_from_directory(app.config['UPLOAD_FOLDER'],imagename, as_attachment=False)
 @app.route('/<aid>/profile.json',methods=['GET'])
 def get_profile(aid):
-    try:
-        re_aid = request.args.get("aid")
-        re = aController.getAuthorByAid(re_aid)
-        print re
-        if re != False:
-            return re
+    if 'logged_in' in session and aid ==session['logged_id']:
+        try:
+            re_aid = request.args.get("aid")
+            re = aController.getAuthorByAid(re_aid)
+            print re
+            if re != False:
+                return re
+            return redirect(url_for('/'))
+        except KeyError:
+            return redirect(url_for('/'))
+    return redirect(url_for('/'))
+@app.route('/<aid>/profile/change',methods=['POST'])
+def change_profile(aid):
+    if 'logged_in' in session and aid ==session['logged_id']:
+        gender=""
+        filename=""
+        email = request.form['email']
+        #parse optional information
+        nickName=request.form['nick_name']
+        birthday =request.form['birthday']
+        city = request.form['city']
+        try:
+            file = request.files['profile_image']
+            filename = file.filename
+            print "--"+file.filename
+        except KeyError:
+            file =None
+        try:
+            gender = request.form['gender']
+        except KeyError:
+            gender = ""
+        if file!=None and filename!="":
+            filename = save_image(aid,file)
+        if ahelper.updateAuthorInfo(aid,email,gender,city,birthday,filename):
+            re = make_response("OK")
+        else:
+            re = make_response("Failed")
+        return re
+    else:
         return redirect(url_for('/'))
-    except KeyError:
-        return redirect(url_for('/'))
-
 @app.route('/ajax/aid')
 def getuid():
     if 'logged_in' not in session:
@@ -158,18 +188,18 @@ def register():
             session['logged_in'] = authorName
             session['logged_id'] = aid
             path =""
-            if(file!=None or file.name!=""):
-                path = save_image(aid,file)
-            if ahelper.updateAuthorInfo(aid,email,gender,city,birthday,path) ==False:
+            if(file!=None and file.filename!=""):
+                save_image(aid,file)
+            if ahelper.updateAuthorInfo(aid,email,gender,city,birthday,file) ==False:
                 abort(500)
             return aid_json
     return redirect(url_for('/'))
 
 def save_image(aid,file):
     filename = aid+"."+file.filename.rsplit('.', 1)[1]
-    path = os.path.join(app.config['UPLOAD_FOLDER'])
-    file.save(path, filename)
-    return path
+    path = os.path.join(app.config['UPLOAD_FOLDER'],filename)
+    file.save(path)
+    return filename
 @app.route('/image/view/<name>',methods=['GET'])
 def view_imagin():
     pass

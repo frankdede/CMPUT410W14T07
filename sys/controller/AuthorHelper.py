@@ -152,6 +152,7 @@ class AuthorHelper:
         # [Success] return {'aid':xxxxx } (jason type)
         # [Exception] return false
         # [Failed] return false
+        cur = self.dbAdapter.getcursor()
         aid = utility.getid()
         password = ""
         nickName = ""
@@ -181,7 +182,16 @@ class AuthorHelper:
         # [Success] return true
         # [Exception] return false
         # [Failed] return false
-        query = "UPDATE author SET email = '%s', gender = '%s',city = '%s',birthday = '%s', img_path = '%s' WHERE aid = '%s'"%(email,gender,city,birthday,img_path,aid)
+        cur = self.dbAdapter.getcursor()
+        query = ""
+        if img_path=="" and gender=="":
+            query = "UPDATE author SET email = '%s',city = '%s',birthday = '%s' WHERE aid = '%s'"%(email,city,birthday,aid)
+        elif img_path=="":
+            query = "UPDATE author SET email = '%s', gender = '%s',city = '%s',birthday = '%s' WHERE aid = '%s'"%(email,gender,city,birthday,aid)
+        elif gender=="":
+            query = "UPDATE author SET email = '%s',city = '%s',birthday = '%s', img_path = '%s' WHERE aid = '%s'"%(email,city,birthday,img_path,aid)
+        else:
+            query = "UPDATE author SET email = '%s', gender = '%s',city = '%s',birthday = '%s', img_path = '%s' WHERE aid = '%s'"%(email,gender,city,birthday,img_path,aid)
         try:
             cur.execute(query)
             return True
