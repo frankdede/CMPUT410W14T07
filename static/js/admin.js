@@ -1,5 +1,9 @@
 $(document).ready(function(){
-	check_select_change();
+	$('body').on('click','#admin_bt',function(){
+		$("#struct-message-panel").html("<p>hi</p>");
+		$("#struct-right-panel").html("<p>hi</p>");
+	});
+	//check_select_change();
 
 });
 function check_select_change(){

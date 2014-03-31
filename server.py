@@ -6,6 +6,10 @@ from flask import Flask, request, redirect, url_for, g, render_template, flash, 
 from werkzeug.utils import secure_filename
 from random import randrange
 import sys,os
+from mimetypes import MimeTypes
+import urllib
+import binascii
+from rauth import OAuth2Service
 sys.path.append('sys/controller')
 sys.path.append('sys/model')
 from AuthorHelper import *
@@ -34,6 +38,7 @@ postcontroller = PostController(dbAdapter)
 reController = RequestController(dbAdapter)
 #
 circleHelper = CircleHelper(dbAdapter)
+circleController = CircleController(dbAdapter)
 #
 commentController = CommentController(dbAdapter)
 #Allowed file extensions
@@ -44,7 +49,20 @@ app.config.from_object(__name__)
 UPLOAD_FOLDER='upload/image'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.secret_key = os.urandom(24)
+admin_id = '000000'
+admin_name='admin'
+admin_model = False
 error = None
+
+GITHUB_CLIENT_ID = '02b57f045e11c12db42c'
+GITHUB_CLIENT_SECRET = 'b759b58460b2f81cfef696f7bf157be9460517f2'
+github = OAuth2Service(
+    client_id=GITHUB_CLIENT_ID,
+    client_secret=GITHUB_CLIENT_SECRET,
+    name='github',
+    authorize_url='https://github.com/login/oauth/authorize',
+    access_token_url='https://github.com/login/oauth/access_token',
+    base_url='https://api.github.com/')
 
 def flaskPostToJson():
     '''Ah the joys of frameworks! They do so much work for you
@@ -78,16 +96,58 @@ def view_profile_image(aid,imagename):
     return send_from_directory(app.config['UPLOAD_FOLDER'],imagename, as_attachment=False)
 @app.route('/<aid>/profile.json',methods=['GET'])
 def get_profile(aid):
-    try:
-        re_aid = request.args.get("aid")
-        re = aController.getAuthorByAid(re_aid)
-        print re
-        if re != False:
+    if 'logged_in' in session and aid ==session['logged_id']:
+        try:
+            re_aid = request.args.get("aid")
+            re = aController.getAuthorByAid(re_aid)
+            print re
+            if re != False:
+                return re
+            return redirect(url_for('/'))
+        except KeyError:
+            return redirect(url_for('/'))
+    return redirect(url_for('/'))
+@app.route('/<aid>/profile/change',methods=['POST'])
+def change_profile(aid):
+    if 'logged_in' in session and aid ==session['logged_id']:
+        try:
+            keyword = request.args.get('type')
+        except KeyError:
+            return "Wrong URL",404
+        if keyword == "information":
+            gender=""
+            filename=""
+            email = request.form['email']
+            #parse optional information
+            nickName=request.form['nick_name']
+            birthday =request.form['birthday']
+            city = request.form['city']
+            try:
+                file = request.files['profile_image']
+                filename = file.filename
+                print "--"+file.filename
+            except KeyError:
+                file =None
+            try:
+                gender = request.form['gender']
+            except KeyError:
+                gender = ""
+            if file!=None and filename!="":
+                filename = save_image(aid,file)
+            if ahelper.updateAuthorInfo(aid,email,gender,city,birthday,filename):
+                re = make_response("OK")
+            else:
+                re = make_response("Failed")
             return re
+        elif keyword == "password":
+            new_pwd = request.form['register_pwd']
+            if ahelper.updatePasswordByAid(aid,new_pwd):
+                re = make_response("OK")
+            else:
+                re = make_response("Error")
+            return re
+    else:
         return redirect(url_for('/'))
-    except KeyError:
-        return redirect(url_for('/'))
-
 @app.route('/ajax/aid')
 def getuid():
     if 'logged_in' not in session:
@@ -119,7 +179,16 @@ def login():
         else:
             session['logged_in'] = authorName
             session['logged_id'] = json.loads(json_str)['aid']
-            return json_str ,200
+
+            if(session['logged_id']==admin_id):
+                session['admin_model']= admin_id;
+            return json_str,200
+    else:
+        if not session.get('oauth_state'):
+            session['oauth_state'] = binascii.hexlify(os.urandom(24))
+        authorize_url = github.get_authorize_url(scope='user,notifications', state=session.get('oauth_state'))
+        return render_template('header.html',authorize_url=authorize_url)
+
     if "logged_in" in session:
         aid = session['logged_id']
         msgCount = reController.getRequestCountByAid(aid)
@@ -157,7 +226,7 @@ def register():
             session['logged_in'] = authorName
             session['logged_id'] = aid
             path =""
-            if(file!=None or file.name!=""):
+            if(file!=None and file.filename!=""):
                 path = save_image(aid,file)
             if ahelper.updateAuthorInfo(aid,email,gender,city,birthday,path) ==False:
                 abort(500)
@@ -166,16 +235,16 @@ def register():
 
 def save_image(aid,file):
     filename = aid+"."+file.filename.rsplit('.', 1)[1]
-    path = os.path.join(app.config['UPLOAD_FOLDER'])
-    file.save(path, filename)
-    return path
+    path = os.path.join(app.config['UPLOAD_FOLDER'],filename)
+    file.save(path)
+    return filename
 @app.route('/image/view/<name>',methods=['GET'])
 def view_imagin():
     pass
 @app.route('/<aid>/recommended_authorlist.json', methods=['GET'])
 def authorlist(aid):
     if ('logged_in' not in session) or (aid !=session['logged_id']):
-        abort(404)
+        return redirect(url_for('/'))
     re = aController.getRecommendedAuthor(aid)
     return re
 # search authors with keyword
@@ -197,6 +266,31 @@ def allauthorlist(aid):
     re = aController.getOtherAuthor(aid)
     print re
     return re
+@app.route('/<aid>/circlelist.json',methods=['GET'])
+def circleauthorlist(aid):
+    if ('logged_in' not in session) or (aid !=session['logged_id']):
+        return redirect(url_for('/'))
+    re = circleController.getFriendList(aid)
+    print re
+    return re
+@app.route('/<aid>/circle',methods=['GET'])
+def render_circle_modal(aid):
+    if ('logged_in' not in session) or (aid !=session['logged_id']):
+        return redirect(url_for('/'))
+    return render_template('view_circles_modal.html')
+@app.route('/<aid>/circle/delete',methods=['GET'])
+def delete_friends(aid):
+    if ('logged_in' not in session) or (aid !=session['logged_id']):
+        return redirect(url_for('/'))
+    try:
+        keyword = request.args.get('aid')
+        if circleController.deleteFriendOfAuthor(aid,keyword):
+            re =make_response("OK")
+        else:
+            re =make_response("Failed")
+        return re
+    except KeyError:
+        return redirect(url_for('/'))
 @app.route('/<aid>/messages.json', methods=['GET'])
 def messages(aid):
     if ('logged_in' not in session) or (aid !=session['logged_id']):
@@ -346,7 +440,7 @@ def getPermissionList(authorName):
             permission = request.args.get('option')
 
             if permission == "friend" or permission == "friends":
-                friendlist = circleHelper.getFriendList(authorName)
+                friendlist = circleHelper.getFriendList(authorName)	
                 if friendlist != None:
                     return json.dumps(friendlist),200
 
@@ -372,6 +466,85 @@ def getCommentsForPost(pid):
         return result,200
     else:
         return abort(404)
+
+
+
+@app.route('/get_image/<authorName>/<path>')
+def get_image(authorName,path):
+    path = 'upload/image/'+authorName+'/'+path
+    #print path
+    mime = MimeTypes()
+    url = urllib.pathname2url(path)
+    mime_type = mime.guess_type(url)
+    #print mime_type[0]
+    return send_file(path, mimetype=mime_type[0])
+
+# get all the new posts that a specific author can view from the server
+@app.route('/<authorName>/github/notification')
+def getNotification(authorName):
+    authorToken = authorName + '_authToken'
+    if ('logged_in' in session) and (session['logged_in'] == authorName) and (authorToken in session):
+        # get author auth token
+        authorAuthToken=session[authorToken]
+        # get auth session
+        auth_session = github.get_session(token=authorAuthToken)
+        aid = session['logged_id']
+        if aid == None:
+            return json.dumps({'status':None}),200
+        else:
+            r = auth_session.get('/notifications')
+            for i in range(0,len(r.json())):
+                postMsg=''
+                for key,value in r.json()[i].iteritems():
+                    if key == "updated_at":
+                        postMsg=postMsg+"updatet time: " + value +"\n"
+                        print "updatet time: " + value
+                    elif key == "subject":
+                        for key1,value1 in value.iteritems():
+                            if key1 == "url":
+                                postMsg=postMsg+"update at: " + value1 +"\n"
+                                print "update at: " + value1
+                            elif key1 == "title":
+                                postMsg=postMsg+"title :" + value1 +"\n"
+                                print "title :" + value1
+                #newPost = Post(None,aid,None,'Github Notification',postMsg,'text','me')
+                #result = postHelper.addPost(aid,'Github Notification',postMsg,'text','me')
+        r = auth_session.put('/notifications')
+        return "a"
+    else:
+        return abort(404)
+
+@app.route('/github/callback')
+def callback():
+    code = request.args['code']
+    state = request.args['state'].encode('utf-8')
+    #if state!=session.get('oauth_state'):
+        #return render_template('header.html')
+    # get auth session
+    auth_session = github.get_auth_session(data={'code': code})
+    # get author name
+    r = auth_session.get('/user')
+    authorName = r.json()['login']
+    # store author token
+    authorToken = authorName + '_authToken'
+    session[authorToken] = auth_session.access_token
+    # try to register account
+    aid_json = ahelper.addAuthor(authorName,123,authorName)
+    if aid_json!= False:
+        aid = json.loads(aid_json)['aid']
+        session['logged_in'] = authorName
+        session['logged_id'] = aid
+    else:
+        # try to log in
+        json_str = ahelper.authorAuthenticate(authorName,123)
+        if json_str!=False:
+            session['logged_in'] = authorName
+            session['logged_id'] = json.loads(json_str)['aid']
+        else:
+            re = make_response("False")
+            re.headers['Content-Type']='text/plain'
+            return re
+    return redirect(url_for('login'))
 
 if __name__ == '__main__':
     app.debug = True
