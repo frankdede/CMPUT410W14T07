@@ -87,7 +87,7 @@
                 {%endif%}
                 <ul class="dropdown-menu">
                   <li><a href="#">Profile</a></li>
-                  <li><a href="#">Change Password</a></li>
+                  <li><a href="#" id="change_pwd_bt">Change Password</a></li>
                   <li><a href="#">Change Setting</a></li>
                   <li class="divider"></li>
                   <li><a href="{{url_for('logout')}}">Logout</a></li>
@@ -97,6 +97,37 @@
           </div><!-- /.navbar-collapse -->
         </div><!-- /.container-fluid -->
       </nav>
+      <!--Begin of change pwd modal-->
+      <div class="modal fade" id="change_pwd_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+              <h4 class="modal-title" id="myModalLabel">Change your Password</h4>
+            </div>
+            <div class="modal-body">
+              <form class="form-horizontal" id="change_pwd_form" method="post">
+                <div class="form-group">
+                      <label class="col-sm-2 control-label">Password</label>
+                      <div class="col-sm-10">
+                        <input type="password" id="register_pwd" class="form-control" name="register_pwd" placeholder="Password">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-sm-2 control-label">Retype Password</label>
+                      <div class="col-sm-10">
+                        <input type="password" class="form-control" name ="re_pwd" id="re_pwd" placeholder="Password">
+                      </div>
+                    </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" id="submit_new_pwd">Save changes</button>
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="modal fade" id="myModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
@@ -114,7 +145,7 @@
                 <div class="form-group">
                   <label for="exampleInputPassword1">Password:</label>
                   <input type="password" class="form-control" name="password" id="login_password" placeholder="Password" required>
-<a href="{{authorize_url}}">Sign in with GitHub</a>
+                  <a href="{{authorize_url}}">Sign in with GitHub</a>
                 </div>
               </form>
               <form class="form-horizontal" id="register_form" method="post" enctype="multipart/form-data">
@@ -265,8 +296,8 @@
         <!--add author js-->
         <script src="{{url_for('static',filename='js/addauthor.js')}}"></script>
         <script src="{{url_for('static',filename='js/struct.js')}}" ></script>
-         <script src="{{url_for('static',filename='js/profile.js')}}"></script>
-         <script src="{{url_for('static',filename='js/circle.js')}}"></script>
+        <script src="{{url_for('static',filename='js/profile.js')}}"></script>
+        <script src="{{url_for('static',filename='js/circle.js')}}"></script>
         {%endif%}
         
       </body>
