@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# coding: utf-8
 import subprocess
 import unittest
 import mysql.connector
@@ -25,12 +26,12 @@ import time
 import Utility
 DEBUG = True
 
-'''PLEASE rebuild the database everytime before run all the tests!!!'''
+'''PLEASE rebuild the database everytime before run all the tests'''
 class TestController(unittest.TestCase):
     
-        
-
     def setUp(self):
+
+
         self.cid = None
         self.aid = None
         # DO NOT CHANGE HERE
@@ -50,13 +51,13 @@ class TestController(unittest.TestCase):
 
     '''
      ====================   AuthorHelper  ====================
-     PLEASE rebuild the database before run all the tests!!!
+     PLEASE rebuild the database before run all the tests
     '''
 
 
     '''
      ====================   RequestHelper  ====================
-     PLEASE rebuild the database before run all the tests!!!
+     PLEASE rebuild the database before run all the tests
     '''
     
     def test_sendRequest(self):

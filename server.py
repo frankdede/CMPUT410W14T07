@@ -115,11 +115,11 @@ def login():
         if  json_str == False:
             re = make_response("False")
             re.headers['Content-Type']='text/plain'
-            return re
+            return re ,200
         else:
             session['logged_in'] = authorName
             session['logged_id'] = json.loads(json_str)['aid']
-            return json_str
+            return json_str ,200
     if "logged_in" in session:
         aid = session['logged_id']
         msgCount = reController.getRequestCountByAid(aid)
@@ -334,8 +334,9 @@ def uploadPostToServer(authorName):
         return json.dumps({'status':result}),200
     else:
         return abort(404)
-
-# This is used to get friend list from database
+'''
+Retrive the posting permission information for a specific author by authorName
+'''
 @app.route('/<authorName>/post/getPermissionList/',methods=['GET'])
 def getPermissionList(authorName):
 
@@ -360,6 +361,9 @@ def getPermissionList(authorName):
     else:
         return abort(404)
 
+'''
+Get all the comments for a specific post 
+'''
 @app.route('/<pid>/comment/',methods=['GET','PUT'])
 def getCommentsForPost(pid):
 
@@ -367,7 +371,7 @@ def getCommentsForPost(pid):
         result = commentController.getAllCommentsForPost(pid)
         return result,200
     else:
-        return abor(404)
+        return abort(404)
 
 if __name__ == '__main__':
     app.debug = True
