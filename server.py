@@ -465,7 +465,7 @@ def getPermissionList(authorName):
 '''
 Get all the comments for a specific post 
 '''
-@app.route('/author/<aid>/post/<pid>/comment/',methods=['GET','PUT'])
+@app.route('/author/<aid>/posts/<pid>/comments/',methods=['GET','PUT'])
 def getCommentsForPost(aid,pid):
 
     if('logged_id' in session) and (session['logged_id'] == aid):
