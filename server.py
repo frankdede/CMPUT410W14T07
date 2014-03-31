@@ -34,6 +34,7 @@ postcontroller = PostController(dbAdapter)
 reController = RequestController(dbAdapter)
 #
 circleHelper = CircleHelper(dbAdapter)
+circleController = CircleController(dbAdapter)
 #
 commentController = CommentController(dbAdapter)
 #Allowed file extensions
@@ -175,7 +176,7 @@ def view_imagin():
 @app.route('/<aid>/recommended_authorlist.json', methods=['GET'])
 def authorlist(aid):
     if ('logged_in' not in session) or (aid !=session['logged_id']):
-        abort(404)
+        return redirect(url_for('/'))
     re = aController.getRecommendedAuthor(aid)
     return re
 # search authors with keyword
@@ -197,6 +198,31 @@ def allauthorlist(aid):
     re = aController.getOtherAuthor(aid)
     print re
     return re
+@app.route('/<aid>/circlelist.json',methods=['GET'])
+def circleauthorlist(aid):
+    if ('logged_in' not in session) or (aid !=session['logged_id']):
+        return redirect(url_for('/'))
+    re = circleController.getFriendList(aid)
+    print re
+    return re
+@app.route('/<aid>/circle',methods=['GET'])
+def render_circle_modal(aid):
+    if ('logged_in' not in session) or (aid !=session['logged_id']):
+        return redirect(url_for('/'))
+    return render_template('view_circles_modal.html')
+@app.route('/<aid>/circle/delete',methods=['GET'])
+def delete_friends(aid):
+    if ('logged_in' not in session) or (aid !=session['logged_id']):
+        return redirect(url_for('/'))
+    try:
+        keyword = request.args.get('aid')
+        if circleController.deleteFriendOfAuthor(aid,keyword):
+            re =make_response("OK")
+        else:
+            re =make_response("Failed")
+        return re
+    except KeyError:
+        return redirect(url_for('/'))
 @app.route('/<aid>/messages.json', methods=['GET'])
 def messages(aid):
     if ('logged_in' not in session) or (aid !=session['logged_id']):

@@ -42,9 +42,8 @@ function get_profile_json(aid){
     		$("#edit_Modal").find("#submit_bt").click(function(){
     			$("#edit_form").submit();
     		});
-    		$("#edit_Modal").find("#clear_bt").click(function(){
-    			validator.resetForm();
-    			$("#name").text(data.name);
+    		$("#edit_Modal").find("#reset_bt").click(function(){
+    			set_profile_default(data);
     		});
 	});
 }

@@ -54,7 +54,7 @@
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Circles <b class="caret"></b></a>
                 <ul class="dropdown-menu">
                   <li><a href="javascript:void(0);" onclick="javascript:search_click()">Search Author</a></li>
-                  <li><a href="#">View Circles</a></li>
+                  <li><a id='view_circles' href="javascript:void(0);">View Circles</a></li>
                   <li class="divider"></li>
                   <li><a href="#">One more separated link</a></li>
                 </ul>
@@ -249,6 +249,8 @@
               </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
           </div><!-- Endo of modal -->
+          <div id="view_circle_modal">
+          </div>
           <div id="struct-content"></div>
           
           <script src="{{url_for('static',filename='js/main.js')}}"></script>
@@ -263,6 +265,7 @@
         <script src="{{url_for('static',filename='js/addauthor.js')}}"></script>
         <script src="{{url_for('static',filename='js/struct.js')}}" ></script>
          <script src="{{url_for('static',filename='js/profile.js')}}"></script>
+         <script src="{{url_for('static',filename='js/circle.js')}}"></script>
         {%endif%}
         
       </body>

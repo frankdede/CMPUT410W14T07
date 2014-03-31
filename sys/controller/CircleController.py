@@ -38,7 +38,7 @@ class CircleController:
 
             friendList = []
             for row in result:
-                friend = Author(row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7])
+                friend = Author(row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7],row[8])
                 friendList.append(friend.tojson())
             return json.dumps(friendList)
 
@@ -52,7 +52,7 @@ class CircleController:
 
             friendList = []
             for row in result:
-                friend = Author(row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7])
+                friend = Author(row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7],row[8])
                 friendList.append(friend.tojson())
             return json.dumps(friendList)
 
@@ -65,7 +65,7 @@ class CircleController:
         if(result != None):
             friendList = []
             for row in result:
-                friend = Author(row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7])
+                friend = Author(row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7],row[8])
                 friendList.append(friend.tojson())
             return json.dumps(friendList)
 
