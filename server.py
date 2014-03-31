@@ -386,6 +386,15 @@ def getPermissionList(authorName):
     else:
         return abort(404)
 
+@app.route('/<pid>/comment/',methods=['GET','PUT'])
+def getCommentsForPost(pid):
+
+    if('logged_id' in session) and (session['logged_id'] == pid):
+        result = commentController.getAllCommentsForPost(pid)
+        return result,200
+    else:
+        return abor(404)
+
 if __name__ == '__main__':
     app.debug = True
     app.run(host='0.0.0.0')
