@@ -442,16 +442,17 @@ def getPermissionList(authorName):
 
     if ('logged_in' in session) and (session['logged_in'] == authorName):
         if request.method == 'GET':
+            aid = session['logged_id']
             # Get the permission: friend or fof, from parameter 
             permission = request.args.get('option')
 
             if permission == "friend" or permission == "friends":
-                friendlist = circleHelper.getFriendList(authorName)	
+                friendlist = circleHelper.getFriendList(aid)	
                 if friendlist != None:
                     return json.dumps(friendlist),200
 
                 elif permission == "fof":
-                    fof = circleHelper.getFriendOfFriend(authorName)
+                    fof = circleHelper.getFriendOfFriend(aid)
 
                     if fof != None:
                         return json.dumps(fof),200
@@ -476,13 +477,14 @@ def getCommentsForPost(aid,pid):
 
 @app.route('/get_image/<authorName>/<path>')
 def get_image(authorName,path):
-    path = 'upload/image/'+authorName+'/'+path
-    #print path
-    mime = MimeTypes()
-    url = urllib.pathname2url(path)
-    mime_type = mime.guess_type(url)
-    #print mime_type[0]
-    return send_file(path, mimetype=mime_type[0])
+    if ('logged_in' in session):
+        path = 'upload/image/'+authorName+'/'+path
+        mime = MimeTypes()
+        url = urllib.pathname2url(path)
+        mime_type = mime.guess_type(url)
+        return send_file(path, mimetype=mime_type[0])
+    else:
+        return abort(404)
 
 # get all the new posts that a specific author can view from the server
 @app.route('/<authorName>/github/notification')
