@@ -429,9 +429,9 @@ def get_image(authorName,path):
 # get all the new posts that a specific author can view from the server
 @app.route('/<authorName>/github/notification')
 def getNotification(authorName):
-    if ('logged_in' in session) and (session['logged_in'] == authorName):
+    authorToken = authorName + '_authToken'
+    if ('logged_in' in session) and (session['logged_in'] == authorName) and (authorToken in session):
         # get author auth token
-        authorToken = authorName + '_authToken'
         authorAuthToken=session[authorToken]
         # get auth session
         auth_session = github.get_session(token=authorAuthToken)
