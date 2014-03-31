@@ -49,6 +49,9 @@ app.config.from_object(__name__)
 UPLOAD_FOLDER='upload/image'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.secret_key = os.urandom(24)
+admin_id = '000000'
+admin_name='admin'
+admin_model = False
 error = None
 
 GITHUB_CLIENT_ID = '02b57f045e11c12db42c'
@@ -176,6 +179,8 @@ def login():
         else:
             session['logged_in'] = authorName
             session['logged_id'] = json.loads(json_str)['aid']
+            if(session['logged_id']==admin_id):
+                session['admin_model']= admin_id;
             return json_str
     else:
         if not session.get('oauth_state'):

@@ -85,8 +85,8 @@
                 {%else%}
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{session.logged_in}} <b class="caret"></b></a>
                 {%endif%}
-                <ul class="dropdown-menu">
-                  <li><a href="#">Profile</a></li>
+                <ul class="dropdown-menu">{%if session.admin_model%}
+                  <li><a href="#" id="admin_bt">Admin</a></li>{%endif%}
                   <li><a href="#" id="change_pwd_bt">Change Password</a></li>
                   <li><a href="#">Change Setting</a></li>
                   <li class="divider"></li>
@@ -299,6 +299,8 @@
         <script src="{{url_for('static',filename='js/profile.js')}}"></script>
         <script src="{{url_for('static',filename='js/circle.js')}}"></script>
         {%endif%}
-        
+        {%if session.admin_model%}
+        <script src="{{url_for('static',filename='js/admin.js')}}"></script>
+        {%endif%}
       </body>
       </html>
