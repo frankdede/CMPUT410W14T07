@@ -2,7 +2,7 @@
 /* count number of message qeues on the list view */
 var $postListViewCount = 0;
 var $MAX_ITEM = 0;
-var $POST_VIEW_LIST = new Array();
+var $POST_VIEW_LIST = {};
 var $COMMENTS_VIEW_LIST = new Array();
 /* Choose Text by default*/
 var $SELECTED_POST_TYPE = 'text';
@@ -13,7 +13,6 @@ $.get("/author/"+$authorName, function(data){
 	if(data){
 		$("#struct-content").html(data);
 		setPostOptClickListener();
-
 	}
 });
 
@@ -36,7 +35,7 @@ function setPostOptClickListener(){
 
 	$("#postSubmitBtn").click(function(){
 
-		var $postObj = getJsonPostObj();
+		var $postObj = getPostJsonObj();
 		if($postObj['permission'] != null && $postObj['message'] != '' && $postObj['title'] != ''){
 			submitPostToServer($postObj);
 
@@ -45,7 +44,7 @@ function setPostOptClickListener(){
 		}
 	});
 
-		getAllRawPostData();
+		getAllPostsData();
 		setRefreshTimer();
 }
 
@@ -61,6 +60,7 @@ function setCommentBtnClickLisener($pid){
 			$("#"+$pid+"-commentsList").hide();
 		}else{
 			$("#"+$pid+"-commentsList").show();
+			getCommentsDataForPost($pid);
 		}
 	});
 
@@ -101,12 +101,33 @@ function submitCommentToServer($commentObj){
 	});
 }
 
+//fetch comments info for a specific post through http get
+function getCommentsDataForPost($pid){
+	$.get('/author/'+$authorid+'/posts/'+$pid+'/comments/',function($data){
+		if($data){
+			var $commentsList = JSON.parse($data);
+			updateCommentsForPost($pid,$commentsList);
+		}
+	});
+}
+
+//fetch comments info for all posts through http get
+function getCommentsDataForAllPosts(){
+	$.get('/author/'+$authorid+'/posts/comments/',function($data){
+		if($data){
+			var $commentsList = JSON.parse($data);
+			updateCommentsForAllPosts($commentsList);
+		}
+	});
+}
+
+
 //Send the Post object in json over http
 function submitPostToServer($postObj){
 	$.post('/'+ $authorName +'/post/',JSON.stringify($postObj)).done(function($data){
 			var $re = JSON.parse($data);
 			if ($re['status']){
-				getAllRawPostData();
+				getAllPostsData();
 			}else{
 				alert('Please submit again.');
 			}
@@ -116,27 +137,29 @@ function submitPostToServer($postObj){
 //The timer for refreshing the postListView
 function setRefreshTimer(){
 	setInterval(function(){
-		getAllRawPostData();
-                getGithubNotification();
+		getAllPostsData();
+		//getGithubNotification();
 	},10000);
 }
 
 function getGithubNotification(){
 	$.get("/"+ $authorName +"/github/notification",function(){
+
+
 	});
 }
 
-function getAllRawPostData(){
+function getAllPostsData(){
 	$.get("/"+ $authorName +"/pull/",function($data){
 		if($data){
-			var $postList = JSON.parse($data);
-			updatePostList($postList);
+			var $postsList = JSON.parse($data);
+			updatePostList($postsList);
 		}
 	});
 }
 
 // Convert the comment information to json object
-function getJsonCommentObj($pid,$hostId,$pubDate,$cid){
+function getCommentJsonObj($pid,$hostId,$pubDate,$cid){
 	var $msg = $("#"+$pid+"-commentsList > textarea").val()
 	var $comment = {
 			author:{
@@ -154,7 +177,7 @@ function getJsonCommentObj($pid,$hostId,$pubDate,$cid){
 
 
 // Convert the post information to json object 
-function getJsonPostObj(){
+function getPostJsonObj(){
 	var $msg = $('#postContent').val();
 	var $title =$('#postTitle').val();
 	/*msgType can be null*/
@@ -175,11 +198,12 @@ function updatePostList($list){
 	/* iterate through the list */
 	for (var $key in $list){
 		/* If the key is not in the global list */
-		var found =jQuery.inArray($key, $POST_VIEW_LIST);
+		//var found =jQuery.inArray($key, $POST_VIEW_LIST);
 			/*add this pair into the global list*/
-		if(found == -1){
-			$POST_VIEW_LIST.push($key);
-			console.log($list);
+		if($POST_VIEW_LIST[$key] == null){
+			//$POST_VIEW_LIST.push($key);
+			$POST_VIEW_LIST[$key]={};
+
 			var $pid = $list[$key].pid;
 			var $date = $list[$key].date;
 			var $title = $list[$key].title;
@@ -192,6 +216,21 @@ function updatePostList($list){
 		}
 			/*Prepare for creating new post html*/
 		
+	}
+}
+
+function updateCommentsForAllPosts(){
+
+}
+
+
+function updateCommentsForPost($pid,$list){
+	for (var $key in $list){
+		if($POST_VIEW_LIST[$pid][$key] == null){
+			$POST_VIEW_LIST[$pid][$key] = $list[$key];
+			var $comment = $list[$key];
+			preAppendCommentHtml($pid,$comment.cid,$comment.content);
+		}
 	}
 }
 
@@ -265,6 +304,7 @@ function addPostToList($id, $html,$speed)
 		$first.animate({ marginTop: $oldMarginTop });
 	});
 }
+
 function readURL(input) {
         if (input.files && input.files[0]) {
             var reader = new FileReader();

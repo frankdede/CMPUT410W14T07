@@ -26,9 +26,11 @@ import post
 import time
 import Utility
 #Flask-Testing
+
 import urllib2
 from flask.ext.testing import LiveServerTestCase
 from flask.ext.testing import TestCase
+
 DEBUG = True
 
 class ServerTest(unittest.TestCase):
@@ -43,6 +45,14 @@ class ServerTest(unittest.TestCase):
     def test_server_is_up_and_running(self):
         response = urllib2.urlopen('http://localhost:5000')
         self.assertEqual(response.code,200)
+
+    def test_server_login(self):
+
+        response = self.app.post('/login/',data={username:'frank',password:'12345'})
+        self.assertEqual(response.code,200)
+
+    def test_server_getCommentsForPost(self):
+        pass
 
 if __name__ == '__main__':
     unittest.main()

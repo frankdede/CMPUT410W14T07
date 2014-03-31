@@ -56,6 +56,7 @@ error = None
 
 GITHUB_CLIENT_ID = '02b57f045e11c12db42c'
 GITHUB_CLIENT_SECRET = 'b759b58460b2f81cfef696f7bf157be9460517f2'
+
 github = OAuth2Service(
     client_id=GITHUB_CLIENT_ID,
     client_secret=GITHUB_CLIENT_SECRET,
@@ -78,6 +79,7 @@ def flaskPostToJson():
 @app.route('/', methods=['GET', 'POST'])
 def root():
     return redirect(url_for('login'))
+
 @app.route('/<aid>', methods=['GET', 'POST'])
 def author_view(aid):
     if 'logged_in' in session and aid ==session['logged_id']:
@@ -87,13 +89,16 @@ def author_view(aid):
         return render_template('header.html',msgCount = countnumber)
     else:
         return redirect(url_for('login'))
+
 @app.route('/<aid>/profile',methods=['GET'])
 def view_profile(aid):
     return render_template('profile.html')
+
 @app.route('/<aid>/profile/image/<imagename>',methods=['GET'])
 def view_profile_image(aid,imagename):
     print imagename
     return send_from_directory(app.config['UPLOAD_FOLDER'],imagename, as_attachment=False)
+
 @app.route('/<aid>/profile.json',methods=['GET'])
 def get_profile(aid):
     if 'logged_in' in session and aid ==session['logged_id']:
@@ -107,6 +112,7 @@ def get_profile(aid):
         except KeyError:
             return redirect(url_for('/'))
     return redirect(url_for('/'))
+    
 @app.route('/<aid>/profile/change',methods=['POST'])
 def change_profile(aid):
     if 'logged_in' in session and aid ==session['logged_id']:
@@ -380,11 +386,11 @@ def index():
         return render_template('markdown.html', **locals())
     return render_template('markdown_input.html')
 
-@app.route('/author/<aid>/post/<pid>/comments',methods=['GET'])
+@app.route('/author/<aid>/post/<pid>/comments',methods=['GET','POST'])
 def getAllCommentsForPost(aid,pid):
 
     if ('logged_in' in session) and (session['logged_in'] == aid):
-        self.commentController.getAllCommentsForPost(pid)
+        return commentController.getAllCommentsForPost(pid),200
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.' ,1)[1] in app.config['ALLOWED_EXTENSIONS']
@@ -458,16 +464,15 @@ def getPermissionList(authorName):
 '''
 Get all the comments for a specific post 
 '''
-@app.route('/<pid>/comment/',methods=['GET','PUT'])
-def getCommentsForPost(pid):
+@app.route('/author/<aid>/post/<pid>/comment/',methods=['GET','PUT'])
+def getCommentsForPost(aid,pid):
 
-    if('logged_id' in session) and (session['logged_id'] == pid):
+    if('logged_id' in session) and (session['logged_id'] == aid):
         result = commentController.getAllCommentsForPost(pid)
+        print result
         return result,200
     else:
         return abort(404)
-
-
 
 @app.route('/get_image/<authorName>/<path>')
 def get_image(authorName,path):
