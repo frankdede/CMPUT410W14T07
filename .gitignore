@@ -30,6 +30,8 @@ nosetests.xml
 # Translations
 *.mo
 
+# sql
+information
 # Mr Developer
 .mr.developer.cfg
 .project
