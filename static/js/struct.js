@@ -273,3 +273,6 @@ function readURL(input) {
             reader.readAsDataURL(input.files[0]);
         }
     }
+$("#postImagebtn").click(function(){
+  $("#uploadImage_form").submit();
+});
