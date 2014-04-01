@@ -37,7 +37,7 @@ function setPostOptClickListener(){
 
 		var $postObj = toPostJsonObj();
 		if($postObj['permission'] != null && $postObj['message'] != '' && $postObj['title'] != ''){
-			submitPostToServer($postObj);
+			submitPostDataToServer($postObj);
 
 		}else{
 			alert("Please complete your form correctly before submit");
@@ -51,21 +51,30 @@ function setPostOptClickListener(){
 //Set a listener for each comment button
 //The id for each li is #pid-expendBtn
 function setCommentBtnClickLisener($pid){
-
+	//Create comment list 
 	afterCommentsList($pid);
+	//Append a reply form to the comment list
 	appendReplyFormHtml($pid);
 
+	//For every 'comments' button,install onclick lisenter
 	$("#"+$pid+"-expandBtn").click(function(){
 		if($("#"+$pid+"-commentsList").is(":visible")){
+			//hide if it's visible
 			$("#"+$pid+"-commentsList").hide();
 		}else{
+			//show if it's hidden
 			$("#"+$pid+"-commentsList").show();
+			//Refresh comments list for this post
 			getCommentsDataForPost($pid);
 		}
 	});
 
+	//Install onclick lisenter for reply button
 	$("#"+$pid+"-commentsList > button").click(function(){
-		preAppendCommentHtml($pid,"dsds","Test"+$pid);
+		//Collect the data from webpage
+		var $commentObj = toCommentJsonObj($pid);
+		console.log($commentObj);
+		submitCommentDataToServer($pid,$commentObj);
 	});
 	
 }
@@ -89,13 +98,13 @@ function preAppendCommentHtml($pid,$cid,$content){
 	$("#"+$pid+"-replyForm").before($li);
 }
 
-//Add the following li after the li of specific post
+//Add the following li right after the li of specific post
 function afterCommentsList($pid){
 	$("#"+$pid).after("<li id=\""+$pid+"-commentsList\" class=\"commentsListView\"></li>");
 }
 
-//Send the Comment object in json over http
-function submitCommentToServer($pid,$commentObj){
+//Send a comment object in json over http post
+function submitCommentDataToServer($pid,$commentObj){
 	$.post('/author/'+$authorid+'/posts/'+$pid+'/comments/',JSON.stringify($commentObj)).done(function($data){
 		//var $re = JSON.parse($data);
 		if($data != null){
@@ -106,7 +115,7 @@ function submitCommentToServer($pid,$commentObj){
 	});
 }
 
-//fetch comments info for a specific post through http get
+//fetch comments info for a specific post over http get
 function getCommentsDataForPost($pid){
 	$.get('/author/'+$authorid+'/posts/'+$pid+'/comments/',function($data){
 		if($data){
@@ -116,7 +125,7 @@ function getCommentsDataForPost($pid){
 	});
 }
 
-//fetch comments info for all posts through http get
+//fetch comments info for all posts over http get
 function getCommentsDataForAllPosts(){
 	$.get('/author/'+$authorid+'/posts/comments/',function($data){
 		if($data){
@@ -128,7 +137,7 @@ function getCommentsDataForAllPosts(){
 
 
 //Send the Post object in json over http
-function submitPostToServer($postObj){
+function submitPostDataToServer($postObj){
 	$.post('/'+ $authorName +'/post/',JSON.stringify($postObj)).done(function($data){
 			var $re = JSON.parse($data);
 			if ($re['status']){
@@ -166,7 +175,7 @@ function getAllPostsData(){
 // Collect the comment's content from reply form
 // then convert it to an json object
 function toCommentJsonObj($pid){
-	
+
 	// Get text from textarea of this post
 	var $msg = $("#"+$pid+"-commentsList > textarea").val()
 
@@ -188,7 +197,7 @@ function toCommentJsonObj($pid){
 					{
 						'author':{
 							'id':$authorid,
-							'host'null,
+							'host':null,
 							'displayname':null
 						},
 						'comment':$msg,

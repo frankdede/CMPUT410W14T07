@@ -96,7 +96,7 @@ def view_profile(aid):
 
 @app.route('/<aid>/profile/image/<imagename>',methods=['GET'])
 def view_profile_image(aid,imagename):
-    print imagename
+    #print imagename
     return send_from_directory(app.config['UPLOAD_FOLDER'],imagename, as_attachment=False)
 
 @app.route('/<aid>/profile.json',methods=['GET'])
@@ -105,7 +105,7 @@ def get_profile(aid):
         try:
             re_aid = request.args.get("aid")
             re = aController.getAuthorByAid(re_aid)
-            print re
+            #print re
             if re != False:
                 return re
             return redirect(url_for('/'))
@@ -131,7 +131,7 @@ def change_profile(aid):
             try:
                 file = request.files['profile_image']
                 filename = file.filename
-                print "--"+file.filename
+                #print "--"+file.filename
             except KeyError:
                 file =None
             try:
@@ -219,7 +219,7 @@ def register():
         password=request.form['register_pwd']
         #parse optional information
         file = request.files['profile_image']
-        print "--"+file.filename
+        #print "--"+file.filename
         nickName=request.form['nick_name']
         birthday =request.form['birthday']
         city = request.form['city']
@@ -258,6 +258,7 @@ def authorlist(aid):
         return redirect(url_for('/'))
     re = aController.getRecommendedAuthor(aid)
     return re
+
 # search authors with keyword
 @app.route('/<aid>/author/search',methods=['GET'])
 def search_author(aid):
@@ -270,25 +271,29 @@ def search_author(aid):
     if keyword!=None and keyword!="":
         re = aController.searchAuthorByString(keyword)
         return re
+
 @app.route('/<aid>/authorlist.json',methods=['GET'])
 def allauthorlist(aid):
     if ('logged_in' not in session) or (aid !=session['logged_id']):
         return redirect(url_for('/'))
     re = aController.getOtherAuthor(aid)
-    print re
+    #print re
     return re
+
 @app.route('/<aid>/circlelist.json',methods=['GET'])
 def circleauthorlist(aid):
     if ('logged_in' not in session) or (aid !=session['logged_id']):
         return redirect(url_for('/'))
     re = circleController.getFriendList(aid)
-    print re
+    #print re
     return re
+
 @app.route('/<aid>/circle',methods=['GET'])
 def render_circle_modal(aid):
     if ('logged_in' not in session) or (aid !=session['logged_id']):
         return redirect(url_for('/'))
     return render_template('view_circles_modal.html')
+
 @app.route('/<aid>/circle/delete',methods=['GET'])
 def delete_friends(aid):
     if ('logged_in' not in session) or (aid !=session['logged_id']):
@@ -302,13 +307,14 @@ def delete_friends(aid):
         return re
     except KeyError:
         return redirect(url_for('/'))
+
 @app.route('/<aid>/messages.json', methods=['GET'])
 def messages(aid):
     if ('logged_in' not in session) or (aid !=session['logged_id']):
         abort(404)
     else:
         jsonstring = reController.getAllRequestByAid(aid)
-        print jsonstring
+        #print jsonstring
         return jsonstring
 # logout
 @app.route('/logout')
@@ -470,9 +476,9 @@ def getPermissionList(authorName):
         return abort(404)
 
 '''
-Get all the comments for a specific post 
+Get all the comments for a specific post from DB
 '''
-@app.route('/author/<aid>/posts/<pid>/comments/')
+@app.route('/author/<aid>/posts/<pid>/comments/',methods=['GET'])
 def getCommentsForPost(aid,pid):
 
     if('logged_id' in session) and (session['logged_id'] == aid):
@@ -480,14 +486,17 @@ def getCommentsForPost(aid,pid):
         return result,200
     else:
         return abort(404)
-
-@app.route('/author/<aid>/post/<pid>/comments',methods=['PUT','POST'])
+'''
+Add a comment for a specific post into DB
+'''
+@app.route('/author/<aid>/posts/<pid>/comments/',methods=['PUT','POST'])
 def addCommentForPost(aid,pid):
 
-    if ('logged_in' in session) and (session['logged_in'] == aid):
+    if ('logged_in' in session) and (session['logged_id'] == aid):
         
         commentObj = flaskPostToJson()
         
+        #Follow the json example on github
         aid = commentObj['posts'][0]['author']['id']
         content = commentObj['posts'][0]['comments'][0]['comment']
         pid = commentObj['posts'][0]['guid']
@@ -531,15 +540,15 @@ def getNotification(authorName):
                 for key,value in r.json()[i].iteritems():
                     if key == "updated_at":
                         postMsg=postMsg+"updatet time: " + value +"\n"
-                        print "updatet time: " + value
+                        #print "updatet time: " + value
                     elif key == "subject":
                         for key1,value1 in value.iteritems():
                             if key1 == "url":
                                 postMsg=postMsg+"update at: " + value1 +"\n"
-                                print "update at: " + value1
+                                #print "update at: " + value1
                             elif key1 == "title":
                                 postMsg=postMsg+"title :" + value1 +"\n"
-                                print "title :" + value1
+                                #print "title :" + value1
                 #newPost = Post(None,aid,None,'Github Notification',postMsg,'text','me')
                 #result = postHelper.addPost(aid,'Github Notification',postMsg,'text','me')
         r = auth_session.put('/notifications')
