@@ -154,6 +154,11 @@ def change_profile(aid):
             return re
     else:
         return redirect(url_for('/'))
+@app.route('/<aid>/admin',methods=['GET','POST'])
+def admin_page(aid):
+    if 'admin_model' not in session or aid != session['admin_model']:
+        abort(404);
+    return render_template("admin.html")
 @app.route('/ajax/aid')
 def getuid():
     if 'logged_in' not in session:

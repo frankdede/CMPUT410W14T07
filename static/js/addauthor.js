@@ -43,10 +43,10 @@ function search_auther_list(aid,url){
               <span class='glyphicon glyphicon-plus'></span> Add \
             </button> \
             </td></tr>");
-          for(var i=item_per_page;i<recive_size;i++){
+      });
+       for(var i=item_per_page;i<recive_size;i++){
             $("#search_row_count"+i).hide();
           }
-      });
       remove_all_paging_bt(recive_size);
       paginate(recive_size);
       $("#search_model").modal();
