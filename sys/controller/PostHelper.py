@@ -371,6 +371,20 @@ class PostHelper:
             print("Error message:", err.msg)
             print("Query:",query)
             print("****************************************")
+            return None
+        if cur != None:
+            for ele in cur:
+                pid = ele[0]
+                aid = ele[1]
+                time = ele[2].strftime("%Y-%m-%d %H:%M:%S")
+                title = ele[3]
+                msg = ele[4]
+                msgType = ele[5]
+                permission = ele[6]
+                name = ele[7]
+                post = Post(pid,aid,name,time,title,msg,msgType,permission)
+                re.append(post)
+            return re
     def getSelectedPost(self,aid):
         re = []
         cur = self.dbAdapter.getcursor()
@@ -397,20 +411,6 @@ class PostHelper:
                 msg = ele[4]
                 msgType = ele[5]
                 permission = 'selected'
-                name = ele[7]
-                post = Post(pid,aid,name,time,title,msg,msgType,permission)
-                re.append(post)
-            return re
-            return None
-        if cur != None:
-            for ele in cur:
-                pid = ele[0]
-                aid = ele[1]
-                time = ele[2].strftime("%Y-%m-%d %H:%M:%S")
-                title = ele[3]
-                msg = ele[4]
-                msgType = ele[5]
-                permission = ele[6]
                 name = ele[7]
                 post = Post(pid,aid,name,time,title,msg,msgType,permission)
                 re.append(post)

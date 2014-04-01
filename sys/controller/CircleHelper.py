@@ -115,10 +115,10 @@ class CircleHelper:
 
         return cur.fetchall()
 
-    def getFriendOfFriendList(self,aid):
+    def getFriendOfFriend(self,aid):
         
         cur = self.dbAdapter.getcursor()
-        query = ("SELECT A.aid,A.name,A.nickName,A.sid,A.email,A.gender,A.city,A.birthday,A.imgPath "
+        query = ("SELECT A.aid,A.name,A.nick_name,A.sid,A.email,A.gender,A.city,A.birthday,A.img_path "
                  "FROM author A WHERE A.aid IN "
                  "(SELECT C2.aid2 FROM circle C2 WHERE C2.aid2 <>'%s' AND C2.aid1 IN "
                  "(SELECT C1.aid2 FROM circle C1 WHERE C1.aid1 = '%s'))")%(aid,aid)
