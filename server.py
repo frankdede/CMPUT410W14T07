@@ -386,11 +386,14 @@ def index():
         return render_template('markdown.html', **locals())
     return render_template('markdown_input.html')
 
-@app.route('/author/<aid>/post/<pid>/comments',methods=['GET','POST'])
-def getAllCommentsForPost(aid,pid):
+@app.route('/author/<aid>/posts/comments')
+def getCommentsForAllPosts(aid,pid):
 
     if ('logged_in' in session) and (session['logged_in'] == aid):
         return commentController.getAllCommentsForPost(pid),200
+    else:
+        return abort(404)
+
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.' ,1)[1] in app.config['ALLOWED_EXTENSIONS']
@@ -418,7 +421,6 @@ def uploadPostToServer(authorName):
 
     if ('logged_in' in session) and (session['logged_in'] == authorName):
         aid = session['logged_id']
-        #aid = ahelper.getAidByAuthorName(authorName)
         postName = authorName
         postObj = flaskPostToJson()
         postTitle = postObj['title']
@@ -465,15 +467,30 @@ def getPermissionList(authorName):
 '''
 Get all the comments for a specific post 
 '''
-@app.route('/author/<aid>/posts/<pid>/comments/',methods=['GET','PUT'])
+@app.route('/author/<aid>/posts/<pid>/comments/')
 def getCommentsForPost(aid,pid):
 
     if('logged_id' in session) and (session['logged_id'] == aid):
         result = commentController.getAllCommentsForPost(pid)
-        print result
         return result,200
     else:
         return abort(404)
+
+@app.route('/author/<aid>/post/<pid>/comments',methods=['PUT','POST'])
+def addCommentForPost(aid,pid):
+
+    if ('logged_in' in session) and (session['logged_in'] == aid):
+        
+        commentObj = flaskPostToJson()
+        aid = commentObj['author']['id']
+        content = commentObj['comment']
+
+
+        result = commentController.addCommentForPost(aid,)
+
+    else:
+        return abort(404)
+
 
 @app.route('/get_image/<authorName>/<path>')
 def get_image(authorName,path):

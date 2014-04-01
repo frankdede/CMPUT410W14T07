@@ -35,7 +35,7 @@ function setPostOptClickListener(){
 
 	$("#postSubmitBtn").click(function(){
 
-		var $postObj = getPostJsonObj();
+		var $postObj = toPostJsonObj();
 		if($postObj['permission'] != null && $postObj['message'] != '' && $postObj['title'] != ''){
 			submitPostToServer($postObj);
 
@@ -159,7 +159,7 @@ function getAllPostsData(){
 }
 
 // Convert the comment information to json object
-function getCommentJsonObj($pid,$hostId,$pubDate,$cid){
+function toCommentJsonObj($pid,$hostId,$pubDate,$cid){
 	var $msg = $("#"+$pid+"-commentsList > textarea").val()
 	var $comment = {
 			author:{
@@ -177,7 +177,7 @@ function getCommentJsonObj($pid,$hostId,$pubDate,$cid){
 
 
 // Convert the post information to json object 
-function getPostJsonObj(){
+function toPostJsonObj(){
 	var $msg = $('#postContent').val();
 	var $title =$('#postTitle').val();
 	/*msgType can be null*/
