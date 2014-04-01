@@ -95,9 +95,14 @@ function afterCommentsList($pid){
 }
 
 //Send the Comment object in json over http
-function submitCommentToServer($commentObj){
-	$.post('/'+$authorName+'/comments/',JSON.stringify($commentObj)).done(function($data){
-		
+function submitCommentToServer($pid,$commentObj){
+	$.post('/author/'+$authorid+'/posts/'+$pid+'/comments/',JSON.stringify($commentObj)).done(function($data){
+		//var $re = JSON.parse($data);
+		if($data != null){
+			getCommentsDataForPost($pid);
+		}else{
+			console.log('failed to submit comment to server');
+		}
 	});
 }
 
@@ -158,18 +163,42 @@ function getAllPostsData(){
 	});
 }
 
-// Convert the comment information to json object
-function toCommentJsonObj($pid,$hostId,$pubDate,$cid){
+// Collect the comment's content from reply form
+// then convert it to an json object
+function toCommentJsonObj($pid){
+	
+	// Get text from textarea of this post
 	var $msg = $("#"+$pid+"-commentsList > textarea").val()
+
 	var $comment = {
-			author:{
-				id:$authorid,
-				host:$hostId,
-				displayname:$authorName
-			},
-			comment:$msg,
-			pubDate:$pubDate,
-			guid:$cid
+			'posts':[{
+				'title': null,
+				'source': null,
+				'origin': null,
+				'description': null,
+				'content-type': null,
+				'author':{
+					'id':$authorid,
+					'host':null,
+					'displayname':null,
+					'url':null
+				},
+				'categories':null,
+				'comments':[
+					{
+						'author':{
+							'id':$authorid,
+							'host'null,
+							'displayname':null
+						},
+						'comment':$msg,
+						'pubData':null,
+						'guid':null
+					}
+				],
+				'pubDate':null,
+				'guid':$pid,
+				'visibility':null}]
 	};
 
 	return $comment;

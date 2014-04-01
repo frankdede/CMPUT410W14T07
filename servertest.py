@@ -26,7 +26,6 @@ import post
 import time
 import Utility
 #Flask-Testing
-#import flaskr
 import server
 import urllib2
 from flask.ext.testing import LiveServerTestCase

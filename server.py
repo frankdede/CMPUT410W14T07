@@ -482,12 +482,16 @@ def addCommentForPost(aid,pid):
     if ('logged_in' in session) and (session['logged_in'] == aid):
         
         commentObj = flaskPostToJson()
-        aid = commentObj['author']['id']
-        content = commentObj['comment']
+        
+        aid = commentObj['posts'][0]['author']['id']
+        content = commentObj['posts'][0]['comments'][0]['comment']
+        pid = commentObj['posts'][0]['guid']
 
-
-        result = commentController.addCommentForPost(aid,)
-
+        result = commentController.addCommentForPost(aid,pid,content)
+        if result != None:
+            return result,200
+        else:
+            return None,200
     else:
         return abort(404)
 
