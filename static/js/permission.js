@@ -4,6 +4,7 @@
 //var checked = {};
 /*the option that the user chose*/
 var option = null;
+var checked = [];
 var host=window.location.host;
 document.getElementById('permissionSelectedAll').style.visibility='hidden';
 document.getElementById('permissionClearAll').style.visibility='hidden';
@@ -18,7 +19,7 @@ function permission_selected(sel){
 	var userId=$authorName;
 	//get select option value
 	option = sel.options[sel.selectedIndex].value;
-	if(option==="friend"||option==="fof"){
+	if(option==="friends"||option==="fof"){
 		document.getElementById('permissionSelectedAll').style.visibility='visible';
 		document.getElementById('permissionClearAll').style.visibility='visible';
 		document.getElementById('permissionAntiSelect').style.visibility='visible';
@@ -39,7 +40,6 @@ function permission_selected(sel){
 					}
 					var cell=row.insertCell(count);
 					cell.innerHTML=data[i][1];
-					//alert data[i];
 					var br = document.createElement("br");
 					cell.appendChild(br);
                                         var img = document.createElement("img");
@@ -50,7 +50,7 @@ function permission_selected(sel){
 					cell.appendChild(br);
 					var checkbox = document.createElement("input");
 					checkbox.type="checkbox";
-					checkbox.value=data[i][1];
+					checkbox.value=data[i][0];
 					checkbox.name="checkbox";
 					checkbox.id="checkbox";
 					cell.appendChild(checkbox);
@@ -70,30 +70,21 @@ function permission_selected(sel){
 	}
 }
 $("#permissionSelected").click(function(){
-	//var url = "/post/"+option;
-	var checked = {};
-	alert(option);
-	if(option==="friend"||option==="fof"){
-		$("input:checkbox[name=checkbox]:checked").each(function(){
-			var value = $(this).val();
-			var key=value+"";
-			checked[key]=value;
+	checked = [];
+	if(option==="friends"||option==="fof"){
+		var count = 0;
+		$("input[name='checkbox']").each(function(){
+        		if (this.checked == false) {
+				count = count + 1;
+			} else {
+				var value = $(this).val();
+				checked.push(value);
+			}
 		});
-	}/*
-	else if(option==="me"){
-		checked[$authorName]=$authorName;
-	}
-	$.ajax({
-		url:url,
-		data:JSON.stringify(checked),
-		type:"post",
-		contentType:"application/json",
-		success: function(data){
-			alert(data);
-			window.location.replace("/");
+		if (count==0){
+			checked=[];
 		}
-	});*/
-	setpermission(option);
+	}
  });
 $("#permissionSelectedAll").click(function(){
 	$('input[name=checkbox]').prop('checked', true);

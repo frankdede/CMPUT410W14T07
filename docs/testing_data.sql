@@ -14,6 +14,10 @@ INSERT INTO author values('777777','ET','ET','12345',1,'rose@gmail.com','male','
 INSERT INTO circle values('111111','333333');
 INSERT INTO circle values('333333','111111');
 
+
+INSERT INTO circle values('111111','444444');
+INSERT INTO circle values('444444','111111');
+
 INSERT INTO circle values('222222','444444');
 INSERT INTO circle values('444444','222222');
 
