@@ -474,7 +474,7 @@ def getPermissionList(authorName):
                     return json.dumps(friendlist),200
 
             elif permission == "fof":
-                fof = circleHelper.getFriendOfFriend(aid)
+                fof = circleHelper.getFriendOfFriendList(aid)
 
                 if fof != None:
                     return json.dumps(fof),200
