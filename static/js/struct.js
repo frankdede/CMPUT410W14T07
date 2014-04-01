@@ -34,10 +34,17 @@ function setPostOptClickListener(){
 	});
 
 	$("#postSubmitBtn").click(function(){
-
 		var $postObj = toPostJsonObj();
 		if($postObj['permission'] != null && $postObj['message'] != '' && $postObj['title'] != ''){
-			submitPostDataToServer($postObj);
+			if (checked.length>0){
+				for (i=0;i<checked.length;i++){
+					$postObj['permission'] = checked[i];
+					submitPostToServer($postObj);
+				}
+			}
+			else{
+				submitPostToServer($postObj);
+			}
 
 		}else{
 			alert("Please complete your form correctly before submit");
@@ -152,7 +159,10 @@ function submitPostDataToServer($postObj){
 function setRefreshTimer(){
 	setInterval(function(){
 		getAllPostsData();
-		//getGithubNotification();
+                if($github=='True'){
+		    	getGithubNotification();
+		}
+			
 	},10000);
 }
 

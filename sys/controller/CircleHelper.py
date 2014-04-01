@@ -96,7 +96,7 @@ class CircleHelper:
         # [Success] Returns an jason array of author objects / empty jason array
         # [Exception Caught] return null
         cur = self.dbAdapter.getcursor()
-        query = ("SELECT A.aid,A.name,A.nickName,A.sid,A.email,A.gender,A.city,A.birthday,A.imgPath "
+        query = ("SELECT A.aid,A.name,A.nick_name,A.sid,A.email,A.gender,A.city,A.birthday,A.img_path "
                  "FROM author A "
                  "WHERE A.aid in (SELECT C.aid2 FROM circle C WHERE C.aid1='%s') AND sid = 1")%(aid)
         try:

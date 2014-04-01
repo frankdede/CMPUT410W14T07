@@ -23,6 +23,7 @@ class PostController:
         post_list.extend(self.posthelper.getFriendsPost(aid))
         post_list.extend(self.posthelper.getAuthorPost(aid))
         post_list.extend(self.posthelper.getMyHostFriendPost(aid))
+        post_list.extend(self.posthelper.getSelectedPost(aid))
         for post in post_list:
             if(post is None):
                 return None

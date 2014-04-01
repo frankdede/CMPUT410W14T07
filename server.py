@@ -459,19 +459,19 @@ def getPermissionList(authorName):
             # Get the permission: friend or fof, from parameter 
             permission = request.args.get('option')
 
-            if permission == "friend" or permission == "friends":
+            if permission == "friends":
                 friendlist = circleHelper.getFriendList(aid)	
                 if friendlist != None:
                     return json.dumps(friendlist),200
 
-                elif permission == "fof":
-                    fof = circleHelper.getFriendOfFriend(aid)
+            elif permission == "fof":
+                fof = circleHelper.getFriendOfFriend(aid)
 
-                    if fof != None:
-                        return json.dumps(fof),200
-                    else:
-                        return "null",200
-                        return "null",200
+                if fof != None:
+                    return json.dumps(fof),200
+                else:
+                    return "null",200
+                    return "null",200
     else:
         return abort(404)
 
@@ -586,7 +586,11 @@ def callback():
             re = make_response("False")
             re.headers['Content-Type']='text/plain'
             return re
-    return redirect(url_for('login'))
+    return redirect(url_for('github_signup'))
+
+@app.route('/github/signup')
+def github_signup():
+    return render_template('header.html',github = True)
 
 if __name__ == '__main__':
     app.debug = True
