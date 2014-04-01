@@ -59,7 +59,14 @@ function set_click_listener(){
 		event.preventDefault();
 		pos = $(this).attr('data');
 		$("#admin_row_count"+pos).addClass('danger');
-		$('#delete_author_bt').alert();
+		$.get(author_id+'/admin/delete/author?aid='+author_list[pos].aid,function(data){
+			if (data=="OK") {
+				$(this).text("Deleted");
+			}else{
+				alert("Server Error Code:"+data);
+			}
+		});
+
 	});
 	$('body').on('click','#edit_author_bt',function(){
 		event.preventDefault();

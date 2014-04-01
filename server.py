@@ -159,15 +159,19 @@ def admin_page(aid):
     if 'admin_model' not in session or aid != session['admin_model']:
         abort(404);
     return render_template("admin.html")
-@app.route('/<aid>/admin/delete/author',methods=['GET','POST'])
+@app.route('/<aid>/admin/delete/author',methods=['GET'])
 def admin_author_delete(aid):
     if 'admin_model' not in session or aid != session['admin_model']:
         abort(404);
     try:
         keyword = request.args.get('aid')
+        if ahelper.deleteAuthor(keyword) == True:
+            re = make_response("OK")
+        else:
+            re = make_response("Wrong")
+        return re
     except KeyError:
         return "Wrong URL",404
-    
 @app.route('/ajax/aid')
 def getuid():
     if 'logged_in' not in session:
