@@ -370,3 +370,14 @@ function readURL(input) {
 $("#postImagebtn").click(function(){
   $("#uploadImage_form").submit();
 });
+//Send the Post object in json over http
+function submitPostToServer($postObj){
+	$.post('/'+ $authorName +'/post/',JSON.stringify($postObj)).done(function($data){
+			var $re = JSON.parse($data);
+			if ($re['status']){
+				getAllPostsData();
+			}else{
+				alert('Please submit again.');
+			}
+	});
+}
