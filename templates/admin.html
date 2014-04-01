@@ -1,23 +1,49 @@
-<div class="table-responsive">
-  <table class="table table-hover">  
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>Author Name</th>
-        <th>Nick Name</th>
-        <th>Operations</th>
-          <th><button type="button" class="btn btn-default btn-xs" id="admin_refresh_bt">
+<ul class="nav nav-tabs" id="admin_tab">
+  <li class="active"><a href="#author_tab" data-toggle="tab">Home</a></li>
+  <li><a href="#server_tab" data-toggle="tab">Profile</a></li>
+  <li><a href="#setting" data-toggle="tab">Setting</a></li>
+  <li><a href="#overall" data-toggle="tab">Overall</a></li>
+</ul>
+
+
+<div class="tab-content">
+  <div class="tab-pane active" id="author_tab">
+    <div class="table-responsive">
+      <table class="table table-hover">  
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Author Name</th>
+            <th>Nick Name</th>
+            <th>Operations</th>
+            <th><button type="button" class="btn btn-default btn-xs" id="admin_refresh_bt">
              <span class="glyphicon glyphicon-refresh">Refresh</span>
-            </button>
-          </th>
-        </tr>
-      </thead>
-      <tbody id="admin_author_table">
-        <tr><td>1</td><td>hello</td><td>world</td><tr>
-        </tbody>
-      </table>
+           </button>
+         </th>
+       </tr>
+     </thead>
+     <tbody id="admin_author_table">
+      <tr><td>1</td><td>hello</td><td>world</td><tr>
+      </tbody>
+    </table>
+  </div>
+    <div class="row">
+    <div class="col-md-4">
+      <ul class="pagination pagination-sm" id="admin_page_number">
+        <li id="admin_page_num_begin"><a href="#" >&laquo;</a></li>
+        <li><a href="#">&raquo;</a></li>
+      </ul>
     </div>
-    <ul class="pagination pagination-sm" id="admin_page_number">
-      <li id="admin_page_num_begin"><a href="#" >&laquo;</a></li>
-      <li><a href="#">&raquo;</a></li>
-    </ul>
+    <div class="col-md-6">
+      <div class="btn-group">
+        <button type="button" class="btn btn-sm">Select All</button>
+        <button type="button" class="btn btn-sm">Remove Selected</button>
+        <button type="button" class="btn btn-sm">Commit</button>
+      </div>
+    </div>   
+    </div>
+</div>
+<div class="tab-pane" id="server_tab">...</div>
+<div class="tab-pane" id="setting_tab">...</div>
+<div class="tab-pane" id="overall_tab">...</div>
+</div>
