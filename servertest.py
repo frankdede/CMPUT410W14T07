@@ -26,7 +26,8 @@ import post
 import time
 import Utility
 #Flask-Testing
-
+#import flaskr
+import server
 import urllib2
 from flask.ext.testing import LiveServerTestCase
 from flask.ext.testing import TestCase
@@ -35,24 +36,24 @@ DEBUG = True
 
 class ServerTest(unittest.TestCase):
 
-    def create_app(self):
-        app = Flask(__name__)
-        app.config['TESTING'] = True
+    def setUp(self):
+        server.app.config['TESTING'] = True
         # Default port is 5000
-        app.config['LIVESERVER_PORT'] = 5000
-        return app
+        server.app.config['LIVESERVER_PORT'] = 5000
+        self.app = server.app.test_client()
 
     def test_server_is_up_and_running(self):
         response = urllib2.urlopen('http://localhost:5000')
         self.assertEqual(response.code,200)
 
     def test_server_login(self):
-
-        response = self.app.post('/login/',data={username:'frank',password:'12345'})
-        self.assertEqual(response.code,200)
+        response = self.app.post('/login',data=dict(username='frank',password='12345'),follow_redirects=True)
+        self.assertEqual(json.loads(response.data),{"aid": "111111"})
 
     def test_server_getCommentsForPost(self):
         pass
+
+
 
 if __name__ == '__main__':
     unittest.main()
