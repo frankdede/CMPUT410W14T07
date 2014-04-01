@@ -8,6 +8,7 @@ $(document).ready(function(){
 			$.get(aid+'/admin',function(html_data){
 				$("#struct-message-panel").html(html_data);
 				refresh_author_table();
+
 			});
 		});
 		
@@ -42,6 +43,9 @@ function check_select_change(){
 		$( "#title" ).text( str );
 	}).change();
 }
+/*
+* Set click listener on admin table each row
+*/
 function set_click_listener(){
 	$('body').on('click','#page_item',function(){
 		event.preventDefault();
@@ -61,21 +65,37 @@ function set_click_listener(){
 		$("#admin_row_count"+pos).addClass('danger');
 		$.get(author_id+'/admin/delete/author?aid='+author_list[pos].aid,function(data){
 			if (data=="OK") {
-				$(this).text("Deleted");
+				$("#admin_row_count"+pos).slideUp(500,function(){
+					refresh_author_table();
+				});
 			}else{
 				alert("Server Error Code:"+data);
 			}
 		});
-
 	});
 	$('body').on('click','#edit_author_bt',function(){
 		event.preventDefault();
-		
+		pos = $(this).attr('data');
+		aid = author_list[pos].aid;
+		$.getJSON(author_id+'/profile.json',{'aid':aid},function(data){
+			set_profile_default(data);
+			$('#edit_Modal').modal();
+			$('#submit_bt').replaceWith("<button type=\"button\" class=\"btn btn-primary\" id=\"next_bt\">Next</button>");
+			$('#reset_bt').hide();
+			$(document).on('click','#next_bt',function(){
+				submit_form('/admin/manage/'+aid+"?type=information");
+				$('#edit_Modal').modal('hide');
+				$("#change_pwd_modal").modal();
+				set_change_pwd_form_checker(author_id,"/admin/manage/"+aid+"?type=password");
+			});
+		});
 	});
 	$('body').on('click','#view_author_bt',function(){
 		event.preventDefault();
 		
 	});
+}
+function fetch_author_information(){
 }
 function hide_all_row(){
 	for (var i = 0; i < author_list.length; i++) {

@@ -116,44 +116,47 @@ def get_profile(aid):
 @app.route('/<aid>/profile/change',methods=['POST'])
 def change_profile(aid):
     if 'logged_in' in session and aid ==session['logged_id']:
-        try:
-            keyword = request.args.get('type')
-        except KeyError:
-            return "Wrong URL",404
-        if keyword == "information":
-            gender=""
-            filename=""
-            email = request.form['email']
-            #parse optional information
-            nickName=request.form['nick_name']
-            birthday =request.form['birthday']
-            city = request.form['city']
-            try:
-                file = request.files['profile_image']
-                filename = file.filename
-                #print "--"+file.filename
-            except KeyError:
-                file =None
-            try:
-                gender = request.form['gender']
-            except KeyError:
-                gender = ""
-            if file!=None and filename!="":
-                filename = save_image(aid,file)
-            if ahelper.updateAuthorInfo(aid,email,gender,city,birthday,filename):
-                re = make_response("OK")
-            else:
-                re = make_response("Failed")
-            return re
-        elif keyword == "password":
-            new_pwd = request.form['register_pwd']
-            if ahelper.updatePasswordByAid(aid,new_pwd):
-                re = make_response("OK")
-            else:
-                re = make_response("Error")
-            return re
+        return change_author_profile(aid)
     else:
         return redirect(url_for('/'))
+def change_author_profile(aid):
+    try:
+        keyword = request.args.get('type')
+        print keyword
+    except KeyError:
+        return "Wrong URL",404
+    if keyword == "information":
+        gender=""
+        filename=""
+        email = request.form['email']
+        #parse optional information
+        nickName=request.form['nick_name']
+        birthday =request.form['birthday']
+        city = request.form['city']
+        try:
+            file = request.files['profile_image']
+            filename = file.filename
+            #print "--"+file.filename
+        except KeyError:
+            file =None
+        try:
+            gender = request.form['gender']
+        except KeyError:
+            gender = ""
+        if file!=None and filename!="":
+            filename = save_image(aid,file)
+        if ahelper.updateAuthorInfo(aid,email,gender,city,birthday,filename):
+            re = make_response("OK")
+        else:
+            re = make_response("Failed")
+        return re
+    elif keyword == "password":
+        new_pwd = request.form['register_pwd']
+        if ahelper.updatePasswordByAid(aid,new_pwd):
+            re = make_response("OK")
+        else:
+            re = make_response("Error")
+        return re
 @app.route('/<aid>/admin',methods=['GET','POST'])
 def admin_page(aid):
     if 'admin_model' not in session or aid != session['admin_model']:
@@ -172,6 +175,12 @@ def admin_author_delete(aid):
         return re
     except KeyError:
         return "Wrong URL",404
+
+@app.route('/<aid>/admin/manage/<otheraid>',methods=['POST'])
+def admin_change_author(aid,otheraid):
+    if 'admin_model' not in session or aid != session['admin_model']:
+        abort(404);
+    return change_author_profile(otheraid)
 @app.route('/ajax/aid')
 def getuid():
     if 'logged_in' not in session:

@@ -44,23 +44,23 @@ content varchar(1024),
 type enum('html','text','markdown','picture') NOT NULL,
 permission varchar(128) NOT NULL,
 PRIMARY KEY (pid),
-FOREIGN KEY (aid) REFERENCES author(aid)
+FOREIGN KEY (aid) REFERENCES author(aid) ON DELETE CASCADE
 );
 
 CREATE TABLE post_permission(
 pid char(128) NOT NULL,
 aid char(128) NOT NULL,
 PRIMARY KEY(pid,aid),
-FOREIGN KEY(pid) REFERENCES post(pid),
-FOREIGN KEY(aid) REFERENCES author(aid)
+FOREIGN KEY(pid) REFERENCES post(pid)ON DELETE CASCADE,
+FOREIGN KEY(aid) REFERENCES author(aid) ON DELETE CASCADE
 );
 
 CREATE TABLE circle(
 aid1 varchar(128) NOT NULL,
 aid2 varchar(128) NOT NULL,
 PRIMARY KEY (aid1, aid2),
-FOREIGN KEY (aid1) REFERENCES author(aid),
-FOREIGN KEY (aid2) REFERENCES author(aid)
+FOREIGN KEY (aid1) REFERENCES author(aid) ON DELETE CASCADE,
+FOREIGN KEY (aid2) REFERENCES author(aid) ON DELETE CASCADE
 );
 
 CREATE TABLE request(
@@ -68,8 +68,8 @@ time timestamp,
 recipient_id varchar(128) NOT NULL,
 sender_id varchar(128) NOT NULL,
 PRIMARY KEY (recipient_id,sender_id),
-FOREIGN KEY (recipient_id) REFERENCES author(aid),
-FOREIGN KEY (sender_id) REFERENCES author(aid)
+FOREIGN KEY (recipient_id) REFERENCES author(aid) ON DELETE CASCADE,
+FOREIGN KEY (sender_id) REFERENCES author(aid) ON DELETE CASCADE
 );
 
 CREATE TABLE comments (
@@ -79,8 +79,8 @@ CREATE TABLE comments (
   time TIMESTAMP,
   content varchar(128),
   PRIMARY KEY(cid),
-  FOREIGN KEY(pid) references post(pid),
-  FOREIGN KEY(aid) references author(aid)
+  FOREIGN KEY(pid) references post(pid) ON DELETE CASCADE,
+  FOREIGN KEY(aid) references author(aid) ON DELETE CASCADE
 );
 CREATE TABLE signup_request(
 	requester varchar(128) UNIQUE,
@@ -93,6 +93,6 @@ CREATE TABLE image(
 	aid varchar(128),
 	pid varchar(128),
 	primary key (image_id),
-	FOREIGN KEY (aid) references author(aid),
-	FOREIGN KEY (pid) references post(pid)
+	FOREIGN KEY (aid) references author(aid) ON DELETE CASCADE,
+	FOREIGN KEY (pid) references post(pid) ON DELETE CASCADE
 );

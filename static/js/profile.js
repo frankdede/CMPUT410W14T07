@@ -27,7 +27,7 @@ function get_profile_json(aid){
 		var validator = $( "#edit_form" ).validate({
 			debug: true,
 			submitHandler: function(form) {
-				submit_form();
+				submit_form("/profile/change?type=information");
 			},
 			rules: {
 				email:{
@@ -91,10 +91,17 @@ function show_edit_profile_modal(){
 	});
 	$(document).on('click','#change_pwd_bt',function(){
 		$('#change_pwd_modal').modal();
-		$("#change_pwd_form").validate({
+		set_change_pwd_form_checker(author_id,"/profile/change?type=password");
+	});
+	$("#submit_new_pwd").click(function(){
+		$("#change_pwd_form").submit();
+	});	
+}
+function set_change_pwd_form_checker(aid,url){
+	$("#change_pwd_form").validate({
 			debug: true,
 			submitHandler: function(form) {
-				$.post(author_id+"/profile/change?type=password",$("#change_pwd_form").serialize(),
+				$.post(author_id+url,$("#change_pwd_form").serialize(),
 					function(data){
 						if (data=="OK") {
 							window.location.replace("/logout");
@@ -127,12 +134,8 @@ function show_edit_profile_modal(){
 				},
 			}
 		});
-	});
-	$("#submit_new_pwd").click(function(){
-		$("#change_pwd_form").submit();
-	});	
 }
-function submit_form(){
+function submit_form(url){
 	if (file_check==false) {
 		$("#ed_profile").remove();
 	}
@@ -141,7 +144,7 @@ function submit_form(){
 		return;
 	}
 	$.ajax({
-        url: author_id+"/profile/change?type=information",  //Server script to process data
+        url: author_id+url,  //Server script to process data
         type: 'POST',
         // Form data
         data: formData,
