@@ -1,4 +1,3 @@
-
 USE c410;
 DROP TABLE IF exists image;
 DROP TABLE if exists signup_request;
@@ -43,7 +42,7 @@ time TIMESTAMP NOT NULL,
 title varchar(128) NOT NULL,
 content varchar(1024),
 type enum('html','text','markdown','picture') NOT NULL,
-permission enum('me','author','friends', 'fof', 'fomh', 'public') NOT NULL,
+permission varchar(128) NOT NULL,
 PRIMARY KEY (pid),
 FOREIGN KEY (aid) REFERENCES author(aid)
 );
