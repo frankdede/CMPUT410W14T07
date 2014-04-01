@@ -115,7 +115,7 @@ class CircleHelper:
 
         return cur.fetchall()
 
-    def getFriendOfFriend(self,aid):
+    def getFriendOfFriendList(self,aid):
         
         cur = self.dbAdapter.getcursor()
         query = ("SELECT A.aid,A.name,A.nick_name,A.sid,A.email,A.gender,A.city,A.birthday,A.img_path "
