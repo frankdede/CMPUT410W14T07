@@ -201,7 +201,7 @@ function toCommentJsonObj($pid){
 							'displayname':null
 						},
 						'comment':$msg,
-						'pubData':null,
+						'pubDate':null,
 						'guid':null
 					}
 				],
