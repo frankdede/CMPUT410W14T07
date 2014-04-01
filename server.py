@@ -145,7 +145,7 @@ def change_author_profile(aid):
             gender = ""
         if file!=None and filename!="":
             filename = save_image(aid,file)
-        if ahelper.updateAuthorInfo(aid,email,gender,city,birthday,filename):
+        if ahelper.updateAuthorInfo(aid,email,gender,city,birthday,filename) and ahelper.updateNickNameByAid(aid,nickName):
             re = make_response("OK")
         else:
             re = make_response("Failed")
