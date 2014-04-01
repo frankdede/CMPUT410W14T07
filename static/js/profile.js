@@ -96,7 +96,6 @@ function show_edit_profile_modal(){
 			submitHandler: function(form) {
 				$.post(author_id+"/profile/change?type=password",$("#change_pwd_form").serialize(),
 					function(data){
-						alert(data);
 						if (data=="OK") {
 							window.location.replace("/logout");
 						}else{

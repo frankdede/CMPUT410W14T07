@@ -6,10 +6,9 @@ $(document).ready(function(){
 		author_id = aid;
 		$.getJSON(aid+"/circlelist.json",function(data){
 			$.get(aid+"/circle",function(html_content){
-				html_download = true;
 				$('#view_circle_modal').html(html_content);
 				$('#view_circles').click(function(){
-					refresh_circle_list(data);
+					reload_data();
 					set_delete_click_listener(data);
 					$('#view_circle').modal();
 				});
@@ -19,6 +18,12 @@ $(document).ready(function(){
 	});
 	
 });
+function reload_data(){
+	$.getJSON(author_id+"/circlelist.json",function(data){
+		refresh_circle_list(data);
+	});
+}
+//refresh the circle list
 function refresh_circle_list(data){
 	$('#view_friends_table').empty();
 	for (var i = 0; i < data.length; i++) {
@@ -44,13 +49,14 @@ function refresh_circle_list(data){
 				}
 }
 function set_delete_click_listener(data){
+//set delete button click listener
 	$('body').on('click','#deletefriendbt',function(){
 		var pos = parseInt($(this).attr("data"));
 		$.get(author_id+"/circle/delete",{"aid":friend_list[pos].aid},function(data2){
       		if (data2 == "OK"){
       			$("#view_friends_table").find("#addrow"+pos).slideUp(function(){
 					friend_list[pos]="undefined";
-      				refresh_circle_list(data);
+      				reload_data();
       			});
       		}else if(data2 == "Failed"){
         		alert("Delete Failed");
