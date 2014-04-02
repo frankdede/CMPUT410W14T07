@@ -1,8 +1,9 @@
 import json
 class Comment:
-    def __init__(self,cid,aid,nickName,content,time):
+    def __init__(self,cid,aid,nickName,content,time,pid):
         self.cid = cid
         self.aid = aid
+        self.pid = pid
         self.nickName = nickName
         self.time = time
         self.content = content
@@ -22,6 +23,9 @@ class Comment:
     def getContent(self):
         return self.content
 
+    def getPid(self):
+        return self.pid
+
     def setCid(self,cid):
         self.cid = cid
 
@@ -37,10 +41,14 @@ class Comment:
     def setContent(self,content):
         self.content = content
 
+    def setPid(self,pid):
+        self.pid = pid
+
     def tojson(self):
         result = {}
         result['cid'] = self.cid
         result['aid'] = self.aid
+        result['pid'] = self.pid
         result['nick_name'] = self.nickName
         result['content'] = self.content
         result['time'] = self.time

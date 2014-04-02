@@ -6,8 +6,35 @@ class CommentHelper:
     def __init__(self,dbAdapter):
         self.dbAdapter = dbAdapter
 
+    def getCommentsForAuthor(self,aid):
+
+        cur = self.dbAdapter.getcursor()
+        query =("SELECT "
+                "C.cid,"
+                "C.aid,"
+                "A.nick_name,"
+                "C.content,"
+                "C.time,"
+                "C.pid "
+                "FROM author A, comments C "
+                "WHERE A.aid = C.aid AND C.aid = ?;")%(aid)
+        try
+            cur.execute(query)
+        except mysql.connector.Error as err:
+
+            print("****************************************")
+            print("SQLException from getAllCommentsForPost():")
+            print("Error code:", err.errno)
+            print("SQLSTATE value:", err.sqlstate)
+            print("Error message:", err.msg)
+            print("Might be query issue:",query)
+            print("****************************************")
+            return None
+
+        return cur.fetchall()
+
     #Get all the comments for a specific post
-    def getAllCommentsForPost(self,postId):
+    def getCommentsForPost(self,pid):
 
         cur = self.dbAdapter.getcursor()
 
@@ -18,7 +45,7 @@ class CommentHelper:
                 "C.content,"
                 "C.time "
                 "FROM author A, comments C "
-                "WHERE C.pid = '%s' AND C.aid = A.aid;")%(postId)
+                "WHERE C.pid = '%s' AND C.aid = A.aid;")%(pid)
         try:
             cur.execute(query)
 

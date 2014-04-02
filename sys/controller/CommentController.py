@@ -7,19 +7,31 @@ class CommentController:
 
     def __init__(self,dbAdapter):
         self.commentHelper = CommentHelper(dbAdapter)
-
     '''
-    Get all comments for a specific post by its id
+    Get all comments for a specific author by aid
+    '''
+    def getCommentsForAuthor(self,aid):
+
+        result = self.commentHelper.getCommentsForAuthor(aid)
+        if result != None:
+            commentsArray = []
+            for item in result:
+                comment = Comment(item[0],item[1],item[2],item[3],item[4].strftime("%Y-%m-%d %H:%M:%S"),item[5])
+                commentsArray.append(comment)
+            return json.dumps(commentsArray)
+        return None
+    '''
+    Get all comments for a specific post by pid
     @param String Post ID
     @return String/None Returns a JSON formatted dictionary of comments if getting successfully, else None
     '''
-    def getAllCommentsForPost(self,pid):
+    def getCommentsForPost(self,pid):
         
-        result = self.commentHelper.getAllCommentsForPost(pid)
+        result = self.commentHelper.getCommentsForPost(pid)
         if result != None:
             commentDict = {}
             for item in result:
-                comment = Comment(item[0],item[1],item[2],item[3],item[4].strftime("%Y-%m-%d %H:%M:%S"))
+                comment = Comment(item[0],item[1],item[2],item[3],item[4].strftime("%Y-%m-%d %H:%M:%S"),pid)
                 commentDict[comment.getCid()] = comment.tojson()
             return json.dumps(commentDict)
         return None
