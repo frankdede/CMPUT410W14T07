@@ -1,9 +1,22 @@
 var author_id;
 var author_list = new Array();
 var item_per_page = 5;
+var admin_switcher = true;
 $(document).ready(function(){
 	$('body').on('click','#admin_bt',function(){
-		$.get('/ajax/aid',function(aid){
+		if (admin_switcher==true) {
+			$("#admin_bt").text("Quit Admin");
+			change_to_admin();
+			admin_switcher= false;
+		}else{
+			window.location.replace("/"+author_id);
+			admin_switcher= true;
+		}
+	});
+	//check_select_change();
+});
+function change_to_admin(){
+	$.get('/ajax/aid',function(aid){
 			author_id = aid;
 			$.get(aid+'/admin',function(html_data){
 				$("#struct-message-panel").html(html_data);
@@ -11,12 +24,8 @@ $(document).ready(function(){
 
 			});
 		});
-		
-		
-		$("#struct-right-panel").html("<p>hi</p>");
-	});
-	//check_select_change();
-});
+
+}
 function paginate(size){
 	var page_number = Math.ceil(size/3);
 	for (var i = page_number-1; i >0; i--) {
@@ -55,25 +64,17 @@ function set_click_listener(){
 			$("#admin_row_count"+i).show();
 		};
 	});
-	$('body').on('click','#admin_refresh_bt',function(){
+	$('body').on('click','#admin_refresh_bt',function(event){
 		event.preventDefault();
 		refresh_author_table();
 	});
-	$('body').on('click','#delete_author_bt',function(){
+	$('body').on('click','#delete_author_bt',function(event){
 		event.preventDefault();
 		pos = $(this).attr('data');
 		$("#admin_row_count"+pos).addClass('danger');
-		$.get(author_id+'/admin/delete/author?aid='+author_list[pos].aid,function(data){
-			if (data=="OK") {
-				$("#admin_row_count"+pos).slideUp(500,function(){
-					refresh_author_table();
-				});
-			}else{
-				alert("Server Error Code:"+data);
-			}
-		});
+		delete_author(author_list[pos].aid);
 	});
-	$('body').on('click','#edit_author_bt',function(){
+	$('body').on('click','#edit_author_bt',function(event){
 		event.preventDefault();
 		pos = $(this).attr('data');
 		aid = author_list[pos].aid;
@@ -90,12 +91,74 @@ function set_click_listener(){
 			});
 		});
 	});
-	$('body').on('click','#view_author_bt',function(){
+	$('body').on('click','#select_all_bt',function(event){
+		$("input[type='checkbox']").prop('checked',true);
+	});
+	$('#remove_select_bt').click(function(){
+		$("input[type='checkbox']").prop('checked',false);
+	});
+	$('#delete_select_bt').click(function(){
+		$("input[type='checkbox']").each(function(i,item){
+			if(item.checked==true){
+				aid = author_list[i].aid;
+				$.get(author_id+'/admin/delete/author?aid='+aid,function(data){
+					if (data=="OK") {
+						$("#admin_row_count"+i).slideUp(500,function(){
+							refresh_author_table();
+						});
+					}else{
+						alert("Server Error Code:"+data);
+					}
+				});
+			}
+			});
+		});
+	$(document).on('click','#vp_bt',function(event){
 		event.preventDefault();
-		
+		pos = $(this).attr('data');
+		aid = author_list[pos].aid;
+		$.get(author_id+'/admin',{page:"viewpost"},function(html_data){
+			$("#struct-right-panel").html(html_data);
+			$.getJSON(author_id+"/admin/view/post?aid="+aid,function(data){
+				$.each(data,function(i,item){
+					console.log(item);
+					insert_to_collapse(item);
+				});
+			});
+		});
 	});
 }
-function fetch_author_information(){
+function insert_to_collapse(item){
+	var string = createPostHtml(item.pid,item.title,item.date,item.content,item.type,item.permission);
+	$("#accordion").append(string)
+}
+function createPostHtml(pid,title,date,message,type,permission){
+	var string = "  <div class=\"panel panel-default\">\
+    <div class=\"panel-heading\">\
+      <h4 class=\"panel-title\">\
+        <a data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"#collapse_"+pid+"\">\
+          "+title+"\
+        </a>\
+      </h4>\
+    </div>\
+    <div id=\"collapse_"+pid+"\" class=\"panel-collapse collapse in\">\
+      <div class=\"panel-body\">"+message+
+      "</div>\
+    </div>\
+  </div>"
+
+	return string;
+}
+function delete_author(aid){
+	$.get(author_id+'/admin/delete/author?aid='+aid,function(data){
+			if (data=="OK") {
+				$("#admin_row_count"+pos).slideUp(500,function(){
+					refresh_author_table();
+				});
+			}else{
+				alert("Server Error Code:"+data);
+			}
+		});
 }
 function hide_all_row(){
 	for (var i = 0; i < author_list.length; i++) {
@@ -125,8 +188,8 @@ function refresh_author_table(){
 				<span class=\"caret\"></span> \
 				</button> \
 				<ul class=\"dropdown-menu\"> \
-				<li><a href=\"#\">View Post</a></li> \
-				<li><a href=\"#\">View his friends' Posts</a></li> \
+				<li><a href=\"#\" id='vp_bt' data='"+i+"'>View Post</a></li> \
+				<li><a href=\"#\" id='vfp_bt' data'"+i+"'>View his friends' Posts</a></li> \
 				</ul> \
 				</div> \
 				</td><td><input type=\"checkbox\"></td></tr>");

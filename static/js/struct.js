@@ -174,7 +174,7 @@ function getGithubNotification(){
 }
 
 function getAllPostsData(){
-	$.get("/"+ $authorName +"/pull/",function($data){
+	$.get("/"+ $authorid +"/pull/",function($data){
 		if($data){
 			var $postsList = JSON.parse($data);
 			updatePostList($postsList);

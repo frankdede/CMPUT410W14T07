@@ -33,7 +33,7 @@ ahelper = AuthorHelper(dbAdapter)
 aController = AuthorController(dbAdapter)
 # use the conneted dbAdapter to initialize postHelper obj
 postHelper = PostHelper(dbAdapter)
-postcontroller = PostController(dbAdapter)
+postController = PostController(dbAdapter)
 #
 reController = RequestController(dbAdapter)
 #
@@ -161,6 +161,12 @@ def change_author_profile(aid):
 def admin_page(aid):
     if 'admin_model' not in session or aid != session['admin_model']:
         abort(404);
+    try:
+        keyword = request.args.get('page')
+        if keyword == 'viewpost':
+            return render_template("admin_view_post.html")
+    except KeyError:
+        pass
     return render_template("admin.html")
 @app.route('/<aid>/admin/delete/author',methods=['GET'])
 def admin_author_delete(aid):
@@ -175,7 +181,16 @@ def admin_author_delete(aid):
         return re
     except KeyError:
         return "Wrong URL",404
-
+@app.route('/<aid>/admin/view/post',methods=['GET'])
+def admin_get_post(aid):
+    if 'admin_model' not in session or aid != session['admin_model']:
+        abort(404);
+    try:
+        keyword = request.args.get('aid')
+        post = postController.getPostByAid(keyword)
+        return post,200
+    except KeyError:
+        return "Wrong URL",404
 @app.route('/<aid>/admin/manage/<otheraid>',methods=['POST'])
 def admin_change_author(aid,otheraid):
     if 'admin_model' not in session or aid != session['admin_model']:
@@ -400,12 +415,12 @@ def renderStruct(authorName):
 @app.route('/<aid>/pull/')
 def getPostForAuthor(aid):
 
-    if ('logged_in' in session) and (session['logged_in'] == aid):
-        aid = session['logged_id']
+    if ('logged_in' in session) and (session['logged_id'] == aid):
+        #aid = session['logged_id']
         if aid == None:
             return json.dumps({'status':None}),200
         else:    
-            post = postcontroller.getPost(aid)
+            post = postController.getPost(aid)
             return post,200
     else:
         return abort(404)

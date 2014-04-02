@@ -23,10 +23,18 @@ class PostController:
         post_list.extend(self.posthelper.getFriendsPost(aid))
         post_list.extend(self.posthelper.getAuthorPost(aid))
         post_list.extend(self.posthelper.getMyHostFriendPost(aid))
-        post_list.extend(self.posthelper.getSelectedPost(aid))
+        #post_list.extend(self.posthelper.getSelectedPost(aid))
         for post in post_list:
             if(post is None):
                 return None
             else:
                 json_list[post.getPid()]=post.tojson()
         return json.dumps(json_list)
+    def getPostByAid(self,aid):
+        list = self.posthelper.getPostByAid(aid)
+        if list == None:
+            return None
+        re =[]
+        for post in list:
+            re.append(post.tojson())
+        return json.dumps(re)
