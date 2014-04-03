@@ -455,13 +455,11 @@ def renderStruct(authorName):
 # get all the new posts that a specific author can view from the server
 @app.route('/<aid>/pull/')
 def getPostForAuthor(aid):
-    print REGISTER_RESTRICATION
     if ('logged_in' in session) and (session['logged_id'] == aid):
         #aid = session['logged_id']
         if aid == None:
             return json.dumps({'status':None}),200
         else:
-            print REGISTER_RESTRICATION
             post = postController.getPost(aid)
             return post,200
     else:
