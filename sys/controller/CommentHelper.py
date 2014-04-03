@@ -18,7 +18,7 @@ class CommentHelper:
                 "C.pid "
                 "FROM author A, comments C "
                 "WHERE A.aid = C.aid AND C.aid = ?;")%(aid)
-        try
+        try:
             cur.execute(query)
         except mysql.connector.Error as err:
 

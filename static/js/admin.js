@@ -127,6 +127,15 @@ function set_click_listener(){
 			});
 		});
 	});
+	$(document).on('click','#vfp_bt',function(event){
+		event.preventDefault();
+		$("#friend_tag_trigger").tab('show');
+		pos = $(this).attr('data');
+		console.log(author_list[pos]);
+		new_aid = author_list[pos].aid;
+		name = author_list[pos].name;
+		$("#friend_tag_trigger").text(name+"'s Circle");
+	});
 }
 function insert_to_collapse(item){
 	var string = createPostHtml(item.pid,item.title,item.date,item.content,item.type,item.permission);
@@ -136,17 +145,21 @@ function createPostHtml(pid,title,date,message,type,permission){
 	var string = "  <div class=\"panel panel-default\">\
     <div class=\"panel-heading\">\
       <h4 class=\"panel-title\">\
-        <a data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"#collapse_"+pid+"\">\
-          "+title+"\
+        <a data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"#collapse_"+pid+"\">Title: \
+          "+title+"<button type=\"button\" class=\"btn btn-default btn-xs\">\
+  		<span class=\"glyphicon glyphicon-remove\"></span>\
+		</button>\
         </a>\
       </h4>\
     </div>\
-    <div id=\"collapse_"+pid+"\" class=\"panel-collapse collapse in\">\
-      <div class=\"panel-body\">"+message+
+    <div id=\"collapse_"+pid+"\" class=\"panel-collapse collapse\">\
+      <div class=\"panel-body\"><p>Content: "+message+
+      "</p><p>Date: "+date+"</p>"+
+      "<p>Type: "+type+"</p>"+
+      "<p>permission: "+permission+"</p>"+
       "</div>\
     </div>\
   </div>"
-
 	return string;
 }
 function delete_author(aid){
@@ -189,7 +202,7 @@ function refresh_author_table(){
 				</button> \
 				<ul class=\"dropdown-menu\"> \
 				<li><a href=\"#\" id='vp_bt' data='"+i+"'>View Post</a></li> \
-				<li><a href=\"#\" id='vfp_bt' data'"+i+"'>View his friends' Posts</a></li> \
+				<li><a href=\"#\" id='vfp_bt' data='"+i+"'>View his friends' Posts</a></li> \
 				</ul> \
 				</div> \
 				</td><td><input type=\"checkbox\"></td></tr>");
