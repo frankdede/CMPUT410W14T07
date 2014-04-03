@@ -66,7 +66,12 @@ class AuthorController:
             return json.dumps(author.tojson())
         else:
             return False
-    def deleteAuthorByAid(self,aid):
-        """
-            Delete the circle, post, image, comments, postpermission, request
-            """
+    def getAllTmpAuthor(self):
+        re = []
+        list = self.getAllTmpAuthorObjects()
+        if list !=None:
+            for author in list:
+                re.append(author.tojson())
+            return json.dumps(re)
+        else:
+            return None

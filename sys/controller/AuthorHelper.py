@@ -124,9 +124,33 @@ class AuthorHelper:
             author = Author(row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7],row[8])
             result.append(author)
         return result
-
+    def getAllTmpAuthorObjects(self):
+        # DO NOT DELETE THE COMMENT
+        # TODO:
+        # [SUCCESS] return an json array of author objects for remote server
+        # e.g. {{'aid':xxxxx,'name':xxxxxxx ...},{'aid':xxxxx,'name':xxxxxxx..}}
+        # [Exception] return null
+        # [Failed] return null
+        result = []
+        cur = self.dbAdapter.getcursor()
+        query = ("SELECT aid,name,email,gender,city,img_path,sid,nick_name from author WHERE vaild = 0")
+        try:
+            cur.execute(query)
+        except mysql.connector.Error as err:
+            print("****************************************")
+            print("SQLException from getFriendOfFriend():")
+            print("Error code:", err.errno)
+            print("SQLSTATE value:", err.sqlstate)
+            print("Error message:", err.msg)
+            print("Query:",query)
+            print("****************************************")
+            return None
+        for row in cur:
+            author = Author(row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7],row[8])
+        result.append(author)
+        return result
     def addLocalAuthor(self,authorName,nickName,password):
-        # DO NOT DELETE THE COMMENT 
+        # DO NOT DELETE THE COMMENT
         # TODO:
         # [Success] return {'aid':xxxxx } (jason type)
         # [Exception Caught] return false
@@ -287,10 +311,26 @@ class AuthorHelper:
             print("****************************************")
             return False
         return cur.rowcount>0
+    def setAllTmpAuthorToOfficialAuthor(self,aid):
+        """
+            To set author to official author by its aid
+        """
+        cur = self.dbAdapter.getcursor()
+        query = "UPDATE author SET valid=1 WHERE aid='%s'"%(aid)
+        try:
+            cur.execute(query)
+        except mysql.connector.Error as err:
+            print("****************************************")
+            print("SQLException from updatePasswordByUserId():")
+            print("Error code:", err.errno)
+            print("SQLSTATE value:", err.sqlstate)
+            print("Error message:", err.msg)
+            print("Might be query issue:",query)
+            print("****************************************")
+            return False
+        return cur.rowcount>0
     # to add an author to database the server_id is defualtly 1 if server_id is not provided
-
     def deleteAuthor(self,aid):
-
         cur = self.dbAdapter.getcursor()
 
         query = ("DELETE FROM author "
