@@ -556,18 +556,6 @@ def addCommentForPost(aid,pid):
     else:
         return abort(404)
 
-
-@app.route('/get_image/<authorName>/<path>')
-def get_image(authorName,path):
-    if ('logged_in' in session):
-        path = 'upload/image/'+authorName+'/'+path
-        mime = MimeTypes()
-        url = urllib.pathname2url(path)
-        mime_type = mime.guess_type(url)
-        return send_file(path, mimetype=mime_type[0])
-    else:
-        return abort(404)
-
 # get all the new posts that a specific author can view from the server
 @app.route('/<authorName>/github/notification')
 def getNotification(authorName):
