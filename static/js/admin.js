@@ -1,7 +1,9 @@
 var author_id;
 var author_list = new Array();
+var circle_list = new Array();
 var item_per_page = 5;
 var admin_switcher = true;
+var circle_switcher = false;
 $(document).ready(function(){
 	$('body').on('click','#admin_bt',function(){
 		if (admin_switcher==true) {
@@ -21,7 +23,7 @@ function change_to_admin(){
 			$.get(aid+'/admin',function(html_data){
 				$("#struct-message-panel").html(html_data);
 				refresh_author_table();
-
+				set_click_listener();
 			});
 		});
 
@@ -66,7 +68,11 @@ function set_click_listener(){
 	});
 	$('body').on('click','#admin_refresh_bt',function(event){
 		event.preventDefault();
-		refresh_author_table();
+		if (circle_switcher==false) {
+			refresh_author_table();
+		}else{
+			refresh_circle_table();
+		}
 	});
 	$('body').on('click','#delete_author_bt',function(event){
 		event.preventDefault();
@@ -77,7 +83,11 @@ function set_click_listener(){
 	$('body').on('click','#edit_author_bt',function(event){
 		event.preventDefault();
 		pos = $(this).attr('data');
-		aid = author_list[pos].aid;
+		if (circle_switcher==true) {
+			aid = circle_list[pos].aid;
+		}else{
+			aid = author_list[pos].aid;
+		}
 		$.getJSON(author_id+'/profile.json',{'aid':aid},function(data){
 			set_profile_default(data);
 			$('#edit_Modal').modal();
@@ -100,7 +110,11 @@ function set_click_listener(){
 	$('#delete_select_bt').click(function(){
 		$("input[type='checkbox']").each(function(i,item){
 			if(item.checked==true){
-				aid = author_list[i].aid;
+				if (circle_switcher==true) {
+					aid = circle_list[i].aid;
+				}else{
+					aid = author_list[i].aid;
+				}
 				$.get(author_id+'/admin/delete/author?aid='+aid,function(data){
 					if (data=="OK") {
 						$("#admin_row_count"+i).slideUp(500,function(){
@@ -116,7 +130,11 @@ function set_click_listener(){
 	$(document).on('click','#vp_bt',function(event){
 		event.preventDefault();
 		pos = $(this).attr('data');
-		aid = author_list[pos].aid;
+		if (circle_switcher==false) {
+			aid = author_list[pos].aid;
+		}else{
+			aid = circle_list[pos].aid;
+		}
 		$.get(author_id+'/admin',{page:"viewpost"},function(html_data){
 			$("#struct-right-panel").html(html_data);
 			$.getJSON(author_id+"/admin/view/post?aid="+aid,function(data){
@@ -130,11 +148,22 @@ function set_click_listener(){
 	$(document).on('click','#vfp_bt',function(event){
 		event.preventDefault();
 		$("#friend_tag_trigger").tab('show');
+		circle_switcher= true
 		pos = $(this).attr('data');
-		console.log(author_list[pos]);
-		new_aid = author_list[pos].aid;
-		name = author_list[pos].name;
+		if (circle_switcher==false) {
+			aid = author_list[pos].aid;
+			name = author_list[pos].name;
+		}else{
+			aid = circle_list[pos].aid;
+			name = circle_list[pos].name;
+		}
 		$("#friend_tag_trigger").text(name+"'s Circle");
+		refresh_circle_table(aid);
+	});
+	$(document).on('click','#author_tab',function(event){
+		event.preventDefault();
+		circle_switcher = false;
+		refresh_author_table();
 	});
 }
 function insert_to_collapse(item){
@@ -178,9 +207,36 @@ function hide_all_row(){
 		$("#admin_row_count"+i).hide();
 	}
 }
+function refresh_circle_table(aid){
+	$("#admin_circle_table").empty();
+	$.getJSON(author_id+"/admin/view/circle?aid="+aid,function(json_data){
+		$.each(json_data,function(i,field){
+			console.log(field);
+			circle_list[i] = field;
+			$("#admin_circle_table").append("<tr id='admin_row_count"+i+"'><td>"+(i+1)+"</td><td>"+field.name+"</td> \
+				<td>"+field.nick_name+"</td><td><div class=\"btn-group\"> \
+				<button type='button' class='btn btn-default btn-xs' id = 'edit_author_bt' \
+				data='"+i+"'> \
+				<span class='glyphicon glyphicon-edit'></span> Edit \
+				</button> \
+				<button type='button' class='btn btn-default btn-xs' id = 'view_author_bt' \
+				data='"+i+"' data-toggle=\"dropdown\"> \
+				<span class='glyphicon glyphicon-eye-open'></span> View \
+				<span class=\"caret\"></span> \
+				</button> \
+				<ul class=\"dropdown-menu\"> \
+				<li><a href=\"#\" id='vp_bt' data='"+i+"'>View Post</a></li> \
+				<li><a href=\"#\" id='vfp_bt' data='"+i+"'>View his friends' Posts</a></li> \
+				</ul> \
+				</div> \
+				</td><td></td></tr>");
+		});
+	});
+}
 function refresh_author_table(){
 	$("#admin_author_table").empty();
 	$.getJSON(author_id+"/authorlist.json",function(json_data){
+		
 		var datasize = json_data.length;
 		$.each(json_data,function(i,field){
 			console.log(field);
@@ -212,6 +268,6 @@ function refresh_author_table(){
 	}
 	remove_all_paging_bt(datasize);
 	paginate(datasize);
-	set_click_listener();
+	
 	});
 }

@@ -191,6 +191,16 @@ def admin_get_post(aid):
         return post,200
     except KeyError:
         return "Wrong URL",404
+@app.route('/<aid>/admin/view/circle',methods=['GET'])
+def admin_get_circle(aid):
+    if 'admin_model' not in session or aid != session['admin_model']:
+        abort(404);
+    try:
+        keyword = request.args.get('aid')
+        re = circleController.getFriendList(keyword)
+        return re
+    except KeyError:
+        return "Wrong URL",404
 @app.route('/<aid>/admin/manage/<otheraid>',methods=['POST'])
 def admin_change_author(aid,otheraid):
     if 'admin_model' not in session or aid != session['admin_model']:
