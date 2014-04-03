@@ -587,25 +587,28 @@ def getNotification(authorName):
         if aid == None:
             return json.dumps({'status':None}),200
         else:
+            author_notification = aid+'_notitfication'
+            notification_number = session[author_notification]
+            notifications={}
             r = auth_session.get('/notifications')
-            for i in range(0,len(r.json())):
-                postMsg=''
+            for i in range(notification_number,len(r.json())):
+                notification={}
                 for key,value in r.json()[i].iteritems():
                     if key == "updated_at":
-                        postMsg=postMsg+"updatet time: " + value +"\n"
-                        #print "updatet time: " + value
+                        print "updatet time: " + value
+                        notification['time']=value
                     elif key == "subject":
                         for key1,value1 in value.iteritems():
                             if key1 == "url":
-                                postMsg=postMsg+"update at: " + value1 +"\n"
-                                #print "update at: " + value1
+                                print "update at: " + value1
+                                notification['url']=value1
                             elif key1 == "title":
-                                postMsg=postMsg+"title :" + value1 +"\n"
-                                #print "title :" + value1
-                #newPost = Post(None,aid,None,'Github Notification',postMsg,'text','me')
-                #result = postHelper.addPost(aid,'Github Notification',postMsg,'text','me')
-        r = auth_session.put('/notifications')
-        return "a"
+                                print "title :" + value1
+                                notification['title']=value1
+                notifications[i]=notification
+            session[author_notification] = len(r.json())
+        #r = auth_session.put('/notifications')
+        return json.dumps(notifications),200
     else:
         return abort(404)
 
@@ -639,6 +642,9 @@ def callback():
             re = make_response("False")
             re.headers['Content-Type']='text/plain'
             return re
+    aid = session['logged_id']
+    author_notification = aid+'_notitfication'
+    session[author_notification] = 0
     return redirect(url_for('github_signup'))
 
 @app.route('/github/signup')
