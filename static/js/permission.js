@@ -43,8 +43,9 @@ function permission_selected(sel){
 					var br = document.createElement("br");
 					cell.appendChild(br);
                                         var img = document.createElement("img");
-                                        img.src = "http://"+host+"/get_image"+data[i][8];
+					img.src = data[i][0]+"/profile/image/"+data[i][8];
                                         img.width = document.getElementById("post_list").offsetWidth*0.33;
+                                        img.height = document.getElementById("post_list").offsetWidth*0.33;
 					cell.appendChild(img);
 					var br = document.createElement("br");
 					cell.appendChild(br);

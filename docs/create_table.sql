@@ -1,6 +1,5 @@
 USE c410;
 DROP TABLE IF exists image;
-DROP TABLE if exists signup_request;
 DROP TABLE IF EXISTS comments;
 DROP TABLE IF EXISTS request;
 DROP TABLE IF EXISTS post_permission;
@@ -27,6 +26,7 @@ gender varchar(128),
 city varchar(128),
 birthday varchar(128),
 img_path varchar(128),
+valid int DEFAULT 1,   /*1 is valid 0 is invalid */
 FULLTEXT(name,nick_name),
 PRIMARY KEY (aid),
 CONSTRAINT name_sid UNIQUE (name,sid),
@@ -82,10 +82,6 @@ CREATE TABLE comments (
   FOREIGN KEY(pid) references post(pid) ON DELETE CASCADE,
   FOREIGN KEY(aid) references author(aid) ON DELETE CASCADE
 );
-CREATE TABLE signup_request(
-	requester varchar(128) UNIQUE,
-	primary key(requester)
-);
 CREATE TABLE image(
 	image_id varchar(128),
 	time timestamp,
@@ -96,3 +92,4 @@ CREATE TABLE image(
 	FOREIGN KEY (aid) references author(aid) ON DELETE CASCADE,
 	FOREIGN KEY (pid) references post(pid) ON DELETE CASCADE
 );
+

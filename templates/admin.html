@@ -1,109 +1,7 @@
-<div class="modal fade" id="edit_author_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="myModalLabel">Edit Authors' Information</h4>
-      </div>
-      <div class="modal-body">
-        <form class="form-horizontal" id="admin_edit_form" method="post" enctype="multipart/form-data">
-                <!--register form-->
-                <div class="panel panel-default">
-                  <div class="panel-heading">Required Information</div>
-                  <!--begin required information-->
-                  <div class="panel-body">
-                    <div class="form-group">
-                      <label for="inputEmail3" class="col-sm-2 control-label">Email</label>
-                      <div class="col-sm-10">
-                        <input type="email" class="form-control" id="email" name="email" placeholder="Email">
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <label for="inputEmail3" class="col-sm-2 control-label">Author Name</label>
-                      <div class="col-sm-10">
-                        <input type="text" class="form-control" id="author_name" name="author_name" placeholder="Author Name">
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <label class="col-sm-2 control-label">Password</label>
-                      <div class="col-sm-10">
-                        <input type="password" id="register_pwd" class="form-control" name="register_pwd" placeholder="Password">
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <label class="col-sm-2 control-label">Retype Password</label>
-                      <div class="col-sm-10">
-                        <input type="password" class="form-control" name ="re_pwd" id="re_pwd" placeholder="Password">
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <!--End requirement pannel-->
-                <!--begin personal information pannel-->
-                <div class="panel panel-default">
-                  <div class="panel-heading">
-                    <button type="button" class="btn btn-default btn-xs" id="switcher">
-                      <span class="glyphicon glyphicon-chevron-up" id="button_image"></span>
-                    </button>
-                    Personal Information (Option)
-                  </div>
-                  <div class="panel-body" id="personal_body">
-                    <div class="form-group">
-                      <label class="col-sm-2 control-label">Nick Name</label>
-                      <div class="col-sm-10">
-                        <input type="text" class="form-control" name="nick_name" placeholder="Nick Name">
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <label class="col-sm-2 control-label">Birthday</label>
-                      <div class="col-sm-10">
-                        <input type="text" name ="birthday" id="datepicker" class="form-control" placeholder="Birthday">
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <label class="col-sm-2 control-label">Profile Upload</label>
-                      <div class="col-sm-10">
-                        <input type="file" name="profile_image" id="profile">
-                        <p class="help-block">Size of file is up to <strong>5 MB</strong></p>
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <label class="col-sm-2 control-label">City</label>
-                      <div class="col-sm-10">
-                        <input type="text" name ="city" id="city" class="form-control" placeholder="City" autocomplete="on">
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <label class="col-sm-2 control-label">Gender</label>
-                      <div class="col-sm-10">
-                        <div class="radio">
-                          <label>
-                            <input type="radio" name ="gender" value="male">Male
-                          </label>
-                        </div>
-                        <div class="radio">
-                          <label>
-                            <input type="radio" name ="gender" value="Female">Female
-                          </label>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <!--End personal information pannel-->
-                </div>
-              </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary"id="save_change_bt">Save changes</button>
-      </div>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
 <ul class="nav nav-tabs" id="admin_tab">
-  <li class="active"><a href="#author_tab" data-toggle="tab">Home</a></li>
+  <li class="active"><a href="#author_tab" data-toggle="tab" id="author_tab_trigger">Home</a></li>
   <li><a href="#firend_tab" data-toggle="tab" id="friend_tag_trigger">Friends</a></li>
-  <li><a href="#setting" data-toggle="tab">Setting</a></li>
+  <li><a href="#setting_tab" data-toggle="tab">Setting</a></li>
   <li><a href="#overall" data-toggle="tab">Overall</a></li>
 </ul>
 <div class="tab-content">
@@ -127,7 +25,7 @@
       </tbody>
     </table>
   </div>
-    <div class="row">
+  <div class="row">
     <div class="col-md-4">
       <ul class="pagination pagination-sm" id="admin_page_number">
         <li id="admin_page_num_begin"><a href="#" >&laquo;</a></li>
@@ -141,9 +39,45 @@
         <button type="button" class="btn btn-sm" id ="delete_select_bt">Muti-Delete</button>
       </div>
     </div>   
-    </div>
+  </div>
 </div>
-<div class="tab-pane" id="firend_tab">...</div>
-<div class="tab-pane" id="setting_tab">...</div>
+<div class="tab-pane" id="firend_tab">
+  <table class="table table-hover">  
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Author Name</th>
+        <th>Nick Name</th>
+        <th>Operations</th>
+        <th><button type="button" class="btn btn-default btn-xs" id="admin_refresh_bt">
+         <span class="glyphicon glyphicon-refresh">Refresh</span>
+       </button>
+     </th>
+   </tr>
+ </thead>
+ <tbody id="admin_circle_table">
+  </tbody>
+</table>
+<div class="row">
+  <div class="col-md-6">
+    <div class="btn-group">
+      <button type="button" class="btn btn-sm" id="select_all_bt">Select All</button>
+      <button type="button" class="btn btn-sm" id= "remove_select_bt">Remove Selected</button>
+      <button type="button" class="btn btn-sm" id ="delete_select_bt">Muti-Delete</button>
+    </div>
+  </div>   
+</div>
+</div>
+<div class="tab-pane" id="setting_tab">
+  <table>
+  <div class="row">
+    <div class="input-group">
+      <span class="input-group-addon">
+        <input type="checkbox" id="free_signup_checkbox">
+      </span>
+      <p class="form-control">Free signup Policy(without admin permission)</p>
+    </div><!-- /input-group -->
+  </div>
+  <table>
 <div class="tab-pane" id="overall_tab">...</div>
 </div>

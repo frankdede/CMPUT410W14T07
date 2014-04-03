@@ -45,6 +45,7 @@ commentController = CommentController(dbAdapter)
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 app = Flask(__name__)
 app.config.from_object(__name__)
+FREE_REGISTER = True
 # add upload
 UPLOAD_FOLDER='upload/image'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -191,11 +192,38 @@ def admin_get_post(aid):
         return post,200
     except KeyError:
         return "Wrong URL",404
+@app.route('/<aid>/admin/view/circle',methods=['GET'])
+def admin_get_circle(aid):
+    if 'admin_model' not in session or aid != session['admin_model']:
+        abort(404);
+    try:
+        keyword = request.args.get('aid')
+        re = circleController.getFriendList(keyword)
+        return re
+    except KeyError:
+        return "Wrong URL",404
 @app.route('/<aid>/admin/manage/<otheraid>',methods=['POST'])
 def admin_change_author(aid,otheraid):
     if 'admin_model' not in session or aid != session['admin_model']:
         abort(404);
     return change_author_profile(otheraid)
+@app.route('/<aid>/admin/global_setting/signup_policy',methods=['GET'])
+def admin_change_signup_policy(aid):
+    if 'admin_model' not in session or aid != session['admin_model']:
+        abort(404)
+    try:
+        operation = request.args.get('operation')
+        if operation == 'turunon':
+            FREE_REGISTER = True
+            re = make_response("OK")
+        elif operation == 'turnoff':
+            FREE_REGISTER = False
+            re = make_response("OK")
+        else:
+            re = make_response("Error",404)
+        return re
+    except KeyError:
+        return "Wrong URL",404
 @app.route('/ajax/aid')
 def getuid():
     if 'logged_in' not in session:
@@ -452,7 +480,7 @@ def test():
 
 @app.route('/upload',methods=['POST'])
 def upload():
-    file = request.files['file']
+    file = request.files['img_file']
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
         file.save(os.path.join(app.config['UPLOAD_FOLDER'],filename))
@@ -546,18 +574,6 @@ def addCommentForPost(aid,pid):
     else:
         return abort(404)
 
-
-@app.route('/get_image/<authorName>/<path>')
-def get_image(authorName,path):
-    if ('logged_in' in session):
-        path = 'upload/image/'+authorName+'/'+path
-        mime = MimeTypes()
-        url = urllib.pathname2url(path)
-        mime_type = mime.guess_type(url)
-        return send_file(path, mimetype=mime_type[0])
-    else:
-        return abort(404)
-
 # get all the new posts that a specific author can view from the server
 @app.route('/<authorName>/github/notification')
 def getNotification(authorName):
@@ -571,25 +587,28 @@ def getNotification(authorName):
         if aid == None:
             return json.dumps({'status':None}),200
         else:
+            author_notification = aid+'_notitfication'
+            notification_number = session[author_notification]
+            notifications={}
             r = auth_session.get('/notifications')
-            for i in range(0,len(r.json())):
-                postMsg=''
+            for i in range(notification_number,len(r.json())):
+                notification={}
                 for key,value in r.json()[i].iteritems():
                     if key == "updated_at":
-                        postMsg=postMsg+"updatet time: " + value +"\n"
-                        #print "updatet time: " + value
+                        print "updatet time: " + value
+                        notification['time']=value
                     elif key == "subject":
                         for key1,value1 in value.iteritems():
                             if key1 == "url":
-                                postMsg=postMsg+"update at: " + value1 +"\n"
-                                #print "update at: " + value1
+                                print "update at: " + value1
+                                notification['url']=value1
                             elif key1 == "title":
-                                postMsg=postMsg+"title :" + value1 +"\n"
-                                #print "title :" + value1
-                #newPost = Post(None,aid,None,'Github Notification',postMsg,'text','me')
-                #result = postHelper.addPost(aid,'Github Notification',postMsg,'text','me')
-        r = auth_session.put('/notifications')
-        return "a"
+                                print "title :" + value1
+                                notification['title']=value1
+                notifications[i]=notification
+            session[author_notification] = len(r.json())
+        #r = auth_session.put('/notifications')
+        return json.dumps(notifications),200
     else:
         return abort(404)
 
@@ -623,6 +642,9 @@ def callback():
             re = make_response("False")
             re.headers['Content-Type']='text/plain'
             return re
+    aid = session['logged_id']
+    author_notification = aid+'_notitfication'
+    session[author_notification] = 0
     return redirect(url_for('github_signup'))
 
 @app.route('/github/signup')

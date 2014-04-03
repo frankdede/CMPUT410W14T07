@@ -179,21 +179,22 @@
 <div class = "modal fade" id = "uploadPicture" tabindex = "-1" role = "dialog" aria-labelledby = "uploadPictureLabel" aria-hidden = "true">
   <div class = "modal-dialog">
    <div class = "modal-content">
+     <form id="uploadImage_form"  class ="form-horizontal" action="{{url_for('upload')}}" method="post" enctype="multipart/form-data">
      <div class = "modal-header">
        <h4 class = "modal-title" id = "uploadPictureLabel">Select picture</h4>
      </div>
     <div class = "modal-body">
-      <form id="uploadImage_form"  class ="form-horizontal" action="{{url_for('upload')}}" method="post">
+     
        <label for = "InputFile">Choose your portrait: </label>
        <p class="help-block"> Jepg,Bmp,or Png file only. No more than 1MB.</p>
-       <input type="file" onchange="readURL(this);"/>
-       <img id ="blah" src="#" alt="your image" />
-      </form>     
+       <input type="file" name ="img_file" onchange="readURL(this);"/>
+       <img id ="blah" src="#" alt="your image" />     
     </div>
     <div class = "modal-footer">
         <button type = "button" class = "btn btn-default" data-dismiss= "modal">Close</button>
         <button id = "postImagebtn" type = "button" class = "btn btn-primary">Save picture</button>
     </div>
+  </form>
   </div>
  </div>
 </div>

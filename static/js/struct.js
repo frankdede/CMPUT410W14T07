@@ -168,9 +168,18 @@ function setRefreshTimer(){
 }
 
 function getGithubNotification(){
-	$.get("/"+ $authorName +"/github/notification",function(){
-
-
+	$.get("/"+ $authorName +"/github/notification",function(data){
+                data = JSON.parse(data);
+		if(Object.keys(data).length!=0){
+                	for(var i=0; i<Object.keys(data).length;i++){
+      				var $time = data[i]['time'];
+      				var $message = data[i]['url'];
+      				var $title = 'Github notification ' + data[i]['title'];
+				var $html = createPostViewHtml(i,$title,$time,$message,'text','me');
+				addPostToList('postListView',$html,250);
+				setCommentBtnClickLisener($pid);
+			}
+		}
 	});
 }
 
@@ -376,7 +385,8 @@ function readURL(input) {
             reader.readAsDataURL(input.files[0]);
         }
     }
-$("#postImagebtn").click(function(){
+$(document).on('click',"#postImagebtn",function(){
+	alert("HI");
   $("#uploadImage_form").submit();
 });
 //Send the Post object in json over http
