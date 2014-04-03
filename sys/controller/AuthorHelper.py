@@ -17,8 +17,8 @@ class AuthorHelper:
 
         cur = self.dbAdapter.getcursor()
         #Refactored: Author_name is changed to name
-        query = "SELECT * FROM author WHERE name='%s' AND pwd='%s' AND sid=1"%(authorName,password)
-        
+        query = "SELECT aid,valid FROM author WHERE name='%s' AND pwd='%s' AND sid=1"%(authorName,password)
+        print query
         try:
             cur.execute(query)
             row = cur.fetchone()
@@ -26,6 +26,9 @@ class AuthorHelper:
                 cur.close()
                 return False
             else:
+                valid_bit = str(row[1])
+                if valid_bit == '0':
+                    return "NO_CONFIRMED"
                 re_aid =""
                 re_aid = row[0]
                 cur.close()
@@ -48,7 +51,7 @@ class AuthorHelper:
         # [Exception] return null
         # [Failed] return null
         cur = self.dbAdapter.getcursor()
-        query = "SELECT aid,name,nick_name,sid,email,gender,city,birthday,img_path FROM author WHERE aid='%s'"%(aid)
+        query = "SELECT aid,name,nick_name,sid,email,gender,city,birthday,img_path FROM author WHERE aid='%s' AND sid=1 AND valid=1"%(aid)
         try:
             cur.execute(query)
         except mysql.connector.Error as err:
@@ -78,7 +81,7 @@ class AuthorHelper:
         """
         result = []
         cur = self.dbAdapter.getcursor()
-        query = ("SELECT aid,name,nick_name,sid,email,gender,city,birthday,img_path from author WHERE sid = 1")
+        query = ("SELECT aid,name,nick_name,sid,email,gender,city,birthday,img_path from author WHERE sid = 1 AND valid=1")
         try:
             cur.execute(query)
         except mysql.connector.Error as err:
@@ -129,9 +132,8 @@ class AuthorHelper:
         # [Exception Caught] return false
         # [Failed] return false
         cur = self.dbAdapter.getcursor()
-        import utility
-        aid = utility.getid()
-        query = ("INSERT INTO author values('%s','%s','%s','%s',1,'','','','','')"%(aid,authorname,nickname,password))
+        aid = Utility.getid()
+        query = ("INSERT INTO author values('%s','%s','%s','%s',1,'','','','','',1)"%(aid,authorName,nickName,password))
         try:
             cur.execute(query)
         except mysql.connector.Error as err:
@@ -144,8 +146,29 @@ class AuthorHelper:
             print("******************************")
             return None
             
-        return json.dumps({'aid',aid})
-
+        return json.dumps({'aid':aid})
+    def addLocalTmpAuthor(self,authorName,password,nickName):
+        """
+            # TODO:
+            # [Success] return {'aid':xxxxx } (jason type)
+            # [Exception Caught] return false
+            # [Failed] return false
+        """
+        cur = self.dbAdapter.getcursor()
+        aid = Utility.getid()
+        query = ("INSERT INTO author values('%s','%s','%s','%s',1,'','','','','',0)"%(aid,authorName,nickName,password))
+        try:
+            cur.execute(query)
+        except mysql.connector.Error as err:
+            print("****************************************")
+            print("SQLException from getFriendOfFriend():")
+            print("Error code:", err.errno)
+            print("SQLSTATE value:", err.sqlstate)
+            print("Error message:", err.msg)
+            print("Query:",query)
+            print("******************************")
+            return False
+        return json.dumps({'aid':aid})
     def addRemoteAuthor(self,authorName,sid):
         # DO NOT DELETE THE COMMENT
         # TODO:
@@ -246,7 +269,24 @@ class AuthorHelper:
           return False
 
         return cur.rowcount>0
-
+    def setTmpAuthorToOfficialAuthor(self,aid):
+        """
+            To set author to official author by its aid
+            """
+        cur = self.dbAdapter.getcursor()
+        query = "UPDATE author SET valid=1 WHERE aid='%s'"%(aid)
+        try:
+            cur.execute(query)
+        except mysql.connector.Error as err:
+            print("****************************************")
+            print("SQLException from updatePasswordByUserId():")
+            print("Error code:", err.errno)
+            print("SQLSTATE value:", err.sqlstate)
+            print("Error message:", err.msg)
+            print("Might be query issue:",query)
+            print("****************************************")
+            return False
+        return cur.rowcount>0
     # to add an author to database the server_id is defualtly 1 if server_id is not provided
 
     def deleteAuthor(self,aid):
@@ -315,7 +355,7 @@ class AuthorHelper:
     def searchAuthor(self,single_key):
         result=[]
         cur = self.dbAdapter.getcursor()
-        query = "SELECT aid,name,nick_name,sid,email,gender,city,birthday,img_path FROM author WHERE name like '%"+single_key+"%' or nick_name like '%"+single_key+"%';"
+        query = "SELECT aid,name,nick_name,sid,email,gender,city,birthday,img_path FROM author WHERE valid=1 AND name like '%"+single_key+"%' or nick_name like '%"+single_key+"%';"
         print query
         try:
             cur.execute(query)

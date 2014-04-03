@@ -368,7 +368,6 @@ function readURL(input) {
         }
     }
 $(document).on('click',"#postImagebtn",function(){
-	alert("HI");
   $("#uploadImage_form").submit();
 });
 //Send the Post object in json over http

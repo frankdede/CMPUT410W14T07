@@ -20,6 +20,8 @@ function login_form_checker(){
       $.post("login",$("#login_form").serialize()).done(function(data){
           if(data ==="False"){
             $("#error_code").text("The password or username you entered is incorrect");
+          }else if(data==="NO_CONFIRMED"){
+            $("#error_code").text("Unconfirmed Author,please wait for Administrator's agreement");
           }else{
             author_id = $.parseJSON(data).aid;
             if (author_id=="") {
@@ -99,7 +101,9 @@ function ajax_upload_file(){
             author_id = $.parseJSON(data).aid;
             if (author_id=="") {
               $("#error_code").text("Unknown error");
-            }else{
+            }else if(data==="NO_CONFIRMED"){
+              $("#error_code").text("Unconfirmed Author,please wait for Administrator's agreement");
+              }else{
               window.location.replace("/"+author_id);
             }
           }
@@ -208,6 +212,7 @@ $("#re_button").click(function(){
     $("#re_button").text("Login");
     $("#button_login").text("Submit");
     $("#modal_title").text("Please Sign Up");
+    $("#error_code").text("");
      click = 1;
      // odd clicks
   } else {
@@ -216,6 +221,7 @@ $("#re_button").click(function(){
     $("#re_button").text("Register");
     $("#button_login").text("Login");
     $("#modal_title").text("Welcome");
+    $("#error_code").text("");
      click = 0;
      // even clicks
   }

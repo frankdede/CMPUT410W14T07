@@ -7,7 +7,7 @@ DROP TABLE IF EXISTS post;
 DROP TABLE IF EXISTS circle;
 DROP TABLE IF EXISTS author;
 DROP TABLE IF EXISTS servers;
-
+DROP TABLE IF EXISTS setting;
 CREATE TABLE servers(
 sid int,
 name varchar(128) NOT NULL,
@@ -92,4 +92,12 @@ CREATE TABLE image(
 	FOREIGN KEY (aid) references author(aid) ON DELETE CASCADE,
 	FOREIGN KEY (pid) references post(pid) ON DELETE CASCADE
 );
-
+CREATE TABLE setting(
+	name varchar(60),
+	value BOOL,
+	PRIMARY KEY (name)
+);
+INSERT INTO setting values('SIGNUP_RESTRICATION',false);
+UPDATE setting SET value = true WHERE name='SIGNUP_RESTRICATION';
+UPDATE setting SET value = false WHERE name='SIGNUP_RESTRICATION';
+SELECT * FROM setting WHERE name='SIGNUP_RESTRICATION'

@@ -17,6 +17,7 @@ from DatabaseAdapter import *
 from PostHelper import *
 from RequestHelper import *
 from CircleHelper import *
+from SettingHelper import *
 from PostController import *
 from AuthorController import *
 from RequestController import *
@@ -41,11 +42,12 @@ circleHelper = CircleHelper(dbAdapter)
 circleController = CircleController(dbAdapter)
 #
 commentController = CommentController(dbAdapter)
+settingHelper = SettingHelper(dbAdapter)
 #Allowed file extensions
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 app = Flask(__name__)
 app.config.from_object(__name__)
-FREE_REGISTER = True
+REGISTER_RESTRICATION = None
 # add upload
 UPLOAD_FOLDER='upload/image'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -214,10 +216,10 @@ def admin_change_signup_policy(aid):
     try:
         operation = request.args.get('operation')
         if operation == 'turunon':
-            FREE_REGISTER = True
+            settingHelper.removeSignUpRestrication()
             re = make_response("OK")
         elif operation == 'turnoff':
-            FREE_REGISTER = False
+            settingHelper.addSignUpRestrication()
             re = make_response("OK")
         else:
             re = make_response("Error",404)
@@ -248,14 +250,17 @@ def login():
         authorName =request.form['username']
         password =request.form['password']
         json_str = ahelper.authorAuthenticate(authorName,password)
+        print json_str
         if  json_str == False:
             re = make_response("False")
             re.headers['Content-Type']='text/plain'
             return re ,200
+        elif json_str=="NO_CONFIRMED":
+            re = make_response("NO_CONFIRMED")
+            return re ,200
         else:
             session['logged_in'] = authorName
             session['logged_id'] = json.loads(json_str)['aid']
-
             if(session['logged_id']==admin_id):
                 session['admin_model']= admin_id;
             return json_str,200
@@ -292,21 +297,29 @@ def register():
             gender = request.form['gender']
         except KeyError:
             gender = ""
-        aid_json = ahelper.addAuthor(authorName,password,nickName)
+        if REGISTER_RESTRICATION:
+            aid_json = ahelper.addLocalTmpAuthor(authorName,password,nickName)
+        else:
+            aid_json = ahelper.addAuthor(authorName,password,nickName)
         if aid_json == False:
             re = make_response("False")
             re.headers['Content-Type']='text/plain'
             return re
         else:
             aid = json.loads(aid_json)['aid']
-            session['logged_in'] = authorName
-            session['logged_id'] = aid
-            path =""
-            if(file!=None and file.filename!=""):
-                path = save_image(aid,file)
-            if ahelper.updateAuthorInfo(aid,email,gender,city,birthday,path) ==False:
-                abort(500)
+            if not REGISTER_RESTRICATION:
+                session['logged_in'] = authorName
+                session['logged_id'] = aid
+        path =""
+        if(file!=None and file.filename!=""):
+            path = save_image(aid,file)
+        if ahelper.updateAuthorInfo(aid,email,gender,city,birthday,path) ==False:
+            abort(500)
+        if not REGISTER_RESTRICATION:
             return aid_json
+        else:
+            re= make_response("NO_CONFIRMED")
+            return re
     return redirect(url_for('/'))
 
 def save_image(aid,file):
@@ -442,12 +455,13 @@ def renderStruct(authorName):
 # get all the new posts that a specific author can view from the server
 @app.route('/<aid>/pull/')
 def getPostForAuthor(aid):
-
+    print REGISTER_RESTRICATION
     if ('logged_in' in session) and (session['logged_id'] == aid):
         #aid = session['logged_id']
         if aid == None:
             return json.dumps({'status':None}),200
-        else:    
+        else:
+            print REGISTER_RESTRICATION
             post = postController.getPost(aid)
             return post,200
     else:
@@ -647,4 +661,5 @@ def github_signup():
 
 if __name__ == '__main__':
     app.debug = True
+    REGISTER_RESTRICATION = settingHelper.getSignUpRestricationValue()
     app.run(host='0.0.0.0')
