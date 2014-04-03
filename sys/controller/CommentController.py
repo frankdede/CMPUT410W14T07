@@ -17,7 +17,8 @@ class CommentController:
             commentsArray = []
             for item in result:
                 comment = Comment(item[0],item[1],item[2],item[3],item[4].strftime("%Y-%m-%d %H:%M:%S"),item[5])
-                commentsArray.append(comment)
+                commentsArray.append(comment.tojson())
+            print(commentsArray)
             return json.dumps(commentsArray)
         return None
     '''

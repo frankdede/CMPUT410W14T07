@@ -51,7 +51,7 @@ function setPostOptClickListener(){
 		}
 	});
 
-		getAllPostsData();
+		getPostsData();
 		setRefreshTimer();
 }
 
@@ -80,7 +80,6 @@ function setCommentBtnClickLisener($pid){
 	$("#"+$pid+"-commentsList > button").click(function(){
 		//Collect the data from webpage
 		var $commentObj = toCommentJsonObj($pid);
-		console.log($commentObj);
 		submitCommentDataToServer($pid,$commentObj);
 	});
 	
@@ -133,11 +132,11 @@ function getCommentsDataForPost($pid){
 }
 
 //fetch comments info for all posts over http get
-function getCommentsDataForAllPosts(){
+function getCommentsDataForAuthor(){
 	$.get('/author/'+$authorid+'/posts/comments/',function($data){
 		if($data){
 			var $commentsList = JSON.parse($data);
-			updateCommentsForAllPosts($commentsList);
+			updateCommentsForAuthor($commentsList);
 		}
 	});
 }
@@ -158,22 +157,33 @@ function submitPostDataToServer($postObj){
 //The timer for refreshing the postListView
 function setRefreshTimer(){
 	setInterval(function(){
-		getAllPostsData();
-                if($github=='True'){
-		    	getGithubNotification();
-		}
+
+		getPostsData();
+		getCommentsDataForAuthor();
+		//if($github=='True'){
+		//    	getGithubNotification();
+		//}
 			
 	},10000);
 }
 
 function getGithubNotification(){
-	$.get("/"+ $authorName +"/github/notification",function(){
-
-
+	$.get("/"+ $authorName +"/github/notification",function(data){
+                data = JSON.parse(data);
+		if(Object.keys(data).length!=0){
+                	for(var i=0; i<Object.keys(data).length;i++){
+      				var $time = data[i]['time'];
+      				var $message = data[i]['url'];
+      				var $title = 'Github notification ' + data[i]['title'];
+				var $html = createPostViewHtml(i,$title,$time,$message,'text','me');
+				addPostToList('postListView',$html,250);
+				setCommentBtnClickLisener($pid);
+			}
+		}
 	});
 }
 
-function getAllPostsData(){
+function getPostsData(){
 	$.get("/"+ $authorid +"/pull/",function($data){
 		if($data){
 			var $postsList = JSON.parse($data);
@@ -267,16 +277,24 @@ function updatePostList($list){
 	}
 }
 
-function updateCommentsForAllPosts(){
-
+function updateCommentsForAuthor($list){
+	for (var $i = 0 ;$i < $list.length ; $i++ ){
+		if( $POST_VIEW_LIST[$list[$i]['pid']][$list[$i]['cid']] == null ){
+			var $comment = $list[$i];
+			$POST_VIEW_LIST[$comment['pid']][$comment['cid']] = $comment;
+			
+			preAppendCommentHtml($comment.pid,$comment.cid,$comment.content);
+		}
+	}
 }
 
 
 function updateCommentsForPost($pid,$list){
 	for (var $key in $list){
-		if($POST_VIEW_LIST[$pid][$key] == null){
-			$POST_VIEW_LIST[$pid][$key] = $list[$key];
+		if( $POST_VIEW_LIST[$pid][$key] == null ){
 			var $comment = $list[$key];
+			$POST_VIEW_LIST[$pid][$key] = $comment;
+			
 			preAppendCommentHtml($pid,$comment.cid,$comment.content);
 		}
 	}
@@ -375,7 +393,7 @@ function submitPostToServer($postObj){
 	$.post('/'+ $authorName +'/post/',JSON.stringify($postObj)).done(function($data){
 			var $re = JSON.parse($data);
 			if ($re['status']){
-				getAllPostsData();
+				getPostsData();
 			}else{
 				alert('Please submit again.');
 			}
