@@ -367,7 +367,8 @@ function readURL(input) {
             reader.readAsDataURL(input.files[0]);
         }
     }
-$("#postImagebtn").click(function(){
+$(document).on('click',"#postImagebtn",function(){
+	alert("HI");
   $("#uploadImage_form").submit();
 });
 //Send the Post object in json over http

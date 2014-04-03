@@ -102,13 +102,27 @@ function set_click_listener(){
 		});
 	});
 	$('body').on('click','#select_all_bt',function(event){
-		$("input[type='checkbox']").prop('checked',true);
+		if (circle_switcher==false) {
+			$("#admin_author_table input[type='checkbox']").prop('checked',true);
+		}else{
+			$("#admin_circle_table input[type='checkbox']").prop('checked',true);
+		}
 	});
-	$('#remove_select_bt').click(function(){
-		$("input[type='checkbox']").prop('checked',false);
+	$('body').on('click','#remove_select_bt',function(){
+		if (circle_switcher==false) {
+			$("#admin_author_table input[type='checkbox']").prop('checked',false);
+		}else{
+			$("#admin_circle_table input[type='checkbox']").prop('checked',false);
+		}
 	});
 	$('#delete_select_bt').click(function(){
-		$("input[type='checkbox']").each(function(i,item){
+		if (circle_switcher==false) {
+			var aim_string = "#admin_author_table input[type='checkbox']"
+		}else{
+			var aim_string = "#admin_circle_table input[type='checkbox']"
+		}
+
+		$(aim_string).each(function(i,item){
 			if(item.checked==true){
 				if (circle_switcher==true) {
 					aid = circle_list[i].aid;
@@ -118,7 +132,11 @@ function set_click_listener(){
 				$.get(author_id+'/admin/delete/author?aid='+aid,function(data){
 					if (data=="OK") {
 						$("#admin_row_count"+i).slideUp(500,function(){
-							refresh_author_table();
+							if(circle_switcher==false){
+								refresh_author_table();
+							}else{
+								refresh_circle_table();
+							}
 						});
 					}else{
 						alert("Server Error Code:"+data);
@@ -160,10 +178,29 @@ function set_click_listener(){
 		$("#friend_tag_trigger").text(name+"'s Circle");
 		refresh_circle_table(aid);
 	});
-	$(document).on('click','#author_tab',function(event){
-		event.preventDefault();
+	$(document).on('click','#author_tab_trigger',function(event){
 		circle_switcher = false;
 		refresh_author_table();
+	});
+	//beigin settiong tab click listener
+	$("#free_signup_checkbox").click(function(){
+		if(this.checked){
+			$.get(author_id+'/admin/global_setting/signup_policy',{operation:"turunon"},function(response){
+				if (response=="OK") {
+					alert("Set successful");
+				}else{
+					alert("Error code"+response);
+				}
+			});
+		}else{
+			$.get(author_id+'/admin/global_setting/signup_policy',{operation:"turnoff"},function(response){
+				if (response=="OK") {
+					alert("Set successful");
+				}else{
+					alert("Error code"+response);
+				}
+			});
+		}
 	});
 }
 function insert_to_collapse(item){
@@ -229,7 +266,7 @@ function refresh_circle_table(aid){
 				<li><a href=\"#\" id='vfp_bt' data='"+i+"'>View his friends' Posts</a></li> \
 				</ul> \
 				</div> \
-				</td><td></td></tr>");
+				</td><td><input type='checkbox'></td></tr>");
 		});
 	});
 }

@@ -45,6 +45,7 @@ commentController = CommentController(dbAdapter)
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 app = Flask(__name__)
 app.config.from_object(__name__)
+FREE_REGISTER = True
 # add upload
 UPLOAD_FOLDER='upload/image'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -206,6 +207,23 @@ def admin_change_author(aid,otheraid):
     if 'admin_model' not in session or aid != session['admin_model']:
         abort(404);
     return change_author_profile(otheraid)
+@app.route('/<aid>/admin/global_setting/signup_policy',methods=['GET'])
+def admin_change_signup_policy(aid):
+    if 'admin_model' not in session or aid != session['admin_model']:
+        abort(404)
+    try:
+        operation = request.args.get('operation')
+        if operation == 'turunon':
+            FREE_REGISTER = True
+            re = make_response("OK")
+        elif operation == 'turnoff':
+            FREE_REGISTER = False
+            re = make_response("OK")
+        else:
+            re = make_response("Error",404)
+        return re
+    except KeyError:
+        return "Wrong URL",404
 @app.route('/ajax/aid')
 def getuid():
     if 'logged_in' not in session:
@@ -462,7 +480,7 @@ def test():
 
 @app.route('/upload',methods=['POST'])
 def upload():
-    file = request.files['file']
+    file = request.files['img_file']
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
         file.save(os.path.join(app.config['UPLOAD_FOLDER'],filename))

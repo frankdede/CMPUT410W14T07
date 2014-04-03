@@ -1,7 +1,7 @@
 <ul class="nav nav-tabs" id="admin_tab">
-  <li class="active"><a href="#author_tab" data-toggle="tab">Home</a></li>
+  <li class="active"><a href="#author_tab" data-toggle="tab" id="author_tab_trigger">Home</a></li>
   <li><a href="#firend_tab" data-toggle="tab" id="friend_tag_trigger">Friends</a></li>
-  <li><a href="#setting" data-toggle="tab">Setting</a></li>
+  <li><a href="#setting_tab" data-toggle="tab">Setting</a></li>
   <li><a href="#overall" data-toggle="tab">Overall</a></li>
 </ul>
 <div class="tab-content">
@@ -59,12 +59,6 @@
   </tbody>
 </table>
 <div class="row">
-  <div class="col-md-4">
-    <ul class="pagination pagination-sm" id="admin_page_number">
-      <li id="admin_page_num_begin"><a href="#" >&laquo;</a></li>
-      <li><a href="#">&raquo;</a></li>
-    </ul>
-  </div>
   <div class="col-md-6">
     <div class="btn-group">
       <button type="button" class="btn btn-sm" id="select_all_bt">Select All</button>
@@ -74,6 +68,16 @@
   </div>   
 </div>
 </div>
-<div class="tab-pane" id="setting_tab">...</div>
+<div class="tab-pane" id="setting_tab">
+  <table>
+  <div class="row">
+    <div class="input-group">
+      <span class="input-group-addon">
+        <input type="checkbox" id="free_signup_checkbox">
+      </span>
+      <p class="form-control">Free signup Policy(without admin permission)</p>
+    </div><!-- /input-group -->
+  </div>
+  <table>
 <div class="tab-pane" id="overall_tab">...</div>
 </div>
