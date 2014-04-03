@@ -148,7 +148,6 @@ function set_click_listener(){
 	$(document).on('click','#vfp_bt',function(event){
 		event.preventDefault();
 		$("#friend_tag_trigger").tab('show');
-		circle_switcher= true
 		pos = $(this).attr('data');
 		if (circle_switcher==false) {
 			aid = author_list[pos].aid;
@@ -157,6 +156,7 @@ function set_click_listener(){
 			aid = circle_list[pos].aid;
 			name = circle_list[pos].name;
 		}
+		circle_switcher= true
 		$("#friend_tag_trigger").text(name+"'s Circle");
 		refresh_circle_table(aid);
 	});
