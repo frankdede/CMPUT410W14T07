@@ -434,10 +434,10 @@ def index():
         return render_template('markdown.html', **locals())
     return render_template('markdown_input.html')
 
-@app.route('/author/<aid>/posts/comments')
+@app.route('/author/<aid>/posts/comments/',methods=['GET'])
 def getCommentsForAuthor(aid):
 
-    if ('logged_in' in session) and (session['logged_in'] == aid):
+    if ('logged_in' in session) and (session['logged_id'] == aid):
         return commentController.getCommentsForAuthor(aid),200
     else:
         return abort(404)
