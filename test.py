@@ -95,7 +95,7 @@ class TestController(unittest.TestCase):
      PLEASE rebuild the database before run all the tests!!!
     '''
 
-    def test_getAllCommentsForPost(self):
+    def test_getCommentsForPost(self):
     # Tested By : Guanqi
         result = self.commentController.getAllCommentsForPost('1')
         self.assertTrue(result != None,"Failed to get all comments for post")

@@ -445,10 +445,10 @@ def index():
     return render_template('markdown_input.html')
 
 @app.route('/author/<aid>/posts/comments')
-def getCommentsForAllPosts(aid,pid):
+def getCommentsForAuthor(aid):
 
     if ('logged_in' in session) and (session['logged_in'] == aid):
-        return commentController.getAllCommentsForPost(pid),200
+        return commentController.getCommentsForAuthor(aid),200
     else:
         return abort(404)
 
@@ -529,7 +529,7 @@ Get all the comments for a specific post from DB
 def getCommentsForPost(aid,pid):
 
     if('logged_id' in session) and (session['logged_id'] == aid):
-        result = commentController.getAllCommentsForPost(pid)
+        result = commentController.getCommentsForPost(pid)
         return result,200
     else:
         return abort(404)
