@@ -48,9 +48,9 @@ FOREIGN KEY (aid) REFERENCES author(aid) ON DELETE CASCADE
 );
 
 CREATE TABLE post_permission(
-pid char(128) NOT NULL,
-aid char(128) NOT NULL,
-PRIMARY KEY(pid,aid),
+pid varchar(128) NOT NULL,
+aid varchar(128) NOT NULL,
+PRIMARY KEY(pid),
 FOREIGN KEY(pid) REFERENCES post(pid)ON DELETE CASCADE,
 FOREIGN KEY(aid) REFERENCES author(aid) ON DELETE CASCADE
 );
@@ -73,7 +73,7 @@ FOREIGN KEY (sender_id) REFERENCES author(aid) ON DELETE CASCADE
 );
 
 CREATE TABLE comments (
-  cid varchar(128) NOT NULL UNIQUE,
+  cid varchar(128) NOT NULL,
   pid varchar(128) NOT NULL,
   aid varchar(128) NOT NULL, 
   time TIMESTAMP,
