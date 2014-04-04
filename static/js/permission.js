@@ -102,3 +102,6 @@ $("#permissionAntiSelect").click(function(){
 		}
 	});
 });
+$("#redirectToMyPost").click(function(){
+	window.location.replace("/"+$authorName+"/mypost");
+ });

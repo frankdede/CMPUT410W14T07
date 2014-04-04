@@ -415,3 +415,33 @@ class PostHelper:
                 post = Post(pid,aid,name,time,title,msg,msgType,permission)
                 re.append(post)
             return re
+    def getSelectedPost(self,aid):
+        re = []
+        cur = self.dbAdapter.getcursor()
+        
+        #get the post if it is public
+        query = "SELECT p.pid,p.aid,p.time,p.title,p.content,p.type,p.permission,a.name FROM post p, author a WHERE a.aid = p.permission and p.permission='%s' ;"%(aid)
+        try:
+            cur.execute(query)
+        except mysql.connector.Error as err:
+            print("****************************************")
+            print("SQLException from getSelectedPost():")
+            print("Error code:", err.errno)
+            print("SQLSTATE value:", err.sqlstate)
+            print("Error message:", err.msg)
+            print("1st Query:",query)
+            print("****************************************")
+            return None
+        if cur != None:
+            for ele in cur:
+                pid = ele[0]
+                aid = ele[1]
+                time = ele[2].strftime("%Y-%m-%d %H:%M:%S")
+                title = ele[3]
+                msg = ele[4]
+                msgType = ele[5]
+                permission = 'selected'
+                name = ele[7]
+                post = Post(pid,aid,name,time,title,msg,msgType,permission)
+                re.append(post)
+            return re

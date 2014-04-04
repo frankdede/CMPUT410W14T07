@@ -1,0 +1,12 @@
+body { font-family: sans-serif; background: #eee; }
+table, th, td { border: 1px solid #eee; }
+td	{ text-align: center; }
+th	{ background-color: #fafafa; color: #377BA8; text-align: center; }
+table { width: 100%; border-collapse: collapse; }
+.col_date	{ width: 15%; }
+.col_title	{ width: 15%; }
+.col_type	{ width: 10%; }
+.col_content	{ width: 20%; }
+.col_permission	{ width: 20%; }
+.col_edit	{ width: 10%; }
+.col_delete	{ width: 10%; }

@@ -674,6 +674,35 @@ def callback():
     session[author_notification] = 0
     return redirect(url_for('login'))
 
+
+# get all the new posts that a specific author can view from the server
+@app.route('/<aid>/pull/mypost')
+def getMyPostForAuthor(aid):
+    if ('logged_in' in session) and (session['logged_id'] == aid):
+        #aid = session['logged_id']
+        if aid == None:
+            return json.dumps({'status':None}),200
+        else:
+            post = postController.getMyPost(aid)
+            return post,200
+    else:
+        return abort(404)
+
+@app.route('/<authorName>/mypost')
+def myPost(authorName):
+    if ('logged_in' in session) and (session['logged_in'] == authorName):
+        return render_template('mypost.html')
+    else:
+        abort(404);
+
+@app.route('/<authorName>/mypost/delete/<pid>')
+def myPostDelete(authorName,pid):
+    if ('logged_in' in session) and (session['logged_in'] == authorName):
+        result = postHelper.deletePostByPid(pid)
+	print result
+        return render_template('mypost.html')
+    else:
+        abort(404);
 if __name__ == '__main__':
     app.debug = True
     REGISTER_RESTRICATION = settingHelper.getSignUpRestricationValue()
