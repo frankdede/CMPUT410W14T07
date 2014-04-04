@@ -108,7 +108,7 @@ class AuthorHelper:
         # [Failed] return null
         result = []
         cur = self.dbAdapter.getcursor()
-        query = ("SELECT aid,name,email,gender,city,img_path,sid,nick_name from author WHERE sid != 1")
+        query = ("SELECT aid,name,nick_name,sid,email,gender,city,birthday,img_path from author WHERE sid != 1")
         try:
             cur.execute(query)
         except mysql.connector.Error as err:
@@ -133,7 +133,7 @@ class AuthorHelper:
         # [Failed] return null
         result = []
         cur = self.dbAdapter.getcursor()
-        query = ("SELECT aid,name,email,gender,city,img_path,sid,nick_name from author WHERE vaild = 0")
+        query = ("SELECT aid,name,nick_name,sid,email,gender,city,birthday,img_path from author WHERE valid = 0")
         try:
             cur.execute(query)
         except mysql.connector.Error as err:
@@ -147,7 +147,7 @@ class AuthorHelper:
             return None
         for row in cur:
             author = Author(row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7],row[8])
-        result.append(author)
+            result.append(author)
         return result
     def addLocalAuthor(self,authorName,nickName,password):
         # DO NOT DELETE THE COMMENT

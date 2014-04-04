@@ -97,7 +97,3 @@ CREATE TABLE setting(
 	value BOOL,
 	PRIMARY KEY (name)
 );
-INSERT INTO setting values('SIGNUP_RESTRICATION',false);
-UPDATE setting SET value = true WHERE name='SIGNUP_RESTRICATION';
-UPDATE setting SET value = false WHERE name='SIGNUP_RESTRICATION';
-SELECT * FROM setting WHERE name='SIGNUP_RESTRICATION'

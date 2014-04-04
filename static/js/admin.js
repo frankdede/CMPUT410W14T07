@@ -1,21 +1,23 @@
 var author_id;
 var author_list = new Array();
 var circle_list = new Array();
+var tmp_author_list = new Array();
 var item_per_page = 5;
 var admin_switcher = true;
 var circle_switcher = false;
 $(document).ready(function(){
+	/*Set open admin link listener*/
 	$('body').on('click','#admin_bt',function(){
 		if (admin_switcher==true) {
 			$("#admin_bt").text("Quit Admin");
 			change_to_admin();
 			admin_switcher= false;
 		}else{
+			/*To exit the admin modal and redirect to root*/
 			window.location.replace("/"+author_id);
 			admin_switcher= true;
 		}
 	});
-	//check_select_change();
 });
 function change_to_admin(){
 	$.get('/ajax/aid',function(aid){
@@ -192,6 +194,7 @@ function set_click_listener(){
 					alert("Error code"+response);
 				}
 			});
+			$("#hide_div").hide();
 		}else{
 			$.get(author_id+'/admin/global_setting/signup_policy',{operation:"turnoff"},function(response){
 				if (response=="OK") {
@@ -200,14 +203,37 @@ function set_click_listener(){
 					alert("Error code"+response);
 				}
 			});
+			$("#hide_div").show();
 		}
+	});
+	$("#setting_tag_trigger").click(function(){
+		refresh_tmp_table();
+	});
+}
+function refresh_tmp_table(){
+	$('#admin_tmp_author_table').empty();
+	$.getJSON(author_id+'/admin/view/tmp_author',function(json_data){
+		$.each(json_data,function(i,field){
+			$('#admin_tmp_author_table').append("<tr id='admin_row_count"+i+"'><td>"+(i+1)+"</td><td>"+field.name+"</td> \
+				<td>"+field.nick_name+"</td><td><div class=\"btn-group\"> \
+				<button type='button' class='btn btn-default btn-xs' id = 'deny_author_bt' \
+				data='"+i+"'> \
+				<span class='glyphicon glyphicon-remove'></span> Deny \
+				</button> \
+				<button type='button' class='btn btn-default btn-xs' id = 'approve_author_bt' \
+				data='"+i+"'> \
+				<span class='glyphicon glyphicon-ok'></span> Approve \
+				</button> \
+				</div> \
+				</td><td><input type=\"checkbox\"></td></tr>");
+		});
 	});
 }
 function insert_to_collapse(item){
-	var string = createPostHtml(item.pid,item.title,item.date,item.content,item.type,item.permission);
+	var string = create_post_html(item.pid,item.title,item.date,item.content,item.type,item.permission);
 	$("#accordion").append(string)
 }
-function createPostHtml(pid,title,date,message,type,permission){
+function create_post_html(pid,title,date,message,type,permission){
 	var string = "  <div class=\"panel panel-default\">\
     <div class=\"panel-heading\">\
       <h4 class=\"panel-title\">\

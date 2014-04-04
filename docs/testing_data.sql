@@ -43,3 +43,4 @@ INSERT INTO post values('5','777777',NULL,'belong to 777777','test permission fo
 
 INSERT INTO comments VALUES('1','1','111111',NULL,'Nice comment');
 INSERT INTO comments VALUES('2','1','111111',NULL,'Lmao');
+INSERT INTO setting values('SIGNUP_RESTRICTION',1);

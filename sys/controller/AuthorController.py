@@ -68,7 +68,7 @@ class AuthorController:
             return False
     def getAllTmpAuthor(self):
         re = []
-        list = self.getAllTmpAuthorObjects()
+        list = self.authorHelper.getAllTmpAuthorObjects()
         if list !=None:
             for author in list:
                 re.append(author.tojson())

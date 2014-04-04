@@ -100,8 +100,13 @@ def view_profile(aid):
 @app.route('/<aid>/profile/image/<imagename>',methods=['GET'])
 def view_profile_image(aid,imagename):
     #print imagename
-    return send_from_directory(app.config['UPLOAD_FOLDER'],imagename, as_attachment=False)
-
+    import os.path
+    path = os.path.join(app.config['UPLOAD_FOLDER'],imagename);
+    print os.path.isfile(path)
+    if os.path.isfile(path):
+        return send_from_directory(app.config['UPLOAD_FOLDER'],imagename, as_attachment=False)
+    else:
+        return send_from_directory(app.config['UPLOAD_FOLDER'],"default.jpeg", as_attachment=False)
 @app.route('/<aid>/profile.json',methods=['GET'])
 def get_profile(aid):
     if 'logged_in' in session and aid ==session['logged_id']:
@@ -204,6 +209,14 @@ def admin_get_circle(aid):
         return re
     except KeyError:
         return "Wrong URL",404
+@app.route('/<aid>/admin/view/tmp_author',methods=['GET'])
+def admin_get_tmp_author(aid):
+    if 'admin_model' not in session or aid != session['admin_model']:
+        abort(404);
+    response = aController.getAllTmpAuthor();
+    if response == None:
+        response = make_response("ERROR")
+    return response
 @app.route('/<aid>/admin/manage/<otheraid>',methods=['POST'])
 def admin_change_author(aid,otheraid):
     if 'admin_model' not in session or aid != session['admin_model']:
