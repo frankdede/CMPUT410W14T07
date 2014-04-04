@@ -226,5 +226,5 @@ $(document).on('click',"#postImagebtn",function(){
   $("#uploadImage_form").submit();
 });
 $("#back").click(function(){
-	window.location.replace("/login");
+	window.location.replace("/");
  });
