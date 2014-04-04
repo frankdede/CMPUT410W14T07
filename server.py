@@ -267,8 +267,10 @@ def login():
     else:
         if not session.get('oauth_state'):
             session['oauth_state'] = binascii.hexlify(os.urandom(24))
-        authorize_url = github.get_authorize_url(scope='user,notifications', state=session.get('oauth_state'))
-        return render_template('header.html',authorize_url=authorize_url)
+            authorize_url = github.get_authorize_url(scope='user,notifications', state=session.get('oauth_state'))
+            return render_template('header.html',authorize_url=authorize_url)
+        else:
+            return render_template('header.html',github=True)
 
     if "logged_in" in session:
         aid = session['logged_id']
@@ -657,11 +659,7 @@ def callback():
     aid = session['logged_id']
     author_notification = aid+'_notitfication'
     session[author_notification] = 0
-    return redirect(url_for('github_signup'))
-
-@app.route('/github/signup')
-def github_signup():
-    return render_template('header.html',github = True)
+    return redirect(url_for('login'))
 
 if __name__ == '__main__':
     app.debug = True
