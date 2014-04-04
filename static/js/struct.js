@@ -41,9 +41,15 @@ function setPostOptClickListener(){
 					$postObj['permission'] = checked[i];
 					submitPostToServer($postObj);
 				}
+				$postObj['permission'] = 'me';
+				submitPostToServer($postObj);
 			}
 			else{
 				submitPostToServer($postObj);
+				if ($postObj['permission'] == 'friends'){
+					$postObj['permission'] = 'me';
+					submitPostToServer($postObj);
+				}
 			}
 
 		}else{
