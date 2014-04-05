@@ -60,11 +60,17 @@ class ServiceController:
             remoteDisplayName  = request['friend']['author']['displayname']
             remoteAid = request['friend']['author']['id']
             
+            if():
+
+                
+
             result = self.requestController.sendRequest(remoteAid,localAid)
 
-        retunr None
+        return None
 
-    def sendFriendRequestToRemoteServer(response):
+    def sendFriendRequestToRemoteServer(senderAid,remoteRecipiendAid,):
+
+
 
         
 
