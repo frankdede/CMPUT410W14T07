@@ -46,7 +46,7 @@ class TestController(unittest.TestCase):
         # controllers
         self.commentController = CommentController(dbAdapter)
         self.requestController = RequestController(dbAdapter)
-        self.circleHelper = CircleHelper(dbAdapter)
+        self.circleController = CircleController(dbAdapter)
         self.authorController = AuthorController(dbAdapter)
 
     '''
@@ -91,13 +91,13 @@ class TestController(unittest.TestCase):
         self.assertTrue(result == True,"Failed to delete all request by aid")
         
     '''
-     ====================   CommentHelper  ====================
+     ====================   CommentController  ====================
      PLEASE rebuild the database before run all the tests!!!
     '''
 
     def test_getCommentsForPost(self):
     # Tested By : Guanqi
-        result = self.commentController.getAllCommentsForPost('1')
+        result = self.commentController.getCommentsForPost('1')
         self.assertTrue(result != None,"Failed to get all comments for post")
 
     def test_addCommentForPost(self):
@@ -111,6 +111,15 @@ class TestController(unittest.TestCase):
         result = self.commentController.deleteCommentForPost('1')
         self.assertTrue(result == True,"Failed to delete comment for post")
 
+    '''
+    ===================  CircleController ===========================
+    '''
+
+    def test_areFriends(self):
+        result = self.circleController.areFriends('111111','333333')
+        self.assertTrue(result == True,"Failed to determine the relationship between the two aids")
+        result = self.circleController.areFriends('555555','111111')
+        self.assertTrue(result == False,"Failed to determine the relationship between the two aids")
 
 if __name__ == '__main__':
     print("**************************** Script Starts ****************************")
