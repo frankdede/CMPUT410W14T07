@@ -475,6 +475,3 @@ class PostHelper:
                 post = Post(pid,aid,name,time,title,msg,msgType,permission)
                 re.append(post)
             return re
-    def getFriendsFriendPost(self,aid):
-        re = []
-        cur = self.dbAdapter.getcursor()

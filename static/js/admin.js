@@ -235,14 +235,18 @@ function set_tmp_table_click_listener(){
 	$(document).on('click','#approve_author_bt',function(){
 		pos = $(this).attr('data');
 		$.get(author_id+"/admin/author/approve",{aid:tmp_author_list[pos].aid},function(data){
-			if (data =="OK"){}
+			if (data =="OK"){
+				refresh_tmp_table();
+			}
 			else{alert("Unknown Error Code:"+data);}
 		});
 	});
 	$(document).on('click','#deny_author_bt',function(){
 		pos = $(this).attr('data');
 		$.get(author_id+"/admin/author/deny",{aid:tmp_author_list[pos].aid},function(data){
-			if (data =="OK"){}
+			if (data =="OK"){
+				refresh_tmp_table();
+			}
 			else{alert("Unknown Error Code:"+data);}
 		});
 	});
