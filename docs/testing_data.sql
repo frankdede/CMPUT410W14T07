@@ -1,16 +1,16 @@
 
-INSERT INTO servers values(1,'localhost','localhost');
-INSERT INTO servers values(2,'remote','192.178.0.2');
+INSERT INTO servers values('cs410.cs.ualberta.ca:41070','localhost','localhost');
+INSERT INTO servers values('192.168.1.1','remote','remote');
 
-INSERT INTO author values('000000','admin','Administrator','12345',1,'frank@gmail.com','male','edmonton','1992-01-01','/frank/1.jpg',1);
-INSERT INTO author values('111111','frank','Frank Huang','12345',1,'frank@gmail.com','male','edmonton','1992-01-01','/frank/1.jpg',1);
-INSERT INTO author values('222222','jack','Jack Wong','12345',1,'jack@gmail.com','male','toronto','1994-01-01','/jack/1.jpg',1);
-INSERT INTO author values('333333','william','William Zhang','12345',1,'william@gmail.com','male','calgary','1994-01-01','/william/1.jpg',1);
-INSERT INTO author values('444444','mark','Mark Duan','12345',1,'mark@gmail.com','male','edmonton','1992-01-01','/mark/1.jpg',1);
-INSERT INTO author values('555555','paul','Paul Xu','12345',1,'paul@gmail.com','male','edmonton','1992-01-01','/paul/1.jpg',1);
-INSERT INTO author values('666666','rose','Rose Xiang','12345',1,'rose@gmail.com','male','calgary','1993-01-01','/rose/1.jpg',1);
-INSERT INTO author values('777777','ET','ET','12345',1,'rose@gmail.com','male','calgary','1993-01-01','/rose/1.jpg',0);
-INSERT INTO author values('999999','NOTCONFIRMED','NOT CONFIRMED','12345',1,'','','','','',0);
+INSERT INTO author values('000000','admin','Administrator','12345','cs410.cs.ualberta.ca:41070','frank@gmail.com','male','edmonton','1992-01-01','/frank/1.jpg',1);
+INSERT INTO author values('111111','frank','Frank Huang','12345','cs410.cs.ualberta.ca:41070','frank@gmail.com','male','edmonton','1992-01-01','/frank/1.jpg',1);
+INSERT INTO author values('222222','jack','Jack Wong','12345','cs410.cs.ualberta.ca:41070','jack@gmail.com','male','toronto','1994-01-01','/jack/1.jpg',1);
+INSERT INTO author values('333333','william','William Zhang','12345','cs410.cs.ualberta.ca:41070','william@gmail.com','male','calgary','1994-01-01','/william/1.jpg',1);
+INSERT INTO author values('444444','mark','Mark Duan','12345','cs410.cs.ualberta.ca:41070','mark@gmail.com','male','edmonton','1992-01-01','/mark/1.jpg',1);
+INSERT INTO author values('555555','paul','Paul Xu','12345','cs410.cs.ualberta.ca:41070','paul@gmail.com','male','edmonton','1992-01-01','/paul/1.jpg',1);
+INSERT INTO author values('666666','rose','Rose Xiang','12345','cs410.cs.ualberta.ca:41070','rose@gmail.com','male','calgary','1993-01-01','/rose/1.jpg',1);
+INSERT INTO author values('777777','ET','ET','12345','cs410.cs.ualberta.ca:41070','rose@gmail.com','male','calgary','1993-01-01','/rose/1.jpg',0);
+INSERT INTO author values('999999','NOTCONFIRMED','NOT CONFIRMED','12345','cs410.cs.ualberta.ca:41070','','','','','',0);
 
 INSERT INTO circle values('111111','333333');
 INSERT INTO circle values('333333','111111');

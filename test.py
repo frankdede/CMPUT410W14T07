@@ -53,7 +53,8 @@ class TestController(unittest.TestCase):
      ====================   AuthorHelper  ====================
      PLEASE rebuild the database before run all the tests
     '''
-
+    def test_addRemoteAuthor(self):
+        result = self.authorController.addRemoteAuthor()
 
     '''
      ====================   RequestHelper  ====================

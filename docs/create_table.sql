@@ -9,7 +9,7 @@ DROP TABLE IF EXISTS author;
 DROP TABLE IF EXISTS servers;
 DROP TABLE IF EXISTS setting;
 CREATE TABLE servers(
-sid int,
+sid varchar(128) NOT NULL,
 name varchar(128) NOT NULL,
 url varchar(128) NOT NULL,
 PRIMARY KEY (sid)
@@ -20,7 +20,7 @@ aid varchar(128) NOT NULL UNIQUE,
 name varchar(128) NOT NULL ,
 nick_name varchar(128),
 pwd varchar(128) NOT NULL,
-sid int default 1 NOT NULL,
+sid varchar(128) NOT NULL,
 email varchar(128),
 gender varchar(128),
 city varchar(128),
