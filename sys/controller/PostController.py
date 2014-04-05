@@ -48,11 +48,3 @@ class PostController:
             else:
                 json_list[post.getPid()]=post.tojson()
         return json.dumps(json_list)
-    def getPostByAid(self,aid):
-        list = self.posthelper.getPostByAid(aid)
-        if list == None:
-            return None
-        re =[]
-        for post in list:
-            re.append(post.tojson())
-        return json.dumps(re)
