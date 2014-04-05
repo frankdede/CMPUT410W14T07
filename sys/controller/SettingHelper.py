@@ -53,6 +53,6 @@ class SettingHelper:
             print("Might be query issue:",query)
             print("****************************************")
             return False
-        if row != None
+        if row != None:
             return row[0]
         return None
