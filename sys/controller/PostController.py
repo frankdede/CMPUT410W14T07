@@ -17,13 +17,36 @@ class PostController:
     def getPost(self,aid):
         post_list=[]
         json_list={}
-        post_list.extend(self.posthelper.getPublicPost(aid))
-        post_list.extend(self.posthelper.getPrivatePost(aid))
-        post_list.extend(self.posthelper.getFriendsFriendPost(aid))
-        post_list.extend(self.posthelper.getFriendsPost(aid))
-        post_list.extend(self.posthelper.getAuthorPost(aid))
-        post_list.extend(self.posthelper.getMyHostFriendPost(aid))
-        post_list.extend(self.posthelper.getSelectedPost(aid))
+
+
+        publicPost = self.posthelper.getPublicPost(aid)
+        if publicPost != None:
+            post_list.extend(publicPost)
+
+        privatePost = self.posthelper.getPrivatePost(aid)
+        if privatePost != None:
+            post_list.extend(privatePost)
+
+        fofPost = self.posthelper.getFriendsFriendPost(aid)
+        if fofPost != None:
+            post_list.extend(fofPost)
+
+        friendsPost = self.posthelper.getFriendsPost(aid)
+        if friendsPost != None:
+            post_list.extend(friendsPost)
+
+        authorPost = self.posthelper.getAuthorPost(aid)
+        if authorPost != None:
+            post_list.extend(authorPost)
+
+        myHostFriendPost = self.posthelper.getMyHostFriendPost(aid)
+        if myHostFriendPost != None:
+            post_list.extend(myHostFriendPost)
+
+        selectedPost = self.posthelper.getSelectedPost(aid)
+        if selectedPost != None:
+            post_list.extend(selectedPost)
+
         for post in post_list:
             if(post is None):
                 return None

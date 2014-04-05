@@ -415,6 +415,8 @@ class PostHelper:
                 post = Post(pid,aid,name,time,title,msg,msgType,permission)
                 re.append(post)
             return re
+        return None
+
     def getSelectedPost(self,aid):
         re = []
         cur = self.dbAdapter.getcursor()
@@ -445,6 +447,8 @@ class PostHelper:
                 post = Post(pid,aid,name,time,title,msg,msgType,permission)
                 re.append(post)
             return re
+        return None
+        
     def getMyPost(self,aid):
         re = []
         cur = self.dbAdapter.getcursor()
@@ -475,6 +479,7 @@ class PostHelper:
                 post = Post(pid,aid,name,time,title,msg,msgType,permission)
                 re.append(post)
             return re
+        return None
     def getFriendsFriendPost(self,aid):
         re = []
         cur = self.dbAdapter.getcursor()
