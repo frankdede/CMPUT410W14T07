@@ -60,12 +60,17 @@ class AuthorController:
     def getAuthorByAid(self,aid):
         """
             To get author json by aid
-            """
+        """
         author = self.authorHelper.getAuthorObjectByAid(aid)
         if author !=None:
             return json.dumps(author.tojson())
         else:
             return False
+
+    def addRemoteAuthor(self,aid,displayName,sid):
+        
+        return self.authorHelper.addRemoteAuthor(aid,displayName,sid)
+
     def getAllTmpAuthor(self):
         re = []
         list = self.authorHelper.getAllTmpAuthorObjects()

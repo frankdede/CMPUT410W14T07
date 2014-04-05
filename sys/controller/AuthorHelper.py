@@ -193,18 +193,16 @@ class AuthorHelper:
             print("******************************")
             return False
         return json.dumps({'aid':aid})
-    def addRemoteAuthor(self,authorName,sid):
+
+    def addRemoteAuthor(self,aid,displayName,sid):
         # DO NOT DELETE THE COMMENT
         # TODO:
         # [Success] return {'aid':xxxxx } (jason type)
         # [Exception] return false
         # [Failed] return false
         cur = self.dbAdapter.getcursor()
-        aid = utility.getid()
-        password = ""
-        nickName = ""
-        query = ("INSERT INTO author(aid,name,nick_name,pwd,sid) "
-                 "VALUES('%s','%s','%s','%s',%s)")%(aid,authorName,nickName,password,sid)
+        query = ("INSERT INTO author(aid,name,nick_name,pwd,sid,email,gender,city,birthday,img_path,valid) "
+                 "VALUES('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')")%(aid,aid,displayName,"REMOTE_USER",sid,"remote@remote.com","","","","",0)
         try:
             cur.execute(query)
 
@@ -218,10 +216,8 @@ class AuthorHelper:
             print("****************************************")
             return False
         if cur.rowcount > 0:
+            return True
 
-            return json.dumps({"aid":aid})
-
-        cur.close()
         return False
     def confirmAuthor(self,aid):
         """

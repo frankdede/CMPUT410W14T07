@@ -137,8 +137,9 @@ class CircleHelper:
           return None
 
         return cur.fetchall()
-
-
+    '''
+    Determine if two authors are friends or not
+    '''
     def areFriends(self,aid1,aid2):
 
       cur = self.dbAdapter.getcursor()
@@ -159,3 +160,47 @@ class CircleHelper:
         return None
 
       return len(cur.fetchall()) > 0
+
+    '''
+    Check if the authors in the list are friends of a specific author
+    '''
+    def areFriendsOfAuthor(self,aid1,aidsList):
+
+      if len(aidsList) == 0:
+        return None
+      cur = self.dbAdapter.getcursor()
+     
+
+      #Change each aid to 'aid2 = aid' formate
+      for i in range(len(aidsList)):
+        aidsList[i] = ("aid2 = '%s'")%(aidsList[i])
+      
+      # Add 'OR' Between two aids
+      aidsListQuery = ['OR'] * (len(aidsList) * 2 - 1)
+      aidsListQuery[0::2] = aidsList
+
+      query = ("SELECT aid2 FROM circle WHERE aid1 = '%s' AND (%s);")%(aid1,' '.join(aidsListQuery))
+      try:
+
+        cur.execute(query)
+
+      except mysql.connector.Error as err:
+        print("****************************************")
+        print("SQLException from areFriends():")
+        print("Error code:", err.errno)
+        print("SQLSTATE value:", err.sqlstate)
+        print("Error message:", err.msg)
+        print("Query:",query)
+        print("****************************************")
+        return None
+
+      return cur.fetchall()
+
+
+
+
+
+
+      
+
+
