@@ -137,3 +137,25 @@ class CircleHelper:
           return None
 
         return cur.fetchall()
+
+
+    def areFriends(self,aid1,aid2):
+
+      cur = self.dbAdapter.getcursor()
+      query = ("SELECT * FROM circle WHERE aid1 ='%s' AND aid2 = '%s';")%(aid1,aid2)
+
+      try:
+
+        cur.execute(query)
+
+      except mysql.connector.Error as err:
+        print("****************************************")
+        print("SQLException from areFriends():")
+        print("Error code:", err.errno)
+        print("SQLSTATE value:", err.sqlstate)
+        print("Error message:", err.msg)
+        print("Query:",query)
+        print("****************************************")
+        return None
+
+      return len(cur.fetchall()) > 0

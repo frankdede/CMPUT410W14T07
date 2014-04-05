@@ -71,7 +71,12 @@ class CircleController:
 
         return None 
 
+    def areFriends(self,aid1,aid2):
 
+        return self.circleHelper.areFriends(aid1,aid2)
 
+    def isFriendOfAuthor(author,authorsList):
+
+        return self.circleHelper.isFriendOfAuthor(author,authorsList)
         
 

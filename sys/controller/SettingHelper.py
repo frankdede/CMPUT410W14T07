@@ -8,9 +8,9 @@ class SettingHelper:
     dbAdapter = None
     def __init__(self,dbAdapter):
         self.dbAdapter = dbAdapter
-    def addSignUpRestrication(self):
+    def addSignUpRestriction(self):
         cur = self.dbAdapter.getcursor()
-        query = "UPDATE setting SET value = true WHERE name='SIGNUP_RESTRICTION'"
+        query = "UPDATE setting SET value = true WHERE name='SIGNUP_RESTRICTION';"
         try:
             cur.execute(query)
         except mysql.connector.Error as err:
@@ -23,9 +23,9 @@ class SettingHelper:
             print("****************************************")
             return False
         return cur.rowcount>0
-    def removeSignUpRestrication(self):
+    def removeSignUpRestriction(self):
         cur = self.dbAdapter.getcursor()
-        query = "UPDATE setting SET value = false WHERE name='SIGNUP_RESTRICTION'"
+        query = "UPDATE setting SET value = false WHERE name='SIGNUP_RESTRICTION';"
         try:
             cur.execute(query)
         except mysql.connector.Error as err:
@@ -38,9 +38,9 @@ class SettingHelper:
             print("****************************************")
             return False
         return cur.rowcount>0
-    def getSignUpRestricationValue(self):
+    def getSignUpRestrictionValue(self):
         cur = self.dbAdapter.getcursor()
-        query = "SELECT value FROM setting WHERE name='SIGNUP_RESTRICTION'"
+        query = "SELECT value FROM setting WHERE name='SIGNUP_RESTRICTION';"
         try:
             cur.execute(query)
             row = cur.fetchone()
@@ -53,4 +53,6 @@ class SettingHelper:
             print("Might be query issue:",query)
             print("****************************************")
             return False
-        return row[0]
+        if row != None:
+            return row[0]
+        return None

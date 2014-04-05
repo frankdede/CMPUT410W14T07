@@ -47,7 +47,7 @@ settingHelper = SettingHelper(dbAdapter)
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 app = Flask(__name__)
 app.config.from_object(__name__)
-REGISTER_RESTRICATION = None
+REGISTER_RESTRICTION = None
 # add upload
 UPLOAD_FOLDER='upload/image'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -255,10 +255,10 @@ def admin_change_signup_policy(aid):
     try:
         operation = request.args.get('operation')
         if operation == 'turunon':
-            settingHelper.removeSignUpRestrication()
+            settingHelper.removeSignUpRestriction()
             re = make_response("OK")
         elif operation == 'turnoff':
-            settingHelper.addSignUpRestrication()
+            settingHelper.addSignUpRestriction()
             re = make_response("OK")
         else:
             re = make_response("Error",404)
@@ -338,7 +338,7 @@ def register():
             gender = request.form['gender']
         except KeyError:
             gender = ""
-        if REGISTER_RESTRICATION:
+        if REGISTER_RESTRICTION:
             aid_json = ahelper.addLocalTmpAuthor(authorName,password,nickName)
         else:
             aid_json = ahelper.addAuthor(authorName,password,nickName)
@@ -348,7 +348,7 @@ def register():
             return re
         else:
             aid = json.loads(aid_json)['aid']
-            if not REGISTER_RESTRICATION:
+            if not REGISTER_RESTRICTION:
                 session['logged_in'] = authorName
                 session['logged_id'] = aid
         path =""
@@ -356,7 +356,7 @@ def register():
             path = save_image(aid,file)
         if ahelper.updateAuthorInfo(aid,email,gender,city,birthday,path) ==False:
             abort(500)
-        if not REGISTER_RESTRICATION:
+        if not REGISTER_RESTRICTION:
             return aid_json
         else:
             re= make_response("NO_CONFIRMED")
@@ -731,5 +731,5 @@ def myPostDelete(authorName,pid):
         abort(404);
 if __name__ == '__main__':
     app.debug = True
-    REGISTER_RESTRICATION = settingHelper.getSignUpRestricationValue()
+    REGISTER_RESTRICTION = settingHelper.getSignUpRestrictionValue()
     app.run(host='0.0.0.0')
