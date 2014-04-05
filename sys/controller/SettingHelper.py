@@ -8,7 +8,7 @@ class SettingHelper:
     dbAdapter = None
     def __init__(self,dbAdapter):
         self.dbAdapter = dbAdapter
-    def addSignUpRestrication(self):
+    def addSignUpRestriction(self):
         cur = self.dbAdapter.getcursor()
         query = "UPDATE setting SET value = true WHERE name='SIGNUP_RESTRICTION';"
         try:
@@ -23,7 +23,7 @@ class SettingHelper:
             print("****************************************")
             return False
         return cur.rowcount>0
-    def removeSignUpRestrication(self):
+    def removeSignUpRestriction(self):
         cur = self.dbAdapter.getcursor()
         query = "UPDATE setting SET value = false WHERE name='SIGNUP_RESTRICTION';"
         try:
@@ -38,7 +38,7 @@ class SettingHelper:
             print("****************************************")
             return False
         return cur.rowcount>0
-    def getSignUpRestricationValue(self):
+    def getSignUpRestrictionValue(self):
         cur = self.dbAdapter.getcursor()
         query = "SELECT value FROM setting WHERE name='SIGNUP_RESTRICTION';"
         try:
