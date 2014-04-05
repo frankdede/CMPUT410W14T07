@@ -186,7 +186,7 @@ class CircleHelper:
 
       except mysql.connector.Error as err:
         print("****************************************")
-        print("SQLException from areFriends():")
+        print("SQLException from areFriendsOfAuthor():")
         print("Error code:", err.errno)
         print("SQLSTATE value:", err.sqlstate)
         print("Error message:", err.msg)

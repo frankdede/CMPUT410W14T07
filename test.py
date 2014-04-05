@@ -50,7 +50,7 @@ class TestController(unittest.TestCase):
         self.authorController = AuthorController(dbAdapter)
 
     '''
-     ====================   AuthorHelper  ====================
+     ====================   AuthorController & Helper  ====================
      PLEASE rebuild the database before run all the tests
     '''
     def test_addAuthor(self):
@@ -131,6 +131,12 @@ class TestController(unittest.TestCase):
         self.assertTrue(result == True,"Failed to determine the relationship between the two aids")
         result = self.circleController.areFriends('555555','111111')
         self.assertTrue(result == False,"Failed to determine the relationship between the two aids")
+
+    def test_areFriendsOfAuthor(self):
+        author = "111111"
+        authorsList = ["222222","333333"]
+        result = self.circleController.areFriendsOfAuthor(author,authorsList)
+        self.assertTrue(result != None,"Failed to check areFriends of Author ")
 
 if __name__ == '__main__':
     print("**************************** Script Starts ****************************")

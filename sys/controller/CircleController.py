@@ -75,8 +75,16 @@ class CircleController:
 
         return self.circleHelper.areFriends(aid1,aid2)
 
-    def isFriendOfAuthor(author,authorsList):
+    def areFriendsOfAuthor(self,author,authorsList):
+       
+        rows = self.circleHelper.areFriendsOfAuthor(author,authorsList)
 
-        return self.circleHelper.isFriendOfAuthor(author,authorsList)
-        
+        if(rows != None):
+            friendsList = []
+            for row in rows:
+                friendsList.append(row[0])
+
+            return friendsList
+        else:
+            return None
 
