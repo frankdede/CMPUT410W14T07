@@ -480,6 +480,3 @@ class PostHelper:
                 re.append(post)
             return re
         return None
-    def getFriendsFriendPost(self,aid):
-        re = []
-        cur = self.dbAdapter.getcursor()
