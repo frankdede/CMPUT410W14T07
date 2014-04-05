@@ -27,7 +27,6 @@ city varchar(128),
 birthday varchar(128),
 img_path varchar(128),
 valid int DEFAULT 1,   /*1 is valid 0 is invalid */
-FULLTEXT(name,nick_name),
 PRIMARY KEY (aid),
 CONSTRAINT name_sid UNIQUE (name,sid),
 FOREIGN KEY (sid) REFERENCES servers (sid)
