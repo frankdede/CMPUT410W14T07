@@ -71,6 +71,10 @@ class AuthorController:
         
         return self.authorHelper.addRemoteAuthor(aid,displayName,sid)
 
+    def addAuthor(self,name,password,nickName,sid='cs410.cs.ualberta.ca:41070'):
+
+        return self.authorHelper.addAuthor(name,password,nickName,sid)
+
     def getAllTmpAuthor(self):
         re = []
         list = self.authorHelper.getAllTmpAuthorObjects()

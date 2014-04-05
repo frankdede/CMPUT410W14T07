@@ -107,8 +107,11 @@ class AuthorHelper:
         # [Exception] return null
         # [Failed] return null
         result = []
+
+        localSid = 'cs410.cs.ualberta.ca:41070'
+
         cur = self.dbAdapter.getcursor()
-        query = ("SELECT aid,name,nick_name,sid,email,gender,city,birthday,img_path from author WHERE sid != 1")
+        query = ("SELECT aid,name,nick_name,sid,email,gender,city,birthday,img_path from author WHERE sid != '%s'")%(localSid)
         try:
             cur.execute(query)
         except mysql.connector.Error as err:
@@ -149,15 +152,18 @@ class AuthorHelper:
             author = Author(row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7],row[8])
             result.append(author)
         return result
+
     def addLocalAuthor(self,authorName,nickName,password):
         # DO NOT DELETE THE COMMENT
         # TODO:
         # [Success] return {'aid':xxxxx } (jason type)
         # [Exception Caught] return false
         # [Failed] return false
+        localSid = 'cs410.cs.ualberta.ca:41070'
         cur = self.dbAdapter.getcursor()
         aid = Utility.getid()
-        query = ("INSERT INTO author values('%s','%s','%s','%s',1,'','','','','',1)"%(aid,authorName,nickName,password))
+
+        query = ("INSERT INTO author values('%s','%s','%s','%s','%s','','','','','',1)"%(aid,authorName,nickName,password,localSid))
         try:
             cur.execute(query)
         except mysql.connector.Error as err:
@@ -171,6 +177,7 @@ class AuthorHelper:
             return None
             
         return json.dumps({'aid':aid})
+
     def addLocalTmpAuthor(self,authorName,password,nickName):
         """
             # TODO:
@@ -180,7 +187,9 @@ class AuthorHelper:
         """
         cur = self.dbAdapter.getcursor()
         aid = Utility.getid()
-        query = ("INSERT INTO author values('%s','%s','%s','%s',1,'','','','','',0)"%(aid,authorName,nickName,password))
+        localSid = 'cs410.cs.ualberta.ca:41070'
+
+        query = ("INSERT INTO author values('%s','%s','%s','%s','%s','','','','','',0)"%(aid,authorName,nickName,password,localSid))
         try:
             cur.execute(query)
         except mysql.connector.Error as err:
@@ -194,31 +203,6 @@ class AuthorHelper:
             return False
         return json.dumps({'aid':aid})
 
-    def addRemoteAuthor(self,aid,displayName,sid):
-        # DO NOT DELETE THE COMMENT
-        # TODO:
-        # [Success] return {'aid':xxxxx } (jason type)
-        # [Exception] return false
-        # [Failed] return false
-        cur = self.dbAdapter.getcursor()
-        query = ("INSERT INTO author(aid,name,nick_name,pwd,sid,email,gender,city,birthday,img_path,valid) "
-                 "VALUES('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')")%(aid,aid,displayName,"REMOTE_USER",sid,"remote@remote.com","","","","",0)
-        try:
-            cur.execute(query)
-
-        except mysql.connector.Error as err:
-            print("****************************************")
-            print("SQLException from addRemoteAuthor():")
-            print("Error code:", err.errno)
-            print("SQLSTATE value:", err.sqlstate)
-            print("Error message:", err.msg)
-            print("Might be query issue:",query)
-            print("****************************************")
-            return False
-        if cur.rowcount > 0:
-            return True
-
-        return False
     def confirmAuthor(self,aid):
         """
         confirm the author and set the valid bit to true
@@ -344,7 +328,7 @@ class AuthorHelper:
             print("****************************************")
             return False
         return cur.rowcount>0
-    # to add an author to database the server_id is defualtly 1 if server_id is not provided
+    # to add an author to database the server_id is defualtly cs410.cs.ualberta.ca:41070 if server_id is not given
     def deleteAuthor(self,aid):
         cur = self.dbAdapter.getcursor()
 
@@ -365,15 +349,15 @@ class AuthorHelper:
           print("****************************************")
           return False
 
-        return cur.rowcount>0
+        return cur.rowcount > 0
 
-    def addAuthor(self,authorName,password,nickName,sid=1):
+    def addAuthor(self,name,password,nickName,sid='cs410.cs.ualberta.ca:41070'):
 
         cur = self.dbAdapter.getcursor()
         aid =Utility.getid()
 
         query = ("INSERT INTO author(aid,name,nick_name,pwd,sid) "
-                 "VALUES('%s','%s','%s','%s',%s)")%(aid,authorName,nickName,password,sid)
+                 "VALUES('%s','%s','%s','%s','%s')")%(aid,name,nickName,password,sid)
        
         try:
           cur.execute(query)
@@ -389,6 +373,29 @@ class AuthorHelper:
           print("****************************************")
           return False
         return json.dumps({"aid":aid})
+    
+    def addRemoteAuthor(self,aid,displayName,sid):
+
+        cur = self.dbAdapter.getcursor()
+
+        query = ("INSERT INTO author(aid,name,nick_name,pwd,sid) "
+                 "VALUES('%s','%s','%s','%s','%s')")%(aid,aid,aid,"",sid)
+        try:
+          cur.execute(query)
+
+        except mysql.connector.Error as err:
+
+          print("****************************************")
+          print("SQLException from addRemoteAuthor():")
+          print("Error code:", err.errno)
+          print("SQLSTATE value:", err.sqlstate)
+          print("Error message:", err.msg)
+          print("Might be query issue:",query)
+          print("****************************************")
+          return False
+
+        return True
+
     def getRecommendedAuthorList(self,aid):
         cur = self.dbAdapter.getcursor()
         query = ("SELECT c2.aid2,a.name ,count(*)as num FROM circle c1,circle c2,author a WHERE c1.aid2 = c2.aid1 and c1.aid1 !=c2.aid2 and c1.aid1 ='%s' and a.aid=c2.aid2 group by c1.aid1,c2.aid2 order by num desc;")%(aid)
@@ -407,6 +414,7 @@ class AuthorHelper:
         for row in cur:
             re.append({"aid":row[0],"name":row[1]})
         return re
+
     def searchAuthor(self,single_key):
         result=[]
         cur = self.dbAdapter.getcursor()

@@ -53,8 +53,17 @@ class TestController(unittest.TestCase):
      ====================   AuthorHelper  ====================
      PLEASE rebuild the database before run all the tests
     '''
+    def test_addAuthor(self):
+        result = self.authorController.addAuthor('test','',''):
+        self.assertTrue(result != None,"Failed to add author")
+
     def test_addRemoteAuthor(self):
-        result = self.authorController.addRemoteAuthor()
+        result = self.authorController.addRemoteAuthor('remote_test_aid','','192.168.1.1')
+        self.assertTrue(result != None,"Failed to add an remote author")
+
+    def test_getAllAuthorObjectsForRemoteServer(self):
+        result = self.authorController.getAllAuthorObjectsForRemoteServer()
+        self.assertTrue(result != None,"Failed to get all author objects for remote server")
 
     '''
      ====================   RequestHelper  ====================
