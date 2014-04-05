@@ -14,10 +14,10 @@ class AuthorHelper:
         self.dbAdapter = dbAdapter
 
     def authorAuthenticate(self,authorName,password):
-
+        localSid = 'cs410.cs.ualberta.ca:41070'
         cur = self.dbAdapter.getcursor()
         #Refactored: Author_name is changed to name
-        query = "SELECT aid,valid FROM author WHERE name='%s' AND pwd='%s' AND sid=1"%(authorName,password)
+        query = "SELECT aid,valid FROM author WHERE name='%s' AND pwd='%s' AND sid='%s'"%(authorName,password,localSid)
         print query
         try:
             cur.execute(query)
