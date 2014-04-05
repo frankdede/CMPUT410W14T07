@@ -223,6 +223,25 @@ class AuthorHelper:
 
         cur.close()
         return False
+    def confirmAuthor(self,aid):
+        """
+        confirm the author and set the valid bit to true
+        return booleam
+        """
+        cur = self.dbAdapter.getcursor()
+        query = "UPDATE author SET valid=1 WHERE aid = '%s'"%(aid)
+        try:
+            cur.execute(query)
+        except mysql.connector.Error as err:
+            print("****************************************")
+            print("updateAuthorInfo():")
+            print("Error code:", err.errno)
+            print("SQLSTATE value:", err.sqlstate)
+            print("Error message:", err.msg)
+            print("Might be query issue:",query)
+            print("****************************************")
+            return False
+        return cur.rowcount>0
     def updateAuthorInfo(self,aid,email,gender,city,birthday,img_path):
         # DO NOT DELETE THE COMMENT
         # TODO:

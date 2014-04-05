@@ -209,11 +209,13 @@ function set_click_listener(){
 	$("#setting_tag_trigger").click(function(){
 		refresh_tmp_table();
 	});
+	set_tmp_table_click_listener();
 }
 function refresh_tmp_table(){
 	$('#admin_tmp_author_table').empty();
 	$.getJSON(author_id+'/admin/view/tmp_author',function(json_data){
 		$.each(json_data,function(i,field){
+			tmp_author_list[i] = field
 			$('#admin_tmp_author_table').append("<tr id='admin_row_count"+i+"'><td>"+(i+1)+"</td><td>"+field.name+"</td> \
 				<td>"+field.nick_name+"</td><td><div class=\"btn-group\"> \
 				<button type='button' class='btn btn-default btn-xs' id = 'deny_author_bt' \
@@ -228,6 +230,23 @@ function refresh_tmp_table(){
 				</td><td><input type=\"checkbox\"></td></tr>");
 		});
 	});
+}
+function set_tmp_table_click_listener(){
+	$(document).on('click','#approve_author_bt',function(){
+		pos = $(this).attr('data');
+		$.get(author_id+"/admin/author/approve",{aid:tmp_author_list[pos].aid},function(data){
+			if (data =="OK"){}
+			else{alert("Unknown Error Code:"+data);}
+		});
+	});
+	$(document).on('click','#deny_author_bt',function(){
+		pos = $(this).attr('data');
+		$.get(author_id+"/admin/author/deny",{aid:tmp_author_list[pos].aid},function(data){
+			if (data =="OK"){}
+			else{alert("Unknown Error Code:"+data);}
+		});
+	});
+
 }
 function insert_to_collapse(item){
 	var string = create_post_html(item.pid,item.title,item.date,item.content,item.type,item.permission);

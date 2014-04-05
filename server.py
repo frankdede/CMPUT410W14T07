@@ -189,6 +189,32 @@ def admin_author_delete(aid):
         return re
     except KeyError:
         return "Wrong URL",404
+@app.route('/<aid>/admin/author/approve',methods=['GET'])
+def admin_author_approve(aid):
+    if 'admin_model' not in session or aid != session['admin_model']:
+        abort(404);
+    try:
+        keyword = request.args.get('aid')
+        if ahelper.confirmAuthor(keyword) == True:
+            re = make_response("OK")
+        else:
+            re = make_response("Wrong")
+        return re
+    except KeyError:
+        return "Wrong URL",404
+@app.route('/<aid>/admin/author/deny',methods=['GET'])
+def admin_author_deny(aid):
+    if 'admin_model' not in session or aid != session['admin_model']:
+        abort(404);
+    try:
+        keyword = request.args.get('aid')
+        if ahelper.deleteAuthor(keyword) == True:
+            re = make_response("OK")
+        else:
+            re = make_response("Wrong")
+        return re
+    except KeyError:
+        return "Wrong URL",404
 @app.route('/<aid>/admin/view/post',methods=['GET'])
 def admin_get_post(aid):
     if 'admin_model' not in session or aid != session['admin_model']:
