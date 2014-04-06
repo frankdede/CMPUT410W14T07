@@ -64,8 +64,8 @@ admin_name='admin'
 admin_model = False
 error = None
 
-GITHUB_CLIENT_ID = '02b57f045e11c12db42c'
-GITHUB_CLIENT_SECRET = 'b759b58460b2f81cfef696f7bf157be9460517f2'
+GITHUB_CLIENT_ID = '5a4bdc64c247e1f45f61'
+GITHUB_CLIENT_SECRET = '0640b9e5a32d2ebe6f4713158f2321f8ac43cee4'
 
 github = OAuth2Service(
     client_id=GITHUB_CLIENT_ID,
@@ -446,6 +446,7 @@ def messages(aid):
 @app.route('/logout')
 def logout():
     session.pop('logged_in', None)
+    session.pop('oauth_state', None)
     return redirect(url_for('login'))
 # make request
 @app.route('/<aid>/author/request',methods=['GET'])
