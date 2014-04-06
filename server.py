@@ -443,14 +443,15 @@ def messages(aid):
         abort(404)
     else:
         jsonstring = reController.getAllRequestByAid(aid)
-        #print jsonstring
         return jsonstring
+
 # logout
 @app.route('/logout')
 def logout():
     session.pop('logged_in', None)
     session.pop('oauth_state', None)
     return redirect(url_for('login'))
+    
 # make request
 @app.route('/<aid>/author/request',methods=['GET'])
 def addfriend(aid):

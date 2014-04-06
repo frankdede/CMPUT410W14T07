@@ -10,14 +10,17 @@ class AuthorHelper:
     """
     If the username and password are correct, it will return True otherwise false
     """
+    
+
     def __init__(self,dbAdapter):
+        self.localSid = 'cs410.cs.ualberta.ca:41070'
         self.dbAdapter = dbAdapter
 
     def authorAuthenticate(self,authorName,password):
-        localSid = 'cs410.cs.ualberta.ca:41070'
+
         cur = self.dbAdapter.getcursor()
         #Refactored: Author_name is changed to name
-        query = "SELECT aid,valid FROM author WHERE name='%s' AND pwd='%s' AND sid='%s'"%(authorName,password,localSid)
+        query = "SELECT aid,valid FROM author WHERE name='%s' AND pwd='%s' AND sid='%s'"%(authorName,password,self.localSid)
         print query
         try:
             cur.execute(query)
@@ -50,9 +53,9 @@ class AuthorHelper:
         # [Success] return an jason author object
         # [Exception] return null
         # [Failed] return null
-        localSid = 'cs410.cs.ualberta.ca:41070'
+
         cur = self.dbAdapter.getcursor()
-        query = "SELECT aid,name,nick_name,sid,email,gender,city,birthday,img_path FROM author WHERE aid='%s' AND sid='%s' AND valid=1"%(aid,localSid)
+        query = "SELECT aid,name,nick_name,sid,email,gender,city,birthday,img_path FROM author WHERE aid='%s' AND sid='%s' AND valid=1"%(aid,self.localSid)
         print query
         try:
             cur.execute(query)
@@ -113,7 +116,7 @@ class AuthorHelper:
         localSid = 'cs410.cs.ualberta.ca:41070'
 
         cur = self.dbAdapter.getcursor()
-        query = ("SELECT aid,name,nick_name,sid,email,gender,city,birthday,img_path from author WHERE sid != '%s'")%(localSid)
+        query = ("SELECT aid,name,nick_name,sid,email,gender,city,birthday,img_path from author WHERE sid != '%s'")%(self.localSid)
         try:
             cur.execute(query)
         except mysql.connector.Error as err:
@@ -165,7 +168,7 @@ class AuthorHelper:
         cur = self.dbAdapter.getcursor()
         aid = Utility.getid()
 
-        query = ("INSERT INTO author values('%s','%s','%s','%s','%s','','','','','',1)"%(aid,authorName,nickName,password,localSid))
+        query = ("INSERT INTO author values('%s','%s','%s','%s','%s','','','','','',1)"%(aid,authorName,nickName,password,self.localSid))
         try:
             cur.execute(query)
         except mysql.connector.Error as err:
@@ -189,9 +192,8 @@ class AuthorHelper:
         """
         cur = self.dbAdapter.getcursor()
         aid = Utility.getid()
-        localSid = 'cs410.cs.ualberta.ca:41070'
 
-        query = ("INSERT INTO author values('%s','%s','%s','%s','%s','','','','','',0)"%(aid,authorName,nickName,password,localSid))
+        query = ("INSERT INTO author values('%s','%s','%s','%s','%s','','','','','',0)"%(aid,authorName,nickName,password,self.localSid))
         try:
             cur.execute(query)
         except mysql.connector.Error as err:
@@ -224,6 +226,7 @@ class AuthorHelper:
             print("****************************************")
             return False
         return cur.rowcount>0
+
     def updateAuthorInfo(self,aid,email,gender,city,birthday,img_path):
         # DO NOT DELETE THE COMMENT
         # TODO:
@@ -330,6 +333,7 @@ class AuthorHelper:
             print("****************************************")
             return False
         return cur.rowcount>0
+
     # to add an author to database the server_id is defualtly cs410.cs.ualberta.ca:41070 if server_id is not given
     def deleteAuthor(self,aid):
         cur = self.dbAdapter.getcursor()
@@ -441,7 +445,7 @@ class AuthorHelper:
     def isRemoteAuthor(self,aid):
         cur = self.dbAdapter.getcursor()
         localSid = 'cs410.cs.ualberta.ca:41070'
-        query = ("SELECT * FROM author WHERE aid = '%s' AND sid <> '%s';")%(aid,localSid)
+        query = ("SELECT * FROM author WHERE aid = '%s' AND sid <> '%s';")%(aid,self.localSid)
 
         try:
             cur.execute(query)

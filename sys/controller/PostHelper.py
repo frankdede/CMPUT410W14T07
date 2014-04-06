@@ -35,32 +35,10 @@ class PostHelper:
           return None
 
         if cur.rowcount>0:
-          return True
+          return pid
         else:
           return False
           
-    def addPostPermission(self,dbAdapter,pid,aid):
-
-        cur = self.dbAdapter.getcursor()
-        query = "INSERT INTO user_permission VALUES('%s','%s')"%(pid,aid)
-
-        try:
-
-          cur.execute(query)
-          self.dbAdapter.commit()
-
-        except mysql.connector.Error as err:
-
-          print("****************************************")
-          print("SQLException is raised by addPostPermission():")
-          print("Error code:", err.errno)
-          print("SQLSTATE value:", err.sqlstate)
-          print("Error message:", err.msg)
-          print("Might be query issue:",query)
-          print("****************************************")
-          return False
-
-        return cur.rowcount>0
 #type argument should be one of ['pid','aid','time','message','title','permission']
 #Usage: updatepost(databasehelper,pid,type="html", permmision="public") check keyword argument
     def updateMessage(self,pid,newContent):
