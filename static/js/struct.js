@@ -179,11 +179,11 @@ function getGithubNotification(){
 		if(Object.keys(data).length!=0){
                 	for(var i=0; i<Object.keys(data).length;i++){
       				var $time = data[i]['time'];
-      				var $message = data[i]['url'];
-      				var $title = 'Github notification ' + data[i]['title'];
+      				var $message = data[i]['content'];
+      				var $title = data[i]['title'];
 				var $html = createPostViewHtml(i,$title,$time,$message,'text','me');
 				addPostToList('postListView',$html,250);
-				setCommentBtnClickLisener($pid);
+				setCommentBtnClickLisener(i);
 			}
 		}
 	});
