@@ -146,8 +146,12 @@ class TestController(unittest.TestCase):
 
     def test_addFriendForAuthor(self):
         result = self.circleController.addFriendForAuthor('111111','999999')
-        self.assertTrue(result != None)
-        
+        self.assertTrue(result == True,"Failed to add friend for author")
+
+    def test_deleteFriendOfAuthor(self):
+        result = self.circleController.deleteFriendOfAuthor('111111','999999')
+        self.assertTrue(result == True,"Failed to delete friend of author")
+
 if __name__ == '__main__':
     print("**************************** Script Starts ****************************")
     subprocess.call(["./install.sh", "-rebuild_all"])
