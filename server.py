@@ -400,7 +400,7 @@ def search_author(aid):
     except KeyError:
         return redirect(url_for('/'))
     if keyword!=None and keyword!="":
-        re = aController.searchAuthorByString(keyword)
+        re = aController.searchAuthorByString(aid,keyword)
         return re
 
 @app.route('/<aid>/authorlist.json',methods=['GET'])
@@ -551,8 +551,8 @@ def allowed_file(filename):
 def test():
     return render_template('upload_image.html')
 
-@app.route('/upload',methods=['POST'])
-def upload():
+@app.route('/<aid>/<pid>/upload',methods=['POST'])
+def upload(aid,pid):
     file = request.files['img_file']
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)

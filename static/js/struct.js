@@ -391,17 +391,54 @@ function readURL(input) {
             reader.readAsDataURL(input.files[0]);
         }
     }
+$('#upload_img_file').bind('change', function() {
+  var size = this.files[0].size/1024/1024;
+  var type = this.files[0].type;
+  if(extentions.indexOf(type)==-1){
+    alert("The file is not supported for upload" );
+    file.replaceWith(file = file.clone(true));
+  }else if (size>5) {
+    alert("This file size should not be greater than 5 MB");
+    var file = $('#upload_img_file');
+    file.replaceWith(file = file.clone(true));
+    }
+  });
 $(document).on('click',"#postImagebtn",function(){
-  $("#uploadImage_form").submit();
+  $("#uploadPicture").modal('hide');
 });
 //Send the Post object in json over http
 function submitPostToServer($postObj){
 	$.post('/'+ $authorName +'/post/',JSON.stringify($postObj)).done(function($data){
 			var $re = JSON.parse($data);
 			if ($re['status']){
+				ajax_upload_image($re['status')
 				getPostsData();
 			}else{
 				alert('Please submit again.');
 			}
 	});
+}
+function ajax_upload_image(pid){
+  var formData = new FormData($("#uploadImage_form")[0]);
+    $.ajax({
+        url: authorid+"/"+pid+"/upload",  //Server script to process data
+        type: 'POST',
+        // Form data
+        data: formData,
+        //Options to tell jQuery not to process data or worry about content-type.
+        contentType: false,
+        cache: false,
+        processData: false,
+        async: false,
+        success: function(data) {
+          if(data ==="False"){
+            $("#upload_error_code").text("Upload Error");
+            $("#uploadImage_form")[0].reset();
+            return false;
+          }else if (data=="OK"){
+            alert("success");
+            return true;
+          }
+        },
+    });
 }

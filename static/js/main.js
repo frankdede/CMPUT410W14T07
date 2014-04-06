@@ -5,7 +5,7 @@ var author_id="";
 var request_list = Array();
 var extentions =new Array("image/jpg","image/jpeg","image/png","image/gif");
 $(document).ready(function(){
-  $( "#datepicker" ).datepicker();
+  //$( "#datepicker" ).datepicker();
   $("#register_form").hide();
   $("#personal_body").hide();
   register_form_checker();

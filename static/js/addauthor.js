@@ -36,19 +36,32 @@ function search_auther_list(aid,url){
     $.getJSON(aid+url,function(data2){
       recive_size = data2.length;
       $.each(data2,function(i,field){
+        console.log(field);
         search_author_list[i] = field;
-          $("#add_all_author_table").append("<tr id='search_row_count"+i+"'><td>"+(i+1)+"</td><td>"+field.name+"</td> \
+          var row_html = "";
+        if (field.followed==0){
+          row_html = "<tr id='search_row_count"+i+"'><td>"+(i+1)+"</td><td>"+field.name+"</td> \
           <td>"+field.nickname+"</td><td><button type='button' class='btn btn-default btn-xs' id = 'searchaddfriendbt' \
              data='"+i+"'> \
               <span class='glyphicon glyphicon-plus'></span> Add \
             </button> \
-            </td></tr>");
+            </td></tr>"
+          }
+          else if (field.followed==1) {
+            row_html = "<tr id='search_row_count"+i+"'><td>"+(i+1)+"</td><td>"+field.name+"</td> \
+          <td>"+field.nickname+"</td><td><button type='button' class='btn btn-default btn-xs' id = 'searchaddfriendbt' \
+             data='"+i+"' disabled> \
+              <span class='glyphicon glyphicon-plus'></span> Followed \
+            </button> \
+            </td></tr>"
+          }
+          $("#add_all_author_table").append(row_html);
       });
        for(var i=item_per_page;i<recive_size;i++){
             $("#search_row_count"+i).hide();
           }
       remove_all_paging_bt(recive_size);
-      paginate(recive_size);
+      addpaginate(recive_size);
       $("#search_model").modal();
       $('body').on('click','#searchaddfriendbt',function(){
           var pos = parseInt($(this).attr("data"));
@@ -71,19 +84,18 @@ $(document).ready(function(){
     search_click();
   });
   page_click();
-  set_click_popover();
 });
 function page_click(){
   $('body').on('click','#page_item',function(){
     event.preventDefault();
     var pos = parseInt($(this).attr("data"));
-    hide_all_row()
+    add_author_hide_all_row()
     for (var i = (pos-1)*item_per_page; i <(pos)*item_per_page; i++) {
        $("#search_row_count"+i).show();
     };
   });
 }
-function hide_all_row(){
+function add_author_hide_all_row(){
   for (var i = 0; i < search_author_list.length; i++) {
     $("#search_row_count"+i).hide();
     }
@@ -128,7 +140,7 @@ function get_author_name(){
     return data;
   });
 }
-function paginate(size){
+function addpaginate(size){
   var page_number = Math.ceil(size/3);
   for (var i = page_number; i >0; i--) {
     $("#page_num_begin").after("<li><a href=\"javascritp:void(0);\" id='page_item' data='"+i
@@ -140,22 +152,4 @@ function remove_all_paging_bt(size){
   for (var i = 1; i <= page_number; i++) {
     $("#page_item[data|=\""+i+"\"]").remove();
   }
-}
-function set_click_popover(){
-  
-  $(document).on("click",".author_clicker",function(){
-    pos = $(this).attr('data');
-    clicker = $(this);
-    aid = recommended_author_list[pos].aid;
-    $.getJSON(author_id+'/profile.json',{'aid':aid},function(data){
-      console.log(data);
-      console.log(clicker);
-      /*{
-          placement:"left",
-          animation: true,
-          title:data.name,
-          content:"Nikc name"+data.nick_name
-      });*/
-    });
-  });
 }
