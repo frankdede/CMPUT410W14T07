@@ -50,8 +50,10 @@ class AuthorHelper:
         # [Success] return an jason author object
         # [Exception] return null
         # [Failed] return null
+        localSid = 'cs410.cs.ualberta.ca:41070'
         cur = self.dbAdapter.getcursor()
-        query = "SELECT aid,name,nick_name,sid,email,gender,city,birthday,img_path FROM author WHERE aid='%s' AND sid=1 AND valid=1"%(aid)
+        query = "SELECT aid,name,nick_name,sid,email,gender,city,birthday,img_path FROM author WHERE aid='%s' AND sid='%s' AND valid=1"%(aid,localSid)
+        print query
         try:
             cur.execute(query)
         except mysql.connector.Error as err:

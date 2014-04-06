@@ -120,8 +120,9 @@ def get_profile(aid):
     if 'logged_in' in session and aid ==session['logged_id']:
         try:
             re_aid = request.args.get("aid")
+            print re_aid
             re = aController.getAuthorByAid(re_aid)
-            #print re
+            print re
             if re != False:
                 return re
             return redirect(url_for('/'))
@@ -135,6 +136,7 @@ def change_profile(aid):
         return change_author_profile(aid)
     else:
         return redirect(url_for('/'))
+
 def change_author_profile(aid):
     try:
         keyword = request.args.get('type')
