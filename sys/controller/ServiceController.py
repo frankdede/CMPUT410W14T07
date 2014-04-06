@@ -55,10 +55,12 @@ class ServiceController:
     def receiveFriendRequestFromRemoteServer(self,request):
 
         if(request['query'] == 'friendrequest'):
-            localAid = request['id']
-            remoteServer = request['friend']['author']['host']
-            remoteDisplayName  = request['friend']['author']['displayname']
-            remoteAid = request['friend']['author']['id']
+            localAid = request['friend']['author']['id']
+            localServer = request['friend']['author']['host']
+
+            remoteServer = request['author']['host']
+            remoteDisplayName  = request['author']['displayname']
+            remoteAid = request['author']['id']
             
             result = self.requestController.sendRequest(remoteAid,localAid)
 
