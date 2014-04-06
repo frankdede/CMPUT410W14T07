@@ -1,6 +1,8 @@
 import mysql.connector
 from CircleController import *
 from RequestController import *
+from PostController import *
+from CommentController import *
 import json
 
 class ServiceController:
@@ -8,6 +10,7 @@ class ServiceController:
     def __init__(self, dbAdapter):
         self.circleController = CircleController(dbAdapter)
         self.requestController = RequestController(dbAdapter)
+        self.commentController = CommentController(dbAdapter)
     def registerRemoteServer():
         pass
 
@@ -88,8 +91,8 @@ class ServiceController:
 
         return request
 
-
-
+    def sendPublicPostsToRemoteServer(self):
+        pass
 
 
 

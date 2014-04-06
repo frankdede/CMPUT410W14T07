@@ -1,11 +1,15 @@
 import json
+
 import flask
 import requests
 import markdown
 import httplib
+
 from time import gmtime, strftime
-from flask import Flask, request, redirect, url_for, g, render_template, flash, session, abort,make_response, Markup, send_from_directory,send_file
+from flask import Flask, request, redirect, url_for, g, render_template, flash, session
+from flask import abort,make_response, Markup, send_from_directory,send_file
 from werkzeug.utils import secure_filename
+
 from random import randrange
 import sys,os
 from mimetypes import MimeTypes
@@ -14,6 +18,7 @@ import binascii
 from rauth import OAuth2Service
 sys.path.append('sys/controller')
 sys.path.append('sys/model')
+
 # import all helpers
 from AuthorHelper import *
 from DatabaseAdapter import *
@@ -124,8 +129,7 @@ def get_profile(aid):
             re_aid = request.args.get("aid")
             print re_aid
             re = aController.getAuthorByAid(re_aid)
-            print re
-            if re != False:
+            if re != None:
                 return re
             return redirect(url_for('/'))
         except KeyError:
@@ -458,15 +462,15 @@ def logout():
 @app.route('/<aid>/author/request',methods=['GET'])
 def addfriend(aid):
     if ('logged_in' not in session) or (session['logged_id'] != aid):
-        abort(400)
+        abort(404)
     else:
         try:
             request_aid = request.args.get('recipient')
             if reController.sendRequest(aid,request_aid) is True:
-                re = make_response("OK")
+                re = make_response("OK",200)
                 return re
             else:
-                re = make_response("Existed")
+                re = make_response("Existed",409)
                 return re
         except KeyError:
             return redirect(url_for(aid))
@@ -481,13 +485,27 @@ def acceptRequest(recipientId):
 
             if( not aController.isRemoteAuthor(senderAid) ):
 
-                re = make_response("OK",200)
+                if( reController.acceptRequestFromSender(recipientAid,senderAid) ):
+                    re = make_response("OK",200)
+                else:
+                    re = make_response("Failed")
                 return re
-            if( reController.acceptRequestFromSender(recipientAid,senderAid) ):
-                re = make_response("OK",200)
             else:
-                re = make_response("Fail")
-            return re
+                remoteAuthor = aController.getAuthorInfoByAid(senderAid)
+                localAuthor = aController.getAuthorInfoByAid(recipientAid)
+
+                recipientAid = localAuthor.getAid()
+                recipientName = localAuthor.getNickName()
+                remoteSenderAid = remoteAuthor.getAid()
+                remoteSid = remoteAuthor.getSid()
+                response = sendAcceptRequestToRemoteServer(recipientAid,recipientName,remoteSenderAid,remoteSid)
+
+                if(response == True):
+                    re = make_response("OK",200)
+                else:
+                    re = make_response("Failed")
+                return re
+
         except KeyError:
             return redirect(url_for('aid'))
 #accept request
@@ -782,6 +800,9 @@ def myPostDelete(authorName,pid):
     else:
         abort(404);
 
+'''
+Public API: receieve the friend request from a remote server
+'''
 @app.route('/friendrequest',methods=['GET','POST'])
 def friendRequestService():
     if(request.method == 'POST'):
@@ -800,10 +821,10 @@ Don't access this API from client side
 This is for internal server to use only
 '''
 
-@app.route('/response/accept')
-def sendAcceptRequestToRemoteServer():
+#@app.route('/response/accept')
+def sendAcceptRequestToRemoteServer(recipientAid,recipientName,remoteSenderAid,remoteSid):
     
-    payload = serviceController.sendFriendRequestToRemoteServer(senderAid,senderName,remoteAid,remote)
+    payload = serviceController.sendFriendRequestToRemoteServer(recipientAid,recipientName,remoteSenderAid,remoteSid)
     if(payload != None):
         url = payload['friend']['host']
         headers = {'content-type': 'application/json'}
@@ -813,6 +834,15 @@ def sendAcceptRequestToRemoteServer():
         else:
             return False
     return False
+'''
+Public API: all posts marked as public on the server
+'''
+@app.route('/posts')
+def sendPublicPostsToRemoteServer():
+    
+    payload = serviceController.sendPublicPostsToRemoteServer()
+    if(payload != None):
+        pass
 
 if __name__ == '__main__':
     app.debug = True

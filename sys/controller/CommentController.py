@@ -36,6 +36,37 @@ class CommentController:
                 commentDict[comment.getCid()] = comment.tojson()
             return json.dumps(commentDict)
         return None
+
+    '''
+    For Public API Only
+    Get all the comments for public posts
+    @return Array commentsArray [{'comment':{},'pid':''}],else None
+    '''
+    def getCommentsForPublicPosts(self):
+
+        result = self.commentHelper.getCommentsForPublicPosts()
+
+        if result != None:
+            commentsArray = []
+            for row in result:
+                commentDict = {}
+                comment = {}
+                author = {}
+                author['id'] = row[1]
+                author['host'] = row[5]
+                author['displayname'] = row[2]
+
+                comment['author'] = author
+                comment['comment'] = row[3]
+                comment['pubDate'] = row[4].strftime("%Y-%m-%d %H:%M:%S")
+                comment['guid'] = row[0]
+
+                commentDict['pid'] = row[6]
+                commentDict['comment'] = comment
+                commentsArray.append(commentDict)
+            return commentsArray
+        return None
+
     '''
     Add comment for a specific post 
     @param String Author ID
