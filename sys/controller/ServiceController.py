@@ -20,7 +20,7 @@ class ServiceController:
     Status of the repsone will be 'YES' if two authors are friends
     else 'NO' 
     '''
-    def checkFriendsForRemoteServer(aid1,aid2):
+    def checkFriendsForRemoteServer(self,aid1,aid2):
         
         result = self.circleController.areFriends(aid1,aid2)
         if(result != None):
@@ -37,7 +37,7 @@ class ServiceController:
     '''
     Check if the authors in the list are friends of a specific author for remote server
     '''
-    def checkAuthorsListForRemoteServer(request):
+    def checkAuthorsListForRemoteServer(self,request):
 
         if(request['query'] == 'friends'):
             author = request['author']
@@ -52,7 +52,7 @@ class ServiceController:
             return json.dumps(repsonse)
         return None
 
-    def receiveFriendRequestFromRemoteServer(request):
+    def receiveFriendRequestFromRemoteServer(self,request):
 
         if(request['query'] == 'friendrequest'):
             localAid = request['id']
@@ -68,7 +68,7 @@ class ServiceController:
                 return False
         return None
 
-    def sendFriendRequestToRemoteServer(senderAid,senderName,remoteAid,remoteSid):
+    def sendFriendRequestToRemoteServer(self,senderAid,senderName,remoteAid,remoteSid):
 
         request = {}
         response['query'] = 'friendrequest'
