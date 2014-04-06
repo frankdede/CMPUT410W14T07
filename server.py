@@ -741,7 +741,7 @@ def myPostDelete(authorName,pid):
 def friendRequestService():
     if(request.method == 'POST'):
         response = make_response()
-        result = serviceController.receiveFriendRequest(json.loads(request.body))
+        result = serviceController.receiveFriendRequestFromRemoteServer(json.loads(request.body))
         if(result):
             return make_response("", 200)
         else:
