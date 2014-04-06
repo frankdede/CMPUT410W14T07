@@ -657,24 +657,42 @@ def getNotification(authorName):
             author_notification = aid+'_notitfication'
             notification_number = session[author_notification]
             notifications={}
-            r = auth_session.get('/notifications')
+            r = auth_session.get('/users/'+authorName+'/received_events')
+
+            #print r.json()
             for i in range(notification_number,len(r.json())):
                 notification={}
+                content=""
+                title = ""
+                repo=""
+                ref=""
                 for key,value in r.json()[i].iteritems():
-                    if key == "updated_at":
-                        print "updatet time: " + value
-                        notification['time']=value
-                    elif key == "subject":
+                    if key == "payload":
                         for key1,value1 in value.iteritems():
-                            if key1 == "url":
-                                print "update at: " + value1
-                                notification['url']=value1
-                            elif key1 == "title":
-                                print "title :" + value1
-                                notification['title']=value1
+                            if key1 == "commits":
+                                for j in range(0,len(value1)):
+                                    for key2,value2 in value1[j].iteritems():
+                                        if key2 == "message":
+                                            content = content + value2 + " "
+                            elif key1 == "ref":
+                                ref = value1
+                    elif key == "created_at":
+                        notification['time']=value
+                    elif key == "actor":
+                        for key1,value1 in value.iteritems():
+                            if key1 == "login":
+                                title = title + value1
+                    elif key == "repo":
+                        for key1,value1 in value.iteritems():
+                            if key1 == "name":
+                                repo = value1
+                    elif key == "type":
+                        if value == "PushEvent":
+                            title = title + ' Push ' + repo + ' ' + ref
+                notification['title']=title
+                notification['content']=content
                 notifications[i]=notification
             session[author_notification] = len(r.json())
-        #r = auth_session.put('/notifications')
         return json.dumps(notifications),200
     else:
         return abort(404)
