@@ -740,14 +740,19 @@ def myPostDelete(authorName,pid):
 @app.route('/friendrequest',methods=['GET','POST'])
 def friendRequestService():
     if(request.method == 'POST'):
+        print(request)
         response = make_response()
-        result = serviceController.receiveFriendRequestFromRemoteServer(json.loads(request.body))
+        #result = serviceController.receiveFriendRequestFromRemoteServer(json.loads(request.))
         if(result):
-            return make_response("", 200)
+
+            return request
+            #return make_response("", 200)
         else:
-            return make_response("", 409)
+            return request
+            #return make_response("", 409)
     else:
-        return make_response("", 409)
+        return request
+        #return make_response("", 409)
 
 
 if __name__ == '__main__':
