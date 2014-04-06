@@ -84,3 +84,7 @@ class AuthorController:
             return json.dumps(re)
         else:
             return None
+
+    def isRemoteAuthor(self,aid):
+        
+        return self.authorHelper.isRemoteAuthor(aid)

@@ -465,23 +465,29 @@ def addfriend(aid):
         except KeyError:
             return redirect(url_for(aid))
 #accept request
-@app.route('/<aid>/author/request/accept',methods=['GET'])
-def accept_request(aid):
+@app.route('/<recipientAid>/author/request/accept',methods=['GET'])
+def acceptRequest(recipientId):
     if ('logged_in' not in session) or (session['logged_id'] != aid):
         return redirect(url_for('/'))
     else:
         try:
-            accept_aid = request.args.get('sender')
-            if reController.acceptRequestFromSender(aid,accept_aid):
-                re = make_response("OK")
+            senderAid = request.args.get('sender')
+
+            if( not aController.isRemoteAuthor(senderAid) ):
+
+                re = make_response("OK",200)
+                return re
+            if( reController.acceptRequestFromSender(recipientAid,senderAid) ):
+                re = make_response("OK",200)
             else:
                 re = make_response("Fail")
             return re
         except KeyError:
             return redirect(url_for('aid'))
 #accept request
+
 @app.route('/<aid>/author/request/deny',methods=['GET'])
-def deny_request(aid):
+def denyRequest(aid):
     if ('logged_in' not in session) or (session['logged_id'] != aid):
         return redirect(url_for('/'))
     else:
@@ -750,7 +756,6 @@ def friendRequestService():
             return make_response("", 409)
     else:
         return make_response("", 409)
-
 
 if __name__ == '__main__':
     app.debug = True

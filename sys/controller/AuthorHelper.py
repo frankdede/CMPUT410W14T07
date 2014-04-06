@@ -419,12 +419,12 @@ class AuthorHelper:
         result=[]
         cur = self.dbAdapter.getcursor()
         query = "SELECT aid,name,nick_name,sid,email,gender,city,birthday,img_path FROM author WHERE valid=1 AND name like '%"+single_key+"%' or nick_name like '%"+single_key+"%';"
-        print query
+
         try:
             cur.execute(query)
         except mysql.connector.Error as err:
             print("****************************************")
-            print("SQLException from addAuthor():")
+            print("SQLException from searchAuthor():")
             print("Error code:", err.errno)
             print("SQLSTATE value:", err.sqlstate)
             print("Error message:", err.msg)
@@ -435,3 +435,26 @@ class AuthorHelper:
             author = Author(row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7],row[8])
             result.append(author)
         return result
+
+    def isRemoteAuthor(self,aid):
+        cur = self.dbAdapter.getcursor()
+        localSid = 'cs410.cs.ualberta.ca:41070'
+        query = ("SELECT * FROM author WHERE aid = '%s' AND sid <> '%s';")%(aid,localSid)
+
+        try:
+            cur.execute(query)
+
+        except mysql.connector.Error as err:
+            print("****************************************")
+            print("SQLException from searchAuthor():")
+            print("Error code:", err.errno)
+            print("SQLSTATE value:", err.sqlstate)
+            print("Error message:", err.msg)
+            print("Might be query issue:",query)
+            print("****************************************")
+            return None
+
+        return len(cur.fetchall()) > 0 
+
+
+
