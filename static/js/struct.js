@@ -26,6 +26,21 @@ function setPostOptClickListener(){
 	$("#picOption").click(function(){
 		$("#postSelectedType").html('Picture');
 		$SELECTED_POST_TYPE = 'Picture';
+                $("#uploadImage_form").validate({
+                            debug: true,
+                            submitHandler: function(form){
+                            
+                rules:{     
+                        img_file:{
+                                   required:true,
+                        }
+                 }
+                 messages:{
+                        img_file:{
+                                   required:"Please select a image"
+                        }
+                 }
+                 }    
 	});
 
 	$("#htmlOption").click(function(){
@@ -391,9 +406,14 @@ function readURL(input) {
             reader.readAsDataURL(input.files[0]);
         }
     }
+
+                   
 $(document).on('click',"#postImagebtn",function(){
   $("#uploadImage_form").submit();
+  $("#uploadPicture").modal('hide');
 });
+
+
 //Send the Post object in json over http
 function submitPostToServer($postObj){
 	$.post('/'+ $authorName +'/post/',JSON.stringify($postObj)).done(function($data){
