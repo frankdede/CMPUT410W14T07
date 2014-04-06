@@ -689,6 +689,20 @@ def getNotification(authorName):
                     elif key == "type":
                         if value == "PushEvent":
                             title = title + ' Push ' + repo + ' ' + ref
+                        elif value == "CommitCommentEvent":
+                            title = title + ' Commit Comment ' + repo + ' ' + ref
+                        elif value == "CreateEvent":
+                            title = title + ' Create ' + repo + ' ' + ref
+                        elif value == "DeleteEvent":
+                            title = title + ' Delete ' + repo + ' ' + ref
+                        elif value == "DeploymentEvent":
+                            title = title + ' Deploytment ' + repo + ' ' + ref
+                        elif value == "DownloadEvent":
+                            title = title + ' Download ' + repo + ' ' + ref
+                        elif value == "FollowEvent":
+                            title = title + ' Follow ' + repo + ' ' + ref
+                        elif value == "ForkEvent":
+                            title = title + ' Fork ' + repo + ' ' + ref
                 notification['title']=title
                 notification['content']=content
                 notifications[i]=notification
