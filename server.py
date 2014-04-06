@@ -738,10 +738,10 @@ def myPostDelete(authorName,pid):
         abort(404);
 
 @app.route('/friendrequest',methods=['GET','POST'])
-def friendRequestService(self):
+def friendRequestService():
     if(request.method == 'POST'):
         response = make_response()
-        result = self.serviceController.receiveFriendRequest(json.loads(request.body))
+        result = serviceController.receiveFriendRequest(json.loads(request.body))
         if(result):
             return make_response("", 200)
         else:
