@@ -66,8 +66,14 @@ class TestController(unittest.TestCase):
         result = self.authorHelper.getAllAuthorObjectsForRemoteServer()
         self.assertTrue(result != None,"Failed to get all author objects for remote server")
 
+    def test_isRemoteAuthor(self):
+        result = self.authorController.isRemoteAuthor('100000')
+        self.assertTrue(result == True,"Failed to check isRemoteAuthor")
+
+        result = self.authorController.isRemoteAuthor('333333')
+        self.assertTrue(result == False,"Failed to check isRemoteAuthor")
     '''
-     ====================   RequestHelper  ====================
+     ====================   Request ControllerHelper  ====================
      PLEASE rebuild the database before run all the tests
     '''
     def test_sendRequest(self):
@@ -80,6 +86,7 @@ class TestController(unittest.TestCase):
         result = self.requestController.acceptRequestFromSender('111111','222222')
         self.assertTrue(result == True,"Failed to accept a request from sender")
     
+   
     '''
     Cannot delete request by far
     def test_deleteRequest(self):

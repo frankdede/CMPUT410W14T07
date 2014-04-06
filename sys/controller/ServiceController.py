@@ -86,7 +86,7 @@ class ServiceController:
         author['displayname'] = senderName
         request['friend'] = friend
 
-        return jason.dumps(request)
+        return request
 
 
 

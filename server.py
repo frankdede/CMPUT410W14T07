@@ -1,5 +1,6 @@
 import json
 import flask
+import requests
 import markdown
 import httplib
 from time import gmtime, strftime
@@ -756,6 +757,25 @@ def friendRequestService():
             return make_response("", 409)
     else:
         return make_response("", 409)
+
+'''
+Don't access this API from client side
+This is for internal server to use only
+'''
+
+@app.route('/response/accept')
+def sendAcceptRequestToRemoteServer():
+    
+    payload = serviceController.sendFriendRequestToRemoteServer(senderAid,senderName,remoteAid,remote)
+    if(payload != None):
+        url = payload['friend']['host']
+        headers = {'content-type': 'application/json'}
+        response = requests.post(url,data = json.dumps(payload),headers = headers )
+        if(resposen.status == '200'):
+            return True
+        else:
+            return False
+    return False
 
 if __name__ == '__main__':
     app.debug = True
