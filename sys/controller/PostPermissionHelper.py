@@ -18,7 +18,7 @@ class PostPermissionHelper:
 
         data = []
         for aid in aidsList:
-            data.append(tuple(pid,aid))
+            data.append(tuple([pid,aid]))
 
         query = "INSERT INTO post_permission VALUES(%s,%s)"
 

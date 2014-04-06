@@ -19,6 +19,7 @@ from AuthorController import *
 from RequestController import *
 from CommentController import *
 from CircleController import *
+from PostPermissionController import *
 # models
 import author
 import post
@@ -48,6 +49,7 @@ class TestController(unittest.TestCase):
         self.requestController = RequestController(dbAdapter)
         self.circleController = CircleController(dbAdapter)
         self.authorController = AuthorController(dbAdapter)
+        self.postPermissionController = PostPermissionController(dbAdapter)
 
     '''
      ====================   AuthorController & Helper  ====================
@@ -157,9 +159,9 @@ class TestController(unittest.TestCase):
     '''
 
     def test_addPostPermission(self):
-        pid = ''
-        aid = ['','','']
-        result = postPermissionController.addPostPermission(pid,aidsList)
+        pid = '7'
+        aidsList = ['444444','111111','333333']
+        result = self.postPermissionController.addPostPermission(pid,aidsList)
         self.assertTrue(result == True,"Failed to add post permission")
 
 if __name__ == '__main__':
