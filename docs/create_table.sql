@@ -41,7 +41,7 @@ time TIMESTAMP NOT NULL,
 title varchar(128) NOT NULL,
 content varchar(1024),
 type enum('html','text','markdown','picture') NOT NULL,
-permission varchar(128) NOT NULL,
+permission enum('friends','fof','fomh','me','public','specify') NOT NULL,
 PRIMARY KEY (pid),
 FOREIGN KEY (aid) REFERENCES author(aid) ON DELETE CASCADE
 );
@@ -72,27 +72,29 @@ FOREIGN KEY (sender_id) REFERENCES author(aid) ON DELETE CASCADE
 );
 
 CREATE TABLE comments (
-  cid varchar(128) NOT NULL,
-  pid varchar(128) NOT NULL,
-  aid varchar(128) NOT NULL, 
-  time TIMESTAMP,
-  content varchar(128),
-  PRIMARY KEY(cid),
-  FOREIGN KEY(pid) references post(pid) ON DELETE CASCADE,
-  FOREIGN KEY(aid) references author(aid) ON DELETE CASCADE
+cid varchar(128) NOT NULL,
+pid varchar(128) NOT NULL,
+aid varchar(128) NOT NULL, 
+time TIMESTAMP,
+content varchar(128),
+PRIMARY KEY(cid),
+FOREIGN KEY(pid) references post(pid) ON DELETE CASCADE,
+FOREIGN KEY(aid) references author(aid) ON DELETE CASCADE
 );
+
 CREATE TABLE image(
-	image_id varchar(128),
-	time timestamp,
-	path varchar(128),
-	aid varchar(128),
-	pid varchar(128),
-	primary key (image_id),
-	FOREIGN KEY (aid) references author(aid) ON DELETE CASCADE,
-	FOREIGN KEY (pid) references post(pid) ON DELETE CASCADE
+image_id varchar(128),
+time timestamp,
+path varchar(128),
+aid varchar(128),
+pid varchar(128),
+primary key (image_id),
+FOREIGN KEY (aid) references author(aid) ON DELETE CASCADE,
+FOREIGN KEY (pid) references post(pid) ON DELETE CASCADE
 );
+
 CREATE TABLE setting(
-	name varchar(60),
-	value BOOL,
-	PRIMARY KEY (name)
+name varchar(60),
+value BOOL,
+PRIMARY KEY (name)
 );
