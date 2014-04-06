@@ -86,7 +86,7 @@ class AuthorHelper:
         """
         result = []
         cur = self.dbAdapter.getcursor()
-        query = ("SELECT aid,name,nick_name,sid,email,gender,city,birthday,img_path from author WHERE sid = 1 AND valid=1")
+        query = ("SELECT aid,name,nick_name,sid,email,gender,city,birthday,img_path from author WHERE sid = '%s' AND valid=1")%(self.localSid)
         try:
             cur.execute(query)
         except mysql.connector.Error as err:
@@ -112,8 +112,6 @@ class AuthorHelper:
         # [Exception] return null
         # [Failed] return null
         result = []
-
-        localSid = 'cs410.cs.ualberta.ca:41070'
 
         cur = self.dbAdapter.getcursor()
         query = ("SELECT aid,name,nick_name,sid,email,gender,city,birthday,img_path from author WHERE sid != '%s'")%(self.localSid)

@@ -12,15 +12,18 @@ class PostPermissionHelper:
     def addPostPermission(self,pid,aidsList):
 
         cur = self.dbAdapter.getcursor()
-        data = []
 
+        if len(aidsList) == 0:
+          return False
+
+        data = []
         for aid in aidsList:
             data.append(tuple(pid,aid))
 
         query = "INSERT INTO post_permission VALUES(%s,%s)"
 
         try:
-          cur.executemany()
+          cur.executemany(query,data)
 
         except mysql.connector.Error as err:
 
