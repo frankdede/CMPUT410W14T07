@@ -742,17 +742,13 @@ def friendRequestService():
     if(request.method == 'POST'):
         print(request)
         response = make_response()
-        #result = serviceController.receiveFriendRequestFromRemoteServer(json.loads(request.))
-        if(True):
-
-            return request
-            #return make_response("", 200)
+        result = serviceController.receiveFriendRequestFromRemoteServer(json.loads(request.data))
+        if(result):
+            return make_response("", 200)
         else:
-            return request
-            #return make_response("", 409)
+            return make_response("", 409)
     else:
-        return request
-        #return make_response("", 409)
+        return make_response("", 409)
 
 
 if __name__ == '__main__':
