@@ -743,7 +743,7 @@ def friendRequestService():
         print(request)
         response = make_response()
         #result = serviceController.receiveFriendRequestFromRemoteServer(json.loads(request.))
-        if(result):
+        if(True):
 
             return request
             #return make_response("", 200)
