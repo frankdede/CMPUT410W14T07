@@ -57,20 +57,37 @@ class AuthorController:
                 dic ={}
             return json.dumps(re)
         return None
+
+    '''
+    Get an jsonified author object by aid
+    '''
     def getAuthorByAid(self,aid):
-        """
-            To get author json by aid
-        """
+       
         author = self.authorHelper.getAuthorObjectByAid(aid)
-        if author !=None:
+        if author != None:
             return json.dumps(author.tojson())
         else:
-            return False
+            return None
 
+    '''
+    Get an author object by aid
+    '''
+    def getAuthorInfoByAid(self,aid):
+        author = self.authorHelper.getAuthorObjectByAid(aid)
+        if author != None:
+            return author
+        else:
+            return None
+    '''
+    Add a remote author into database
+    '''
     def addRemoteAuthor(self,aid,displayName,sid):
         
         return self.authorHelper.addRemoteAuthor(aid,displayName,sid)
 
+    '''
+    Add a local author into database
+    '''
     def addAuthor(self,name,password,nickName,sid='cs410.cs.ualberta.ca:41070'):
 
         return self.authorHelper.addAuthor(name,password,nickName,sid)
