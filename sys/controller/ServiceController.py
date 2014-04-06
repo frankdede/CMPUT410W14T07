@@ -1,6 +1,8 @@
 import mysql.connector
 from CircleController import *
 from RequestController import *
+from PostController import *
+from CommentController import *
 import json
 
 class ServiceController:
@@ -88,6 +90,7 @@ class ServiceController:
 
         return request
 
+    def sendPublicPostsToRemoteServer(self):
 
 
 

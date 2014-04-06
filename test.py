@@ -61,7 +61,7 @@ class TestController(unittest.TestCase):
 
 
     def test_addRemoteAuthor(self):
-        result = self.authorController.addRemoteAuthor('remote_test_aid','','192.168.1.1')
+        result = self.authorController.addRemoteAuthor('remote_test_aid','','cs410.cs.ualberta.ca:41068')
         self.assertTrue(result != None,"Failed to add an remote author")
 
     def test_getAllAuthorObjectsForRemoteServer(self):
@@ -130,6 +130,10 @@ class TestController(unittest.TestCase):
         result = self.commentController.deleteCommentForPost('1')
         self.assertTrue(result == True,"Failed to delete comment for post")
 
+    def test_getCommentsForPublicPosts(self):
+        result = self.commentController.getCommentsForPublicPosts()
+        self.assertTrue(result != None,"Faild to get comments for public posts")
+
     '''
     ===================  CircleController ===========================
     '''
@@ -144,7 +148,7 @@ class TestController(unittest.TestCase):
     def test_areFriendsOfAuthor(self):
         author = "111111"
         authorsList = ["222222","333333"]
-        
+
         result = self.circleController.areFriendsOfAuthor(author,authorsList)
         self.assertTrue(result != None,"Failed to check areFriends of Author ")
 

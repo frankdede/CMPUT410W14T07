@@ -23,7 +23,7 @@ class CommentHelper:
         except mysql.connector.Error as err:
 
             print("****************************************")
-            print("SQLException from getAllCommentsForPost():")
+            print("SQLException from getCommentsForAuthor():")
             print("Error code:", err.errno)
             print("SQLSTATE value:", err.sqlstate)
             print("Error message:", err.msg)
@@ -51,7 +51,37 @@ class CommentHelper:
 
         except mysql.connector.Error as err:
             print("****************************************")
-            print("SQLException from getAllCommentsForPost():")
+            print("SQLException from getCommentsForPost():")
+            print("Error code:", err.errno)
+            print("SQLSTATE value:", err.sqlstate)
+            print("Error message:", err.msg)
+            print("Might be query issue:",query)
+            print("****************************************")
+            return None
+
+        return cur.fetchall()
+
+    def getCommentsForPublicPosts(self):
+
+        cur = self.dbAdapter.getcursor()
+
+        query = ("SELECT "
+                "C.cid,"
+                "C.aid,"
+                "A.nick_name,"
+                "C.content,"
+                "C.time,"
+                "S.url,"
+                "C.pid "
+                "FROM author A, comments C, servers S, post P "
+                "WHERE P.permission = 'public' AND P.pid = C.pid "
+                "AND C.aid = A.aid AND A.sid = S.sid AND S.local = 1;")
+        try:
+            cur.execute(query)
+
+        except mysql.connector.Error as err:
+            print("****************************************")
+            print("SQLException from getCommentForPublicPosts():")
             print("Error code:", err.errno)
             print("SQLSTATE value:", err.sqlstate)
             print("Error message:", err.msg)

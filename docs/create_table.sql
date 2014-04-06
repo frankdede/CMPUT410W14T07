@@ -12,6 +12,7 @@ CREATE TABLE servers(
 sid varchar(128) NOT NULL,
 name varchar(128) NOT NULL,
 url varchar(128) NOT NULL,
+local BOOL NOT NULL,
 PRIMARY KEY (sid)
 );
 
@@ -95,6 +96,6 @@ FOREIGN KEY (pid) references post(pid) ON DELETE CASCADE
 
 CREATE TABLE setting(
 name varchar(60),
-value BOOL,
+value BOOL NOT NULL,
 PRIMARY KEY (name)
 );
