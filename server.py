@@ -61,6 +61,8 @@ ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 app = Flask(__name__)
 app.config.from_object(__name__)
 REGISTER_RESTRICTION = None
+POST_REMOTE_ACCESS_RESTRICTION = None
+IMAGE_REMOTE_ACCESS_RESTRICTION = None
 # add upload
 UPLOAD_FOLDER='upload/image'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -845,4 +847,6 @@ def sendPublicPostsToRemoteServer():
 if __name__ == '__main__':
     app.debug = True
     REGISTER_RESTRICTION = settingHelper.getSignUpRestrictionValue()
+    POST_REMOTE_ACCESS_RESTRICTION = settingHelper.getRemotePostAccessRestrictionValue()
+    IMAGE_REMOTE_ACCESS_RESTRICTION = settingHelper.getRemoteImageAccessRestrictionValue()
     app.run(host='0.0.0.0',port=8080)
