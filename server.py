@@ -1,6 +1,7 @@
 import json
 import flask
 import markdown
+import httplib
 from time import gmtime, strftime
 from flask import Flask, request, redirect, url_for, g, render_template, flash, session, abort,make_response, Markup, send_from_directory,send_file
 from werkzeug.utils import secure_filename
@@ -12,16 +13,19 @@ import binascii
 from rauth import OAuth2Service
 sys.path.append('sys/controller')
 sys.path.append('sys/model')
+# import all helpers
 from AuthorHelper import *
 from DatabaseAdapter import *
 from PostHelper import *
 from RequestHelper import *
 from CircleHelper import *
 from SettingHelper import *
+# import all controllers
 from PostController import *
 from AuthorController import *
 from RequestController import *
 from CommentController import *
+from ServiceController import *
 
 DEBUG = True
 # create a new database obj
@@ -43,6 +47,9 @@ circleController = CircleController(dbAdapter)
 #
 commentController = CommentController(dbAdapter)
 settingHelper = SettingHelper(dbAdapter)
+#
+serviceController = ServiceController(dbAdapter)
+
 #Allowed file extensions
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 app = Flask(__name__)
@@ -729,6 +736,20 @@ def myPostDelete(authorName,pid):
         return render_template('mypost.html')
     else:
         abort(404);
+
+@app.route('/friendrequest',methods=['GET','POST'])
+def friendRequestService():
+    if(request.method == 'POST'):
+        response = make_response()
+        result = self.serviceController.receiveFriendRequest(json.loads(request.body))
+        if(result):
+            return make_response("", 200)
+        else:
+            return make_response("", 409)
+    else:
+        return make_response("", 409)
+
+
 if __name__ == '__main__':
     app.debug = True
     REGISTER_RESTRICTION = settingHelper.getSignUpRestrictionValue()

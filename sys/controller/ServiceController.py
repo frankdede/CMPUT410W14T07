@@ -7,7 +7,7 @@ class ServiceController:
 
     def __init__(self, dbAdapter):
         self.circleController = CircleController(dbAdapter)
-        self.requestController = requestController(dbAdapter)
+        self.requestController = RequestController(dbAdapter)
     def registerRemoteServer():
         pass
 
@@ -52,23 +52,42 @@ class ServiceController:
             return json.dumps(repsonse)
         return None
 
-    def reciveFriendRequstFromRemoteServer(request):
+    def receiveFriendRequestFromRemoteServer(request):
 
-        if(request['query'] = 'friendrequest'):
+        if(request['query'] == 'friendrequest'):
             localAid = request['id']
             remoteServer = request['friend']['author']['host']
             remoteDisplayName  = request['friend']['author']['displayname']
             remoteAid = request['friend']['author']['id']
             
-            if():
-
-                
-
             result = self.requestController.sendRequest(remoteAid,localAid)
 
+            if result == True :
+                return True
+            else:
+                return False
         return None
 
-    def sendFriendRequestToRemoteServer(senderAid,remoteRecipiendAid,):
+    def sendFriendRequestToRemoteServer(senderAid,senderName,remoteAid,remoteSid):
+
+        request = {}
+        response['query'] = 'friendrequest'
+        friend = {}
+
+        friend['id'] = remoteAid
+        friend['host'] = remoteSid
+        friend['displayname'] = name
+
+        author = {}
+        author['id'] = senderAid
+        author['host'] = "http://cs410.cs.ualberta.ca:41070/"
+        author['displayname'] = senderName
+        request['friend'] = friend
+
+        return jason.dumps(request)
+
+
+
 
 
 
