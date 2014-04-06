@@ -11,7 +11,7 @@ class RequestHelper:
 
     def addNewRequest(self,recipientId,senderId):
 
-        query ="INSERT INTO request VALUES(NULL,'%s','%s')"%(recipientId,senderId)
+        query ="INSERT INTO request VALUES(CURRENT_TIMESTAMP,'%s','%s');"%(recipientId,senderId)
 
         cur = self.dbAdapter.getcursor()
         try:
