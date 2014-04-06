@@ -186,6 +186,35 @@ class PostHelper:
           return False
 
         return cur.rowcount>0
+
+    def getLocalPublicPosts(self):
+
+        query = ("SELECT "
+                "P.pid,"
+                "P.time,"
+                "P.title,"
+                "P.content,"
+                "P.type,"
+                "P.permission,"
+                "A.aid,A.nick_name,S.sid "
+                "FROM post P, author A, servers S "
+                "WHERE S.local = 1 AND S.sid = A.sid AND A.aid = P.aid AND P.permission = 'public';")
+        try:
+            cur.execute(query)
+
+        except mysql.connector.Error as err:
+            print("****************************************")
+            print("SQLException from getPublicPost():")
+            print("Error code:", err.errno)
+            print("SQLSTATE value:", err.sqlstate)
+            print("Error message:", err.msg)
+            print("1st Query:",query)
+            print("****************************************")
+            return None
+
+        cur.fetchall()
+
+
     def getPublicPost(self,aid):
         re = []
         cur = self.dbAdapter.getcursor()
