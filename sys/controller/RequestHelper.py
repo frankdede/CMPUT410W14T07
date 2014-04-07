@@ -80,6 +80,27 @@ class RequestHelper:
 
         return cur.fetchall()
 
+    def getSentRequestByAid(self,aid):
+        """
+        To get list of authors, who is the author followed 
+        """
+        cur = self.dbAdapter.getcursor()
+        query =("SELECT recipient_id,time,name "
+               "FROM request,author WHERE aid = recipient_id and sender_id = '%s'")%(aid)
+        try:
+            cur.execute(query)
+        except mysql.connector.Error as err:
+
+            print("****************************************")
+            print("SQLException from getMessageListByAuthorName():")
+            print("Error code:", err.errno)
+            print("SQLSTATE value:", err.sqlstate)
+            print("Error message:", err.msg)
+            print("Might be query issue:",query)
+            print("****************************************")
+            return None
+
+        return cur.fetchall()
     """
     To get the number of requests
     """

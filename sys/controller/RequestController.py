@@ -66,9 +66,20 @@ class RequestController:
     else:
       return None
   def deleteAllRequestByAid(self,recipientId):
-
+    """
+    To delete all requests by reciever
+    """
     return self.requestHelper.deleteAllRequestByAid(recipientId)
+  def getSentRequest(self,sender_id):
+    """
+    get a list of aid,which belongs to the author the sender sent
+    """
+    cur =  self.requestHelper.getSentRequestByAid(sender_id)
+    if cur == None:
+      return cur
+    re = []
+    for row in cur:
+      re.append(row[0])
+    return re
 
-
-    
 

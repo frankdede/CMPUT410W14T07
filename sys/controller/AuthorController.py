@@ -1,4 +1,5 @@
 from AuthorHelper import *
+from RequestController import *
 from DatabaseAdapter import *
 import sys
 sys.path.append("sys/model")
@@ -10,6 +11,7 @@ class AuthorController:
     """
     def __init__(self,dbAdapter):
         self.authorHelper = AuthorHelper(dbAdapter)
+        self.requestController = RequestController(dbAdapter)
     def getOtherAuthor(self,aid):
         """
             to get list of authors except for the author by aid
@@ -20,12 +22,17 @@ class AuthorController:
         re = []
         tmp_list =self.authorHelper.getAllAuthorObjectsForLocalServer()
         tmp_list.extend(self.authorHelper.getAllAuthorObjectsForRemoteServer())
+        sent_list = self.requestController.getSentRequest(aid)
         for author in tmp_list:
             current_aid =author.getAid()
             if current_aid !=aid:
                 dic['aid'] = current_aid
                 dic['name'] = author.getName()
                 dic['nickname'] = author.getNickname()
+                if current_aid in sent_list:
+                    dic['followed'] = 1
+                else:
+                    dic['followed'] = 0
                 re.append(dic)
                 dic ={}
         return json.dumps(re)
@@ -37,11 +44,12 @@ class AuthorController:
             """
         tmp_list =self.authorHelper.getRecommendedAuthorList(aid)
         return json.dumps(tmp_list)
-    def searchAuthorByString(self,keyword):
+    def searchAuthorByString(self,aid,keyword):
         """
             To search keyword inside a row string
             """
         list = Utility.parseKeyword(keyword)
+        sent_list = self.requestController.getSentRequest(aid)
         re =[]
         tmp_list =[]
         dic = {}
@@ -53,6 +61,10 @@ class AuthorController:
                 dic['aid'] = current_aid
                 dic['name'] = author.getName()
                 dic['nickname'] = author.getNickname()
+                if current_aid in sent_list:
+                    dic['followed'] = 1
+                else:
+                    dic['followed'] = 0
                 re.append(dic)
                 dic ={}
             return json.dumps(re)

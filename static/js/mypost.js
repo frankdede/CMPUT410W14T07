@@ -7,6 +7,7 @@ var host=window.location.host;
 document.getElementById('permissionSelectedAll').style.visibility='hidden';
 document.getElementById('permissionClearAll').style.visibility='hidden';
 document.getElementById('permissionAntiSelect').style.visibility='hidden';
+document.getElementById('listStyle').style.overflow = 'scroll';
 
 $(document).ready(function(){
 	var postListTable=document.getElementById("post_edit"); 
@@ -84,16 +85,11 @@ $("#permissionEditFinish").click(function(){
 	deletePost(document.getElementById("pid").value,1);
 	if($post['permission'] != null && $post['message'] != '' && $post['title'] != ''){
 		if (checked.length>0){
-			for (i=0;i<checked.length;i++){
-				$post['permission'] = checked[i];
-				submitPostToServer($post);
-			}
-			$post['permission'] = 'me';
 			submitPostToServer($post);
 		}
 		else{
 			submitPostToServer($post);
-			if ($post['permission'] == 'friends'){
+			if (($postObj['permission'] == 'friends')||($postObj['permission'] == 'fomh')){
 				$post['permission'] = 'me';
 				submitPostToServer($post);
 			}
@@ -109,11 +105,22 @@ function submitPostToServer($postObj){
 	$.post('/'+ $authorName +'/post/',JSON.stringify($postObj)).done(function($data){
 			var $re = JSON.parse($data);
 			if ($re['status']){
+                              	if(option==="specify"){
+                                       submitSpecifyToServer($re['status']);
+                               	}
 				location.reload();
 			}else{
 				alert('Please submit again.');
 			}
 	});
+}
+
+//Send the Post object in json over http
+function submitSpecifyToServer($pid){
+       var send = {'data':checked};
+       alert(JSON.stringify(send));
+       $.post('/'+ $authorName +'/postpermission/'+$pid,JSON.stringify(send)).done(function($data){
+       });
 }
 
 function permission_selected(sel){
@@ -125,10 +132,11 @@ function permission_selected(sel){
 	var userId=$authorName;
 	//get select option value
 	option = sel.options[sel.selectedIndex].value;
-	if(option==="friends"||option==="fof"){
+	if(option==="specify"){
 		document.getElementById('permissionSelectedAll').style.visibility='visible';
 		document.getElementById('permissionClearAll').style.visibility='visible';
 		document.getElementById('permissionAntiSelect').style.visibility='visible';
+		document.getElementById('listStyle').style.overflow = 'scroll';
 		//combine paramter
 		var send={"userid":userId,"option":option};
 		//send reuqest and get response
@@ -136,7 +144,6 @@ function permission_selected(sel){
 			data=JSON.parse(data);
 			console.log(data);
 			var number=Object.keys(data).length;
-			//number = 4;
 			var count=0;
 			var rowNumber=0;
 			if(number>0){
@@ -174,23 +181,47 @@ function permission_selected(sel){
 		document.getElementById('permissionSelectedAll').style.visibility='hidden';
 		document.getElementById('permissionClearAll').style.visibility='hidden';
 		document.getElementById('permissionAntiSelect').style.visibility='hidden';
+		document.getElementById('listStyle').style.overflow = 'hidden';
+		var row=postListTable.insertRow(0);
+		var cell=row.insertCell(0);
+		var br = document.createElement("br");
+		cell.appendChild(br);
+                var img = document.createElement("img");
+		img.src = "/permission/image/"+option;
+                img.width = document.getElementById("post_list").offsetWidth*0.33;
+                img.height = document.getElementById("post_list").offsetWidth*0.33;
+		cell.appendChild(img);
+		var p = document.createElement("p");
+		p.style.fontSize='100px';
+		p.innerHTML=option;
+		cell.appendChild(p);
 	}
 }
 $("#permissionEditSelected").click(function(){
 	checked = [];
-	if(option==="friends"||option==="fof"){
+	if(option==="specify"){
 		var count = 0;
 		$("input[name='checkbox']").each(function(){
-        		if (this.checked == false) {
+        		if (this.checked == true) {
 				count = count + 1;
-			} else {
 				var value = $(this).val();
 				checked.push(value);
 			}
 		});
 		if (count==0){
-			checked=[];
+			alert("Please select a friend!");
 		}
+		else{
+			checked.push($authorid);
+			for (i=0;i<checked.length;i++){
+				alert(checked[i]);
+			}
+			$('#postingPermissionModal').modal('hide');
+		}
+	}
+	else{
+		alert('a');
+		$('#postingPermissionModal').modal('hide');
 	}
  });
 $("#permissionSelectedAll").click(function(){

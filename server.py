@@ -32,6 +32,7 @@ from AuthorController import *
 from RequestController import *
 from CommentController import *
 from ServiceController import *
+from PostPermissionController import *
 
 DEBUG = True
 # create a new database obj
@@ -55,6 +56,8 @@ commentController = CommentController(dbAdapter)
 settingHelper = SettingHelper(dbAdapter)
 #
 serviceController = ServiceController(dbAdapter)
+#
+postPermissionHelper = PostPermissionController(dbAdapter)
 
 #Allowed file extensions
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
@@ -65,6 +68,7 @@ POST_REMOTE_ACCESS_RESTRICTION = None
 IMAGE_REMOTE_ACCESS_RESTRICTION = None
 # add upload
 UPLOAD_FOLDER='upload/image'
+PERMISSION_IMAGE='static/image'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.secret_key = os.urandom(24)
 admin_id = '000000'
@@ -404,7 +408,7 @@ def search_author(aid):
     except KeyError:
         return redirect(url_for('/'))
     if keyword!=None and keyword!="":
-        re = aController.searchAuthorByString(keyword)
+        re = aController.searchAuthorByString(aid,keyword)
         return re
 
 @app.route('/<aid>/authorlist.json',methods=['GET'])
@@ -569,8 +573,8 @@ def allowed_file(filename):
 def test():
     return render_template('upload_image.html')
 
-@app.route('/upload',methods=['POST'])
-def upload():
+@app.route('/<aid>/<pid>/upload',methods=['POST'])
+def upload(aid,pid):
     file = request.files['img_file']
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
@@ -615,19 +619,10 @@ def getPermissionList(authorName):
             # Get the permission: friend or fof, from parameter 
             permission = request.args.get('option')
 
-            if permission == "friends":
+            if permission == "specify":
                 friendlist = circleHelper.getFriendList(aid)	
                 if friendlist != None:
                     return json.dumps(friendlist),200
-
-            elif permission == "fof":
-                fof = circleHelper.getFriendOfFriendList(aid)
-
-                if fof != None:
-                    return json.dumps(fof),200
-                else:
-                    return "null",200
-                    return "null",200
     else:
         return abort(404)
 
@@ -844,6 +839,20 @@ def sendPublicPostsToRemoteServer():
     if(payload != None):
         pass
 
+@app.route('/permission/image/<imagename>',methods=['GET'])
+def view_permission_image(imagename):
+    imagename=PERMISSION_IMAGE+'/'+imagename+'.png'
+    return send_file(imagename, mimetype='image/png')
+
+@app.route('/<authorName>/postpermission/<pid>',methods=['PUT','POST'])
+def uploadPostPermissionToServer(authorName,pid):
+    if ('logged_in' in session) and (session['logged_in'] == authorName):
+        send = flaskPostToJson()
+        checked = send['data']
+        result = postPermissionHelper.addPostPermission(pid,checked)
+        return json.dumps({'status':result}),200
+    else:
+        return abort(404)
 if __name__ == '__main__':
     app.debug = True
     REGISTER_RESTRICTION = settingHelper.getSignUpRestrictionValue()
