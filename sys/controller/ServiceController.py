@@ -95,12 +95,13 @@ class ServiceController:
     def sendPublicPostsToRemoteServer(self):
         
         posts = self.postController.getLocalPublicPosts()
-        comments = self.commentController.test_getCommentsForPublicPosts()
-        """
-        for post in posts:
-            post[comment]=comments[post[guid]]
-            for comment in comments
-        """
+        comments = self.commentController.getCommentsForPublicPosts()
+        
+        #for post in posts:
+        #   for comment in comments:
+
+        #   post[comment]=comments[post[guid]]
+                
 
 
         
