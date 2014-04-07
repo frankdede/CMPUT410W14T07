@@ -493,8 +493,8 @@ def addfriend(aid):
             return redirect(url_for(aid))
 #accept request
 @app.route('/<recipientAid>/author/request/accept',methods=['GET'])
-def acceptRequest(recipientId):
-    if ('logged_in' not in session) or (session['logged_id'] != aid):
+def acceptRequest(recipientAid):
+    if ('logged_in' not in session) or (session['logged_id'] != recipientAid):
         return redirect(url_for('/'))
     else:
         try:
@@ -533,11 +533,13 @@ def denyRequest(aid):
         return redirect(url_for('/'))
     else:
         try:
-            deny_aid = request.args.get('sender')
-            if reController.deleteRequest(accept_aid,aid):
+            senderAid = request.args.get('sender')
+            if reController.deleteRequest(senderAid,aid):
                 re = make_response("OK")
+                return re
             else:
                 re = make_response("Fail")
+                return re
         except KeyError:
             return redirect(url_for('aid'))
 @app.route('/author/<authorName>')
@@ -873,10 +875,10 @@ def sendPublicPostsToRemoteServer():
     else:
         return json.dumps([]),200
 '''
-Public API: all 
+Public API: send glabal authors to remote servers
 '''
 @app.route('/global/authors',methods=['GET'])
-def sendGlobalAuthors():
+def sendGlobalAuthorsToRemoteServer():
     payload = serviceController.sendGlobalAuthorsToRemoteServer()
     if(payload != None):
         return json.dumps(payload),200
