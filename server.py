@@ -874,9 +874,9 @@ def sendPublicPostsToRemoteServer():
 '''
 Public API: all 
 '''
-@app.route
+@app.route('/global/authors',methods=['GET'])
 def sendGlobalAuthors():
-    payload = serviceController.sendGlobalAuthors()
+    payload = serviceController.sendGlobalAuthorsToRemoteServer()
     if(payload != None):
         return json.dumps(payload),200
     else:

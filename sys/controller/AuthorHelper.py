@@ -461,8 +461,8 @@ class AuthorHelper:
 
     def getGlobalAuthors(self):
 
-        cur = self.dbAdapter.getGlobalAuthors()
-        query =("SELECT aid,nick_name FROM author A,server S WHERE valid S.sid = A.sid AND S.local = 1;")
+        cur = self.dbAdapter.getcursor()
+        query =("SELECT A.aid,A.nick_name FROM author A,servers S WHERE A.valid = 1 AND S.sid = A.sid AND S.local = 1;")
 
         try:
             cur.execute(query)

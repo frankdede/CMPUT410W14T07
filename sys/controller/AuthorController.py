@@ -118,14 +118,14 @@ class AuthorController:
         
         return self.authorHelper.isRemoteAuthor(aid)
 
-    def getClobalAuthors(self):
+    def getGlobalAuthors(self):
 
         rows = self.authorHelper.getGlobalAuthors()
         if(rows != None):
             authors = []
             for row in rows:
                 author = {}
-                author['aid'] = row[0]
+                author['uuid'] = row[0]
                 author['displayName'] = row[1]
                 authors.append(author)
                 

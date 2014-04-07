@@ -90,6 +90,14 @@ class TestController(unittest.TestCase):
 
         result = self.authorController.isRemoteAuthor('333333')
         self.assertTrue(result == False,"Failed to check isRemoteAuthor")
+    
+    def test_getGlobalAuthors(self):
+
+        result = self.authorController.getGlobalAuthors()
+        print(result)
+        self.assertTrue(result != None,"Failed to get global authors")
+
+
     '''
      ====================   Request ControllerHelper  ====================
      PLEASE rebuild the database before run all the tests

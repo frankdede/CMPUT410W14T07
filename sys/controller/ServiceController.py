@@ -3,6 +3,7 @@ from CircleController import *
 from RequestController import *
 from PostController import *
 from CommentController import *
+from AuthorController import *
 import json
 
 class ServiceController:
