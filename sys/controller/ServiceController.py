@@ -11,6 +11,7 @@ class ServiceController:
         self.circleController = CircleController(dbAdapter)
         self.requestController = RequestController(dbAdapter)
         self.commentController = CommentController(dbAdapter)
+        self.postController = PostController(dbAdapter)
     def registerRemoteServer():
         pass
 
@@ -92,7 +93,13 @@ class ServiceController:
         return request
 
     def sendPublicPostsToRemoteServer(self):
-        pass
+        
+        posts = self.postController.getLocalPublicPosts()
+        comments = self.commentController.test_getCommentsForPublicPosts()
+
+        for post in posts:
+            post[comment]=comments[post[guid]]
+            for comment in comments
 
 
 

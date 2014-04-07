@@ -19,6 +19,7 @@ from AuthorController import *
 from RequestController import *
 from CommentController import *
 from CircleController import *
+from PostController import *
 from PostPermissionController import *
 # models
 import author
@@ -46,10 +47,17 @@ class TestController(unittest.TestCase):
         self.requestHelper = RequestHelper(dbAdapter)
         # controllers
         self.commentController = CommentController(dbAdapter)
+        self.postController = PostController(dbAdapter)
         self.requestController = RequestController(dbAdapter)
         self.circleController = CircleController(dbAdapter)
         self.authorController = AuthorController(dbAdapter)
         self.postPermissionController = PostPermissionController(dbAdapter)
+    '''
+     ====================   PostController & Helper =======================
+    '''
+    def test_getLocalPublicPosts(self):
+        result = self.postController.getLocalPublicPosts()
+        self.assertTrue(result != None,"Failed to get local public posts")
 
     '''
      ====================   AuthorController & Helper  ====================

@@ -49,7 +49,6 @@ class CommentController:
         if result != None:
             commentsArray = []
             for row in result:
-                commentDict = {}
                 comment = {}
                 author = {}
                 author['id'] = row[1]
@@ -60,10 +59,8 @@ class CommentController:
                 comment['comment'] = row[3]
                 comment['pubDate'] = row[4].strftime("%Y-%m-%d %H:%M:%S")
                 comment['guid'] = row[0]
-
-                commentDict['pid'] = row[6]
-                commentDict['comment'] = comment
-                commentsArray.append(commentDict)
+                comment['pid'] = row[6]
+                commentsArray.append(comment)
             return commentsArray
         return None
 

@@ -41,7 +41,7 @@ aid varchar(128) NOT NULL,
 time TIMESTAMP NOT NULL,
 title varchar(128) NOT NULL,
 content varchar(1024),
-type enum('html','text','markdown','picture') NOT NULL,
+type enum('text/html','text/plain','text/x-markdown') NOT NULL,
 permission enum('friends','fof','fomh','me','public','specify') NOT NULL,
 PRIMARY KEY (pid),
 FOREIGN KEY (aid) REFERENCES author(aid) ON DELETE CASCADE

@@ -36,13 +36,13 @@ INSERT INTO request values(NULL,'111111','333333');
 INSERT INTO request values(NULL,'111111','444444');
 INSERT INTO request values(NULL,'111111','555555');
 
-INSERT INTO post values('2','111111',NULL,'Today is a brand new day','hello everyone','text','me');
-INSERT INTO post values('1','444444',NULL,'Today is a brand new day','hello everyone','text','public');
-INSERT INTO post values('3','333333',NULL,'belong to 333333','test permission friends','text','friends');
-INSERT INTO post values('4','333333',NULL,'belong to 333333','test permission fof','text','fof');
-INSERT INTO post values('7','111111',NULL,'Oh my god!','Not all my friends can see THIS LOL','text','specify');
-INSERT INTO post values('6','444444',NULL,'Today is a brand new day','hello everyone','text','public');
-INSERT INTO post values('5','777777',NULL,'belong to 777777','test permission fomh','text','fomh');
+INSERT INTO post values('2','111111',NULL,'Today is a brand new day','hello everyone','text/plain','me');
+INSERT INTO post values('1','444444',NULL,'Today is a brand new day','hello everyone','text/plain','public');
+INSERT INTO post values('3','333333',NULL,'belong to 333333','test permission friends','text/plain','friends');
+INSERT INTO post values('4','333333',NULL,'belong to 333333','test permission fof','text/plain','fof');
+INSERT INTO post values('7','111111',NULL,'Oh my god!','Not all my friends can see THIS LOL','text/plain','specify');
+INSERT INTO post values('6','444444',NULL,'Today is a brand new day','hello everyone','text/plain','public');
+INSERT INTO post values('5','777777',NULL,'belong to 777777','test permission fomh','text/plain','fomh');
 
 INSERT INTO comments VALUES('1','1','111111',NULL,'Nice comment');
 INSERT INTO comments VALUES('2','1','111111',NULL,'Lmao');

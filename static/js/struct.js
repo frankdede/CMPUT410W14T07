@@ -433,7 +433,7 @@ function submitPostToServer($postObj){
 	$.post('/'+ $authorName +'/post/',JSON.stringify($postObj)).done(function($data){
 			var $re = JSON.parse($data);
 			if ($re['status']){
-				ajax_upload_image($re['status'])
+				ajax_upload_image($re['status']);
 				getPostsData();
 			}else{
 				alert('Please submit again.');
