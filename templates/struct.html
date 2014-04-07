@@ -216,9 +216,8 @@
               <h4 class="modal-title" id="modal_title">Shared with</h4>
             </div>
             <div class="modal-body">
-              <select name = "permission" onchange = "permission_selected(this)">
-                <option value="type" autocomplete="off" selected >Type</option>
-                <option value = "public" autocomplete="off">Public</option>
+              <select name = "permission" onchange = "permission_selected(this)" id="permission">
+                <option value = "public" autocomplete="off" selected='Public'>Public</option>
                 <option value = "me" autocomplete="off">Me</option>
                 <option value = "friends" autocomplete="off">Friends</option>
                 <option value = "fof" autocomplete="off">Friend's friend</option>
@@ -228,6 +227,19 @@
               </select>
               <div class="listStyle" id="listStyle">
                 <table id="post_list">
+							<tr>
+
+    								<td>
+        								<br></br>
+        								<img width="184" height="184" src="/permission/image/public"></img>
+        								<p style="font-size: 60px;">
+
+            									Public
+
+        								</p>
+    								</td>
+
+							</tr>
                 </table>
               </div>
             </div>

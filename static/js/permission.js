@@ -9,7 +9,7 @@ var host=window.location.host;
 document.getElementById('permissionSelectedAll').style.visibility='hidden';
 document.getElementById('permissionClearAll').style.visibility='hidden';
 document.getElementById('permissionAntiSelect').style.visibility='hidden';
-document.getElementById('listStyle').style.overflow = 'scroll';
+document.getElementById('listStyle').style.overflow = 'hidden';
 
 function permission_selected(sel){
 	var postListTable=document.getElementById("post_list"); 
@@ -44,7 +44,7 @@ function permission_selected(sel){
 					var br = document.createElement("br");
 					cell.appendChild(br);
                                         var img = document.createElement("img");
-					img.src = data[i][0]+"/profile/image/"+data[i][8];
+					img.src = "http://"+host+"/"+data[i][0]+"/profile/image/"+data[i][8];
                                         img.width = document.getElementById("post_list").offsetWidth*0.33;
                                         img.height = document.getElementById("post_list").offsetWidth*0.33;
 					cell.appendChild(img);
@@ -101,6 +101,9 @@ function permission_selected(sel){
 }
 $("#permissionSelected").click(function(){
 	checked = [];
+	if(option===null){
+		option="public";
+	}
 	if(option==="specify"){
 		var count = 0;
 		$("input[name='checkbox']").each(function(){
