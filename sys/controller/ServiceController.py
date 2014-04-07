@@ -3,6 +3,7 @@ from CircleController import *
 from RequestController import *
 from PostController import *
 from CommentController import *
+from AuthorController import *
 import json
 
 class ServiceController:
@@ -11,6 +12,7 @@ class ServiceController:
         self.circleController = CircleController(dbAdapter)
         self.requestController = RequestController(dbAdapter)
         self.commentController = CommentController(dbAdapter)
+        self.authorController = AuthorController(dbAdapter)
         self.postController = PostController(dbAdapter)
     def registerRemoteServer():
         pass
@@ -66,9 +68,20 @@ class ServiceController:
             remoteDisplayName  = request['author']['displayname']
             remoteAid = request['author']['id']
             
+            
+            result = self.authorController.doesServerExists(remoteServer)
+
+            if(result != True):
+                self.serverController.addServer("","")
+
+            result = self.authorController.doesAuthorExists(remoteAid)
+
+            if(result != True):
+                self.authorController.addAuthor("","")
+
             result = self.requestController.sendRequest(remoteAid,localAid)
 
-            if result == True :
+            if(result == True):
                 return True
             else:
                 return False
@@ -96,12 +109,35 @@ class ServiceController:
         
         posts = self.postController.getLocalPublicPosts()
         comments = self.commentController.getCommentsForPublicPosts()
-        for post in posts:
-           for comment in comments:
-            if(post['guid'] == comment['pid']):
-                post['comments'].append(comment)
+        if(posts != None and comments != None):
+            for post in posts:
+                for comment in comments:
+                    if(post['guid'] == comment['pid']):
+                        post['comments'].append(comment)
                 
-        return posts
+            return posts
+        else:
+            return []
+
+    def sendGlobalAuthorsToRemoteServer(self):
+
+        authors = self.authorController.getGlobalAuthors()
+
+        if authors != None:
+            return authors
+        else:
+            return []
+
+    def getGlobalAuthorsFromRemoteServer(self):
+
+        pass
+
+    def getPublicPostsFromRemoteServer(self):
+
+        pass
+ 
+
+
 
                 
 

@@ -864,7 +864,7 @@ def sendAcceptRequestToRemoteServer(recipientAid,recipientName,remoteSenderAid,r
 '''
 Public API: all posts marked as public on the server
 '''
-@app.route('/posts')
+@app.route('/posts',methods=['GET'])
 def sendPublicPostsToRemoteServer():
     
     payload = serviceController.sendPublicPostsToRemoteServer()
@@ -872,6 +872,17 @@ def sendPublicPostsToRemoteServer():
         return json.dumps(payload),200
     else:
         return json.dumps([]),200
+'''
+Public API: all 
+'''
+@app.route('/global/authors',methods=['GET'])
+def sendGlobalAuthors():
+    payload = serviceController.sendGlobalAuthorsToRemoteServer()
+    if(payload != None):
+        return json.dumps(payload),200
+    else:
+        return json.dumps([]),200
+
 
 @app.route('/permission/image/<imagename>',methods=['GET'])
 def view_permission_image(imagename):
@@ -887,6 +898,7 @@ def uploadPostPermissionToServer(authorName,pid):
         return json.dumps({'status':result}),200
     else:
         return abort(404)
+        
 if __name__ == '__main__':
     app.debug = True
     REGISTER_RESTRICTION = settingHelper.getSignUpRestrictionValue()
