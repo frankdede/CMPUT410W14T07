@@ -89,7 +89,7 @@ $("#permissionEditFinish").click(function(){
 		}
 		else{
 			submitPostToServer($post);
-			if (($postObj['permission'] == 'friends')||($postObj['permission'] == 'fomh')){
+			if (($post['permission'] == 'friends')||($post['permission'] == 'fomh')){
 				$post['permission'] = 'me';
 				submitPostToServer($post);
 			}
