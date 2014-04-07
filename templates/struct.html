@@ -190,7 +190,7 @@
      
        <label for = "InputFile">Choose your portrait: </label>
        <p class="help-block"> JEPG,BMP,or PNG file only. No more than 1MB.</p>
-       <input type="file" name ="img_file" id ='my_upload_img_file'>
+       <input type="file" name ="img_file" id ="my_upload_img_file" onchange='readURL(this)'>
        <img id ="preview" src="#" alt="your image">     
     </div>
     <spam id="upload_error_code"></spam>

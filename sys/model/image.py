@@ -30,4 +30,4 @@ class Image:
     def setPid(self,pid):
         self.pid = pid
     def toJson(self):
-        return {"iid":self.aid,"time",self.time,"aid":self.aid,"pid":self.pid}
+        return {"iid":self.aid,"time":self.time,"aid":self.aid,"pid":self.pid}
