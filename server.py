@@ -556,15 +556,9 @@ def addfriend(aid):
             return redirect(url_for(aid))
 #accept request
 @app.route('/<recipientAid>/author/request/accept',methods=['GET'])
-<<<<<<< HEAD
+
 def acceptRequest(recipientAid):
     if ('logged_in' not in session) or (session['logged_id'] != recipientAid):
-=======
-def acceptRequest(recipientId):
-    '''accept friend request by recipient id'''
-
-    if ('logged_in' not in session) or (session['logged_id'] != aid):
->>>>>>> 2ae8de64b29ae1ce4c5f452f46ab3026d6e10201
         return redirect(url_for('/'))
     else:
         try:
