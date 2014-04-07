@@ -5,7 +5,7 @@ var $MAX_ITEM = 0;
 var $POST_VIEW_LIST = {};
 var $COMMENTS_VIEW_LIST = new Array();
 /* Choose Text by default*/
-var $SELECTED_POST_TYPE = 'text';
+var $SELECTED_POST_TYPE = 'text/plain';
 
 /* struct.js runs from here. Placing the mid panel first*/
 $.get("/author/"+$authorName, function(data){
@@ -20,12 +20,12 @@ $.get("/author/"+$authorName, function(data){
 function setPostOptClickListener(){
 	$("#textOption").click(function(){
 		$("#postSelectedType").html('Text');
-		$SELECTED_POST_TYPE = 'Text';
+		$SELECTED_POST_TYPE = 'text/plain';
 	});
 
 	$("#picOption").click(function(){
-		$("#postSelectedType").html('Picture');
-		$SELECTED_POST_TYPE = 'Picture';
+		$("#postSelectedType").html('Markdown');
+		$SELECTED_POST_TYPE = 'text/x-markdown';
         /*$("#uploadImage_form").validate({
                             debug: true,
                             submitHandler: function(form){
@@ -45,7 +45,7 @@ function setPostOptClickListener(){
 });
 	$("#htmlOption").click(function(){
 		$("#postSelectedType").html('HTML');
-		$SELECTED_POST_TYPE = 'HTML';
+		$SELECTED_POST_TYPE = 'text/html';
 	});
 
 	$("#postSubmitBtn").click(function(){
