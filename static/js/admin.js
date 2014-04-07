@@ -155,15 +155,8 @@ function set_click_listener(){
 		}else{
 			aid = circle_list[pos].aid;
 		}
-		$.get(author_id+'/admin',{page:"viewpost"},function(html_data){
-			$("#struct-right-panel").html(html_data);
-			$.getJSON(author_id+"/admin/view/post?aid="+aid,function(data){
-				$.each(data,function(i,item){
-					console.log(item);
-					insert_to_collapse(item);
-				});
-			});
-		});
+		refresh_post_table();
+		set_admin_remove_post_click_listener();
 	});
 	$(document).on('click','#vfp_bt',function(event){
 		event.preventDefault();
@@ -211,6 +204,16 @@ function set_click_listener(){
 	});
 	set_tmp_table_click_listener();
 }
+function refresh_post_table(){
+	$.get(author_id+'/admin',{page:"viewpost"},function(html_data){
+		$("#struct-right-panel").html(html_data);
+		$.getJSON(author_id+"/admin/view/post?aid="+aid,function(data){
+			$.each(data,function(i,item){
+				insert_to_collapse(item);
+			});
+		});
+	});
+}
 function refresh_tmp_table(){
 	$('#admin_tmp_author_table').empty();
 	$.getJSON(author_id+'/admin/view/tmp_author',function(json_data){
@@ -252,6 +255,20 @@ function set_tmp_table_click_listener(){
 	});
 
 }
+function set_admin_remove_post_click_listener(){
+	$(document).on('click',"#admin_remove_post_bt",function(event){
+		event.preventDefault();
+		pid = $(this).attr('data');
+		$.get(author_id+'/admin/delete/post?pid='+pid,function(response){
+			if (response=="OK") {
+				alert("Delete post successfully");
+			}else{
+				alert("Unknow error Code:"+response);
+			}
+			refresh_post_table();
+		});
+	});
+}
 function insert_to_collapse(item){
 	var string = create_post_html(item.pid,item.title,item.date,item.content,item.type,item.permission);
 	$("#accordion").append(string)
@@ -261,20 +278,23 @@ function create_post_html(pid,title,date,message,type,permission){
     <div class=\"panel-heading\">\
       <h4 class=\"panel-title\">\
         <a data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"#collapse_"+pid+"\">Title: \
-          "+title+"<button type=\"button\" class=\"btn btn-default btn-xs\">\
-  		<span class=\"glyphicon glyphicon-remove\"></span>\
-		</button>\
-        </a>\
+          "+title+
+        "</a>\
       </h4>\
     </div>\
     <div id=\"collapse_"+pid+"\" class=\"panel-collapse collapse\">\
-      <div class=\"panel-body\"><p>Content: "+message+
+      <div class=\"panel-body\"> \
+      <p>Content: "+message+
       "</p><p>Date: "+date+"</p>"+
       "<p>Type: "+type+"</p>"+
       "<p>permission: "+permission+"</p>"+
       "</div>\
     </div>\
-  </div>"
+    <div class='panel-footer'>"+
+    "<button data = '"+pid+"' type='button' class='btn btn-default btn-xs' id ='admin_remove_post_bt'>"+
+  		"<span class='glyphicon glyphicon-remove' ></span>"+
+		"</button>"+
+  "</div>"
 	return string;
 }
 function delete_author(aid){
