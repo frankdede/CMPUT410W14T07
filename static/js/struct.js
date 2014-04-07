@@ -336,6 +336,7 @@ function createPostViewHtml($pid,$title,$date,$message,$type,$permission){
 	"<small class=\"postViewTimeFooter\">"+
 	" | " + $date +
 	"</small>" +
+	"<img src ='"+$authorid+"/"+$pid+"/image/view' width='50px',height='50px' >"+
 	"<small id=\""+$pid+"-expandBtn\" class=\"postViewComment\">"+
 	" | Comments(10)"+
 	"</small>"+

@@ -585,19 +585,18 @@ def getCommentsForAuthor(aid):
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.' ,1)[1] in app.config['ALLOWED_EXTENSIONS']
 
-@app.route('/test')
-def test():
-    return render_template('upload_image.html')
-
 @app.route('/<aid>/<pid>/upload',methods=['POST'])
 def upload(aid,pid):
+    if ('logged_in' not in session) or (session['logged_id'] != aid):
+        abort(404)
     file = request.files['img_file']
     if file:
         if not allowed_file(file.filename):
             re = make_response("Wrong Type");
         else:
             filename = save_image(pid,file)
-            if imageHelper.insertImage(filename,aid,pid):
+            iid =  imageHelper.insertImage(filename,aid,pid)
+            if iid !=False:
                 re = make_response("OK");
             else:
                 re = make_response("DatabaseError")
@@ -605,9 +604,17 @@ def upload(aid,pid):
     else:
         abort(404)
 
-@app.route('/uploads/<filename>')
-def uploadImage(filename):
-    return send_from_directory(app.config['UPLOAD_FOLDER'],filename)
+@app.route('/<aid>/<pid>/image/view',methods=['GET'])
+def viewPostImage(aid,pid):
+    if ('logged_in' not in session) or (session['logged_id'] != aid):
+        abort(404)
+    image = imageHelper.getImageByPid(pid)
+    if image == False:
+        re = make_response("DatabaseError")
+        return re
+    else:
+        filename = image[0].getPath();
+        return send_from_directory(app.config['UPLOAD_FOLDER'],filename)
 
 
 
