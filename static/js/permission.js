@@ -124,6 +124,25 @@ $("#permissionSelected").click(function(){
 	else{
 		$('#postingPermissionModal').modal('hide');
 	}
+	var permissionButton = document.getElementById("postPermissionBtn");
+   	if(option == 'fomh'){
+		permissionButton.innerHTML = '<span class="glyphicon glyphicon-user"></span>Friends of My Host';
+	}
+	else if (option == 'public'){
+		permissionButton.innerHTML = '<span class="glyphicon glyphicon-user"></span>Public';
+	}
+	else if (option == 'me'){
+		permissionButton.innerHTML = '<span class="glyphicon glyphicon-user"></span>Me';
+	}
+	else if (option == 'friends'){
+		permissionButton.innerHTML = '<span class="glyphicon glyphicon-user"></span>Friends';
+	}
+	else if (option == 'fof'){
+		permissionButton.innerHTML = '<span class="glyphicon glyphicon-user"></span>Friends of Friends';
+	}
+	else{
+		permissionButton.innerHTML = '<span class="glyphicon glyphicon-user"></span>Specify';
+	}
  });
 $("#permissionSelectedAll").click(function(){
 	$('input[name=checkbox]').prop('checked', true);
