@@ -118,7 +118,6 @@ function submitPostToServer($postObj){
 //Send the Post object in json over http
 function submitSpecifyToServer($pid){
        var send = {'data':checked};
-       alert(JSON.stringify(send));
        $.post('/'+ $authorName +'/postpermission/'+$pid,JSON.stringify(send)).done(function($data){
        });
 }
@@ -213,14 +212,10 @@ $("#permissionEditSelected").click(function(){
 		}
 		else{
 			checked.push($authorid);
-			for (i=0;i<checked.length;i++){
-				alert(checked[i]);
-			}
 			$('#postingPermissionModal').modal('hide');
 		}
 	}
 	else{
-		alert('a');
 		$('#postingPermissionModal').modal('hide');
 	}
  });

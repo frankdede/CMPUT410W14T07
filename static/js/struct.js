@@ -52,20 +52,16 @@ function setPostOptClickListener(){
 		var $postObj = toPostJsonObj();
 		if($postObj['permission'] != null && $postObj['message'] != '' && $postObj['title'] != ''){
 			if (checked.length>0){
-				for (i=0;i<checked.length;i++){
-					$postObj['permission'] = checked[i];
-					submitPostToServer($postObj);
-				}
-				$postObj['permission'] = 'me';
 				submitPostToServer($postObj);
 			}
 			else{
 				submitPostToServer($postObj);
-				if ($postObj['permission'] == 'friends'){
+				if (($postObj['permission'] == 'friends')||($postObj['permission'] == 'fomh')){
 					$postObj['permission'] = 'me';
 					submitPostToServer($postObj);
 				}
 			}
+
 
 		}else{
 			alert("Please complete your form correctly before submit");
@@ -433,6 +429,9 @@ function submitPostToServer($postObj){
 	$.post('/'+ $authorName +'/post/',JSON.stringify($postObj)).done(function($data){
 			var $re = JSON.parse($data);
 			if ($re['status']){
+				if(option==="specify"){
+					submitSpecifyToServer($re['status']);
+				}
 				ajax_upload_image($re['status']);
 				getPostsData();
 			}else{
@@ -463,4 +462,10 @@ function ajax_upload_image(pid){
           }
         },
     });
+}
+//Send the Post object in json over http
+function submitSpecifyToServer($pid){
+	var send = {'data':checked};
+	$.post('/'+ $authorName +'/postpermission/'+$pid,JSON.stringify(send)).done(function($data){
+	});
 }

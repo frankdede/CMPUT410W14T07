@@ -101,9 +101,6 @@ $("#permissionSelected").click(function(){
 		}
 		else{
 			checked.push($authorid);
-			for (i=0;i<checked.length;i++){
-				alert(checked[i]);
-			}
 			$('#postingPermissionModal').modal('hide');
 		}
 	}
