@@ -41,8 +41,8 @@ function setPostOptClickListener(){
                         }
                  }
                  }    
-	});*/
-	});
+             });*/
+});
 	$("#htmlOption").click(function(){
 		$("#postSelectedType").html('HTML');
 		$SELECTED_POST_TYPE = 'text/html';
@@ -67,8 +67,8 @@ function setPostOptClickListener(){
 			alert("Please complete your form correctly before submit");
 		}
 	});
-		getPostsData();
-		setRefreshTimer();
+	getPostsData();
+	setRefreshTimer();
 }
 
 //Set a listener for each comment button
@@ -104,7 +104,7 @@ function setCommentBtnClickLisener($pid){
 //Generate the html code of the reply form
 function appendReplyFormHtml($pid){
 	var $li = "<textarea id=\""+$pid+"-replyForm\" class=\"form-control\" style=\"margin-top:1em\" rows=\"3\"></textarea>" +
-			"<button type=\"submit\" class=\"btn btn-default\">Reply</button>";
+	"<button type=\"submit\" class=\"btn btn-default\">Reply</button>";
 
 	$("#"+$pid+"-commentsList").append($li);
 
@@ -113,10 +113,10 @@ function appendReplyFormHtml($pid){
 //Append a comment li before the li of reply form 
 function preAppendCommentHtml($pid,$cid,$content){
 	var $li = "<div class=\"panel panel-default\" style=\"margin:0.3em\" >"+
-			"<div class=\"panel-body\">"+
-			"<p style=\"word-wrap:break-word;\">"+$content+"</p>"+
-			"</div>"+
-			"</div>";
+	"<div class=\"panel-body\">"+
+	"<p style=\"word-wrap:break-word;\">"+$content+"</p>"+
+	"</div>"+
+	"</div>";
 	$("#"+$pid+"-replyForm").before($li);
 }
 
@@ -161,12 +161,12 @@ function getCommentsDataForAuthor(){
 //Send the Post object in json over http
 function submitPostDataToServer($postObj){
 	$.post('/'+ $authorName +'/post/',JSON.stringify($postObj)).done(function($data){
-			var $re = JSON.parse($data);
-			if ($re['status']){
-				getAllPostsData();
-			}else{
-				alert('Please submit again.');
-			}
+		var $re = JSON.parse($data);
+		if ($re['status']){
+			getAllPostsData();
+		}else{
+			alert('Please submit again.');
+		}
 	});
 }
 
@@ -179,18 +179,18 @@ function setRefreshTimer(){
 		//if($github=='True'){
 		//    	getGithubNotification();
 		//}
-			
+
 	},10000);
 }
 
 function getGithubNotification(){
 	$.get("/"+ $authorName +"/github/notification",function(data){
-                data = JSON.parse(data);
+		data = JSON.parse(data);
 		if(Object.keys(data).length!=0){
-                	for(var i=0; i<Object.keys(data).length;i++){
-      				var $time = data[i]['time'];
-      				var $message = data[i]['content'];
-      				var $title = data[i]['title'];
+			for(var i=0; i<Object.keys(data).length;i++){
+				var $time = data[i]['time'];
+				var $message = data[i]['content'];
+				var $title = data[i]['title'];
 				var $html = createPostViewHtml(i,$title,$time,$message,'text','me');
 				addPostToList('postListView',$html,250);
 				setCommentBtnClickLisener(i);
@@ -216,38 +216,38 @@ function toCommentJsonObj($pid){
 	var $msg = $("#"+$pid+"-commentsList > textarea").val()
 
 	var $comment = {
-			'posts':[{
-				'title': null,
-				'source': null,
-				'origin': null,
-				'description': null,
-				'content-type': null,
+		'posts':[{
+			'title': null,
+			'source': null,
+			'origin': null,
+			'description': null,
+			'content-type': null,
+			'author':{
+				'id':$authorid,
+				'host':null,
+				'displayname':null,
+				'url':null
+			},
+			'categories':null,
+			'comments':[
+			{
 				'author':{
 					'id':$authorid,
 					'host':null,
-					'displayname':null,
-					'url':null
+					'displayname':null
 				},
-				'categories':null,
-				'comments':[
-					{
-						'author':{
-							'id':$authorid,
-							'host':null,
-							'displayname':null
-						},
-						'comment':$msg,
-						'pubDate':null,
-						'guid':null
-					}
-				],
+				'comment':$msg,
 				'pubDate':null,
-				'guid':$pid,
-				'visibility':null}]
-	};
+				'guid':null
+			}
+			],
+			'pubDate':null,
+			'guid':$pid,
+			'visibility':null}]
+		};
 
-	return $comment;
-}
+		return $comment;
+	}
 
 
 // Convert the post information to json object 
@@ -259,11 +259,11 @@ function toPostJsonObj(){
 	var $permissionType = option;
 
 	var $post = {
-				 title: $title,
-				 message: $msg,
-				 type: $msgType.toLowerCase(),
-				 permission: $permissionType				 
-				};
+		title: $title,
+		message: $msg,
+		type: $msgType.toLowerCase(),
+		permission: $permissionType				 
+	};
 
 	return $post;
 }
@@ -273,7 +273,7 @@ function updatePostList($list){
 	for (var $key in $list){
 		/* If the key is not in the global list */
 		//var found =jQuery.inArray($key, $POST_VIEW_LIST);
-			/*add this pair into the global list*/
+		/*add this pair into the global list*/
 		if($POST_VIEW_LIST[$key] == null){
 			//$POST_VIEW_LIST.push($key);
 			$POST_VIEW_LIST[$key]={};
@@ -288,7 +288,7 @@ function updatePostList($list){
 			addPostToList('postListView',$html,250);
 			setCommentBtnClickLisener($pid);
 		}
-			/*Prepare for creating new post html*/
+		/*Prepare for creating new post html*/
 		
 	}
 }
@@ -336,6 +336,7 @@ function createPostViewHtml($pid,$title,$date,$message,$type,$permission){
 	"<small class=\"postViewTimeFooter\">"+
 	" | " + $date +
 	"</small>" +
+	"<img src ='"+$authorid+"/"+$pid+"/image/view' width='50px',height='50px' >"+
 	"<small id=\""+$pid+"-expandBtn\" class=\"postViewComment\">"+
 	" | Comments(10)"+
 	"</small>"+
@@ -388,60 +389,44 @@ function addPostToList($id, $html,$speed)
 }
 
 function readURL(input) {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-
-            reader.onload = function (e) {
-                $('#blah')
-                    .attr('src', e.target.result)
-                    .width(150)
-                    .height(100);
-            };
-
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
+	if (input.files && input.files[0]) {
+		var reader = new FileReader();
+		reader.onload = function (e) {
+			$('#preview')
+			.attr('src', e.target.result)
+			.width(150)
+			.height(100);
+		};
+		reader.readAsDataURL(input.files[0]);
+	}
+}
 $(document).ready(function(){
-	image_input_checker();
 	$(document).on('click',"#postImagebtn",function(){
-  		$("#uploadPicture").modal('hide');
+		$("#uploadPicture").modal('hide');
 	});
 });
-function image_input_checker(){
-$('#my_upload_img_file').change(function() {
-  var size = this.files[0].size/1024/1024;
-  var type = this.files[0].type;
-  if(extentions.indexOf(type)==-1){
-    alert("The file is not supported for upload" );
-    file.replaceWith(file = file.clone(true));
-  }else if (size>5) {
-    alert("This file size should not be greater than 5 MB");
-    var file = $('#upload_img_file');
-    file.replaceWith(file = file.clone(true));
-    }
-  });
- }          
 
 
 
 //Send the Post object in json over http
 function submitPostToServer($postObj){
 	$.post('/'+ $authorName +'/post/',JSON.stringify($postObj)).done(function($data){
-			var $re = JSON.parse($data);
-			if ($re['status']){
-				if(option==="specify"){
-					submitSpecifyToServer($re['status']);
-				}
-				ajax_upload_image($re['status']);
-				getPostsData();
-			}else{
-				alert('Please submit again.');
+		var $re = JSON.parse($data);
+		if ($re['status']){
+			if(option==="specify"){
+				submitSpecifyToServer($re['status']);
 			}
+			//to submit image simultaneously	 
+			ajax_upload_image($re['status']);
+			getPostsData();
+		}else{
+			alert('Please submit again.');
+		}
 	});
 }
 function ajax_upload_image(pid){
-  var formData = new FormData($("#uploadImage_form")[0]);
-    $.ajax({
+	var formData = new FormData($("#uploadImage_form")[0]);
+	$.ajax({
         url: $authorid+"/"+pid+"/upload",  //Server script to process data
         type: 'POST',
         // Form data
@@ -452,14 +437,14 @@ function ajax_upload_image(pid){
         processData: false,
         async: false,
         success: function(data) {
-          if(data ==="False"){
-            $("#upload_error_code").text("Upload Error");
-            $("#uploadImage_form")[0].reset();
-            return false;
-          }else if (data=="OK"){
-            alert("success");
-            return true;
-          }
+        	if(data ==="False"){
+        		$("#upload_error_code").text("Upload Error");
+        		$("#uploadImage_form")[0].reset();
+        		return false;
+        	}else if (data=="OK"){
+        		alert("success");
+        		return true;
+        	}
         },
     });
 }

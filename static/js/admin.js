@@ -292,7 +292,7 @@ function create_post_html(pid,title,date,message,type,permission){
     </div>\
     <div class='panel-footer'>"+
     "<button data = '"+pid+"' type='button' class='btn btn-default btn-xs' id ='admin_remove_post_bt'>"+
-  		"<span class='glyphicon glyphicon-remove' ></span>"+
+  		"<span class='glyphicon glyphicon-remove' >Delete this Post</span>"+
 		"</button>"+
   "</div>"
 	return string;
