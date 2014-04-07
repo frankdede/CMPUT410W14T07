@@ -189,6 +189,7 @@ class PostHelper:
 
     def getLocalPublicPosts(self):
 
+        cur = self.dbAdapter.getcursor()
         query = ("SELECT "
                 "P.pid,"
                 "P.time,"
@@ -196,7 +197,7 @@ class PostHelper:
                 "P.content,"
                 "P.type,"
                 "P.permission,"
-                "A.aid,A.nick_name,S.sid "
+                "A.aid,A.nick_name,S.url "
                 "FROM post P, author A, servers S "
                 "WHERE S.local = 1 AND S.sid = A.sid AND A.aid = P.aid AND P.permission = 'public';")
         try:
@@ -212,7 +213,7 @@ class PostHelper:
             print("****************************************")
             return None
 
-        cur.fetchall()
+        return cur.fetchall()
 
 
     def getPublicPost(self,aid):

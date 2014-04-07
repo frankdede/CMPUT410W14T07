@@ -53,16 +53,40 @@ class PostController:
             else:
                 json_list[post.getPid()]=post.tojson()
         return json.dumps(json_list)
+
     '''
     For public API to use only
+    Get local public posts
     '''
     def getLocalPublicPosts(self):
 
-        posts = self.posthelper.getLocalPublicPosts()
+        rows = self.posthelper.getLocalPublicPosts()
+        if rows != None:
+            postsArray = []
+            for row in rows:
+                post = {}
+                author = {}
+                author['id'] = row[6]
+                author['host'] = row[8]
+                author['displayname'] = row[7]
+                author['url'] = ""
 
-
-
-
+                post['title'] = row[2]
+                post['source'] = ""
+                post['origin'] = ""
+                post['description'] = ""
+                post['content-type'] = row[4]
+                post['content'] = row[3]
+                post['guid'] = row[0]
+                post['categories'] = ""
+                post['pubDate'] = row[1].strftime("%Y-%m-%d %H:%M:%S")
+                post['visibility'] = row[5]
+                post['author'] = author
+                post['comments'] = []
+                
+                postsArray.append(post)
+            return postsArray
+        return None
 
     def getPostByAid(self,aid):
         list = self.posthelper.getPostByAid(aid)
