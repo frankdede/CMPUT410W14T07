@@ -191,8 +191,22 @@ function permission_selected(sel){
                 img.height = document.getElementById("post_list").offsetWidth*0.33;
 		cell.appendChild(img);
 		var p = document.createElement("p");
-		p.style.fontSize='100px';
-		p.innerHTML=option;
+		p.style.fontSize='60px';
+   		if(option == 'fomh'){
+			p.innerHTML='Friends of My Host';
+		}
+		else if (option == 'public'){
+			p.innerHTML='Public';
+		}
+		else if (option == 'me'){
+			p.innerHTML='Me';
+		}
+		else if (option == 'friends'){
+			p.innerHTML='Friends';
+		}
+		else if (option == 'fof'){
+			p.innerHTML='Friends of Friends';
+		}
 		cell.appendChild(p);
 	}
 }
