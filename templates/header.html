@@ -12,6 +12,7 @@
   <!-- Struct css-->
   <link href="{{url_for('static',filename='css/struct.css')}}" rel="stylesheet">
   <link href="{{url_for('static',filename='css/permission.css')}}" rel="stylesheet">
+  <link href="{{url_for('static',filename='css/bootstrap-markdown.min.css')}}" rel="stylesheet">
   <!--jquery Ui CSSS-->
   <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -302,6 +303,8 @@
         <script src="{{url_for('static',filename='js/profile.js')}}"></script>
         <script src="{{url_for('static',filename='js/circle.js')}}"></script>
         <script src="{{url_for('static',filename='js/bootstrap-markdown.js')}}"></script>
+        <script src="{{url_for('static',filename='js/markdown.js')}}"></script>
+        <script src="{{url_for('static',filename='js/to-markdown.js')}}"></script>
         {%endif%}
         {%if session.admin_model%}
         <script src="{{url_for('static',filename='js/sco.collapse.js')}}"></script>

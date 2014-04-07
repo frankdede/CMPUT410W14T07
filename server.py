@@ -404,9 +404,6 @@ def save_image(aid,file):
     path = os.path.join(app.config['UPLOAD_FOLDER'],filename)
     file.save(path)
     return filename
-@app.route('/image/view/<name>',methods=['GET'])
-def view_imagin():
-    pass
 @app.route('/<aid>/recommended_authorlist.json', methods=['GET'])
 def authorlist(aid):
     if ('logged_in' not in session) or (aid !=session['logged_id']):
@@ -568,9 +565,11 @@ def getPostForAuthor(aid):
 
 def index():
     if request.method == 'POST':
-        content = request.form['postMarkDown']
+        content = request.form['postContent']
         content = Markup(markdown.markdown(content))
-        return render_template('markdown.html', **locals())
+        html_string =  render_template('markdown.html', **locals())
+        print html_string
+        return html_string
     return render_template('markdown_input.html')
 
 @app.route('/author/<aid>/posts/comments/',methods=['GET'])
@@ -613,9 +612,11 @@ def viewPostImage(aid,pid):
         re = make_response("DatabaseError")
         return re
     else:
-        filename = image[0].getPath();
-        return send_from_directory(app.config['UPLOAD_FOLDER'],filename)
-
+        if len(image) >0:
+            filename = image[0].getPath();
+            return send_from_directory(app.config['UPLOAD_FOLDER'],filename)
+        else:
+            abort(404)
 
 
 @app.route('/<authorName>/post/',methods=['PUT','POST'])

@@ -6,8 +6,8 @@ var $POST_VIEW_LIST = {};
 var $COMMENTS_VIEW_LIST = new Array();
 /* Choose Text by default*/
 var $SELECTED_POST_TYPE = 'text/plain';
-var $image_submit = false;
-
+var image_submit = false;
+var mark_down = false;
 /* struct.js runs from here. Placing the mid panel first*/
 $.get("/author/"+$authorName, function(data){
 
@@ -254,7 +254,6 @@ function toCommentJsonObj($pid){
 // Convert the post information to json object 
 function toPostJsonObj(){
 	var $msg = $('#postContent').val();
-	
 	/*if (img_html!=''||img_html!=undefined) {
 		msg+=img_html
 	}*/
@@ -417,27 +416,33 @@ $(document).ready(function(){
 function addMarkDownClickerListener(){
 	$(document).on('click','#markdown_trigger',function(event){
 		//$('#postContent').attr('data-provide','markdown-editable');
-		$('#postContent').markdown();
-		console.log($('#postContent').getContent());
+		$("#postContent").markdown();
+		mark_down = true;
 	});
 }
 //Send the Post object in json over http
 function submitPostToServer($postObj){
-	$.post('/'+ $authorName +'/post/',JSON.stringify($postObj)).done(function($data){
-		var $re = JSON.parse($data);
-		if ($re['status']){
-			if(option==="specify"){
-				submitSpecifyToServer($re['status']);
+	if (mark_down==false) {
+		$.post('/'+ $authorName +'/post/',JSON.stringify($postObj)).done(function($data){
+			var $re = JSON.parse($data);
+			if ($re['status']){
+				if(option==="specify"){
+					submitSpecifyToServer($re['status']);
 			}
 			//to submit image simultaneously	 
 			if (image_submit==true) {
 				ajax_upload_image($re['status']);
 			}
 			getPostsData();
-		}else{
-			alert('Please submit again.');
-		}
-	});
+			}else{
+				alert('Please submit again.');
+			}
+		});
+	}else{
+		$.post('/markdown',$("#markdown_form").serialize(),function(data){
+			console.log(data);
+		});
+	}
 }
 function ajax_upload_image(pid){
 	var formData = new FormData($("#uploadImage_form")[0]);
