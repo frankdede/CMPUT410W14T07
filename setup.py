@@ -1,3 +1,4 @@
+'''this is data base setup file'''
 
 USER = str(raw_input("Mysql username:"))
 PASS = str(raw_input("Password:"))
