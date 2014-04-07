@@ -868,7 +868,9 @@ def sendPublicPostsToRemoteServer():
     
     payload = serviceController.sendPublicPostsToRemoteServer()
     if(payload != None):
-        pass
+        return json.dumps(payload),200
+    else:
+        return json.dumps([]),200
 
 @app.route('/permission/image/<imagename>',methods=['GET'])
 def view_permission_image(imagename):

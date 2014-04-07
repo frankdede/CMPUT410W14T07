@@ -21,6 +21,7 @@ from CommentController import *
 from CircleController import *
 from PostController import *
 from PostPermissionController import *
+from ServiceController import *
 # models
 import author
 import post
@@ -52,12 +53,19 @@ class TestController(unittest.TestCase):
         self.circleController = CircleController(dbAdapter)
         self.authorController = AuthorController(dbAdapter)
         self.postPermissionController = PostPermissionController(dbAdapter)
+        self.serviceController = ServiceController(dbAdapter)
     '''
      ====================   PostController & Helper =======================
     '''
     def test_getLocalPublicPosts(self):
         result = self.postController.getLocalPublicPosts()
         self.assertTrue(result != None,"Failed to get local public posts")
+    '''
+     ===================== ServiceController =============================
+    '''
+    def test_sendPublicPostsToRemoteServer(self):
+        result = self.serviceController.sendPublicPostsToRemoteServer()
+        self.assertTrue(result != None,"Failed to send public posts to remote server")
 
     '''
      ====================   AuthorController & Helper  ====================

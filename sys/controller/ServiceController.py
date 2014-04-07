@@ -96,11 +96,13 @@ class ServiceController:
         
         posts = self.postController.getLocalPublicPosts()
         comments = self.commentController.getCommentsForPublicPosts()
-        
-        #for post in posts:
-        #   for comment in comments:
+        for post in posts:
+           for comment in comments:
+            if(post['guid'] == comment['pid']):
+                post['comments'].append(comment)
+                
+        return posts
 
-        #   post[comment]=comments[post[guid]]
                 
 
 
