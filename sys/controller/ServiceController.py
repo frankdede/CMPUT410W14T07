@@ -96,11 +96,11 @@ class ServiceController:
         
         posts = self.postController.getLocalPublicPosts()
         comments = self.commentController.test_getCommentsForPublicPosts()
-
+        """
         for post in posts:
             post[comment]=comments[post[guid]]
             for comment in comments
-
+        """
 
 
         
