@@ -11,6 +11,7 @@ class ServiceController:
         self.circleController = CircleController(dbAdapter)
         self.requestController = RequestController(dbAdapter)
         self.commentController = CommentController(dbAdapter)
+        self.authorController = AuthorController(dbAdapter)
         self.postController = PostController(dbAdapter)
     def registerRemoteServer():
         pass
@@ -96,12 +97,27 @@ class ServiceController:
         
         posts = self.postController.getLocalPublicPosts()
         comments = self.commentController.getCommentsForPublicPosts()
-        for post in posts:
-           for comment in comments:
-            if(post['guid'] == comment['pid']):
-                post['comments'].append(comment)
+        if(posts != None and comments != None):
+            for post in posts:
+                for comment in comments:
+                    if(post['guid'] == comment['pid']):
+                        post['comments'].append(comment)
                 
-        return posts
+            return posts
+        else:
+            return []
+
+    def sendGlobalAuthorsToRemoteServer(self):
+
+        authors = self.authorController.getGlobalAuthors()
+
+        if authors != None:
+            return authors
+        else:
+            return []
+
+
+
 
                 
 

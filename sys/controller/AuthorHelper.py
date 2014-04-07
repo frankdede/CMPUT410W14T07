@@ -442,7 +442,6 @@ class AuthorHelper:
 
     def isRemoteAuthor(self,aid):
         cur = self.dbAdapter.getcursor()
-        localSid = 'cs410.cs.ualberta.ca:41070'
         query = ("SELECT * FROM author WHERE aid = '%s' AND sid <> '%s';")%(aid,self.localSid)
 
         try:
@@ -459,6 +458,27 @@ class AuthorHelper:
             return None
 
         return len(cur.fetchall()) > 0 
+
+    def getGlobalAuthors(self):
+
+        cur = self.dbAdapter.getGlobalAuthors()
+        query =("SELECT aid,nick_name FROM author A,server S WHERE valid S.sid = A.sid AND S.local = 1;")
+
+        try:
+            cur.execute(query)
+
+        except mysql.connector.Error as err:
+            print("****************************************")
+            print("SQLException from getGlobalAuthors():")
+            print("Error code:", err.errno)
+            print("SQLSTATE value:", err.sqlstate)
+            print("Error message:", err.msg)
+            print("Might be query issue:",query)
+            print("****************************************")
+            return None
+        
+        return cur.fetchall()
+
 
 
 

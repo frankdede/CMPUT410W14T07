@@ -117,3 +117,19 @@ class AuthorController:
     def isRemoteAuthor(self,aid):
         
         return self.authorHelper.isRemoteAuthor(aid)
+
+    def getClobalAuthors(self):
+
+        rows = self.authorHelper.getGlobalAuthors()
+        if(rows != None):
+            authors = []
+            for row in rows:
+                author = {}
+                author['aid'] = row[0]
+                author['displayName'] = row[1]
+                authors.append(author)
+                
+            return authors
+        else:
+            return None
+
