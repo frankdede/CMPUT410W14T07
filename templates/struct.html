@@ -171,7 +171,7 @@
             </button>
             <ul class="dropdown-menu dropdown-inverse" role="menu">
               <li id="textOption"><a>Text</a></li>
-              <li id="picOption"><a>Markdown</a></li>
+              <li id="picOption"><a id="markdown_trigger">Markdown</a></li>
               <li id="htmlOption"><a>HTML</a></li>
             </ul>
           </div>
@@ -191,7 +191,7 @@
        <label for = "InputFile">Choose your portrait: </label>
        <p class="help-block"> JEPG,BMP,or PNG file only. No more than 1MB.</p>
        <input type="file" name ="img_file" id ="my_upload_img_file" onchange='readURL(this)'>
-       <img id ="preview" src="#" alt="your image">     
+       <img id ="preview" alt="preview">     
     </div>
     <spam id="upload_error_code"></spam>
     <div class = "modal-footer">

@@ -6,6 +6,7 @@ var $POST_VIEW_LIST = {};
 var $COMMENTS_VIEW_LIST = new Array();
 /* Choose Text by default*/
 var $SELECTED_POST_TYPE = 'text/plain';
+var $image_submit = false;
 
 /* struct.js runs from here. Placing the mid panel first*/
 $.get("/author/"+$authorName, function(data){
@@ -253,6 +254,10 @@ function toCommentJsonObj($pid){
 // Convert the post information to json object 
 function toPostJsonObj(){
 	var $msg = $('#postContent').val();
+	
+	/*if (img_html!=''||img_html!=undefined) {
+		msg+=img_html
+	}*/
 	var $title =$('#postTitle').val();
 	/*msgType can be null*/
 	var $msgType = $SELECTED_POST_TYPE;
@@ -328,7 +333,9 @@ function createPostViewHtml($pid,$title,$date,$message,$type,$permission){
 	"</small></div>" +
 	"<div class=\"panel-body postViewBody\"><p style=\"word-wrap:break-word;\">" +
 	$message +
-	"</p></div>"+
+	"</p>"+
+	"<img src ='"+$authorid+"/"+$pid+"/image/view' width='50px',height='50px' >"+
+	"</div>"+
 	"</div>"+
 	"<small class=\"postViewPermissionFooter\">"+
 	"Share with:" + $permission +
@@ -336,7 +343,6 @@ function createPostViewHtml($pid,$title,$date,$message,$type,$permission){
 	"<small class=\"postViewTimeFooter\">"+
 	" | " + $date +
 	"</small>" +
-	"<img src ='"+$authorid+"/"+$pid+"/image/view' width='50px',height='50px' >"+
 	"<small id=\""+$pid+"-expandBtn\" class=\"postViewComment\">"+
 	" | Comments(10)"+
 	"</small>"+
@@ -390,6 +396,7 @@ function addPostToList($id, $html,$speed)
 
 function readURL(input) {
 	if (input.files && input.files[0]) {
+		image_submit = true;
 		var reader = new FileReader();
 		reader.onload = function (e) {
 			$('#preview')
@@ -404,10 +411,16 @@ $(document).ready(function(){
 	$(document).on('click',"#postImagebtn",function(){
 		$("#uploadPicture").modal('hide');
 	});
+	addMarkDownClickerListener();
 });
-
-
-
+//add markdown switcher
+function addMarkDownClickerListener(){
+	$(document).on('click','#markdown_trigger',function(event){
+		//$('#postContent').attr('data-provide','markdown-editable');
+		$('#postContent').markdown();
+		console.log($('#postContent').getContent());
+	});
+}
 //Send the Post object in json over http
 function submitPostToServer($postObj){
 	$.post('/'+ $authorName +'/post/',JSON.stringify($postObj)).done(function($data){
@@ -417,7 +430,9 @@ function submitPostToServer($postObj){
 				submitSpecifyToServer($re['status']);
 			}
 			//to submit image simultaneously	 
-			ajax_upload_image($re['status']);
+			if (image_submit==true) {
+				ajax_upload_image($re['status']);
+			}
 			getPostsData();
 		}else{
 			alert('Please submit again.');
