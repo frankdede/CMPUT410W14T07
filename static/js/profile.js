@@ -13,7 +13,7 @@ function get_profile_json(aid){
 	$.getJSON(aid+'/profile.json',{'aid':aid},function(data){
 		console.log(data);
 		author_data = data;
-		//$("#edit_datepicker").datepicker({ dateFormat: "yy-mm-dd" }).datepicker("setDate",new Date(data.birthday));
+		$("#edit_datepicker").datepicker({ dateFormat: "yy-mm-dd" }).datepicker("setDate",new Date(data.birthday));
 		$("#profile_img").attr('src',aid+"/profile/image/"+data.img_path)
 		$("#name").text(data.name);
 		$("#name").append("<small id='edit_bt'><a id='edit_a'>Edit</a></small>");

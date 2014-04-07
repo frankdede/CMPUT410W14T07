@@ -26,7 +26,7 @@ function setPostOptClickListener(){
 	$("#picOption").click(function(){
 		$("#postSelectedType").html('Picture');
 		$SELECTED_POST_TYPE = 'Picture';
-                $("#uploadImage_form").validate({
+        /*$("#uploadImage_form").validate({
                             debug: true,
                             submitHandler: function(form){
                             
@@ -41,8 +41,8 @@ function setPostOptClickListener(){
                         }
                  }
                  }    
+	});*/
 	});
-
 	$("#htmlOption").click(function(){
 		$("#postSelectedType").html('HTML');
 		$SELECTED_POST_TYPE = 'HTML';
@@ -71,7 +71,6 @@ function setPostOptClickListener(){
 			alert("Please complete your form correctly before submit");
 		}
 	});
-
 		getPostsData();
 		setRefreshTimer();
 }
@@ -406,8 +405,14 @@ function readURL(input) {
             reader.readAsDataURL(input.files[0]);
         }
     }
-<<<<<<< HEAD
-$('#upload_img_file').bind('change', function() {
+$(document).ready(function(){
+	image_input_checker();
+	$(document).on('click',"#postImagebtn",function(){
+  		$("#uploadPicture").modal('hide');
+	});
+});
+function image_input_checker(){
+$('#my_upload_img_file').change(function() {
   var size = this.files[0].size/1024/1024;
   var type = this.files[0].type;
   if(extentions.indexOf(type)==-1){
@@ -419,15 +424,8 @@ $('#upload_img_file').bind('change', function() {
     file.replaceWith(file = file.clone(true));
     }
   });
-$(document).on('click',"#postImagebtn",function(){
-=======
+ }          
 
-                   
-$(document).on('click',"#postImagebtn",function(){
-  $("#uploadImage_form").submit();
->>>>>>> e9533fa6e2fd4b48647608e089dd077597a7639f
-  $("#uploadPicture").modal('hide');
-});
 
 
 //Send the Post object in json over http
@@ -435,7 +433,7 @@ function submitPostToServer($postObj){
 	$.post('/'+ $authorName +'/post/',JSON.stringify($postObj)).done(function($data){
 			var $re = JSON.parse($data);
 			if ($re['status']){
-				ajax_upload_image($re['status')
+				ajax_upload_image($re['status'])
 				getPostsData();
 			}else{
 				alert('Please submit again.');
@@ -445,7 +443,7 @@ function submitPostToServer($postObj){
 function ajax_upload_image(pid){
   var formData = new FormData($("#uploadImage_form")[0]);
     $.ajax({
-        url: authorid+"/"+pid+"/upload",  //Server script to process data
+        url: $authorid+"/"+pid+"/upload",  //Server script to process data
         type: 'POST',
         // Form data
         data: formData,
