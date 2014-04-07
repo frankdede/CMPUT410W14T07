@@ -94,10 +94,13 @@ class TestController(unittest.TestCase):
     def test_getGlobalAuthors(self):
 
         result = self.authorController.getGlobalAuthors()
-        print(result)
         self.assertTrue(result != None,"Failed to get global authors")
 
+    def test_doesAuthorExists(self):
 
+        result = self.authorController.doesAuthorExists('111111')
+        self.assertTrue(result == True,"Failed to check the existence of author")
+        
     '''
      ====================   Request ControllerHelper  ====================
      PLEASE rebuild the database before run all the tests

@@ -68,9 +68,20 @@ class ServiceController:
             remoteDisplayName  = request['author']['displayname']
             remoteAid = request['author']['id']
             
+            
+            result = self.authorController.doesServerExists(remoteServer)
+
+            if(result != True):
+                self.serverController.addServer("","")
+
+            result = self.authorController.doesAuthorExists(remoteAid)
+
+            if(result != True):
+                self.authorController.addAuthor("","")
+
             result = self.requestController.sendRequest(remoteAid,localAid)
 
-            if result == True :
+            if(result == True):
                 return True
             else:
                 return False
@@ -117,6 +128,14 @@ class ServiceController:
         else:
             return []
 
+    def getGlobalAuthorsFromRemoteServer(self):
+
+        pass
+
+    def getPublicPostsFromRemoteServer(self):
+
+        pass
+ 
 
 
 

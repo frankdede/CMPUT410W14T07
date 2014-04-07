@@ -479,6 +479,27 @@ class AuthorHelper:
         
         return cur.fetchall()
 
+    def doesAuthorExists(self,aid):
+
+        cur = self.dbAdapter.getcursor()
+        query = ("SELECT * FROM author A WHERE A.aid = '%s' ")%(aid)
+
+        try:
+            cur.execute(query)
+
+        except mysql.connector.Error as err:
+            print("****************************************")
+            print("SQLException from doesAuthorExists():")
+            print("Error code:", err.errno)
+            print("SQLSTATE value:", err.sqlstate)
+            print("Error message:", err.msg)
+            print("Might be query issue:",query)
+            print("****************************************")
+            return None
+        
+        return len(cur.fetchall()) > 0
+
+
 
 
 

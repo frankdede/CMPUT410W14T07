@@ -133,3 +133,7 @@ class AuthorController:
         else:
             return None
 
+    def doesAuthorExists(self,aid):
+
+        return self.authorHelper.doesAuthorExists(aid)
+
