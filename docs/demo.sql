@@ -1,4 +1,5 @@
-
+CREATE DATABASE IF NOT EXISTS c410;
+USE c410;
 INSERT INTO servers values('cs410.cs.ualberta.ca:41070','localhost','http://cs410-07:8080/',1);
 
 INSERT INTO author values('000000','admin','Administrator','12345','cs410.cs.ualberta.ca:41070','frank@gmail.com','male','edmonton','1992-01-01','1.jpg',1);
