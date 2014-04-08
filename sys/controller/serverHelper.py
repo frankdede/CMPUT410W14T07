@@ -10,11 +10,11 @@ class ServerHelper:
 
     def doesServerExists(self,url):
         cur = self.dbAdapter.getcursor()
-        query = ("SELECT * FROM servers WHERE url = '%s':")%(url)
+        query = ("SELECT * FROM servers WHERE url = '%s';")%(url)
         try:
             cur.execute(query)
+        except mysql.connector.Error as err:
 
-        except Exception, e:
           print("****************************************")
           print("SQLException from doesServerExists():")
           print("Error code:", err.errno)
@@ -32,7 +32,8 @@ class ServerHelper:
         query = ("INSERT INTO servers VALUES('%s','%s','%s',%s)")%(sid,name,url,local)
         try:
             cur.execute(query)
-        except Exception, e:
+        except mysql.connector.Error as err:
+
           print("****************************************")
           print("SQLException from doesServerExists():")
           print("Error code:", err.errno)
