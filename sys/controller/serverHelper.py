@@ -10,7 +10,7 @@ class ServerHelper:
 
     def doesServerExists(self,url):
         cur = self.dbAdapter.getcursor()
-        query = ("SELECT * FROM servers WHERE url = '%s';")%(url)
+        query = ("SELECT sid FROM servers WHERE url = '%s';")%(url)
         try:
             cur.execute(query)
         except mysql.connector.Error as err:
@@ -24,7 +24,7 @@ class ServerHelper:
           print("****************************************")
           return None
 
-        return len(cur.fetchall())>0
+        return cur.fetchone() > 0
 
     def addServer(self,name,url,local):
         cur = self.dbAdapter.getcursor()
@@ -43,4 +43,8 @@ class ServerHelper:
           print("****************************************")
           return None
 
-        return cur.rowcount > 0
+        if cur.rowcount > 0:
+          return sid
+        else:
+          return False
+

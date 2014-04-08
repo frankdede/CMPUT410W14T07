@@ -10,8 +10,11 @@ class ServerController:
     '''check whether the server exists or not'''
     def doesServerExists(self,url):
 
-        return self.serverHelper.doesServerExists(url)
-
+        result = self.serverHelper.doesServerExists(url)
+        if(result == False):
+            return result[0]
+        else:
+            return False
     ''' add new server'''
     def addServer(self,name,url,local):
     

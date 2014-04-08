@@ -4,6 +4,7 @@ from RequestController import *
 from PostController import *
 from CommentController import *
 from AuthorController import *
+from ServerController import *
 import json
 
 class ServiceController:
@@ -13,6 +14,7 @@ class ServiceController:
         self.requestController = RequestController(dbAdapter)
         self.commentController = CommentController(dbAdapter)
         self.authorController = AuthorController(dbAdapter)
+        self.serverController = ServerController(dbAdapter)
         self.postController = PostController(dbAdapter)
     def registerRemoteServer():
         pass
@@ -70,15 +72,17 @@ class ServiceController:
             remoteAid = request['author']['id']
             
             
-            result = self.authorController.doesServerExists(remoteServer)
+            serverId = self.serverController.doesServerExists(remoteServer)
 
-            if(result != True):
-                self.serverController.addServer("","")
+            if(serverId == False):
+                serverId = self.serverController.addServer(remoteServer,remoteServer,0)
 
+            print(remoteAid)
             result = self.authorController.doesAuthorExists(remoteAid)
+            print(result)
 
             if(result != True):
-                self.authorController.addAuthor("","")
+                self.authorController.addRemoteAuthor(remoteAid,remoteAid,serverId)
 
             result = self.requestController.sendRequest(remoteAid,localAid)
 
@@ -101,7 +105,7 @@ class ServiceController:
 
         author = {}
         author['id'] = senderAid
-        author['host'] = "http://cs410.cs.ualberta.ca:41070/"
+        author['host'] = "http://cs410.cs.ualberta.ca:41078/"
         author['displayname'] = senderName
         request['friend'] = friend
 
