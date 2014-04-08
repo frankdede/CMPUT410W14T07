@@ -168,7 +168,7 @@ function setRefreshTimer(){
 
 	},10000);
 }
-
+//get github notification from server
 function getGithubNotification(){
 	$.get("/"+ $authorName +"/github/notification",function(data){
 		data = JSON.parse(data);
@@ -185,7 +185,7 @@ function getGithubNotification(){
 		}
 	});
 }
-
+//get all post which user can see from server
 function getPostsData(){
 	$.get("/"+ $authorid +"/pull/",function($data){
 		if($data){
@@ -470,7 +470,7 @@ function ajax_upload_image(pid){
         },
     });
 }
-//Send the Post object in json over http
+//Send the friends which user wants to share post
 function submitSpecifyToServer($pid){
 	var send = {'data':checked};
 	$.post('/'+ $authorName +'/postpermission/'+$pid,JSON.stringify(send)).done(function($data){
