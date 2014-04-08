@@ -1,5 +1,13 @@
 /* Choose Text by default*/
-var $SELECTED_POST_TYPE = 'text';
+
+var $postListViewCount = 0;
+var $MAX_ITEM = 0;
+var $POST_VIEW_LIST = {};
+var $COMMENTS_VIEW_LIST = new Array();
+/* Choose Text by default*/
+var $SELECTED_POST_TYPE = 'text/plain';
+var image_submit = false;
+var mark_down = false;
 /*the option that the user chose*/
 var option = null;
 var checked = [];
@@ -62,7 +70,11 @@ $(document).ready(function(){
 function deletePost($pid,$check){
 	$.get("/"+$authorName+"/mypost/delete/"+$pid,function(){
 		if($check==0){
-			location.reload();
+			$.get($authorName+"/mypost", function(data){
+				if(data){
+					$("#struct-content").html(data);
+				}
+			});
 		}
 	});
 }
@@ -75,6 +87,7 @@ $("#permissionEditFinish").click(function(){
 	}
 	else{
 		var $permissionType = document.getElementById("permission").value;
+		option=$permissionType;
 	}
 	var $post = {
 		title: $title,
@@ -85,13 +98,13 @@ $("#permissionEditFinish").click(function(){
 	deletePost(document.getElementById("pid").value,1);
 	if($post['permission'] != null && $post['message'] != '' && $post['title'] != ''){
 		if (checked.length>0){
-			submitPostToServer($post);
+			myPostSubmitPostToServer($post);
 		}
 		else{
-			submitPostToServer($post);
+			myPostSubmitPostToServer($post);
 			if (($post['permission'] == 'friends')||($post['permission'] == 'fomh')){
 				$post['permission'] = 'me';
-				submitPostToServer($post);
+				myPostSubmitPostToServer($post);
 			}
 		}
 
@@ -101,14 +114,23 @@ $("#permissionEditFinish").click(function(){
  });
 
 //Send the Post object in json over http
-function submitPostToServer($postObj){
-	$.post('/'+ $authorName +'/post/',JSON.stringify($postObj)).done(function($data){
+function myPostSubmitPostToServer($postObj){
+	$.post('/'+ $authorName +'/post?markdown='+mark_down,JSON.stringify($postObj)).done(function($data){
 			var $re = JSON.parse($data);
 			if ($re['status']){
                               	if(option==="specify"){
                                        submitSpecifyToServer($re['status']);
                                	}
-				location.reload();
+				//to submit image simultaneously	 
+				if (image_submit==true) {
+					ajax_upload_image($re['status']);
+				}
+				$.get($authorName+"/mypost", function(data){
+					if(data){
+						alert("Edit Success!")
+						$("#struct-content").html(data);
+					}
+				});
 			}else{
 				alert('Please submit again.');
 			}
@@ -122,7 +144,7 @@ function submitSpecifyToServer($pid){
        });
 }
 
-function permission_selected(sel){
+function myPostPermissionSelected(sel){
 	var postListTable=document.getElementById("post_list"); 
 	while(postListTable.hasChildNodes()){
 		postListTable.removeChild(postListTable.firstChild);
@@ -229,11 +251,11 @@ $("#permissionEditSelected").click(function(){
 		}
 		else{
 			checked.push($authorid);
-			$('#postingPermissionModal').modal('hide');
+			$('#myPostPermissionModal').modal('hide');
 		}
 	}
 	else{
-		$('#postingPermissionModal').modal('hide');
+		$('#myPostPermissionModal').modal('hide');
 	}
 	var permissionButton = document.getElementById("postPermissionBtn");
    	if(option == 'fomh'){
@@ -275,18 +297,96 @@ $("#textOption").click(function(){
 	$SELECTED_POST_TYPE = 'Text';
 });
 
-$("#picOption").click(function(){
-	$("#postSelectedType").html('Picture');
-	$SELECTED_POST_TYPE = 'Picture';
-});
+
+	$("#picOption").click(function(){
+		$("#postSelectedType").html('Markdown');
+		$SELECTED_POST_TYPE = 'text/x-markdown';
+        /*$("#uploadImage_form").validate({
+                            debug: true,
+                            submitHandler: function(form){
+                            
+                rules:{     
+                        img_file:{
+                                   required:true,
+                        }
+                 }
+                 messages:{
+                        img_file:{
+                                   required:"Please select a image"
+                        }
+                 }
+                 }    
+             });*/
+	});
 
 $("#htmlOption").click(function(){
 	$("#postSelectedType").html('HTML');
 	$SELECTED_POST_TYPE = 'HTML';
+	window.location.replace("/");
 });
-$(document).on('click',"#postImagebtn",function(){
-  $("#uploadImage_form").submit();
-});
-$("#back").click(function(){
+$("#redirectToStream").click(function(){
 	window.location.replace("/");
  });
+
+$(document).ready(function(){
+	$(document).on('click',"#postImagebtn",function(){
+		$("#uploadPicture").modal('hide');
+	});
+	addDropDownClickerListener();
+});
+//add markdown switcher
+function addDropDownClickerListener(){
+	$(document).on('click','#markdown_trigger',function(event){
+		event.preventDefault();
+		$("#postContent").markdown();
+		mark_down = true;
+	});
+	$(document).on('click','#text_trigger',function(event){
+		event.preventDefault();
+		$("#postContent").hideEditor();
+		mark_down = false;
+	});
+	$(document).on('click','#html_trigger',function(event){
+		event.preventDefault();
+		$("#postContent").hideEditor();
+		mark_down = false;
+	});
+}
+
+function ajax_upload_image(pid){
+	var formData = new FormData($("#uploadImage_form")[0]);
+	$.ajax({
+        url: $authorid+"/"+pid+"/upload",  //Server script to process data
+        type: 'POST',
+        // Form data
+        data: formData,
+        //Options to tell jQuery not to process data or worry about content-type.
+        contentType: false,
+        cache: false,
+        processData: false,
+        async: false,
+        success: function(data) {
+        	if(data ==="False"){
+        		$("#upload_error_code").text("Upload Error");
+        		$("#uploadImage_form")[0].reset();
+        		return false;
+        	}else if (data=="OK"){
+        		alert("success");
+        		return true;
+        	}
+        },
+    });
+}
+function readURL(input) {
+	if (input.files && input.files[0]) {
+		image_submit = true;
+		var reader = new FileReader();
+		reader.onload = function (e) {
+			$('#preview')
+			.attr('src', e.target.result)
+			.width(150)
+			.height(100);
+		};
+		reader.readAsDataURL(input.files[0]);
+	}
+}
