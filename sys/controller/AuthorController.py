@@ -144,8 +144,8 @@ class AuthorController:
             authors = []
             for row in rows:
                 author = {}
-                author['uuid'] = row[0]
-                author['displayName'] = row[1]
+                author['id'] = row[0]
+                author['displayname'] = row[1]
                 authors.append(author)
                 
             return authors
