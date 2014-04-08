@@ -170,16 +170,18 @@ function refresh_message_list(){
   $.get("ajax/aid",function(data){
     $.getJSON(data+"/messages.json",function(data2){
       $.each(data2,function(i,field){
+        console.log(field);
         request_list[i] = field;
         $("#message_dropdown1").prepend(
-          "<li><a href='#'><strong>"+field.name+"</strong> wants to be your friend</a> \
-          <button type=\"button\" class=\"btn btn-default btn-xs\"id ='accept_bt' \
+          "<li><a id ='link_"+i+"'href='#' data-toggle=\"tooltip\" data-placement=\"left\" title='"+field.nick_name+" server name:"+field.server_name+"'><strong>"+field.name+"</strong> wants to be your friend</a> \
+          <button type=\"button\"  class=\"btn btn-default btn-xs\"id ='accept_bt' \
           data='"+i+"'> \
   <span class=\"glyphicon glyphicon-ok\"></span> </button>\
    <button type=\"button\" class=\"btn btn-default btn-xs\" id = 'deny_bt' \
    data = '"+i+"'> \
   <span class=\"glyphicon glyphicon-remove\"></span> </button>\
   </li>");
+        $('#link_'+i).tooltip();
       });
     }
   );
