@@ -961,6 +961,22 @@ def friendRequestService():
             return make_response("", 409)
     else:
         return make_response("", 409)
+'''
+Public API: receieve the friend request from a remote server
+'''
+@app.route('/service/friendrequest',methods=['GET','POST'])
+def friendRequestService2():
+
+    if(request.method == 'POST'):
+        print(request)
+        response = make_response()
+        result = serviceController.receiveFriendRequestFromRemoteServer(json.loads(request.data))
+        if(result):
+            return make_response("", 200)
+        else:
+            return make_response("", 409)
+    else:
+        return make_response("", 409)
 
 '''
 Don't access this API from client side
