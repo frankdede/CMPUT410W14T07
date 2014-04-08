@@ -56,12 +56,16 @@ class TestController(unittest.TestCase):
         self.postPermissionController = PostPermissionController(dbAdapter)
         self.serverController = ServerController(dbAdapter)
         self.serviceController = ServiceController(dbAdapter)
+
     '''
      ====================   PostController & Helper =======================
     '''
     def test_getLocalPublicPosts(self):
         result = self.postController.getLocalPublicPosts()
         self.assertTrue(result != None,"Failed to get local public posts")
+
+
+
     '''
      ===================== ServiceController =============================
     '''
@@ -76,7 +80,6 @@ class TestController(unittest.TestCase):
     def test_addAuthor(self):
         result = self.authorController.addAuthor('test','','')
         self.assertTrue(result != None,"Failed to add author")
-
 
     def test_addRemoteAuthor(self):
         result = self.authorController.addRemoteAuthor('remote_test_aid','','cs410.cs.ualberta.ca:41068')
@@ -94,36 +97,101 @@ class TestController(unittest.TestCase):
         self.assertTrue(result == False,"Failed to check isRemoteAuthor")
     
     def test_getGlobalAuthors(self):
-
         result = self.authorController.getGlobalAuthors()
         self.assertTrue(result != None,"Failed to get global authors")
 
     def test_doesAuthorExists(self):
-
         result = self.authorController.doesAuthorExists('111111')
         self.assertTrue(result == True,"Failed to check the existence of author")
+
+    def test_getOtherAuthor(self):
+        result = self.authorController.getOtherAuthor('444444')
+        self.assertTrue(result != None, "Failed to get other authors")
+
+    def test_getRecommendedAuthor(self):
+        result = self.authorController.getRecommendedAuthor('444444')
+        self.assertTrue(result != None, "Failed to get recommended author")
+
+    def test_searchAuthorByString(self):
+        result = self.authorController.searchAuthorByString('444444', 'mark')
+        self.assertTrue(result != None, "failed to search author by string")
         
+    def test_getAuthorByAid(self):
+        result = self.authorController.getAuthorByAid('444444')
+        self.assertTrue(result != None, "failed to get author by aid")
+
+    def test_getAuthorInfoByAid(self):
+        result = self.authorController.getAuthorInfoByAid('444444')
+        self.assertTrue(result != None, "failed to get author info by aid")
+
+    def test_getAllTmpAuthor(self):
+        result = self.authorController.getAllTmpAuthor()
+        self.assertTrue(result != None, "fauled to get all tmp author")
+
+    def test_authorAuthenticate(self):
+        result = self.authorHelper.authorAuthenticate('admin', '12345')
+        self.assertTrue(result != None, "fauled to authenticate")
+
+    def test_getAuthorObjectByAid(self):
+        result = self.authorHelper.getAuthorObjectByAid('111111')
+        self.assertTrue(result != None, "failed to get author object by aid")
+
+    def test_getAllAuthorObjectsForLocalServer(self):
+        result = self.authorHelper.getAllAuthorObjectsForLocalServer()
+        self.assertTrue(result != None, "failed to get all author objects for local server")
+
+    def test_addLocalAuthor(self):
+        result = self.authorHelper.addLocalAuthor('Varian Wrynn', 'varian', '12345')
+        self.assertTrue(result != None, "failed to add local author")
+
+    def test_confirmAuthor(self):
+        result = self.authorHelper.confirmAuthor('111111')
+        self.assertTrue(result != False, "failed to confirm author")
+
+    def test_updateAuthorInfo(self):
+        result = self.authorHelper.updateAuthorInfo('555555', 'root@conie.me', 'M', 'Zhenjiang', '1988-12-09', "")
+        self.assertTrue(result != False, "failed to confirm author")
+
+    def test_updateNickNameByAid(self):
+        result = self.authorHelper.updateNickNameByAid('555555', 'Conie')
+        self.assertTrue(result != False, "failed to update nick name by aid")
+
+    def test_updatePasswordByAid(self):
+        result = self.authorHelper.updatePasswordByAid('555555', '54321')
+        self.assertTrue(result != False, "failed to update by aid")
+
+    def test_deleteAuthor(self):
+        result = self.authorHelper.deleteAuthor('555555')
+        self.assertTrue(result != False, "failed to delete author")
+
+    def test_addAuthor(self):
+        result = self.authorHelper.addAuthor('Nielas Aran', '12345', 'nielas')
+        self.assertTrue(result != None, "failed to add author")
+
     '''
      ====================   Request ControllerHelper  ====================
      PLEASE rebuild the database before run all the tests
     '''
     def test_sendRequest(self):
         # Tested By : Guanqi
-        result = self.requestController.sendRequest('111111','222222')
+        result = self.requestController.sendRequest('222222','111111')
         self.assertTrue(result == True,"Failed to sent a request")
-    
     
     def test_accpetRequestFromSender(self):
         result = self.requestController.acceptRequestFromSender('111111','222222')
         self.assertTrue(result == True,"Failed to accept a request from sender")
+
+    def test_deleteRequest(self):
+        result = self.requestController.deleteRequest('111111', '222222')
+        self.assertTrue(result != False, "failed to delete request")
     
-   
     '''
     Cannot delete request by far
     def test_deleteRequest(self):
         result = self.requestController.deleteRequest('222222','111111')
         self.assertTrue(result == True,"Failed to delete a request")
     '''
+
     def test_getAllRequestByAid(self):
         result = self.requestController.getAllRequestByAid('111111')
         self.assertTrue(result != None,"Failed to get all request by aid")
@@ -215,9 +283,7 @@ class TestController(unittest.TestCase):
         self.assertTrue(result == True,"Failed to add server")
 
 if __name__ == '__main__':
-    print("**************************** Script Starts ****************************")
     subprocess.call(["./install.sh", "-rebuild_all"])
-    print("**************************** Script Ends *********************************")
     print("**************************** Test Starts *********************************")
     unittest.main()
         
