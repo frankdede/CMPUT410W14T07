@@ -52,7 +52,7 @@ function search_auther_list(aid,url){
           <td>"+field.nickname+"</td><td>"+field.server_name+"</td>\
           <td><button type='button' class='btn btn-default btn-xs' id = 'searchaddfriendbt' \
              data='"+i+"' disabled> \
-              <span class='glyphicon glyphicon-plus'></span> Friended \
+              <span class='glyphicon glyphicon-plus'></span> Friend \
             </button> \
             </td></tr>"
             }
