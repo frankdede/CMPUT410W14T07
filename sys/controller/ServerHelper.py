@@ -22,9 +22,14 @@ class ServerHelper:
           print("Error message:", err.msg)
           print("Query:",query)
           print("****************************************")
-          return None
+          return False
+      
+        result = cur.fetchone()
+        if(result != None):
+          return result[0]
+        else:
+          return False
 
-        return cur.fetchone() > 0
 
     def addServer(self,name,url,local):
         cur = self.dbAdapter.getcursor()
