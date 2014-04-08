@@ -112,7 +112,9 @@ def root():
 
 @app.route('/<aid>', methods=['GET', 'POST'])
 def author_view(aid):
-    '''header view'''
+    """
+    View the main page
+    """
 
     if 'logged_in' in session and aid ==session['logged_id']:
         username = session['logged_in']
@@ -124,14 +126,16 @@ def author_view(aid):
 
 @app.route('/<aid>/profile',methods=['GET'])
 def view_profile(aid):
-    '''return a html for profile'''
-
+    """
+    return a html for profile
+    """
     return render_template('profile.html')
 
 @app.route('/<aid>/profile/image/<imagename>',methods=['GET'])
 def view_profile_image(aid,imagename):
-    '''load the profile image'''
-
+    """
+    load the profile image
+    """
     #print imagename
     import os.path
     path = os.path.join(app.config['UPLOAD_FOLDER'],imagename);
@@ -142,7 +146,9 @@ def view_profile_image(aid,imagename):
         return send_from_directory(app.config['UPLOAD_FOLDER'],"default.jpeg", as_attachment=False)
 @app.route('/<aid>/profile.json',methods=['GET'])
 def get_profile(aid):
-    '''return author profile'''
+    """
+        get profile image of author with the aid
+    """
 
     if 'logged_in' in session and aid ==session['logged_id']:
         try:
@@ -158,7 +164,7 @@ def get_profile(aid):
     
 @app.route('/<aid>/profile/change',methods=['POST'])
 def change_profile(aid):
-    '''redirect after update profile change'''
+    """redirect after update profile change"""
 
     if 'logged_in' in session and aid ==session['logged_id']:
         return change_author_profile(aid)
@@ -166,7 +172,10 @@ def change_profile(aid):
         return redirect(url_for('/'))
 
 def change_author_profile(aid):
-    '''update profile change'''
+    """
+    update the profile of author with aid, first check the argument, one is the infromation,
+     another is password
+    """
     try:
         keyword = request.args.get('type')
         print keyword
@@ -206,7 +215,11 @@ def change_author_profile(aid):
         return re
 @app.route('/<aid>/admin',methods=['GET','POST'])
 def admin_page(aid):
-    '''direct to admin page'''
+    '''
+    direct to admin page,and render the html,first we need to check session whether the
+    admin_modal in session and aid is equal to value in admin_modal. if the two condition 
+    arrives then continue, otherwise return 404
+    '''
 
     if 'admin_model' not in session or aid != session['admin_model']:
         abort(404);
@@ -219,8 +232,10 @@ def admin_page(aid):
     return render_template("admin.html")
 @app.route('/<aid>/admin/delete/author',methods=['GET'])
 def admin_author_delete(aid):
-    '''delete author in admin'''
-
+    '''
+    to delete the author in admin modal, first check the admin conditions, 
+    and get the argument
+    '''
     if 'admin_model' not in session or aid != session['admin_model']:
         abort(404);
     try:
@@ -234,8 +249,9 @@ def admin_author_delete(aid):
         return "Wrong URL",404
 @app.route('/<aid>/admin/delete/post',methods=['GET'])
 def admin_post_delete(aid):
-    '''delete post in admin'''
-
+    """
+    delete the post in admin modal,first it will check the conditions of admin modal
+    """
     if 'admin_model' not in session or aid != session['admin_model']:
         abort(404);
     try:
@@ -249,8 +265,9 @@ def admin_post_delete(aid):
         return "Wrong URL",404
 @app.route('/<aid>/admin/author/approve',methods=['GET'])
 def admin_author_approve(aid):
-    '''approve application in admin'''
-
+    '''
+    approve application from authors in waiting list in admin modal
+    '''
     if 'admin_model' not in session or aid != session['admin_model']:
         abort(404);
     try:
