@@ -697,13 +697,9 @@ def viewPostImage(aid,pid):
         else:
             return send_from_directory(app.config['UPLOAD_FOLDER'],"unfound.gif")
 
-<<<<<<< HEAD
 
-@app.route('/<authorName>/post',methods=['PUT','POST'])
-=======
 '''upload new post to server by author name'''
 @app.route('/<authorName>/post/',methods=['PUT','POST'])
->>>>>>> 4a9c1ea042360b78bfaa3e2c281aa59030894727
 def uploadPostToServer(authorName):
 
     if ('logged_in' in session) and (session['logged_in'] == authorName):
