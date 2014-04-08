@@ -640,7 +640,7 @@ def renderStruct(authorName):
 
 # get all the new posts that a specific author can view from the server
 '''get post by author id'''
-@app.route('/<aid>/pull/')
+@app.route('/<aid>/pull')
 def getPostForAuthor(aid):
 
 
@@ -1061,7 +1061,7 @@ def uploadPostPermissionToServer(authorName,pid):
 def getPublicPostsFromRemoteServer():
     url = "http://cs410-06/posts"
     response = requests.get(url)
-    result = serviceController.getPublicPostsFromRemoteServer(response)
+    result = serviceController.getPublicPostsFromRemoteServer(response.content)
     return result
         
 if __name__ == '__main__':

@@ -144,6 +144,7 @@ function getCommentsDataForAuthor(){
 }
 
 
+
 //Send the Post object in json over http
 function submitPostDataToServer($postObj){
 	$.post('/'+ $authorName +'/post/',JSON.stringify($postObj)).done(function($data){
@@ -161,10 +162,11 @@ function setRefreshTimer(){
 	setInterval(function(){
 
 		getPostsData();
+		getRemotePublicPostsData();
 		getCommentsDataForAuthor();
-		//if($github=='True'){
-		//    	getGithubNotification();
-		//}
+		if($github=='True'){
+		    getGithubNotification();
+		}
 
 	},10000);
 }
@@ -187,9 +189,19 @@ function getGithubNotification(){
 }
 //get all post which user can see from server
 function getPostsData(){
-	$.get("/"+ $authorid +"/pull/",function($data){
+	$.get("/"+ $authorid +"/pull",function($data){
 		if($data){
 			var $postsList = JSON.parse($data);
+			updatePostList($postsList);
+		}
+	});
+}
+
+function getRemotePublicPostsData(){
+	$.get("/remote/posts",function($data){
+		if($data){
+			var $postsList = JSON.parse($data);
+			console.log($postList)
 			updatePostList($postsList);
 		}
 	});
@@ -310,9 +322,16 @@ function updateCommentsForPost($pid,$list){
 
 //Generate a post view html and return it to its caller
 function createPostViewHtml($pid,$title,$date,$message,$type,$permission,$img){
-	if ($img.length>0) {
-		$img = "<img src ='"+$authorid+"/"+$pid+"/image/view' width='50px',height='50px' >";
+	if($img != undefined){
+		if ($img.length>0) {
+			$img = "<img src ='"+$authorid+"/"+$pid+"/image/view' width='50px',height='50px' >";
+		}else{
+			$img = ""
+		}
+	}else{
+		$img = ""
 	}
+	
 	var $li = "<li id="+$pid+" class=\"postListView\">" +
 	"<div class=\"panel panel-default\">" +
 	"<div class=\"panel-heading\">" +
