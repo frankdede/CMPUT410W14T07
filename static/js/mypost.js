@@ -19,6 +19,7 @@ document.getElementById('listStyle').style.overflow = 'hidden';
 
 $(document).ready(function(){
 	var postListTable=document.getElementById("post_edit"); 
+ 	//fetch all posts which user posts, add them into table, and add two buttons
 	$.get("/"+ $authorid +"/pull/mypost",function($data){
 		if($data){
 			var $postsList = JSON.parse($data);
@@ -68,6 +69,7 @@ $(document).ready(function(){
 });
 
 function deletePost($pid,$check){
+	// delete post which user posted
 	$.get("/"+$authorName+"/mypost/delete/"+$pid,function(){
 		if($check==0){
 			$.get($authorName+"/mypost", function(data){
@@ -137,7 +139,7 @@ function myPostSubmitPostToServer($postObj){
 	});
 }
 
-//Send the Post object in json over http
+//Send the friends which user want to share post
 function submitSpecifyToServer($pid){
        var send = {'data':checked};
        $.post('/'+ $authorName +'/postpermission/'+$pid,JSON.stringify(send)).done(function($data){
@@ -160,7 +162,7 @@ function myPostPermissionSelected(sel){
 		document.getElementById('listStyle').style.overflow = 'scroll';
 		//combine paramter
 		var send={"userid":userId,"option":option};
-		//send reuqest and get response
+		//send reuqest to get post permission list
 		$.get("/"+userId+"/post/getPermissionList",send).done(function(data){
 			data=JSON.parse(data);
 			console.log(data);
@@ -352,7 +354,7 @@ function addDropDownClickerListener(){
 		mark_down = false;
 	});
 }
-
+//Upload post's image to server
 function ajax_upload_image(pid){
 	var formData = new FormData($("#uploadImage_form")[0]);
 	$.ajax({
