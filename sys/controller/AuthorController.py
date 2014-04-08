@@ -1,7 +1,7 @@
 from AuthorHelper import *
 from RequestController import *
 from DatabaseAdapter import *
-from serverHelper import *
+from ServerHelper import *
 import sys
 sys.path.append("sys/model")
 import json
