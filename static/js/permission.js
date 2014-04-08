@@ -27,7 +27,7 @@ function permission_selected(sel){
 		document.getElementById('listStyle').style.overflow = 'scroll';
 		//combine paramter
 		var send={"userid":userId,"option":option};
-		//send reuqest and get response
+		//send reuqest to get post permission list
 		$.get("/"+userId+"/post/getPermissionList",send).done(function(data){
 			data=JSON.parse(data);
 			console.log(data);
@@ -160,7 +160,7 @@ $("#permissionAntiSelect").click(function(){
 	});
 });
 $("#redirectToMyPost").click(function(){
-/* struct.js runs from here. Placing the mid panel first*/
+	/* struct.js runs from here. Placing the mid panel first*/
 	$.get($authorName+"/mypost", function(data){
 		if(data){
 			$("#struct-content").html(data);
