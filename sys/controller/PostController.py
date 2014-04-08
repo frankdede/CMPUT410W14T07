@@ -87,7 +87,9 @@ class PostController:
                 postsArray.append(post)
             return postsArray
         return None
-
+    '''
+      get post by author id
+    '''
     def getPostByAid(self,aid):
         list = self.posthelper.getPostByAid(aid)
         if list == None:
@@ -96,7 +98,9 @@ class PostController:
         for post in list:
             re.append(post.tojson())
         return json.dumps(re)
-        
+    '''
+      get post by myself
+    '''    
     def getMyPost(self,aid):
         post_list=[]
         json_list={}

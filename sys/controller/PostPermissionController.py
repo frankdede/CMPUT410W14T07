@@ -5,4 +5,5 @@ class PostPermissionController:
         self.postPermissionHelper = PostPermissionHelper(dbAdapter)
 
     def addPostPermission(self,pid,aidList):
+    '''add post permission to post'''
         return self.postPermissionHelper.addPostPermission(pid,aidList)

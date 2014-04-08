@@ -103,7 +103,9 @@ class AuthorController:
     def addAuthor(self,name,password,nickName,sid='cs410.cs.ualberta.ca:41070'):
 
         return self.authorHelper.addAuthor(name,password,nickName,sid)
-
+    '''
+    Get all temp authors
+    '''
     def getAllTmpAuthor(self):
         re = []
         list = self.authorHelper.getAllTmpAuthorObjects()
@@ -113,10 +115,15 @@ class AuthorController:
             return json.dumps(re)
         else:
             return None
-
+    '''
+    check whether the author is remote or not
+    '''
     def isRemoteAuthor(self,aid):
         
         return self.authorHelper.isRemoteAuthor(aid)
+    '''
+    get all global authors
+    '''
 
     def getGlobalAuthors(self):
 
@@ -132,7 +139,9 @@ class AuthorController:
             return authors
         else:
             return None
-
+    '''
+    check whether the author exists or not
+    '''
     def doesAuthorExists(self,aid):
 
         return self.authorHelper.doesAuthorExists(aid)

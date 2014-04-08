@@ -13,6 +13,7 @@ class PostHelper:
         self.dbAdapter = dbAdapter
 
     def addPost(self,aid,title,content,type,permission):
+    '''add new post'''
 
         cur = self.dbAdapter.getcursor()
 
@@ -42,7 +43,8 @@ class PostHelper:
 #type argument should be one of ['pid','aid','time','message','title','permission']
 #Usage: updatepost(databasehelper,pid,type="html", permmision="public") check keyword argument
     def updateMessage(self,pid,newContent):
-      
+    '''update message content by post id'''
+  
         cur = self.dbAdapter.getcursor()
         query = "UPDATE post SET message='%s' WHERE pid='%s'"%(newContent,pid)
 
@@ -64,7 +66,8 @@ class PostHelper:
         return cur.rowcount>0
 
     def updateTitle(self,pid,newtitle):
-        
+    '''update post title by post id'''
+    
         cur = self.dbAdapter.getcursor()
         query = "UPDATE post SET title='%s' WHERE pid='%s'"%(newtitle,pid)
 
@@ -86,7 +89,8 @@ class PostHelper:
         return cur.rowcount>0
 
     def updateTime(self,dbAdapter,pid,time = ''):
-        
+    '''update post time by post id'''
+    
         cur = self.dbAdapter.getcursor()
         if time  == '':
             query = "UPDATE post SET time=NULL WHERE pid='%s'"%(pid)
@@ -114,7 +118,8 @@ class PostHelper:
 
     # HAVEN'T BEEN COMPLETED YET
     def updatePermission(self,pid,newPermission,user=''):
-        
+    '''update post's permission by post id'''
+    
         cur = self.dbAdapter.getcursor()
         query = "UPDATE post SET permission='%s' WHERE pid='%s'"%(newPermission,pid)
         cur.execute(query)
@@ -144,7 +149,8 @@ class PostHelper:
         return cur.rowcount>0
 
     def deletePostByPid(self,pid):
-       
+    '''delete post by post id'''
+   
         cur = self.dbAdapter.getcursor()
         query = "DELETE FROM post WHERE pid = '%s'"%(pid)
 
@@ -166,7 +172,8 @@ class PostHelper:
         return cur.rowcount>0
 
     def deletePostByAid(self,aid):
-        
+        '''delete post by post id'''
+
         cur = self.dbAdapter.getcursor()
         query = "DELETE FROM post WHERE aid = '%s'"%(aid)
 
@@ -188,6 +195,7 @@ class PostHelper:
         return cur.rowcount>0
 
     def getLocalPublicPosts(self):
+        '''get local public posts'''        
 
         cur = self.dbAdapter.getcursor()
         query = ("SELECT "
@@ -217,6 +225,8 @@ class PostHelper:
 
 
     def getPublicPost(self,aid):
+    '''get public post by author id'''
+
         re = []
         cur = self.dbAdapter.getcursor()
         
@@ -247,6 +257,8 @@ class PostHelper:
                 re.append(post)
             return re 
     def getPrivatePost(self,aid):
+    '''get private post by author id'''
+
         re = []
         cur = self.dbAdapter.getcursor()
         
@@ -277,6 +289,8 @@ class PostHelper:
                 re.append(post)
             return re
     def getFriendsFriendPost(self,aid):
+    '''get friends' friend post by aid'''
+
         re = []
         cur = self.dbAdapter.getcursor()
         
@@ -307,6 +321,8 @@ class PostHelper:
                 re.append(post)
             return re
     def getFriendsPost(self,aid):
+    '''get friends' post by aid'''
+
         re = []
         cur = self.dbAdapter.getcursor()
         #get the post if it is public
@@ -336,6 +352,8 @@ class PostHelper:
                 re.append(post)
             return re
     def getAuthorPost(self,aid):
+        '''get author's post by aid'''
+
         re = []
         cur = self.dbAdapter.getcursor()
         #get the post if it is public
@@ -365,6 +383,8 @@ class PostHelper:
                 re.append(post)
             return re
     def getMyHostFriendPost(self,aid):
+        '''get host friend's post'''
+
         re = []
         cur = self.dbAdapter.getcursor()
         #get the post if it is public
@@ -394,6 +414,8 @@ class PostHelper:
                 re.append(post)
             return re
     def getPostByAid(self,aid):
+        '''get post by author id'''
+
         re = []
         cur = self.dbAdapter.getcursor()
         
@@ -426,6 +448,8 @@ class PostHelper:
         return None
 
     def getSelectedPost(self,aid):
+        '''get the post selected by author id''' 
+
         re = []
         cur = self.dbAdapter.getcursor()
         
@@ -458,6 +482,8 @@ class PostHelper:
         return None
         
     def getMyPost(self,aid):
+        '''get my post by author id'''
+ 
         re = []
         cur = self.dbAdapter.getcursor()
         

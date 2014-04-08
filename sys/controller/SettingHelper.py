@@ -10,6 +10,8 @@ class SettingHelper:
         self.dbAdapter = dbAdapter
 
     def addSignUpRestriction(self):
+        '''motify sign-up restriction'''
+
         cur = self.dbAdapter.getcursor()
         query = "UPDATE setting SET value = true WHERE name='SIGNUP_RESTRICTION';"
         try:
@@ -26,6 +28,8 @@ class SettingHelper:
         return cur.rowcount>0
 
     def addRemotePostAccessRestriction(self):
+        '''motify post's restriction'''
+
         cur = self.dbAdapter.getcursor()
         query = "UPDATE setting SET value = true WHERE name='POST_REMOTE_ACCESS_RESTRICTION';"
         try:
@@ -42,6 +46,8 @@ class SettingHelper:
         return cur.rowcount>0
 
     def addRemoteImageAccessRestriction(self):
+        '''motify image's restriction'''
+
         cur = self.dbAdapter.getcursor()
         query = "UPDATE setting SET value = true WHERE name='IMAGE_REMOTE_ACCESS_RESTRICTION';"
         try:
@@ -58,6 +64,8 @@ class SettingHelper:
         return cur.rowcount>0
 
     def removeSignUpRestriction(self):
+        '''remove sign up restriction'''
+
         cur = self.dbAdapter.getcursor()
         query = "UPDATE setting SET value = false WHERE name='SIGNUP_RESTRICTION';"
         try:
@@ -74,6 +82,8 @@ class SettingHelper:
         return cur.rowcount>0
 
     def removeRemotePostAccessRestriction(self):
+        '''remove remote post access restriction'''
+
         cur = self.dbAdapter.getcursor()
         query = "UPDATE setting SET value = false WHERE name='POST_REMOTE_ACCESS_RESTRICTION';"
         try:
@@ -90,6 +100,8 @@ class SettingHelper:
         return cur.rowcount>0
 
     def removeRemoteImageAccessRestriction(self):
+        '''remove remote image access restriction'''
+
         cur = self.dbAdapter.getcursor()
         query = "UPDATE setting SET value = false WHERE name='IMAGE_REMOTE_ACCESS_RESTRICTION';"
         try:
@@ -106,6 +118,8 @@ class SettingHelper:
         return cur.rowcount>0
 
     def getSignUpRestrictionValue(self):
+        '''get the sign up restriction value'''
+
         cur = self.dbAdapter.getcursor()
         query = "SELECT value FROM setting WHERE name='SIGNUP_RESTRICTION';"
         try:
@@ -125,6 +139,8 @@ class SettingHelper:
         return None
 
     def getRemotePostAccessRestrictionValue(self):
+        '''get remote post restriction value'''
+
         cur = self.dbAdapter.getcursor()
         query = "SELECT value FROM setting WHERE name='POST_REMOTE_ACCESS_RESTRICTION';"
         try:
@@ -144,6 +160,8 @@ class SettingHelper:
         return None
 
     def getRemoteImageAccessRestrictionValue(self):
+        '''get remote image access restriction value'''
+
         cur = self.dbAdapter.getcursor()
         query = "SELECT value FROM setting WHERE name='IMAGE_REMOTE_ACCESS_RESTRICTION';"
         try:
