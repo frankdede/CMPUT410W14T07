@@ -650,9 +650,16 @@ def getPostForAuthor(aid):
             return json.dumps({'status':None}),200
         else:
             post = postController.getPost(aid)
+            
             return post,200
     else:
         return abort(404)
+
+@app.route('/remote/posts')
+def getRemotePublicPostsForAuthor():
+
+    posts = getPublicPostsFromRemoteServer()
+    return posts,200
 
 '''main function of send markdown'''
 @app.route('/markdown',methods=['GET','POST'])
@@ -1051,10 +1058,11 @@ def uploadPostPermissionToServer(authorName,pid):
         return abort(404)
 
 
-def getPostsRequestsFromRemoteServer(self):
+def getPublicPostsFromRemoteServer():
     url = "http://cs410-06/posts"
     response = requests.get(url)
-
+    result = serviceController.getPublicPostsFromRemoteServer(response)
+    return result
         
 if __name__ == '__main__':
     app.debug = True

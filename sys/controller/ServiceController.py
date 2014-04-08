@@ -161,7 +161,7 @@ class ServiceController:
             localPost[publicPost['guid']] = info
             localPostList.append(localPost)
 
-        return localPostList
+        return json.dumps(localPostList)
 
 
 
