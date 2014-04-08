@@ -4,6 +4,7 @@ var search_author_list = new Array();
 var item_per_page = 5;
 function get_recommended_author_list(aid){
     $("#add_author_table").empty();
+    //to get the json file contains recommended author list
     $.getJSON(aid+"/recommended_authorlist.json",function(data2){
       var size = data2.length
       $.each(data2,function(i,field){
@@ -75,6 +76,7 @@ function search_auther_list(aid,url){
       $("#search_model").modal();
       $('body').on('click','#searchaddfriendbt',function(){
           var pos = parseInt($(this).attr("data"));
+          //to get the requests belongs authors
           $.get(author_id+"/author/request",{recipient:search_author_list[pos].aid},
             function(data2){
               if (data2 == "OK"){
@@ -128,6 +130,7 @@ function search_click(){
   }
 }
 function get_author_id(){
+  //to get aid by jquery get
   $.get("/ajax/aid",function(data){
     author_id = data;
     get_recommended_author_list(data);
@@ -147,6 +150,7 @@ function get_author_id(){
   });
 }
 function get_author_name(){
+  //to get author name
   $.get("/ajax/author_name",function(data){
     return data;
   });
