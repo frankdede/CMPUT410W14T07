@@ -51,7 +51,9 @@ class CircleHelper:
                 "aid1='%s' AND aid2='%s'")%(aid1,aid2)
         try:
             cur.execute(query)
-
+            query = ("DELETE FROM circle WHERE "
+                "aid1='%s' AND aid2='%s'")%(aid2,aid1)
+            cur.execute(query)
         except mysql.connector.Error as err:
 
             print("****************************************")
@@ -73,7 +75,7 @@ class CircleHelper:
         query = ("SELECT A.aid,A.name,A.nick_name,A.sid,A.email,A.gender,A.city,A.birthday,A.img_path "
                  "FROM author A "
                  "WHERE A.aid in "
-                 "(SELECT C.aid2 FROM circle C WHERE C.aid1='%s')")%(aid)
+                 "(SELECT C.aid2 FROM circle C WHERE C.aid1='%s' UNION SELECT c2.aid1 FROM circle c2 WHERE c2.aid2='%s')")%(aid,aid)
         try:
           cur.execute(query);
 

@@ -4,6 +4,7 @@ var search_author_list = new Array();
 var item_per_page = 5;
 function get_recommended_author_list(aid){
     $("#add_author_table").empty();
+    //to get the json file contains recommended author list
     $.getJSON(aid+"/recommended_authorlist.json",function(data2){
       var size = data2.length
       $.each(data2,function(i,field){
@@ -41,15 +42,25 @@ function search_auther_list(aid,url){
           var row_html = "";
         if (field.followed==0){
           row_html = "<tr id='search_row_count"+i+"'><td>"+(i+1)+"</td><td>"+field.name+"</td> \
-          <td>"+field.nickname+"</td><td><button type='button' class='btn btn-default btn-xs' id = 'searchaddfriendbt' \
+          <td>"+field.nickname+"</td><td>"+field.server_name+"</td><td><button type='button' class='btn btn-default btn-xs' id = 'searchaddfriendbt' \
              data='"+i+"'> \
               <span class='glyphicon glyphicon-plus'></span> Add \
             </button> \
             </td></tr>"
+            if(field.firend==1){
+              row_html = "<tr id='search_row_count"+i+"'><td>"+(i+1)+"</td><td>"+field.name+"</td> \
+          <td>"+field.nickname+"</td><td>"+field.server_name+"</td>\
+          <td><button type='button' class='btn btn-default btn-xs' id = 'searchaddfriendbt' \
+             data='"+i+"' disabled> \
+              <span class='glyphicon glyphicon-plus'></span> Friended \
+            </button> \
+            </td></tr>"
+            }
           }
           else if (field.followed==1) {
             row_html = "<tr id='search_row_count"+i+"'><td>"+(i+1)+"</td><td>"+field.name+"</td> \
-          <td>"+field.nickname+"</td><td><button type='button' class='btn btn-default btn-xs' id = 'searchaddfriendbt' \
+          <td>"+field.nickname+"</td><td>"+field.server_name+"</td>\
+          <td><button type='button' class='btn btn-default btn-xs' id = 'searchaddfriendbt' \
              data='"+i+"' disabled> \
               <span class='glyphicon glyphicon-plus'></span> Followed \
             </button> \
@@ -65,6 +76,7 @@ function search_auther_list(aid,url){
       $("#search_model").modal();
       $('body').on('click','#searchaddfriendbt',function(){
           var pos = parseInt($(this).attr("data"));
+          //to get the requests belongs authors
           $.get(author_id+"/author/request",{recipient:search_author_list[pos].aid},
             function(data2){
               if (data2 == "OK"){
@@ -102,6 +114,7 @@ function add_author_hide_all_row(){
 }
 function search_click(){
   event.preventDefault();
+  $("#search_input").val("");
   raw_input = $("#search_input").val();
   if (raw_input.length>50) {
       $("#search_form").removeClass("form-group");
@@ -117,6 +130,7 @@ function search_click(){
   }
 }
 function get_author_id(){
+  //to get aid by jquery get
   $.get("/ajax/aid",function(data){
     author_id = data;
     get_recommended_author_list(data);
@@ -136,6 +150,7 @@ function get_author_id(){
   });
 }
 function get_author_name(){
+  //to get author name
   $.get("/ajax/author_name",function(data){
     return data;
   });

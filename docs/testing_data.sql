@@ -1,6 +1,6 @@
 
-INSERT INTO servers values('cs410.cs.ualberta.ca:41070','localhost','cs410.cs.ualberta.ca:41070',1);
-INSERT INTO servers values('cs410.cs.ualberta.ca:41068','Team 6','cs410.cs.ualberta.ca:41068',0);
+INSERT INTO servers values('cs410.cs.ualberta.ca:41070','localhost','http://cs410-07:8080/',1);
+INSERT INTO servers values('cs410.cs.ualberta.ca:41068','Team 6','http://cs410.cs.ualberta.ca:41068/',0);
 
 INSERT INTO author values('000000','admin','Administrator','12345','cs410.cs.ualberta.ca:41070','frank@gmail.com','male','edmonton','1992-01-01','1.jpg',1);
 INSERT INTO author values('111111','frank','Frank Huang','12345','cs410.cs.ualberta.ca:41070','frank@gmail.com','male','edmonton','1992-01-01','1.jpg',1);
@@ -32,7 +32,6 @@ INSERT INTO circle values('333333','555555');
 INSERT INTO circle values('555555','333333');
 
 INSERT INTO request values(NULL,'111111','333333');
-INSERT INTO request values(NULL,'111111','444444');
 INSERT INTO request values(NULL,'111111','555555');
 
 INSERT INTO post values('2','111111',NULL,'Today is a brand new day','hello everyone','text/plain','me');

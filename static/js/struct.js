@@ -415,14 +415,27 @@ $(document).ready(function(){
 	$(document).on('click',"#postImagebtn",function(){
 		$("#uploadPicture").modal('hide');
 	});
-	addMarkDownClickerListener();
+	addDropDownClickerListener();
 });
 //add markdown switcher
-function addMarkDownClickerListener(){
+function addDropDownClickerListener(){
 	$(document).on('click','#markdown_trigger',function(event){
-		//$('#postContent').attr('data-provide','markdown-editable');
+		event.preventDefault();
+		//$('#postContent').attr('data-provide','markdown');
 		$("#postContent").markdown();
 		mark_down = true;
+	});
+	$(document).on('click','#text_trigger',function(event){
+		//$('#postContent').attr('data-provide','markdown-editable');
+		event.preventDefault();
+		//$("#postContent").hideEditor();
+		mark_down = false;
+	});
+	$(document).on('click','#html_trigger',function(event){
+		event.preventDefault();
+		//$('#postContent').attr('data-provide','markdown-editable');
+		//$("#postContent").hideEditor();
+		mark_down = false;
 	});
 }
 //Send the Post object in json over http

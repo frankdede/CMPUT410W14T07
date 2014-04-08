@@ -115,7 +115,6 @@ class ImageHelper:
 
     '''delete image by image id'''
     def deleteImageByImageId(self,iid):
-
         cur = self.dbAdapter.getcursor()
         query = "DELETE FROM image WHERE image_id ='%s'"%(iid)
         try:

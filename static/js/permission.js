@@ -160,5 +160,10 @@ $("#permissionAntiSelect").click(function(){
 	});
 });
 $("#redirectToMyPost").click(function(){
-	window.location.replace("/"+$authorName+"/mypost");
+/* struct.js runs from here. Placing the mid panel first*/
+	$.get($authorName+"/mypost", function(data){
+		if(data){
+			$("#struct-content").html(data);
+		}
+	});
  });

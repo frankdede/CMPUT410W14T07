@@ -32,6 +32,7 @@ from AuthorController import *
 from RequestController import *
 from CommentController import *
 from ServiceController import *
+from ServerController import *
 from PostPermissionController import *
 from ImageHelper import *
 
@@ -60,6 +61,8 @@ serviceController = ServiceController(dbAdapter)
 #
 postPermissionHelper = PostPermissionController(dbAdapter)
 #
+serverController = ServerController(dbAdapter)
+
 imageHelper = ImageHelper(dbAdapter)
 #Allowed file extensions
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
@@ -112,7 +115,9 @@ def root():
 
 @app.route('/<aid>', methods=['GET', 'POST'])
 def author_view(aid):
-    '''header view'''
+    """
+    View the main page
+    """
 
     if 'logged_in' in session and aid ==session['logged_id']:
         username = session['logged_in']
@@ -124,14 +129,16 @@ def author_view(aid):
 
 @app.route('/<aid>/profile',methods=['GET'])
 def view_profile(aid):
-    '''return a html for profile'''
-
+    """
+    return a html for profile
+    """
     return render_template('profile.html')
 
 @app.route('/<aid>/profile/image/<imagename>',methods=['GET'])
 def view_profile_image(aid,imagename):
-    '''load the profile image'''
-
+    """
+    load the profile image
+    """
     #print imagename
     import os.path
     path = os.path.join(app.config['UPLOAD_FOLDER'],imagename);
@@ -142,7 +149,9 @@ def view_profile_image(aid,imagename):
         return send_from_directory(app.config['UPLOAD_FOLDER'],"default.jpeg", as_attachment=False)
 @app.route('/<aid>/profile.json',methods=['GET'])
 def get_profile(aid):
-    '''return author profile'''
+    """
+        get profile image of author with the aid
+    """
 
     if 'logged_in' in session and aid ==session['logged_id']:
         try:
@@ -158,7 +167,7 @@ def get_profile(aid):
     
 @app.route('/<aid>/profile/change',methods=['POST'])
 def change_profile(aid):
-    '''redirect after update profile change'''
+    """redirect after update profile change"""
 
     if 'logged_in' in session and aid ==session['logged_id']:
         return change_author_profile(aid)
@@ -166,7 +175,10 @@ def change_profile(aid):
         return redirect(url_for('/'))
 
 def change_author_profile(aid):
-    '''update profile change'''
+    """
+    update the profile of author with aid, first check the argument, one is the infromation,
+     another is password
+    """
     try:
         keyword = request.args.get('type')
         print keyword
@@ -206,7 +218,11 @@ def change_author_profile(aid):
         return re
 @app.route('/<aid>/admin',methods=['GET','POST'])
 def admin_page(aid):
-    '''direct to admin page'''
+    '''
+    direct to admin page,and render the html,first we need to check session whether the
+    admin_modal in session and aid is equal to value in admin_modal. if the two condition 
+    arrives then continue, otherwise return 404
+    '''
 
     if 'admin_model' not in session or aid != session['admin_model']:
         abort(404);
@@ -219,8 +235,10 @@ def admin_page(aid):
     return render_template("admin.html")
 @app.route('/<aid>/admin/delete/author',methods=['GET'])
 def admin_author_delete(aid):
-    '''delete author in admin'''
-
+    '''
+    to delete the author in admin modal, first check the admin conditions, 
+    and get the argument
+    '''
     if 'admin_model' not in session or aid != session['admin_model']:
         abort(404);
     try:
@@ -234,8 +252,9 @@ def admin_author_delete(aid):
         return "Wrong URL",404
 @app.route('/<aid>/admin/delete/post',methods=['GET'])
 def admin_post_delete(aid):
-    '''delete post in admin'''
-
+    """
+    delete the post in admin modal,first it will check the conditions of admin modal
+    """
     if 'admin_model' not in session or aid != session['admin_model']:
         abort(404);
     try:
@@ -249,8 +268,9 @@ def admin_post_delete(aid):
         return "Wrong URL",404
 @app.route('/<aid>/admin/author/approve',methods=['GET'])
 def admin_author_approve(aid):
-    '''approve application in admin'''
-
+    '''
+    approve application from authors in waiting list in admin modal
+    '''
     if 'admin_model' not in session or aid != session['admin_model']:
         abort(404);
     try:
@@ -573,12 +593,14 @@ def acceptRequest(recipientAid):
             else:
                 remoteAuthor = aController.getAuthorInfoByAid(senderAid)
                 localAuthor = aController.getAuthorInfoByAid(recipientAid)
-
+                print("+++"+remoteAuthor.getAid())
+                print("+++"+localAuthor.getAid())
                 recipientAid = localAuthor.getAid()
-                recipientName = localAuthor.getNickName()
+                recipientName = localAuthor.getNickname()
                 remoteSenderAid = remoteAuthor.getAid()
-                remoteSid = remoteAuthor.getSid()
-                response = sendAcceptRequestToRemoteServer(recipientAid,recipientName,remoteSenderAid,remoteSid)
+                remoteUrl = serverController.getServerUrlBySid(remoteAuthor.getSid())
+
+                response = sendAcceptRequestToRemoteServer(recipientAid,recipientName,remoteSenderAid,remoteUrl)
 
                 if(response == True):
                     re = make_response("OK",200)
@@ -939,6 +961,22 @@ def friendRequestService():
             return make_response("", 409)
     else:
         return make_response("", 409)
+'''
+Public API: receieve the friend request from a remote server
+'''
+@app.route('/service/friendrequest',methods=['GET','POST'])
+def friendRequestService2():
+
+    if(request.method == 'POST'):
+        print(request)
+        response = make_response()
+        result = serviceController.receiveFriendRequestFromRemoteServer(json.loads(request.data))
+        if(result):
+            return make_response("", 200)
+        else:
+            return make_response("", 409)
+    else:
+        return make_response("", 409)
 
 '''
 Don't access this API from client side
@@ -951,8 +989,9 @@ def sendAcceptRequestToRemoteServer(recipientAid,recipientName,remoteSenderAid,r
     if(payload != None):
         url = payload['friend']['host']
         headers = {'content-type': 'application/json'}
+        print(payload)
         response = requests.post(url,data = json.dumps(payload),headers = headers )
-        if(resposen.status == '200'):
+        if(response.status_code == '200'):
             return True
         else:
             return False
@@ -960,7 +999,7 @@ def sendAcceptRequestToRemoteServer(recipientAid,recipientName,remoteSenderAid,r
 '''
 Public API: all posts marked as public on the server
 '''
-@app.route('/posts',methods=['GET'])
+@app.route('/service/posts',methods=['GET'])
 def sendPublicPostsToRemoteServer():
     
     payload = serviceController.sendPublicPostsToRemoteServer()
@@ -1000,7 +1039,6 @@ def uploadPostPermissionToServer(authorName,pid):
         return abort(404)
         
 if __name__ == '__main__':
-
     app.debug = True
     REGISTER_RESTRICTION = settingHelper.getSignUpRestrictionValue()
     POST_REMOTE_ACCESS_RESTRICTION = settingHelper.getRemotePostAccessRestrictionValue()
