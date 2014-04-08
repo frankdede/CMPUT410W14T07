@@ -9,7 +9,10 @@ class ImageHelper:
     dbAdapter = None
     def __init__(self,dbAdapter):
         self.dbAdapter = dbAdapter
+
+    '''get image by author id'''
     def getImageByAid(self,aid):
+    
         cur = self.dbAdapter.getcursor()
         query = "SELECT * FROM image WHERE aid ='%s'"%(aid)
         try:
@@ -30,7 +33,10 @@ class ImageHelper:
             return re
         else:
             return None
+
+    '''get image by post id'''
     def getImageByPid(self,pid):
+
         cur = self.dbAdapter.getcursor()
         query = "SELECT * FROM image WHERE pid ='%s'"%(pid)
         try:
@@ -51,7 +57,10 @@ class ImageHelper:
             return re
         else:
             return None
+
+    '''insert image path to database by post id, author id'''
     def insertImage(self,path,aid,pid):
+
         cur = self.dbAdapter.getcursor()
         iid = Utility.getid()
         query = "INSERT INTO image VALUES('%s',NULL,'%s','%s','%s')"%(iid,path,aid,pid)
@@ -67,7 +76,10 @@ class ImageHelper:
             print("****************************************")
             return False
         return iid
+
+    '''delete image by author id'''
     def deleteImageByAid(self,aid):
+
         cur = self.dbAdapter.getcursor()
         query = "DELETE FROM image WHERE aid ='%s'"%(aid)
         try:
@@ -82,7 +94,10 @@ class ImageHelper:
             print("****************************************")
             return False
         return cur.rowcount>0
+
+    '''delete image by post id'''
     def deleteImageByPid(self,pid):
+
         cur = self.dbAdapter.getcursor()
         query = "DELETE FROM image WHERE pid ='%s'"%(pid)
         try:
@@ -97,7 +112,10 @@ class ImageHelper:
             print("****************************************")
             return False
         return cur.rowcount>0
+
+    '''delete image by image id'''
     def deleteImageByImageId(self,iid):
+
         cur = self.dbAdapter.getcursor()
         query = "DELETE FROM image WHERE image_id ='%s'"%(iid)
         try:

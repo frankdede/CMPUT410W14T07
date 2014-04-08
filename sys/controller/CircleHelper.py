@@ -13,7 +13,9 @@ class CircleHelper:
 
     def __init__(self,dbAdapter):
         self.dbAdapter = dbAdapter
-
+    '''
+       add friend for the author
+    '''
     def addFriendForAuthor(self,aid1,aid2):
 
         cur = self.dbAdapter.getcursor()
@@ -64,6 +66,7 @@ class CircleHelper:
         return cur.rowcount>0
 
     def getFriendList(self,aid):
+        ''' get a list of all friend by author id'''
 
         result = []
         cur = self.dbAdapter.getcursor()
@@ -114,7 +117,9 @@ class CircleHelper:
           return None
 
         return cur.fetchall()
-
+    '''
+     get friend of friend's list
+    '''
     def getFriendOfFriendList(self,aid):
         
         cur = self.dbAdapter.getcursor()

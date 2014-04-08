@@ -8,7 +8,9 @@ class RequestHelper:
     dbAdapter = None
     def __init__(self,dbAdapter):
         self.dbAdapter = dbAdapter
-
+    '''
+    add a new request sent by user
+    '''
     def addNewRequest(self,recipientId,senderId):
 
         query ="INSERT INTO request VALUES(CURRENT_TIMESTAMP,'%s','%s');"%(recipientId,senderId)
@@ -54,9 +56,10 @@ class RequestHelper:
           
         return cur.rowcount>0
 
-    """
+    '''
     get a list of message of a same recipient
-    """
+    '''
+    
     def getRequestListByAid(self,recipientId):
 
         cur = self.dbAdapter.getcursor()
@@ -101,9 +104,9 @@ class RequestHelper:
             return None
 
         return cur.fetchall()
-    """
+    '''
     To get the number of requests
-    """
+    '''
     def getRequestCountByAid(self,recipientId):
 
         cur = self.dbAdapter.getcursor()
@@ -125,8 +128,10 @@ class RequestHelper:
             return None
 
         return result[0]
-        
 
+    ''' 
+    delete all message by author id
+    '''
     def deleteAllRequestByAid(self,recipient_id):
         
         cur = self.dbAdapter.getcursor()
