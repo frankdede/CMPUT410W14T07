@@ -42,7 +42,7 @@ class ServerTest(unittest.TestCase):
         self.app = server.app.test_client()
 
     def test_server_is_up_and_running(self):
-        response = urllib2.urlopen('http://localhost:5000')
+        response = urllib2.urlopen('http://localhost:8080')
         self.assertEqual(response.code,200)
 
     def test_server_login(self):

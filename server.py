@@ -1023,7 +1023,6 @@ def uploadPostPermissionToServer(authorName,pid):
         return abort(404)
         
 if __name__ == '__main__':
-
     app.debug = True
     REGISTER_RESTRICTION = settingHelper.getSignUpRestrictionValue()
     POST_REMOTE_ACCESS_RESTRICTION = settingHelper.getRemotePostAccessRestrictionValue()
