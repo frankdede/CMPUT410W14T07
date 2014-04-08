@@ -201,6 +201,7 @@ function getRemotePublicPostsData(){
 	$.get("/remote/posts",function($data){
 		if($data){
 			var $postsList = JSON.parse($data);
+			console.log($postList)
 			updatePostList($postsList);
 		}
 	});
@@ -321,9 +322,16 @@ function updateCommentsForPost($pid,$list){
 
 //Generate a post view html and return it to its caller
 function createPostViewHtml($pid,$title,$date,$message,$type,$permission,$img){
-	if ($img.length>0) {
-		$img = "<img src ='"+$authorid+"/"+$pid+"/image/view' width='50px',height='50px' >";
+	if($img != undefined){
+		if ($img.length>0) {
+			$img = "<img src ='"+$authorid+"/"+$pid+"/image/view' width='50px',height='50px' >";
+		}else{
+			$img = ""
+		}
+	}else{
+		$img = ""
 	}
+	
 	var $li = "<li id="+$pid+" class=\"postListView\">" +
 	"<div class=\"panel panel-default\">" +
 	"<div class=\"panel-heading\">" +
