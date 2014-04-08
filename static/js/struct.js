@@ -27,22 +27,7 @@ function setPostOptClickListener(){
 	$("#picOption").click(function(){
 		$("#postSelectedType").html('Markdown');
 		$SELECTED_POST_TYPE = 'text/x-markdown';
-        /*$("#uploadImage_form").validate({
-                            debug: true,
-                            submitHandler: function(form){
-                            
-                rules:{     
-                        img_file:{
-                                   required:true,
-                        }
-                 }
-                 messages:{
-                        img_file:{
-                                   required:"Please select a image"
-                        }
-                 }
-                 }    
-             });*/
+
 });
 	$("#htmlOption").click(function(){
 		$("#postSelectedType").html('HTML');
@@ -183,7 +168,7 @@ function setRefreshTimer(){
 
 	},10000);
 }
-
+//get github notification from server
 function getGithubNotification(){
 	$.get("/"+ $authorName +"/github/notification",function(data){
 		data = JSON.parse(data);
@@ -200,7 +185,7 @@ function getGithubNotification(){
 		}
 	});
 }
-
+//get all post which user can see from server
 function getPostsData(){
 	$.get("/"+ $authorid +"/pull/",function($data){
 		if($data){
@@ -299,6 +284,7 @@ function updatePostList($list){
 	}
 }
 
+//Update a comment for a specific user
 function updateCommentsForAuthor($list){
 	for (var $i = 0 ;$i < $list.length ; $i++ ){
 		if( $POST_VIEW_LIST[$list[$i]['pid']][$list[$i]['cid']] == null ){
@@ -310,7 +296,7 @@ function updateCommentsForAuthor($list){
 	}
 }
 
-
+//Update the dictionary of posts,bind new comment to its corresponding post
 function updateCommentsForPost($pid,$list){
 	for (var $key in $list){
 		if( $POST_VIEW_LIST[$pid][$key] == null ){
@@ -322,9 +308,10 @@ function updateCommentsForPost($pid,$list){
 	}
 }
 
-function createPostViewHtml($pid,$title,$date,$message,$type,$permission,img){
-	if (img.length>0) {
-		img = "<img src ='"+$authorid+"/"+$pid+"/image/view' width='50px',height='50px' >";
+//Generate a post view html and return it to its caller
+function createPostViewHtml($pid,$title,$date,$message,$type,$permission,$img){
+	if ($img.length>0) {
+		$img = "<img src ='"+$authorid+"/"+$pid+"/image/view' width='50px',height='50px' >";
 	}
 	var $li = "<li id="+$pid+" class=\"postListView\">" +
 	"<div class=\"panel panel-default\">" +
@@ -338,7 +325,7 @@ function createPostViewHtml($pid,$title,$date,$message,$type,$permission,img){
 	"<div class=\"panel-body postViewBody\"><p style=\"word-wrap:break-word;\">" +
 	$message +
 	"</p>"+
-	img+
+	$img+
 	"</div>"+
 	"</div>"+
 	"<small class=\"postViewPermissionFooter\">"+
@@ -348,7 +335,7 @@ function createPostViewHtml($pid,$title,$date,$message,$type,$permission,img){
 	" | " + $date +
 	"</small>" +
 	"<small id=\""+$pid+"-expandBtn\" class=\"postViewComment\">"+
-	" | Comments(10)"+
+	" | Comments"+
 	"</small>"+
 	"</li>";
 
@@ -438,6 +425,7 @@ function addDropDownClickerListener(){
 		mark_down = false;
 	});
 }
+
 //Send the Post object in json over http
 function submitPostToServer($postObj){
 		$.post('/'+ $authorName +'/post?markdown='+mark_down,JSON.stringify($postObj)).done(function($data){
@@ -456,6 +444,8 @@ function submitPostToServer($postObj){
 			}
 		});
 }
+
+//Upload post's image to server
 function ajax_upload_image(pid){
 	var formData = new FormData($("#uploadImage_form")[0]);
 	$.ajax({
@@ -480,7 +470,7 @@ function ajax_upload_image(pid){
         },
     });
 }
-//Send the Post object in json over http
+//Send the friends which user wants to share post
 function submitSpecifyToServer($pid){
 	var send = {'data':checked};
 	$.post('/'+ $authorName +'/postpermission/'+$pid,JSON.stringify(send)).done(function($data){

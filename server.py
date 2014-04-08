@@ -603,9 +603,9 @@ def acceptRequest(recipientAid):
                 response = sendAcceptRequestToRemoteServer(recipientAid,recipientName,remoteSenderAid,remoteUrl)
 
                 if(response == True):
-                    re = make_response("OK",200)
-                else:
-                    re = make_response("Failed")
+                    if(reController.acceptRequestFromSender(recipientAid,senderAid)):
+                        re = make_response("OK",200)
+                re = make_response("Failed")
                 return re
 
         except KeyError:
@@ -650,9 +650,16 @@ def getPostForAuthor(aid):
             return json.dumps({'status':None}),200
         else:
             post = postController.getPost(aid)
+            
             return post,200
     else:
         return abort(404)
+
+@app.route('/remote/posts')
+def getRemotePublicPostsForAuthor():
+
+    posts = getPublicPostsFromRemoteServer()
+    return posts,200
 
 '''main function of send markdown'''
 @app.route('/markdown',methods=['GET','POST'])
@@ -989,7 +996,6 @@ def sendAcceptRequestToRemoteServer(recipientAid,recipientName,remoteSenderAid,r
     if(payload != None):
         url = payload['friend']['host']
         headers = {'content-type': 'application/json'}
-        print(payload)
         response = requests.post(url,data = json.dumps(payload),headers = headers )
         if(response.status_code == '200'):
             return True
@@ -1000,6 +1006,18 @@ def sendAcceptRequestToRemoteServer(recipientAid,recipientName,remoteSenderAid,r
 Public API: all posts marked as public on the server
 '''
 @app.route('/service/posts',methods=['GET'])
+def sendPublicPostsToRemoteServerService():
+    
+    payload = serviceController.sendPublicPostsToRemoteServer()
+    if(payload != None):
+        return json.dumps(payload),200
+    else:
+        return json.dumps([]),200
+
+'''
+Public API: all posts marked as public on the server
+'''
+@app.route('/posts',methods=['GET'])
 def sendPublicPostsToRemoteServer():
     
     payload = serviceController.sendPublicPostsToRemoteServer()
@@ -1007,6 +1025,7 @@ def sendPublicPostsToRemoteServer():
         return json.dumps(payload),200
     else:
         return json.dumps([]),200
+
 '''
 Public API: send glabal authors to remote servers
 '''
@@ -1037,6 +1056,13 @@ def uploadPostPermissionToServer(authorName,pid):
         return json.dumps({'status':result}),200
     else:
         return abort(404)
+
+
+def getPublicPostsFromRemoteServer():
+    url = "http://cs410-06/posts"
+    response = requests.get(url)
+    result = serviceController.getPublicPostsFromRemoteServer(response)
+    return result
         
 if __name__ == '__main__':
     app.debug = True

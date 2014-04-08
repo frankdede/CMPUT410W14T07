@@ -5,6 +5,7 @@
 _create_db_path="./docs/create_table.sql"
 #_drop_db_path="./docs/Queries/drop_tables.sql"
 _insert_test_path="./docs/testing_data.sql"
+_insert_demo_path="./docs/demo.sql"
 _db_name="c410" 
 
 # mysql info
@@ -38,10 +39,12 @@ drop_all(){
     mysql -u "$mysql_name" -p"$mysql_password" -h "$_HOST" "$_db_name" < "$_drop_db_path" --verbose
 }
 
-insert_all(){
+create_all(){
     #TODO:
     echo -e "TODO:insert all the tuples into db"
-    mysql -u "$mysql_name" -p"$mysql_password" -h "$_HOST" "$_db_name" < "$_insert_test_path" --verbose
+    mysql -u "$mysql_name" -p"$mysql_password" -h "$_HOST" "$_db_name" < "$_create_db_path" --verbose
+
+    mysql -u "$mysql_name" -p"$mysql_password" -h "$_HOST" "$_db_name" < "$_insert_demo_path" --verbose
 
 }
 
@@ -59,8 +62,8 @@ rebuild_all(){
 case $1 in
     "-rebuild_all") login
                     rebuild_all;;
-    "-insert_test") login
-                    insert_all;;
+    "-create_all") login
+                    create_all;;
     "-drop_all")    login
                     drop_all;;
     "-backup_all")  backup_all;;
