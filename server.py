@@ -699,7 +699,7 @@ def viewPostImage(aid,pid):
 
 
 '''upload new post to server by author name'''
-@app.route('/<authorName>/post/',methods=['PUT','POST'])
+@app.route('/<authorName>/post',methods=['PUT','POST'])
 def uploadPostToServer(authorName):
 
     if ('logged_in' in session) and (session['logged_in'] == authorName):

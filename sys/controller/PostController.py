@@ -1,4 +1,5 @@
 from PostHelper import *
+from ImageHelper import *
 import json
 import sys
 class PostController:
@@ -8,6 +9,7 @@ class PostController:
     """
     def __init__(self,dbAdapter):
         self.posthelper = PostHelper(dbAdapter)
+        self.imagehelper = ImageHelper(dbAdapter)
     """
         Get json file of all post, which the author can see
         @param aid author id
@@ -51,7 +53,13 @@ class PostController:
             if(post is None):
                 return None
             else:
-                json_list[post.getPid()]=post.tojson()
+                single_dic = post.tojson()
+                li = self.imagehelper.getImageByPid(post.getPid());
+                if len(li)>0:
+                    single_dic['img'] = li[0].getPath()
+                else:
+                    single_dic['img'] = ''
+                json_list[post.getPid()]=single_dic
         return json.dumps(json_list)
 
     '''

@@ -192,7 +192,8 @@ function getGithubNotification(){
 				var $time = data[i]['time'];
 				var $message = data[i]['content'];
 				var $title = data[i]['title'];
-				var $html = createPostViewHtml(i,$title,$time,$message,'text','me');
+				var img = data[i]['img']
+				var $html = createPostViewHtml(i,$title,$time,$message,'text','me',img);
 				addPostToList('postListView',$html,250);
 				setCommentBtnClickLisener(i);
 			}
@@ -288,7 +289,8 @@ function updatePostList($list){
 			var $message = $list[$key].content;
 			var $type = $list[$key].type;
 			var $permission = $list[$key].permission;
-			var $html = createPostViewHtml($pid,$title,$date,$message,$type,$permission);
+			var img = $list[$key].img;
+			var $html = createPostViewHtml($pid,$title,$date,$message,$type,$permission,img);
 			addPostToList('postListView',$html,250);
 			setCommentBtnClickLisener($pid);
 		}
@@ -320,7 +322,10 @@ function updateCommentsForPost($pid,$list){
 	}
 }
 
-function createPostViewHtml($pid,$title,$date,$message,$type,$permission){
+function createPostViewHtml($pid,$title,$date,$message,$type,$permission,img){
+	if (img.length>0) {
+		img = "<img src ='"+$authorid+"/"+$pid+"/image/view' width='50px',height='50px' >";
+	}
 	var $li = "<li id="+$pid+" class=\"postListView\">" +
 	"<div class=\"panel panel-default\">" +
 	"<div class=\"panel-heading\">" +
@@ -333,7 +338,7 @@ function createPostViewHtml($pid,$title,$date,$message,$type,$permission){
 	"<div class=\"panel-body postViewBody\"><p style=\"word-wrap:break-word;\">" +
 	$message +
 	"</p>"+
-	"<img src ='"+$authorid+"/"+$pid+"/image/view' width='50px',height='50px' >"+
+	img+
 	"</div>"+
 	"</div>"+
 	"<small class=\"postViewPermissionFooter\">"+
