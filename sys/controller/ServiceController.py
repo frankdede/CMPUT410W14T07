@@ -92,16 +92,16 @@ class ServiceController:
                 return False
         return None
 
-    def sendFriendRequestToRemoteServer(self,senderAid,senderName,remoteAid,remoteSid):
+    def sendFriendRequestToRemoteServer(self,senderAid,senderName,remoteAid,remoteUrl):
         '''send friend request to remote server'''
 
         request = {}
-        response['query'] = 'friendrequest'
+        request['query'] = 'friendrequest'
         friend = {}
 
         friend['id'] = remoteAid
-        friend['host'] = remoteSid
-        friend['displayname'] = name
+        friend['host'] = remoteUrl
+        friend['displayname'] = ''
 
         author = {}
         author['id'] = senderAid

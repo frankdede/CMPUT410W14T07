@@ -33,7 +33,6 @@ INSERT INTO circle values('555555','333333');
  
 INSERT INTO request values(NULL,'111111','222222');
 INSERT INTO request values(NULL,'111111','333333');
-INSERT INTO request values(NULL,'111111','444444');
 INSERT INTO request values(NULL,'111111','555555');
 
 INSERT INTO post values('2','111111',NULL,'Today is a brand new day','hello everyone','text/plain','me');
