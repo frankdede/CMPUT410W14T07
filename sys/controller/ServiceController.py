@@ -143,7 +143,7 @@ class ServiceController:
 
 
     def getPublicPostsFromRemoteServer(self,response):
-        localPostList = []
+        localPostList = {}
         publicPosts = json.loads(response)
 
         for publicPost in publicPosts['posts']:
@@ -157,7 +157,7 @@ class ServiceController:
             info['permission'] = publicPost['visibility']
             info['img'] = ''
 
-            localPostList.append(info)
+            localPostList[publicPost['guid']] = info
 
         return json.dumps(localPostList)
 
