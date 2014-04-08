@@ -608,19 +608,20 @@ def denyRequest(aid):
                 return re
         except KeyError:
             return redirect(url_for('aid'))
+
+'''redirect to main html (posts)'''
 @app.route('/author/<authorName>')
 def renderStruct(authorName):
-'''redirect to main html (posts)'''
-
     if ('logged_in' in session) and (session['logged_in'] == authorName):
         return render_template('struct.html')
     else:
         return abort(404)
 
 # get all the new posts that a specific author can view from the server
+'''get post by author id'''
 @app.route('/<aid>/pull/')
 def getPostForAuthor(aid):
-'''get post by author id'''
+
 
     if ('logged_in' in session) and (session['logged_id'] == aid):
         #aid = session['logged_id']
@@ -632,10 +633,9 @@ def getPostForAuthor(aid):
     else:
         return abort(404)
 
-@app.route('/markdown',methods=['GET','POST'])
-
-def index():
 '''main function of send markdown'''
+@app.route('/markdown',methods=['GET','POST'])
+def index():
 
     if request.method == 'POST':
         content = request.form['postContent']
@@ -645,24 +645,24 @@ def index():
         return html_string
     return render_template('markdown_input.html')
 
+
+'''get comments by author'''
 @app.route('/author/<aid>/posts/comments/',methods=['GET'])
 def getCommentsForAuthor(aid):
-'''get comments by author'''
 
     if ('logged_in' in session) and (session['logged_id'] == aid):
         return commentController.getCommentsForAuthor(aid),200
     else:
         return abort(404)
 
-
-def allowed_file(filename):
 '''check whether the file user upload is allowed or not'''
-
+def allowed_file(filename):
     return '.' in filename and filename.rsplit('.' ,1)[1] in app.config['ALLOWED_EXTENSIONS']
 
+
+'''upload new image by author id and post id'''
 @app.route('/<aid>/<pid>/upload',methods=['POST'])
 def upload(aid,pid):
-    '''upload new image by author id and post id'''
 
     if ('logged_in' not in session) or (session['logged_id'] != aid):
         abort(404)
@@ -681,9 +681,9 @@ def upload(aid,pid):
     else:
         abort(404)
 
+'''view the image in post by author id'''
 @app.route('/<aid>/<pid>/image/view',methods=['GET'])
 def viewPostImage(aid,pid):
-    '''view the image in post by author id'''
 
     if ('logged_in' not in session) or (session['logged_id'] != aid):
         abort(404)
@@ -698,10 +698,9 @@ def viewPostImage(aid,pid):
         else:
             abort(404)
 
-
+'''upload new post to server by author name'''
 @app.route('/<authorName>/post/',methods=['PUT','POST'])
 def uploadPostToServer(authorName):
-    '''upload new post to server by author name'''
 
     if ('logged_in' in session) and (session['logged_in'] == authorName):
         aid = session['logged_id']
@@ -721,9 +720,9 @@ def uploadPostToServer(authorName):
     else:
         return abort(404)
 
+'''Retrive the posting permission information for a specific author by authorName'''
 @app.route('/<authorName>/post/getPermissionList/',methods=['GET'])
 def getPermissionList(authorName):
-    '''Retrive the posting permission information for a specific author by authorName'''
 
     if ('logged_in' in session) and (session['logged_in'] == authorName):
         if request.method == 'GET':
@@ -738,10 +737,10 @@ def getPermissionList(authorName):
     else:
         return abort(404)
 
-
+'''Get all the comments for a specific post from DB'''
 @app.route('/author/<aid>/posts/<pid>/comments/',methods=['GET'])
 def getCommentsForPost(aid,pid):
-    '''Get all the comments for a specific post from DB'''
+    
 
     if('logged_id' in session) and (session['logged_id'] == aid):
         result = commentController.getCommentsForPost(pid)
@@ -749,9 +748,9 @@ def getCommentsForPost(aid,pid):
     else:
         return abort(404)
 
+'''Add a comment for a specific post into DB'''
 @app.route('/author/<aid>/posts/<pid>/comments/',methods=['PUT','POST'])
 def addCommentForPost(aid,pid):    
-    '''Add a comment for a specific post into DB'''
 
     if ('logged_in' in session) and (session['logged_id'] == aid):
         
@@ -770,11 +769,11 @@ def addCommentForPost(aid,pid):
     else:
         return abort(404)
 
+
+'''get the notification by author'''
 # get all the new posts that a specific author can view from the server
 @app.route('/<authorName>/github/notification')
 def getNotification(authorName):
-    '''get the notification by author'''
-
     authorToken = authorName + '_authToken'
     if ('logged_in' in session) and (session['logged_in'] == authorName) and (authorToken in session):
         # get author auth token
@@ -842,9 +841,10 @@ def getNotification(authorName):
     else:
         return abort(404)
 
+
+'''get authorization from github'''
 @app.route('/github/callback')
 def callback():
-    '''get authorization from github'''
 
     code = request.args['code']
     state = request.args['state'].encode('utf-8')
@@ -880,10 +880,11 @@ def callback():
     return redirect(url_for('login'))
 
 
-# get all the new posts that a specific author can view from the server
+
+'''get all the new posts that a specific author can view from the server '''
 @app.route('/<aid>/pull/mypost')
 def getMyPostForAuthor(aid):
-    '''get all view posts by a author'''
+    
 
     if ('logged_in' in session) and (session['logged_id'] == aid):
         #aid = session['logged_id']
@@ -895,18 +896,18 @@ def getMyPostForAuthor(aid):
     else:
         return abort(404)
 
+'''get all posts by author'''
 @app.route('/<authorName>/mypost')
 def myPost(authorName):
-    '''get all posts by author'''
-
+    
     if ('logged_in' in session) and (session['logged_in'] == authorName):
         return render_template('mypost.html')
     else:
         abort(404);
 
+'''delete my post by author'''
 @app.route('/<authorName>/mypost/delete/<pid>')
 def myPostDelete(authorName,pid):
-    '''delete my post by author'''
 
     if ('logged_in' in session) and (session['logged_in'] == authorName):
         result = postHelper.deletePostByPid(pid)
@@ -920,7 +921,6 @@ Public API: receieve the friend request from a remote server
 '''
 @app.route('/friendrequest',methods=['GET','POST'])
 def friendRequestService():
-''''make a reponse for friend request from remote server'''
 
     if(request.method == 'POST'):
         print(request)
@@ -937,10 +937,8 @@ def friendRequestService():
 Don't access this API from client side
 This is for internal server to use only
 '''
-
 #@app.route('/response/accept')
 def sendAcceptRequestToRemoteServer(recipientAid,recipientName,remoteSenderAid,remoteSid):
-'''send accept request to remote server'''
     
     payload = serviceController.sendFriendRequestToRemoteServer(recipientAid,recipientName,remoteSenderAid,remoteSid)
     if(payload != None):
@@ -957,7 +955,6 @@ Public API: all posts marked as public on the server
 '''
 @app.route('/posts',methods=['GET'])
 def sendPublicPostsToRemoteServer():
-'''send public posts to remote server'''
     
     payload = serviceController.sendPublicPostsToRemoteServer()
     if(payload != None):
@@ -969,7 +966,6 @@ Public API: send glabal authors to remote servers
 '''
 @app.route('/global/authors',methods=['GET'])
 def sendGlobalAuthorsToRemoteServer():
-'''send global posts to remote server'''
 
     payload = serviceController.sendGlobalAuthorsToRemoteServer()
     if(payload != None):
@@ -977,17 +973,16 @@ def sendGlobalAuthorsToRemoteServer():
     else:
         return json.dumps([]),200
 
-
+'''view images that have permission'''
 @app.route('/permission/image/<imagename>',methods=['GET'])
 def view_permission_image(imagename):
-'''view images that have permission'''
 
     imagename=PERMISSION_IMAGE+'/'+imagename+'.png'
     return send_file(imagename, mimetype='image/png')
 
+'''upload post's permission by author'''
 @app.route('/<authorName>/postpermission/<pid>',methods=['PUT','POST'])
 def uploadPostPermissionToServer(authorName,pid):
-'''upload post's permission by author'''
 
     if ('logged_in' in session) and (session['logged_in'] == authorName):
         send = flaskPostToJson()
@@ -998,7 +993,6 @@ def uploadPostPermissionToServer(authorName,pid):
         return abort(404)
         
 if __name__ == '__main__':
-'''main function'''
 
     app.debug = True
     REGISTER_RESTRICTION = settingHelper.getSignUpRestrictionValue()

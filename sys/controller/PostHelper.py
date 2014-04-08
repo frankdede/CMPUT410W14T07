@@ -12,8 +12,8 @@ class PostHelper:
     def __init__(self,dbAdapter):
         self.dbAdapter = dbAdapter
 
-    def addPost(self,aid,title,content,type,permission):
     '''add new post'''
+    def addPost(self,aid,title,content,type,permission):
 
         cur = self.dbAdapter.getcursor()
 
@@ -40,10 +40,11 @@ class PostHelper:
         else:
           return False
           
-#type argument should be one of ['pid','aid','time','message','title','permission']
-#Usage: updatepost(databasehelper,pid,type="html", permmision="public") check keyword argument
+    '''
+    type argument should be one of ['pid','aid','time','message','title','permission']
+    Usage: updatepost(databasehelper,pid,type="html", permmision="public") check keyword argument
+    '''
     def updateMessage(self,pid,newContent):
-    '''update message content by post id'''
   
         cur = self.dbAdapter.getcursor()
         query = "UPDATE post SET message='%s' WHERE pid='%s'"%(newContent,pid)
@@ -65,8 +66,8 @@ class PostHelper:
 
         return cur.rowcount>0
 
-    def updateTitle(self,pid,newtitle):
     '''update post title by post id'''
+    def updateTitle(self,pid,newtitle):
     
         cur = self.dbAdapter.getcursor()
         query = "UPDATE post SET title='%s' WHERE pid='%s'"%(newtitle,pid)
@@ -88,8 +89,8 @@ class PostHelper:
 
         return cur.rowcount>0
 
-    def updateTime(self,dbAdapter,pid,time = ''):
     '''update post time by post id'''
+    def updateTime(self,dbAdapter,pid,time = ''):
     
         cur = self.dbAdapter.getcursor()
         if time  == '':
@@ -114,11 +115,10 @@ class PostHelper:
           return False
 
         return cur.rowcount>0
-# if you need change to permission to user, you need to specify the user aid
 
-    # HAVEN'T BEEN COMPLETED YET
-    def updatePermission(self,pid,newPermission,user=''):
     '''update post's permission by post id'''
+    def updatePermission(self,pid,newPermission,user=''):
+    
     
         cur = self.dbAdapter.getcursor()
         query = "UPDATE post SET permission='%s' WHERE pid='%s'"%(newPermission,pid)
@@ -148,8 +148,8 @@ class PostHelper:
 
         return cur.rowcount>0
 
-    def deletePostByPid(self,pid):
     '''delete post by post id'''
+    def deletePostByPid(self,pid):
    
         cur = self.dbAdapter.getcursor()
         query = "DELETE FROM post WHERE pid = '%s'"%(pid)
@@ -171,8 +171,8 @@ class PostHelper:
 
         return cur.rowcount>0
 
+    '''delete post by post id'''
     def deletePostByAid(self,aid):
-        '''delete post by post id'''
 
         cur = self.dbAdapter.getcursor()
         query = "DELETE FROM post WHERE aid = '%s'"%(aid)
@@ -194,8 +194,8 @@ class PostHelper:
 
         return cur.rowcount>0
 
-    def getLocalPublicPosts(self):
-        '''get local public posts'''        
+    '''get local public posts'''
+    def getLocalPublicPosts(self):        
 
         cur = self.dbAdapter.getcursor()
         query = ("SELECT "
@@ -223,9 +223,8 @@ class PostHelper:
 
         return cur.fetchall()
 
-
-    def getPublicPost(self,aid):
     '''get public post by author id'''
+    def getPublicPost(self,aid):
 
         re = []
         cur = self.dbAdapter.getcursor()
@@ -255,10 +254,11 @@ class PostHelper:
                 name = ele[7]
                 post = Post(pid,aid,name,time,title,msg,msgType,permission)
                 re.append(post)
-            return re 
-    def getPrivatePost(self,aid):
-    '''get private post by author id'''
+            return re
 
+    '''get private post by author id'''
+    def getPrivatePost(self,aid):
+    
         re = []
         cur = self.dbAdapter.getcursor()
         
@@ -288,8 +288,9 @@ class PostHelper:
                 post = Post(pid,aid,name,time,title,msg,msgType,permission)
                 re.append(post)
             return re
-    def getFriendsFriendPost(self,aid):
+
     '''get friends' friend post by aid'''
+    def getFriendsFriendPost(self,aid):
 
         re = []
         cur = self.dbAdapter.getcursor()
@@ -320,9 +321,10 @@ class PostHelper:
                 post = Post(pid,aid,name,time,title,msg,msgType,permission)
                 re.append(post)
             return re
-    def getFriendsPost(self,aid):
-    '''get friends' post by aid'''
 
+    '''get friends' post by aid'''
+    def getFriendsPost(self,aid):
+    
         re = []
         cur = self.dbAdapter.getcursor()
         #get the post if it is public
@@ -351,8 +353,9 @@ class PostHelper:
                 post = Post(pid,aid,name,time,title,msg,msgType,permission)
                 re.append(post)
             return re
+
+    '''get author's post by aid'''
     def getAuthorPost(self,aid):
-        '''get author's post by aid'''
 
         re = []
         cur = self.dbAdapter.getcursor()
@@ -382,9 +385,10 @@ class PostHelper:
                 post = Post(pid,aid,name,time,title,msg,msgType,permission)
                 re.append(post)
             return re
-    def getMyHostFriendPost(self,aid):
-        '''get host friend's post'''
 
+    '''get host friend's post'''
+    def getMyHostFriendPost(self,aid):
+        
         re = []
         cur = self.dbAdapter.getcursor()
         #get the post if it is public
@@ -413,8 +417,9 @@ class PostHelper:
                 post = Post(pid,aid,name,time,title,msg,msgType,permission)
                 re.append(post)
             return re
+
+    '''get post by author id'''
     def getPostByAid(self,aid):
-        '''get post by author id'''
 
         re = []
         cur = self.dbAdapter.getcursor()
@@ -447,8 +452,8 @@ class PostHelper:
             return re
         return None
 
-    def getSelectedPost(self,aid):
-        '''get the post selected by author id''' 
+    '''get the post selected by author id'''
+    def getSelectedPost(self,aid): 
 
         re = []
         cur = self.dbAdapter.getcursor()
@@ -481,8 +486,8 @@ class PostHelper:
             return re
         return None
         
+    '''get my post by author id'''
     def getMyPost(self,aid):
-        '''get my post by author id'''
  
         re = []
         cur = self.dbAdapter.getcursor()
