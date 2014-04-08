@@ -1,7 +1,7 @@
 from AuthorHelper import *
 from RequestController import *
 from DatabaseAdapter import *
-from serverHelper import *
+from ServerHelper import *
 import sys
 sys.path.append("sys/model")
 import json
@@ -31,7 +31,7 @@ class AuthorController:
                 dic['aid'] = current_aid
                 dic['name'] = author.getName()
                 dic['nickname'] = author.getNickname()
-                dic['server_name'] = self.serverHelper.getServerNameBysid(author.getSid())
+                dic['server_name'] = self.serverHelper.getServerNameBySid(author.getSid())
                 if current_aid in sent_list:
                     dic['followed'] = 1
                 else:
@@ -64,7 +64,7 @@ class AuthorController:
                 dic['aid'] = current_aid
                 dic['name'] = author.getName()
                 dic['nickname'] = author.getNickname()
-                dic['server_name'] = self.serverHelper.getServerNameBysid(author.getSid())
+                dic['server_name'] = self.serverHelper.getServerNameBySid(author.getSid())
                 if current_aid in sent_list:
                     dic['followed'] = 1
                 else:
