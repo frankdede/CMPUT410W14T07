@@ -1006,6 +1006,19 @@ def sendPublicPostsToRemoteServer():
         return json.dumps(payload),200
     else:
         return json.dumps([]),200
+
+'''
+Public API: all posts marked as public on the server
+'''
+@app.route('/posts',methods=['GET'])
+def sendPublicPostsToRemoteServer():
+    
+    payload = serviceController.sendPublicPostsToRemoteServer()
+    if(payload != None):
+        return json.dumps(payload),200
+    else:
+        return json.dumps([]),200
+
 '''
 Public API: send glabal authors to remote servers
 '''
@@ -1041,7 +1054,7 @@ def uploadPostPermissionToServer(authorName,pid):
 def getPostsRequestsFromRemoteServer(self):
     url = "http://cs410-06/posts"
     response = requests.get(url)
-    
+
         
 if __name__ == '__main__':
     app.debug = True
