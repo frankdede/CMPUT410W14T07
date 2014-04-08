@@ -27,6 +27,8 @@ class AuthorController:
         tmp_list =self.authorHelper.getAllAuthorObjectsForLocalServer()
         tmp_list.extend(self.authorHelper.getAllAuthorObjectsForRemoteServer())
         sent_list = self.requestController.getSentRequest(aid)
+        friend_list = self.circleController.getFriendAidList(aid)
+        print friend_list
         for author in tmp_list:
             current_aid =author.getAid()
             if current_aid !=aid:
@@ -38,6 +40,10 @@ class AuthorController:
                     dic['followed'] = 1
                 else:
                     dic['followed'] = 0
+                if current_aid in friend_list:
+                    dic['friend'] = 1
+                else:
+                    dic['friend'] = 0
                 re.append(dic)
                 dic ={}
         return json.dumps(re)
@@ -55,8 +61,8 @@ class AuthorController:
             """
         list = Utility.parseKeyword(keyword)
         sent_list = self.requestController.getSentRequest(aid)
-        firend_list = self.circleController.getFriendAidList(aid)
-        print firend_list
+        friend_list = self.circleController.getFriendAidList(aid)
+        print friend_list
         re =[]
         tmp_list =[]
         dic = {}
@@ -73,8 +79,8 @@ class AuthorController:
                     dic['followed'] = 1
                 else:
                     dic['followed'] = 0
-                if current_aid in firend_list:
-                    dic['firend'] = 1
+                if current_aid in friend_list:
+                    dic['friend'] = 1
                 else:
                     dic['friend'] = 0
                 re.append(dic)
