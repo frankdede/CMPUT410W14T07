@@ -983,7 +983,7 @@ def sendAcceptRequestToRemoteServer(recipientAid,recipientName,remoteSenderAid,r
 '''
 Public API: all posts marked as public on the server
 '''
-@app.route('/posts',methods=['GET'])
+@app.route('/service/posts',methods=['GET'])
 def sendPublicPostsToRemoteServer():
     
     payload = serviceController.sendPublicPostsToRemoteServer()
