@@ -109,7 +109,7 @@ class ServiceController:
 
     def sendPublicPostsToRemoteServer(self):
         '''send the public posts to remote server'''
-
+        jsonObj = {}
         posts = self.postController.getLocalPublicPosts()
         comments = self.commentController.getCommentsForPublicPosts()
         if(posts != None and comments != None):
@@ -117,10 +117,11 @@ class ServiceController:
                 for comment in comments:
                     if(post['guid'] == comment['pid']):
                         post['comments'].append(comment)
-                
-            return posts
+            jsonObj['posts'] = posts 
+            return jsonObj
+
         else:
-            return []
+            return {}
 
     def sendGlobalAuthorsToRemoteServer(self):
         '''send global authors to remote server'''

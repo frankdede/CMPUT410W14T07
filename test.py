@@ -22,6 +22,7 @@ from CircleController import *
 from PostController import *
 from PostPermissionController import *
 from ServiceController import *
+from ServerController import *
 # models
 import author
 import post
@@ -53,6 +54,7 @@ class TestController(unittest.TestCase):
         self.circleController = CircleController(dbAdapter)
         self.authorController = AuthorController(dbAdapter)
         self.postPermissionController = PostPermissionController(dbAdapter)
+        self.serverController = ServerController(dbAdapter)
         self.serviceController = ServiceController(dbAdapter)
     '''
      ====================   PostController & Helper =======================
@@ -200,6 +202,17 @@ class TestController(unittest.TestCase):
         aidsList = []
         result = self.postPermissionController.addPostPermission(pid,aidsList)
         self.assertTrue(result == False,"Failed to add post permission")
+    '''
+    =================== ServerController =============================
+    '''
+
+    def test_doesServerExists(self):
+        result = self.serverController.doesAuthorExists('cs410.cs.ualberta.ca:41069')
+        self.assertTrue(result == True,"Failed to check existense of the server")
+
+    def test_addServer(self):
+        result = self.serverController.addServer('test','cs410.cs.ualberta.ca:41069',0)
+        self.assertTrue(result == True,"Failed to add server")
 
 if __name__ == '__main__':
     print("**************************** Script Starts ****************************")
