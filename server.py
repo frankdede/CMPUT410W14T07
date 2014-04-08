@@ -32,6 +32,7 @@ from AuthorController import *
 from RequestController import *
 from CommentController import *
 from ServiceController import *
+from ServerController import *
 from PostPermissionController import *
 from ImageHelper import *
 
@@ -60,6 +61,8 @@ serviceController = ServiceController(dbAdapter)
 #
 postPermissionHelper = PostPermissionController(dbAdapter)
 #
+serverController = ServerController(dbAdapter)
+
 imageHelper = ImageHelper(dbAdapter)
 #Allowed file extensions
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
@@ -590,12 +593,14 @@ def acceptRequest(recipientAid):
             else:
                 remoteAuthor = aController.getAuthorInfoByAid(senderAid)
                 localAuthor = aController.getAuthorInfoByAid(recipientAid)
-
+                print("+++"+remoteAuthor.getAid())
+                print("+++"+localAuthor.getAid())
                 recipientAid = localAuthor.getAid()
-                recipientName = localAuthor.getNickName()
+                recipientName = localAuthor.getNickname()
                 remoteSenderAid = remoteAuthor.getAid()
-                remoteSid = remoteAuthor.getSid()
-                response = sendAcceptRequestToRemoteServer(recipientAid,recipientName,remoteSenderAid,remoteSid)
+                remoteUrl = serverController.getServerUrlBySid(remoteAuthor.getSid())
+
+                response = sendAcceptRequestToRemoteServer(recipientAid,recipientName,remoteSenderAid,remoteUrl)
 
                 if(response == True):
                     re = make_response("OK",200)
@@ -968,6 +973,7 @@ def sendAcceptRequestToRemoteServer(recipientAid,recipientName,remoteSenderAid,r
     if(payload != None):
         url = payload['friend']['host']
         headers = {'content-type': 'application/json'}
+        print(payload)
         response = requests.post(url,data = json.dumps(payload),headers = headers )
         if(resposen.status == '200'):
             return True

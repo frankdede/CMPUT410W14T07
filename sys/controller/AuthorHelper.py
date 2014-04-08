@@ -55,13 +55,13 @@ class AuthorHelper:
         # [Failed] return null
 
         cur = self.dbAdapter.getcursor()
-        query = "SELECT aid,name,nick_name,sid,email,gender,city,birthday,img_path FROM author WHERE aid='%s' AND sid='%s' AND valid=1"%(aid,self.localSid)
+        query = "SELECT aid,name,nick_name,sid,email,gender,city,birthday,img_path FROM author WHERE aid='%s' AND valid=1"%(aid)
         print query
         try:
             cur.execute(query)
         except mysql.connector.Error as err:
             print("****************************************")
-            print("SQLException from getFriendOfFriend():")
+            print("SQLException from getAuthorObjectByAid():")
             print("Error code:", err.errno)
             print("SQLSTATE value:", err.sqlstate)
             print("Error message:", err.msg)
@@ -73,7 +73,9 @@ class AuthorHelper:
             return None
         else:
             friend = Author(row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7],row[8])
+            print(friend)
             return friend
+
 
     def getAllAuthorObjectsForLocalServer(self):
         """
@@ -382,8 +384,8 @@ class AuthorHelper:
 
         cur = self.dbAdapter.getcursor()
 
-        query = ("INSERT INTO author(aid,name,nick_name,pwd,sid) "
-                 "VALUES('%s','%s','%s','%s','%s')")%(aid,aid,aid,"",sid)
+        query = ("INSERT INTO author(aid,name,nick_name,pwd,sid,valid) "
+                 "VALUES('%s','%s','%s','%s','%s',1)")%(aid,aid,aid,"",sid)
         try:
           cur.execute(query)
 

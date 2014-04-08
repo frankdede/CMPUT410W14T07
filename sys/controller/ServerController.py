@@ -12,8 +12,12 @@ class ServerController:
 
         result = self.serverHelper.doesServerExists(url)
         return result
-        
+
     ''' add new server'''
     def addServer(self,name,url,local):
     
         return self.serverHelper.addServer(name,url,local)
+
+    def getServerUrlBySid(self,sid):
+
+        return self.serverHelper.getServerUrlBySid(sid)
