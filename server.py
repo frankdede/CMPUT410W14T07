@@ -640,7 +640,7 @@ def renderStruct(authorName):
 
 # get all the new posts that a specific author can view from the server
 '''get post by author id'''
-@app.route('/<aid>/pull/')
+@app.route('/<aid>/pull')
 def getPostForAuthor(aid):
 
 

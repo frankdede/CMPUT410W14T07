@@ -189,7 +189,7 @@ function getGithubNotification(){
 }
 //get all post which user can see from server
 function getPostsData(){
-	$.get("/"+ $authorid +"/pull/",function($data){
+	$.get("/"+ $authorid +"/pull",function($data){
 		if($data){
 			var $postsList = JSON.parse($data);
 			updatePostList($postsList);
@@ -198,7 +198,7 @@ function getPostsData(){
 }
 
 function getRemotePublicPostsData(){
-	$.get("/remote/posts/",function($data){
+	$.get("/remote/posts",function($data){
 		if($data){
 			var $postsList = JSON.parse($data);
 			updatePostList($postsList);
