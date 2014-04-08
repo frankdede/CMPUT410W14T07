@@ -31,6 +31,7 @@ class CircleController:
         return self.circleHelper.deleteFriendOfAuthor(aid1,aid2)
 
     def getFriendList(self,aid):
+    '''get friend list by author id'''
 
         result = self.circleHelper.getFriendList(aid)
 
@@ -45,6 +46,7 @@ class CircleController:
         return None
 
     def getFriendOfMyHomeServerList(self,aid):
+    '''get a list of all friend by author id on local server'''
 
         result = self.circleHelper.getFriendOfMyHomeServerList(aid)
 
@@ -59,7 +61,7 @@ class CircleController:
         return None
 
     def getFriendOfFriendList(self,aid):
-
+        '''get a list of all friend of friends by author id'''
         result = self.circleHelper.getFriendOfFriendList()
 
         if(result != None):
@@ -72,11 +74,12 @@ class CircleController:
         return None 
 
     def areFriends(self,aid1,aid2):
-
+        '''check whether two users are friends or not'''
         return self.circleHelper.areFriends(aid1,aid2)
 
     def areFriendsOfAuthor(self,author,authorsList):
-       
+       '''check all author's friends'''
+
         rows = self.circleHelper.areFriendsOfAuthor(author,authorsList)
 
         if(rows != None):

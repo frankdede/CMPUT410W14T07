@@ -1,5 +1,7 @@
 import uuid
 import re
+'''creat a new unique user id'''
+
 def getid():
     return str(uuid.uuid4())
 def gettime():

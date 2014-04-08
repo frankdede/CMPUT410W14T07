@@ -79,6 +79,8 @@ admin_name='admin'
 admin_model = False
 error = None
 
+'''git connection'''
+
 GITHUB_CLIENT_ID = '5a4bdc64c247e1f45f61'
 GITHUB_CLIENT_SECRET = '0640b9e5a32d2ebe6f4713158f2321f8ac43cee4'
 
@@ -93,6 +95,7 @@ github = OAuth2Service(
 def flaskPostToJson():
     '''Ah the joys of frameworks! They do so much work for you
     that they get in the way of sane operation!'''
+
     if (request.json != None):
         return request.json
     elif (request.data != None and request.data != ''):
@@ -103,10 +106,14 @@ def flaskPostToJson():
 # default path
 @app.route('/', methods=['GET', 'POST'])
 def root():
+    '''direct for login'''
+
     return redirect(url_for('login'))
 
 @app.route('/<aid>', methods=['GET', 'POST'])
 def author_view(aid):
+    '''header view'''
+
     if 'logged_in' in session and aid ==session['logged_id']:
         username = session['logged_in']
         msgCount = reController.getRequestCountByAid(aid)
@@ -117,10 +124,14 @@ def author_view(aid):
 
 @app.route('/<aid>/profile',methods=['GET'])
 def view_profile(aid):
+    '''return a html for profile'''
+
     return render_template('profile.html')
 
 @app.route('/<aid>/profile/image/<imagename>',methods=['GET'])
 def view_profile_image(aid,imagename):
+    '''load the profile image'''
+
     #print imagename
     import os.path
     path = os.path.join(app.config['UPLOAD_FOLDER'],imagename);
@@ -131,6 +142,8 @@ def view_profile_image(aid,imagename):
         return send_from_directory(app.config['UPLOAD_FOLDER'],"default.jpeg", as_attachment=False)
 @app.route('/<aid>/profile.json',methods=['GET'])
 def get_profile(aid):
+    '''return author profile'''
+
     if 'logged_in' in session and aid ==session['logged_id']:
         try:
             re_aid = request.args.get("aid")
@@ -145,12 +158,15 @@ def get_profile(aid):
     
 @app.route('/<aid>/profile/change',methods=['POST'])
 def change_profile(aid):
+    '''redirect after update profile change'''
+
     if 'logged_in' in session and aid ==session['logged_id']:
         return change_author_profile(aid)
     else:
         return redirect(url_for('/'))
 
 def change_author_profile(aid):
+    '''update profile change'''
     try:
         keyword = request.args.get('type')
         print keyword
@@ -190,6 +206,8 @@ def change_author_profile(aid):
         return re
 @app.route('/<aid>/admin',methods=['GET','POST'])
 def admin_page(aid):
+    '''direct to admin page'''
+
     if 'admin_model' not in session or aid != session['admin_model']:
         abort(404);
     try:
@@ -201,6 +219,8 @@ def admin_page(aid):
     return render_template("admin.html")
 @app.route('/<aid>/admin/delete/author',methods=['GET'])
 def admin_author_delete(aid):
+    '''delete author in admin'''
+
     if 'admin_model' not in session or aid != session['admin_model']:
         abort(404);
     try:
@@ -214,6 +234,8 @@ def admin_author_delete(aid):
         return "Wrong URL",404
 @app.route('/<aid>/admin/delete/post',methods=['GET'])
 def admin_post_delete(aid):
+    '''delete post in admin'''
+
     if 'admin_model' not in session or aid != session['admin_model']:
         abort(404);
     try:
@@ -227,6 +249,8 @@ def admin_post_delete(aid):
         return "Wrong URL",404
 @app.route('/<aid>/admin/author/approve',methods=['GET'])
 def admin_author_approve(aid):
+    '''approve application in admin'''
+
     if 'admin_model' not in session or aid != session['admin_model']:
         abort(404);
     try:
@@ -240,6 +264,8 @@ def admin_author_approve(aid):
         return "Wrong URL",404
 @app.route('/<aid>/admin/author/deny',methods=['GET'])
 def admin_author_deny(aid):
+    '''deny application in admin'''
+
     if 'admin_model' not in session or aid != session['admin_model']:
         abort(404);
     try:
@@ -253,6 +279,8 @@ def admin_author_deny(aid):
         return "Wrong URL",404
 @app.route('/<aid>/admin/view/post',methods=['GET'])
 def admin_get_post(aid):
+    '''get post in admin mode'''
+
     if 'admin_model' not in session or aid != session['admin_model']:
         abort(404);
     try:
@@ -263,6 +291,8 @@ def admin_get_post(aid):
         return "Wrong URL",404
 @app.route('/<aid>/admin/view/circle',methods=['GET'])
 def admin_get_circle(aid):
+    '''get friendship in admin mode'''
+
     if 'admin_model' not in session or aid != session['admin_model']:
         abort(404);
     try:
@@ -273,6 +303,8 @@ def admin_get_circle(aid):
         return "Wrong URL",404
 @app.route('/<aid>/admin/view/tmp_author',methods=['GET'])
 def admin_get_tmp_author(aid):
+    '''get the author that haven't been approve by admin'''
+
     if 'admin_model' not in session or aid != session['admin_model']:
         abort(404);
     response = aController.getAllTmpAuthor();
@@ -281,11 +313,15 @@ def admin_get_tmp_author(aid):
     return response
 @app.route('/<aid>/admin/manage/<otheraid>',methods=['POST'])
 def admin_change_author(aid,otheraid):
+    '''update the author profile in admin'''
+
     if 'admin_model' not in session or aid != session['admin_model']:
         abort(404);
     return change_author_profile(otheraid)
 @app.route('/<aid>/admin/global_setting/signup_policy',methods=['GET'])
 def admin_change_signup_policy(aid):
+    '''adjust the forum is open register or not in admin mode'''
+
     if 'admin_model' not in session or aid != session['admin_model']:
         abort(404)
     try:
@@ -303,6 +339,8 @@ def admin_change_signup_policy(aid):
         return "Wrong URL",404
 @app.route('/ajax/aid')
 def getuid():
+    '''get the user id'''
+
     if 'logged_in' not in session:
         return redirect(url_for('login'))
     else:
@@ -311,6 +349,8 @@ def getuid():
         return re
 @app.route('/ajax/author_name')
 def getaname():
+    '''get the username'''
+
     if 'logged_in' not in session:
         return redirect(url_for('login'))
     else:
@@ -321,6 +361,8 @@ def getaname():
 # login page
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    '''author login'''
+
     if request.method == 'POST':
         authorName =request.form['username']
         password =request.form['password']
@@ -358,6 +400,8 @@ def login():
 # register page
 @app.route('/register', methods=['PUT', 'POST'])
 def register():
+    '''new user register'''
+
     if request.method == 'POST':
         #parse require information
         gender=""
@@ -400,12 +444,16 @@ def register():
     return redirect(url_for('/'))
 
 def save_image(aid,file):
+    '''upload the new image into service'''
+
     filename = aid+"."+file.filename.rsplit('.', 1)[1]
     path = os.path.join(app.config['UPLOAD_FOLDER'],filename)
     file.save(path)
     return filename
 @app.route('/<aid>/recommended_authorlist.json', methods=['GET'])
 def authorlist(aid):
+    '''redirect to all author list'''
+
     if ('logged_in' not in session) or (aid !=session['logged_id']):
         return redirect(url_for('/'))
     re = aController.getRecommendedAuthor(aid)
@@ -414,6 +462,8 @@ def authorlist(aid):
 # search authors with keyword
 @app.route('/<aid>/author/search',methods=['GET'])
 def search_author(aid):
+    '''search author by aid'''  
+
     if ('logged_in' not in session) or (aid !=session['logged_id']):
         return redirect(url_for('/'))
     try:
@@ -426,6 +476,8 @@ def search_author(aid):
 
 @app.route('/<aid>/authorlist.json',methods=['GET'])
 def allauthorlist(aid):
+    '''get all author by aid'''
+
     if ('logged_in' not in session) or (aid !=session['logged_id']):
         return redirect(url_for('/'))
     re = aController.getOtherAuthor(aid)
@@ -434,6 +486,8 @@ def allauthorlist(aid):
 
 @app.route('/<aid>/circlelist.json',methods=['GET'])
 def circleauthorlist(aid):
+    '''get the friendship list by author id'''  
+
     if ('logged_in' not in session) or (aid !=session['logged_id']):
         return redirect(url_for('/'))
     re = circleController.getFriendList(aid)
@@ -442,12 +496,16 @@ def circleauthorlist(aid):
 
 @app.route('/<aid>/circle',methods=['GET'])
 def render_circle_modal(aid):
+    '''render the friendship modal by aid'''
+
     if ('logged_in' not in session) or (aid !=session['logged_id']):
         return redirect(url_for('/'))
     return render_template('view_circles_modal.html')
 
 @app.route('/<aid>/circle/delete',methods=['GET'])
 def delete_friends(aid):
+    '''delete firends by aid'''
+
     if ('logged_in' not in session) or (aid !=session['logged_id']):
         return redirect(url_for('/'))
     try:
@@ -462,6 +520,8 @@ def delete_friends(aid):
 
 @app.route('/<aid>/messages.json', methods=['GET'])
 def messages(aid):
+    '''get all message by aid'''
+
     if ('logged_in' not in session) or (aid !=session['logged_id']):
         abort(404)
     else:
@@ -471,6 +531,7 @@ def messages(aid):
 # logout
 @app.route('/logout')
 def logout():
+    '''logout'''
     session.pop('logged_in', None)
     session.pop('oauth_state', None)
     return redirect(url_for('login'))
@@ -478,6 +539,8 @@ def logout():
 # make request
 @app.route('/<aid>/author/request',methods=['GET'])
 def addfriend(aid):
+    '''send add friend request'''
+
     if ('logged_in' not in session) or (session['logged_id'] != aid):
         abort(404)
     else:
@@ -494,6 +557,8 @@ def addfriend(aid):
 #accept request
 @app.route('/<recipientAid>/author/request/accept',methods=['GET'])
 def acceptRequest(recipientId):
+    '''accept friend request by recipient id'''
+
     if ('logged_in' not in session) or (session['logged_id'] != aid):
         return redirect(url_for('/'))
     else:
@@ -529,6 +594,8 @@ def acceptRequest(recipientId):
 
 @app.route('/<aid>/author/request/deny',methods=['GET'])
 def denyRequest(aid):
+    '''deny friend request by author id'''   
+
     if ('logged_in' not in session) or (session['logged_id'] != aid):
         return redirect(url_for('/'))
     else:
@@ -542,6 +609,7 @@ def denyRequest(aid):
             return redirect(url_for('aid'))
 @app.route('/author/<authorName>')
 def renderStruct(authorName):
+'''redirect to main html (posts)'''
 
     if ('logged_in' in session) and (session['logged_in'] == authorName):
         return render_template('struct.html')
@@ -551,6 +619,8 @@ def renderStruct(authorName):
 # get all the new posts that a specific author can view from the server
 @app.route('/<aid>/pull/')
 def getPostForAuthor(aid):
+'''get post by author id'''
+
     if ('logged_in' in session) and (session['logged_id'] == aid):
         #aid = session['logged_id']
         if aid == None:
@@ -564,6 +634,8 @@ def getPostForAuthor(aid):
 @app.route('/markdown',methods=['GET','POST'])
 
 def index():
+'''main function of send markdown'''
+
     if request.method == 'POST':
         content = request.form['postContent']
         content = Markup(markdown.markdown(content))
@@ -574,6 +646,7 @@ def index():
 
 @app.route('/author/<aid>/posts/comments/',methods=['GET'])
 def getCommentsForAuthor(aid):
+'''get comments by author'''
 
     if ('logged_in' in session) and (session['logged_id'] == aid):
         return commentController.getCommentsForAuthor(aid),200
@@ -582,10 +655,14 @@ def getCommentsForAuthor(aid):
 
 
 def allowed_file(filename):
+'''check whether the file user upload is allowed or not'''
+
     return '.' in filename and filename.rsplit('.' ,1)[1] in app.config['ALLOWED_EXTENSIONS']
 
 @app.route('/<aid>/<pid>/upload',methods=['POST'])
 def upload(aid,pid):
+    '''upload new image by author id and post id'''
+
     if ('logged_in' not in session) or (session['logged_id'] != aid):
         abort(404)
     file = request.files['img_file']
@@ -605,6 +682,8 @@ def upload(aid,pid):
 
 @app.route('/<aid>/<pid>/image/view',methods=['GET'])
 def viewPostImage(aid,pid):
+    '''view the image in post by author id'''
+
     if ('logged_in' not in session) or (session['logged_id'] != aid):
         abort(404)
     image = imageHelper.getImageByPid(pid)
@@ -621,6 +700,7 @@ def viewPostImage(aid,pid):
 
 @app.route('/<authorName>/post/',methods=['PUT','POST'])
 def uploadPostToServer(authorName):
+    '''upload new post to server by author name'''
 
     if ('logged_in' in session) and (session['logged_in'] == authorName):
         aid = session['logged_id']
@@ -639,11 +719,10 @@ def uploadPostToServer(authorName):
         return json.dumps({'status':result}),200
     else:
         return abort(404)
-'''
-Retrive the posting permission information for a specific author by authorName
-'''
+
 @app.route('/<authorName>/post/getPermissionList/',methods=['GET'])
 def getPermissionList(authorName):
+    '''Retrive the posting permission information for a specific author by authorName'''
 
     if ('logged_in' in session) and (session['logged_in'] == authorName):
         if request.method == 'GET':
@@ -658,22 +737,20 @@ def getPermissionList(authorName):
     else:
         return abort(404)
 
-'''
-Get all the comments for a specific post from DB
-'''
+
 @app.route('/author/<aid>/posts/<pid>/comments/',methods=['GET'])
 def getCommentsForPost(aid,pid):
+    '''Get all the comments for a specific post from DB'''
 
     if('logged_id' in session) and (session['logged_id'] == aid):
         result = commentController.getCommentsForPost(pid)
         return result,200
     else:
         return abort(404)
-'''
-Add a comment for a specific post into DB
-'''
+
 @app.route('/author/<aid>/posts/<pid>/comments/',methods=['PUT','POST'])
-def addCommentForPost(aid,pid):
+def addCommentForPost(aid,pid):    
+    '''Add a comment for a specific post into DB'''
 
     if ('logged_in' in session) and (session['logged_id'] == aid):
         
@@ -695,6 +772,8 @@ def addCommentForPost(aid,pid):
 # get all the new posts that a specific author can view from the server
 @app.route('/<authorName>/github/notification')
 def getNotification(authorName):
+    '''get the notification by author'''
+
     authorToken = authorName + '_authToken'
     if ('logged_in' in session) and (session['logged_in'] == authorName) and (authorToken in session):
         # get author auth token
@@ -764,6 +843,8 @@ def getNotification(authorName):
 
 @app.route('/github/callback')
 def callback():
+    '''get authorization from github'''
+
     code = request.args['code']
     state = request.args['state'].encode('utf-8')
     #if state!=session.get('oauth_state'):
@@ -801,6 +882,8 @@ def callback():
 # get all the new posts that a specific author can view from the server
 @app.route('/<aid>/pull/mypost')
 def getMyPostForAuthor(aid):
+    '''get all view posts by a author'''
+
     if ('logged_in' in session) and (session['logged_id'] == aid):
         #aid = session['logged_id']
         if aid == None:
@@ -813,6 +896,8 @@ def getMyPostForAuthor(aid):
 
 @app.route('/<authorName>/mypost')
 def myPost(authorName):
+    '''get all posts by author'''
+
     if ('logged_in' in session) and (session['logged_in'] == authorName):
         return render_template('mypost.html')
     else:
@@ -820,6 +905,8 @@ def myPost(authorName):
 
 @app.route('/<authorName>/mypost/delete/<pid>')
 def myPostDelete(authorName,pid):
+    '''delete my post by author'''
+
     if ('logged_in' in session) and (session['logged_in'] == authorName):
         result = postHelper.deletePostByPid(pid)
 	print result
@@ -832,6 +919,8 @@ Public API: receieve the friend request from a remote server
 '''
 @app.route('/friendrequest',methods=['GET','POST'])
 def friendRequestService():
+''''make a reponse for friend request from remote server'''
+
     if(request.method == 'POST'):
         print(request)
         response = make_response()
@@ -850,6 +939,7 @@ This is for internal server to use only
 
 #@app.route('/response/accept')
 def sendAcceptRequestToRemoteServer(recipientAid,recipientName,remoteSenderAid,remoteSid):
+'''send accept request to remote server'''
     
     payload = serviceController.sendFriendRequestToRemoteServer(recipientAid,recipientName,remoteSenderAid,remoteSid)
     if(payload != None):
@@ -866,6 +956,7 @@ Public API: all posts marked as public on the server
 '''
 @app.route('/posts',methods=['GET'])
 def sendPublicPostsToRemoteServer():
+'''send public posts to remote server'''
     
     payload = serviceController.sendPublicPostsToRemoteServer()
     if(payload != None):
@@ -877,6 +968,8 @@ Public API: all
 '''
 @app.route('/global/authors',methods=['GET'])
 def sendGlobalAuthors():
+'''send global posts to remote server'''
+
     payload = serviceController.sendGlobalAuthorsToRemoteServer()
     if(payload != None):
         return json.dumps(payload),200
@@ -886,11 +979,15 @@ def sendGlobalAuthors():
 
 @app.route('/permission/image/<imagename>',methods=['GET'])
 def view_permission_image(imagename):
+'''view images that have permission'''
+
     imagename=PERMISSION_IMAGE+'/'+imagename+'.png'
     return send_file(imagename, mimetype='image/png')
 
 @app.route('/<authorName>/postpermission/<pid>',methods=['PUT','POST'])
 def uploadPostPermissionToServer(authorName,pid):
+'''upload post's permission by author'''
+
     if ('logged_in' in session) and (session['logged_in'] == authorName):
         send = flaskPostToJson()
         checked = send['data']
@@ -900,6 +997,8 @@ def uploadPostPermissionToServer(authorName,pid):
         return abort(404)
         
 if __name__ == '__main__':
+'''main function'''
+
     app.debug = True
     REGISTER_RESTRICTION = settingHelper.getSignUpRestrictionValue()
     POST_REMOTE_ACCESS_RESTRICTION = settingHelper.getRemotePostAccessRestrictionValue()

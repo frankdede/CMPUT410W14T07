@@ -59,6 +59,7 @@ class ServiceController:
         return None
 
     def receiveFriendRequestFromRemoteServer(self,request):
+        '''receive friend request from remote server'''
 
         if(request['query'] == 'friendrequest'):
             localAid = request['friend']['author']['id']
@@ -88,6 +89,7 @@ class ServiceController:
         return None
 
     def sendFriendRequestToRemoteServer(self,senderAid,senderName,remoteAid,remoteSid):
+        '''send friend request to remote server'''
 
         request = {}
         response['query'] = 'friendrequest'
@@ -106,7 +108,8 @@ class ServiceController:
         return request
 
     def sendPublicPostsToRemoteServer(self):
-        
+        '''send the public posts to remote server'''
+
         posts = self.postController.getLocalPublicPosts()
         comments = self.commentController.getCommentsForPublicPosts()
         if(posts != None and comments != None):
@@ -120,6 +123,7 @@ class ServiceController:
             return []
 
     def sendGlobalAuthorsToRemoteServer(self):
+        '''send global authors to remote server'''
 
         authors = self.authorController.getGlobalAuthors()
 

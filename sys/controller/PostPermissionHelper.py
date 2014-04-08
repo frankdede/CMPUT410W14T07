@@ -8,8 +8,9 @@ import json
 class PostPermissionHelper:
     def __init__(self,dbAdapter):
         self.dbAdapter = dbAdapter
-
+   
     def addPostPermission(self,pid,aidsList):
+    '''add post permisstion to post'''
 
         cur = self.dbAdapter.getcursor()
 

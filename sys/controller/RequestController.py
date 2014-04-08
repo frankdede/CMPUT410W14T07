@@ -8,7 +8,9 @@ class RequestController:
   def __init__(self,dbAdapter):
     self.requestHelper = RequestHelper(dbAdapter)
     self.circleController = CircleController(dbAdapter)
-
+  '''
+    accept the request from sender
+  '''
   def acceptRequestFromSender(self,recipientId,senderId):
 
     result = self.circleController.addFriendForAuthor(recipientId,senderId)
@@ -53,9 +55,11 @@ class RequestController:
       return json.dumps(requestList)
     else:
       return None
-
+  '''
+    Get request count by author id
+  '''
   def getRequestCountByAid(self,recipientId):
-
+ 
     result = self.requestHelper.getRequestCountByAid(recipientId)
 
     if(result != None):

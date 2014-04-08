@@ -7,6 +7,7 @@ class CommentHelper:
         self.dbAdapter = dbAdapter
 
     def getCommentsForAuthor(self,aid):
+    '''get all comments by author id'''
 
         cur = self.dbAdapter.getcursor()
         query =("SELECT "
@@ -62,6 +63,7 @@ class CommentHelper:
         return cur.fetchall()
 
     def getCommentsForPublicPosts(self):
+    '''get all comments for public posts'''
 
         cur = self.dbAdapter.getcursor()
 
@@ -117,6 +119,7 @@ class CommentHelper:
         return False
 
     def deleteCommentForPost(self,cid):
+    '''delete comments for a post'''
 
         cur = self.dbAdapter.getcursor()
         query = ("DELETE FROM comments WHERE cid = '%s' ")%(cid)
@@ -137,6 +140,7 @@ class CommentHelper:
         return cur.rowcount > 0
 
     def countCommentsForPost(self,pid):
+    ''' count comments for a post'''
 
         cur = self.dbAdapter.getcursor()
         query = ("SELECT count(*) FROM comments where pid = '%s'") %(pid)
