@@ -148,7 +148,6 @@ class ServiceController:
 
         for publicPost in publicPosts['posts']:
 
-            localPost = {}
             info = {}
             info['pid'] = publicPost['guid']
             info['date'] = publicPost['pubDate']
@@ -158,8 +157,7 @@ class ServiceController:
             info['permission'] = publicPost['visibility']
             info['img'] = ''
 
-            localPost[publicPost['guid']] = info
-            localPostList.append(localPost)
+            localPostList.append(info)
 
         return json.dumps(localPostList)
 
