@@ -1,6 +1,7 @@
 from AuthorHelper import *
 from RequestController import *
 from DatabaseAdapter import *
+from serverHelper import *
 import sys
 sys.path.append("sys/model")
 import json
@@ -12,6 +13,7 @@ class AuthorController:
     def __init__(self,dbAdapter):
         self.authorHelper = AuthorHelper(dbAdapter)
         self.requestController = RequestController(dbAdapter)
+        self.serverHelper = ServerHelper(dbAdapter)
     def getOtherAuthor(self,aid):
         """
             to get list of authors except for the author by aid
@@ -29,6 +31,7 @@ class AuthorController:
                 dic['aid'] = current_aid
                 dic['name'] = author.getName()
                 dic['nickname'] = author.getNickname()
+                dic['server_name'] = self.serverHelper.getServerNameBysid(author.getSid())
                 if current_aid in sent_list:
                     dic['followed'] = 1
                 else:
@@ -61,6 +64,7 @@ class AuthorController:
                 dic['aid'] = current_aid
                 dic['name'] = author.getName()
                 dic['nickname'] = author.getNickname()
+                dic['server_name'] = self.serverHelper.getServerNameBysid(author.getSid())
                 if current_aid in sent_list:
                     dic['followed'] = 1
                 else:

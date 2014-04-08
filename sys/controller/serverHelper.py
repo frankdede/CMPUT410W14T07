@@ -43,3 +43,20 @@ class ServerHelper:
           return None
 
         return cur.rowcount > 0
+    def getServerNameBysid(self,sid):
+        cur = self.dbAdapter.getcursor()
+        query = "SELECT name FROM servers WHERE sid='%s'"%(sid)
+        try:
+            cur.execute(query)
+        except Exception, e:
+          print("****************************************")
+          print("SQLException from doesServerExists():")
+          print("Error code:", err.errno)
+          print("SQLSTATE value:", err.sqlstate)
+          print("Error message:", err.msg)
+          print("Query:",query)
+          print("****************************************")
+          return None
+        re = cur.fetchone()[0]
+        cur.close()
+        return re

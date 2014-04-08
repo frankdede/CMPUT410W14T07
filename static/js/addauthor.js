@@ -41,7 +41,7 @@ function search_auther_list(aid,url){
           var row_html = "";
         if (field.followed==0){
           row_html = "<tr id='search_row_count"+i+"'><td>"+(i+1)+"</td><td>"+field.name+"</td> \
-          <td>"+field.nickname+"</td><td><button type='button' class='btn btn-default btn-xs' id = 'searchaddfriendbt' \
+          <td>"+field.nickname+"</td><td>"+field.server_name+"</td><td><button type='button' class='btn btn-default btn-xs' id = 'searchaddfriendbt' \
              data='"+i+"'> \
               <span class='glyphicon glyphicon-plus'></span> Add \
             </button> \
@@ -49,7 +49,8 @@ function search_auther_list(aid,url){
           }
           else if (field.followed==1) {
             row_html = "<tr id='search_row_count"+i+"'><td>"+(i+1)+"</td><td>"+field.name+"</td> \
-          <td>"+field.nickname+"</td><td><button type='button' class='btn btn-default btn-xs' id = 'searchaddfriendbt' \
+          <td>"+field.nickname+"</td><td>"+field.server_name+"</td>\
+          <td><button type='button' class='btn btn-default btn-xs' id = 'searchaddfriendbt' \
              data='"+i+"' disabled> \
               <span class='glyphicon glyphicon-plus'></span> Followed \
             </button> \
