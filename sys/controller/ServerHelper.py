@@ -71,9 +71,9 @@ class ServerHelper:
         re = cur.fetchone()
 
         if (re != None):
-          return re[0]
-        else:
-          return None
+          if(len(re) != 0):
+            return re[0]
+        return None
 
     def getServerUrlBySid(self,sid):
         cur = self.dbAdapter.getcursor()
@@ -90,7 +90,9 @@ class ServerHelper:
           print("****************************************")
           return None
 
+        re = cur.fetchone()
+        
         if (re != None):
-          return re[0]
-        else:
-          return None
+          if(len(re) != 0):
+            return re[0]
+        return None

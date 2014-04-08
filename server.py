@@ -956,6 +956,7 @@ def sendAcceptRequestToRemoteServer(recipientAid,recipientName,remoteSenderAid,r
     if(payload != None):
         url = payload['friend']['host']
         headers = {'content-type': 'application/json'}
+        print(payload)
         response = requests.post(url,data = json.dumps(payload),headers = headers )
         if(resposen.status == '200'):
             return True

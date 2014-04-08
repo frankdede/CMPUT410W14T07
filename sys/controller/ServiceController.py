@@ -103,10 +103,9 @@ class ServiceController:
         friend['host'] = remoteUrl
         friend['displayname'] = ''
 
-        author = {}
-        author['id'] = senderAid
-        author['host'] = "http://cs410.cs.ualberta.ca:41078/"
-        author['displayname'] = senderName
+        request['id'] = senderAid
+        request['host'] = "http://cs410.cs.ualberta.ca:41078/"
+        request['displayname'] = senderName
         request['friend'] = friend
 
         return request
