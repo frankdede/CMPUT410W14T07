@@ -1,5 +1,6 @@
 from AuthorHelper import *
 from RequestController import *
+from CircleController import *
 from DatabaseAdapter import *
 from ServerHelper import *
 import sys
@@ -14,6 +15,7 @@ class AuthorController:
         self.authorHelper = AuthorHelper(dbAdapter)
         self.requestController = RequestController(dbAdapter)
         self.serverHelper = ServerHelper(dbAdapter)
+        self.circleController = CircleController(dbAdapter)
     def getOtherAuthor(self,aid):
         """
             to get list of authors except for the author by aid
@@ -53,6 +55,8 @@ class AuthorController:
             """
         list = Utility.parseKeyword(keyword)
         sent_list = self.requestController.getSentRequest(aid)
+        firend_list = self.circleController.getFriendAidList(aid)
+        print firend_list
         re =[]
         tmp_list =[]
         dic = {}
@@ -69,6 +73,10 @@ class AuthorController:
                     dic['followed'] = 1
                 else:
                     dic['followed'] = 0
+                if current_aid in firend_list:
+                    dic['firend'] = 1
+                else:
+                    dic['friend'] = 0
                 re.append(dic)
                 dic ={}
             return json.dumps(re)

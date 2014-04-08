@@ -47,6 +47,18 @@ class CircleController:
 
         return None
 
+    def getFriendAidList(self,aid):
+        """
+        to get a list of friend of aid
+        """
+        result = self.circleHelper.getFriendList(aid)
+
+        if(result != None):
+            friendList = []
+            for row in result:
+                friendList.append(row[0])
+            return friendList
+        return None
     '''get a list of all friend by author id on local server'''
     def getFriendOfMyHomeServerList(self,aid):
     
