@@ -5,11 +5,11 @@ $(document).ready(function(){
 	$.get('ajax/aid',function(aid){
 		author_id = aid;
 		$.getJSON(aid+"/circlelist.json",function(data){
+			set_delete_click_listener(data);
 			$.get(aid+"/circle",function(html_content){
 				$('#view_circle_modal').html(html_content);
 				$('#view_circles').click(function(){
 					reload_data();
-					set_delete_click_listener(data);
 					$('#view_circle').modal();
 				});
 				
@@ -48,7 +48,7 @@ function refresh_circle_list(data){
     </div>");
 				}
 }
-function set_delete_click_listener(data){
+function set_delete_click_listener(){
 //set delete button click listener
 	$('body').on('click','#deletefriendbt',function(){
 		var pos = parseInt($(this).attr("data"));

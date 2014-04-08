@@ -422,8 +422,7 @@ function addMarkDownClickerListener(){
 }
 //Send the Post object in json over http
 function submitPostToServer($postObj){
-	if (mark_down==false) {
-		$.post('/'+ $authorName +'/post/',JSON.stringify($postObj)).done(function($data){
+		$.post('/'+ $authorName +'/post?markdown='+mark_down,JSON.stringify($postObj)).done(function($data){
 			var $re = JSON.parse($data);
 			if ($re['status']){
 				if(option==="specify"){
@@ -438,11 +437,6 @@ function submitPostToServer($postObj){
 				alert('Please submit again.');
 			}
 		});
-	}else{
-		$.post('/markdown',$("#markdown_form").serialize(),function(data){
-			console.log(data);
-		});
-	}
 }
 function ajax_upload_image(pid){
 	var formData = new FormData($("#uploadImage_form")[0]);
