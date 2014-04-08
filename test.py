@@ -207,7 +207,7 @@ class TestController(unittest.TestCase):
     '''
 
     def test_doesServerExists(self):
-        result = self.serverController.doesAuthorExists('cs410.cs.ualberta.ca:41069')
+        result = self.serverController.doesServerExists('cs410.cs.ualberta.ca:41069')
         self.assertTrue(result == True,"Failed to check existense of the server")
 
     def test_addServer(self):
