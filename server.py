@@ -961,6 +961,22 @@ def friendRequestService():
             return make_response("", 409)
     else:
         return make_response("", 409)
+'''
+Public API: receieve the friend request from a remote server
+'''
+@app.route('/service/friendrequest',methods=['GET','POST'])
+def friendRequestService2():
+
+    if(request.method == 'POST'):
+        print(request)
+        response = make_response()
+        result = serviceController.receiveFriendRequestFromRemoteServer(json.loads(request.data))
+        if(result):
+            return make_response("", 200)
+        else:
+            return make_response("", 409)
+    else:
+        return make_response("", 409)
 
 '''
 Don't access this API from client side
@@ -975,7 +991,7 @@ def sendAcceptRequestToRemoteServer(recipientAid,recipientName,remoteSenderAid,r
         headers = {'content-type': 'application/json'}
         print(payload)
         response = requests.post(url,data = json.dumps(payload),headers = headers )
-        if(resposen.status == '200'):
+        if(response.status_code == '200'):
             return True
         else:
             return False
@@ -983,7 +999,7 @@ def sendAcceptRequestToRemoteServer(recipientAid,recipientName,remoteSenderAid,r
 '''
 Public API: all posts marked as public on the server
 '''
-@app.route('/posts',methods=['GET'])
+@app.route('/service/posts',methods=['GET'])
 def sendPublicPostsToRemoteServer():
     
     payload = serviceController.sendPublicPostsToRemoteServer()

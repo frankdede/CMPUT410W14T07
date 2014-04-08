@@ -138,6 +138,7 @@ class ServiceController:
 
     def getGlobalAuthorsFromRemoteServer(self):
 
+        #self.postController.addPosts
         pass
 
     def getPublicPostsFromRemoteServer(self):
