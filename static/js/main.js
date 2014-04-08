@@ -173,7 +173,7 @@ function refresh_message_list(){
         console.log(field);
         request_list[i] = field;
         $("#message_dropdown1").prepend(
-          "<li><a id ='link_"+i+"'href='#' data-toggle=\"tooltip\" data-placement=\"left\" title='"+field.nick_name+" server name:"+field.server_name+"'><strong>"+field.name+"</strong> wants to be your friend</a> \
+          "<li><a id ='link_"+i+"'href='#' data-toggle=\"tooltip\" data-placement=\"top\" title='Nick Name:"+field.nick_name+"  server name:"+field.server_name+"'><strong>"+field.name+"</strong> wants to be your friend</a> \
           <button type=\"button\"  class=\"btn btn-default btn-xs\"id ='accept_bt' \
           data='"+i+"'> \
   <span class=\"glyphicon glyphicon-ok\"></span> </button>\

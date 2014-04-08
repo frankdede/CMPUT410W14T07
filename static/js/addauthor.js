@@ -97,6 +97,10 @@ $(document).ready(function(){
   });
   page_click();
 });
+function search_link(){
+  $("#search_input").val("");
+  search_click();
+}
 function page_click(){
   $('body').on('click','#page_item',function(){
     event.preventDefault();
@@ -114,7 +118,6 @@ function add_author_hide_all_row(){
 }
 function search_click(){
   event.preventDefault();
-  $("#search_input").val("");
   raw_input = $("#search_input").val();
   if (raw_input.length>50) {
       $("#search_form").removeClass("form-group");
