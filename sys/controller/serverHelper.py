@@ -42,4 +42,4 @@ class ServerHelper:
           print("****************************************")
           return None
 
-        return cur.fetchall() > 0
+        return cur.rowcount > 0
