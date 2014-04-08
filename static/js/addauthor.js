@@ -46,6 +46,15 @@ function search_auther_list(aid,url){
               <span class='glyphicon glyphicon-plus'></span> Add \
             </button> \
             </td></tr>"
+            if(field.firend==1){
+              row_html = "<tr id='search_row_count"+i+"'><td>"+(i+1)+"</td><td>"+field.name+"</td> \
+          <td>"+field.nickname+"</td><td>"+field.server_name+"</td>\
+          <td><button type='button' class='btn btn-default btn-xs' id = 'searchaddfriendbt' \
+             data='"+i+"' disabled> \
+              <span class='glyphicon glyphicon-plus'></span> Friended \
+            </button> \
+            </td></tr>"
+            }
           }
           else if (field.followed==1) {
             row_html = "<tr id='search_row_count"+i+"'><td>"+(i+1)+"</td><td>"+field.name+"</td> \
@@ -103,6 +112,7 @@ function add_author_hide_all_row(){
 }
 function search_click(){
   event.preventDefault();
+  $("#search_input").val("");
   raw_input = $("#search_input").val();
   if (raw_input.length>50) {
       $("#search_form").removeClass("form-group");
