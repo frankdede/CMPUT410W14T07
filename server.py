@@ -493,8 +493,8 @@ def addfriend(aid):
             return redirect(url_for(aid))
 #accept request
 @app.route('/<recipientAid>/author/request/accept',methods=['GET'])
-def acceptRequest(recipientId):
-    if ('logged_in' not in session) or (session['logged_id'] != aid):
+def acceptRequest(recipientAid):
+    if ('logged_in' not in session) or (session['logged_id'] != recipientAid):
         return redirect(url_for('/'))
     else:
         try:
@@ -616,18 +616,25 @@ def viewPostImage(aid,pid):
             filename = image[0].getPath();
             return send_from_directory(app.config['UPLOAD_FOLDER'],filename)
         else:
-            abort(404)
+            return send_from_directory(app.config['UPLOAD_FOLDER'],"unfound.gif")
 
 
-@app.route('/<authorName>/post/',methods=['PUT','POST'])
+@app.route('/<authorName>/post',methods=['PUT','POST'])
 def uploadPostToServer(authorName):
 
     if ('logged_in' in session) and (session['logged_in'] == authorName):
         aid = session['logged_id']
         postName = authorName
         postObj = flaskPostToJson()
+        try:
+            type = request.args.get('markdown')
+            postMsg = postObj['message']
+            if type =='true':
+                content = Markup(markdown.markdown(postMsg))
+                postMsg = render_template('markdown.html', **locals())
+        except KeyError:
+            return "Wrong URL",404
         postTitle = postObj['title']
-        postMsg = postObj['message']
         postType = postObj['type']
         postPermission = postObj['permission']
         postDate = strftime("%Y-%m-%d %H:%M:%S", gmtime())
