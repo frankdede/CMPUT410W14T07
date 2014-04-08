@@ -989,7 +989,6 @@ def sendAcceptRequestToRemoteServer(recipientAid,recipientName,remoteSenderAid,r
     if(payload != None):
         url = payload['friend']['host']
         headers = {'content-type': 'application/json'}
-        print(payload)
         response = requests.post(url,data = json.dumps(payload),headers = headers )
         if(response.status_code == '200'):
             return True
@@ -1037,6 +1036,12 @@ def uploadPostPermissionToServer(authorName,pid):
         return json.dumps({'status':result}),200
     else:
         return abort(404)
+
+
+def getPostsRequestsFromRemoteServer(self):
+    url = "http://cs410-06/posts"
+    response = requests.get(url)
+    
         
 if __name__ == '__main__':
     app.debug = True

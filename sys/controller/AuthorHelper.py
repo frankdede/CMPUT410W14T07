@@ -501,7 +501,3 @@ class AuthorHelper:
         
         return len(cur.fetchall()) > 0
 
-
-
-
-

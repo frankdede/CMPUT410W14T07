@@ -136,14 +136,35 @@ class ServiceController:
         else:
             return []
 
-    def getGlobalAuthorsFromRemoteServer(self):
+    def getGlobalAuthorsFromRemoteServer(self,response):
 
-        #self.postController.addPosts
+        #authors = json.loads(response)
         pass
 
-    def getPublicPostsFromRemoteServer(self):
 
-        pass
+    def getPublicPostsFromRemoteServer(self,response):
+        localPostList = []
+        publicPosts = json.loads(response)
+
+        for publicPost in publicPosts['posts']:
+
+            localPost = {}
+            info = {}
+            info['pid'] = publicPost['guid']
+            info['date'] = publicPost['pubDate']
+            info['title'] = publicPost['title']
+            info['content'] = publicPost['content']
+            info['type'] = publicPost['content-type']
+            info['permission'] = publicPost['visibility']
+            info['img'] = ''
+
+            localPost[publicPost['guid']] = info
+            localPostList.append(localPost)
+
+        return localPostList
+
+
+
  
 
 
