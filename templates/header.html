@@ -12,6 +12,7 @@
   <!-- Struct css-->
   <link href="{{url_for('static',filename='css/struct.css')}}" rel="stylesheet">
   <link href="{{url_for('static',filename='css/permission.css')}}" rel="stylesheet">
+  <link href="{{url_for('static',filename='css/mypost.css')}}" rel="stylesheet">
   <link href="{{url_for('static',filename='css/bootstrap-markdown.min.css')}}" rel="stylesheet">
   <!--jquery Ui CSSS-->
   <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
@@ -48,7 +49,7 @@
           <!-- Collect the nav links, forms, and other content for toggling -->
           <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-              <li class="active"><a href="#">Stream</a></li>
+              <li class="active"><a href="#"id="redirectToStream">Stream</a></li>
               <li><a href="#" id="redirectToMyPost">Post</a></li>
               {%if session.logged_in%}
               <li class="Partner">

@@ -1,35 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  	<meta charset="utf-8">
-  	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-  	<meta name="viewport" content="width=device-width, initial-scale=1">
 
- 	<!-- Bootstrap -->
-  	<link href="{{url_for('static',filename='css/bootstrap.min.css')}}" rel="stylesheet">
-  	<link href="{{url_for('static',filename='css/main.css')}}" rel="stylesheet">
-  	<!-- Struct css-->
-  	<link href="{{url_for('static',filename='css/mypost.css')}}" rel="stylesheet">
-  	<link href="{{url_for('static',filename='css/permission.css')}}" rel="stylesheet">
-  	<!--jquery Ui CSSS-->
-  	<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css"> 
-  	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-  	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    	<!--[if lt IE 9]>
-      	<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-      	<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-      	<![endif]-->
-      	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-      	<script src="{{url_for('static',filename='js/jquery-1.10.2.min.js')}}"></script>
-      	<!-- Include all compiled plugins (below), or include individual files as needed -->
-      	<script src="{{url_for('static',filename='js/bootstrap.min.js')}}"></script>
-      	<script src="{{url_for('static',filename='js/json2.js')}}"></script>
-      	<script src="{{url_for('static',filename='js/jquery.validate.min.js')}}"></script>
-      	<script src="{{url_for('static',filename='js/jquery.form.min.js')}}"></script>
-      	<script src="{{url_for('static',filename='js/bootstrap-tooltip.js')}}"></script>
-      	<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
-</head>
-<body>
 <table id="post_edit">
 	<colgroup>
 		<col class = "col_date">
@@ -73,11 +42,12 @@
             							</button>
             							<ul class="dropdown-menu dropdown-inverse" role="menu">
               								<li id="textOption"><a>Text</a></li>
-              								<li id="picOption"><a>Picture</a></li>
+              								
+              								<li id="picOption"><a id="markdown_trigger">Markdown</a></li>
               								<li id="htmlOption"><a>HTML</a></li>
             							</ul>
 							</div>
-          <button id="postPermissionBtn" type="button"  class="btn btn-default " data-toggle="modal" data-target="#postingPermissionModal" ><span class="glyphicon glyphicon-user"></span>Permission</button>
+          <button id="postPermissionBtn" type="button"  class="btn btn-default " data-toggle="modal" data-target="#myPostPermissionModal" ><span class="glyphicon glyphicon-user"></span>Permission</button>
           						<button id="postPicture" type="button" class = "btn btn-default" data-toggle = "modal" data-target="#uploadPicture">Add picture</button>
 						</div>
 					</div>
@@ -100,10 +70,11 @@
        						<h4 class = "modal-title" id = "uploadPictureLabel">Select picture</h4>
      					</div>
     					<div class = "modal-body">
+     
        						<label for = "InputFile">Choose your portrait: </label>
        						<p class="help-block"> JEPG,BMP,or PNG file only. No more than 1MB.</p>
-       						<input type="file" name ="img_file" id ='my_upload_img_file'>
-       						<img id ="preview" src="#" alt="your image">     
+       						<input type="file" name ="img_file" id ="my_upload_img_file" onchange='readURL(this)'>
+       						<img id ="preview" alt="preview">     
     					</div>
     					<spam id="upload_error_code"></spam>
     					<div class = "modal-footer">
@@ -114,7 +85,7 @@
   			</div>
  		</div>
 	</div>
-      	<div class="modal fade" id="postingPermissionModal">
+      	<div class="modal fade" id="myPostPermissionModal">
         	<div class="modal-dialog">
           		<div class="modal-content">
             			<div class="modal-header">
@@ -122,7 +93,7 @@
               				<h4 class="modal-title" id="modal_title">Shared with</h4>
             			</div>
            	 		<div class="modal-body">
-              				<select name = "permission" onchange = "permission_selected(this)">
+              				<select name = "permission" onchange = "myPostPermissionSelected(this)">
                 				<option value = "public" autocomplete="off" selected>Public</option>
                 				<option value = "me" autocomplete="off">Me</option>
                 				<option value = "friends" autocomplete="off">Friends</option>
@@ -158,15 +129,4 @@
           		</div><!-- /.modal-content -->
         	</div><!-- /.modal-dialog -->
 	</div><!-- /.modal -->
-        <div>
-        	<button type = "button" class = "btn btn-default" id="back">Back</button>
-        </div>
 	<script src="{{url_for('static',filename='js/mypost.js')}}"></script>
-       	<script>
-        // Gobal Session info(author_name,author_id)
-        var $authorName = "{{session.logged_in}}";
-
-        var $authorid = "{{session.logged_id}}";
-        </script>
-</body>
-</html>
