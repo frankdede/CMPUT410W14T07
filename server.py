@@ -1061,7 +1061,7 @@ def uploadPostPermissionToServer(authorName,pid):
 def getPublicPostsFromRemoteServer():
     url = "http://cs410-06/posts"
     response = requests.get(url)
-    result = serviceController.getPublicPostsFromRemoteServer(response)
+    result = serviceController.getPublicPostsFromRemoteServer(response.content)
     return result
         
 if __name__ == '__main__':

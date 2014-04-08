@@ -144,6 +144,7 @@ function getCommentsDataForAuthor(){
 }
 
 
+
 //Send the Post object in json over http
 function submitPostDataToServer($postObj){
 	$.post('/'+ $authorName +'/post/',JSON.stringify($postObj)).done(function($data){
@@ -161,10 +162,11 @@ function setRefreshTimer(){
 	setInterval(function(){
 
 		getPostsData();
+		getRemotePublicPostsData();
 		getCommentsDataForAuthor();
-		//if($github=='True'){
-		//    	getGithubNotification();
-		//}
+		if($github=='True'){
+		    getGithubNotification();
+		}
 
 	},10000);
 }
@@ -188,6 +190,15 @@ function getGithubNotification(){
 //get all post which user can see from server
 function getPostsData(){
 	$.get("/"+ $authorid +"/pull/",function($data){
+		if($data){
+			var $postsList = JSON.parse($data);
+			updatePostList($postsList);
+		}
+	});
+}
+
+function getRemotePublicPostsData(){
+	$.get("/remote/posts/",function($data){
 		if($data){
 			var $postsList = JSON.parse($data);
 			updatePostList($postsList);
