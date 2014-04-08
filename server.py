@@ -603,9 +603,9 @@ def acceptRequest(recipientAid):
                 response = sendAcceptRequestToRemoteServer(recipientAid,recipientName,remoteSenderAid,remoteUrl)
 
                 if(response == True):
-                    re = make_response("OK",200)
-                else:
-                    re = make_response("Failed")
+                    if(reController.acceptRequestFromSender(recipientAid,senderAid)):
+                        re = make_response("OK",200)
+                re = make_response("Failed")
                 return re
 
         except KeyError:
