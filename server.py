@@ -139,10 +139,8 @@ def view_profile_image(aid,imagename):
     """
     load the profile image
     """
-    #print imagename
     import os.path
     path = os.path.join(app.config['UPLOAD_FOLDER'],imagename);
-    print os.path.isfile(path)
     if os.path.isfile(path):
         return send_from_directory(app.config['UPLOAD_FOLDER'],imagename, as_attachment=False)
     else:
@@ -156,7 +154,6 @@ def get_profile(aid):
     if 'logged_in' in session and aid ==session['logged_id']:
         try:
             re_aid = request.args.get("aid")
-            print re_aid
             re = aController.getAuthorByAid(re_aid)
             if re != None:
                 return re
@@ -195,7 +192,6 @@ def change_author_profile(aid):
         try:
             file = request.files['profile_image']
             filename = file.filename
-            #print "--"+file.filename
         except KeyError:
             file =None
         try:
@@ -387,7 +383,6 @@ def login():
         authorName =request.form['username']
         password =request.form['password']
         json_str = ahelper.authorAuthenticate(authorName,password)
-        print json_str
         if  json_str == False:
             re = make_response("False")
             re.headers['Content-Type']='text/plain'
@@ -501,7 +496,6 @@ def allauthorlist(aid):
     if ('logged_in' not in session) or (aid !=session['logged_id']):
         return redirect(url_for('/'))
     re = aController.getOtherAuthor(aid)
-    #print re
     return re
 
 @app.route('/<aid>/circlelist.json',methods=['GET'])
@@ -511,7 +505,6 @@ def circleauthorlist(aid):
     if ('logged_in' not in session) or (aid !=session['logged_id']):
         return redirect(url_for('/'))
     re = circleController.getFriendList(aid)
-    #print re
     return re
 
 @app.route('/<aid>/circle',methods=['GET'])
@@ -593,8 +586,6 @@ def acceptRequest(recipientAid):
             else:
                 remoteAuthor = aController.getAuthorInfoByAid(senderAid)
                 localAuthor = aController.getAuthorInfoByAid(recipientAid)
-                print("+++"+remoteAuthor.getAid())
-                print("+++"+localAuthor.getAid())
                 recipientAid = localAuthor.getAid()
                 recipientName = localAuthor.getNickname()
                 remoteSenderAid = remoteAuthor.getAid()
@@ -650,7 +641,7 @@ def getPostForAuthor(aid):
             return json.dumps({'status':None}),200
         else:
             post = postController.getPost(aid)
-            
+            print(post)
             return post,200
     else:
         return abort(404)
@@ -669,7 +660,6 @@ def index():
         content = request.form['postContent']
         content = Markup(markdown.markdown(content))
         html_string =  render_template('markdown.html', **locals())
-        print html_string
         return html_string
     return render_template('markdown_input.html')
 
@@ -825,7 +815,6 @@ def getNotification(authorName):
             notifications={}
             r = auth_session.get('/users/'+authorName+'/received_events')
 
-            #print r.json()
             for i in range(notification_number,len(r.json())):
                 notification={}
                 content=""
@@ -947,7 +936,6 @@ def myPostDelete(authorName,pid):
 
     if ('logged_in' in session) and (session['logged_in'] == authorName):
         result = postHelper.deletePostByPid(pid)
-	print result
         return render_template('mypost.html')
     else:
         abort(404);
@@ -975,7 +963,6 @@ Public API: receieve the friend request from a remote server
 def friendRequestService2():
 
     if(request.method == 'POST'):
-        print(request)
         response = make_response()
         result = serviceController.receiveFriendRequestFromRemoteServer(json.loads(request.data))
         if(result):

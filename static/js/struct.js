@@ -192,6 +192,7 @@ function getPostsData(){
 	$.get("/"+ $authorid +"/pull",function($data){
 		if($data){
 			var $postsList = JSON.parse($data);
+			console.log($postsList)
 			updatePostList($postsList);
 		}
 	});
@@ -201,7 +202,7 @@ function getRemotePublicPostsData(){
 	$.get("/remote/posts",function($data){
 		if($data){
 			var $postsList = JSON.parse($data);
-			console.log($postList)
+			console.log($postsList)
 			updatePostList($postsList);
 		}
 	});
